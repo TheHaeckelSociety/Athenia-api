@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
             "dev-assets.projectathenia.com"
         ]
 
-        dev.vm.box = "ubuntu/xenial64"
+        dev.vm.box = "SharkLinux/Bionic"
         dev.vm.synced_folder ".", "/vagrant", owner: "www-data", group: "www-data", mount_options: ["dmode=775,fmode=775"]
 
         dev.vm.provider :virtualbox do |vb|
