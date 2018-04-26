@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     ####################################################################################################################
         
     config.vm.define "dev" do |dev|
-        dev.vm.network "private_network", ip: "172.28.128.110"
+        dev.vm.network "private_network", ip: "172.28.145.110"
         dev.vm.hostname = "dev-api.projectathenia.com"
         dev.hostsupdater.aliases = [
             "dev-assets.projectathenia.com"

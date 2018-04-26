@@ -35,6 +35,9 @@
   apt: name=git state=present
   when: server_env != "development"
 
+- name: Install vim
+  apt: name=vim state=present
+
 - name: Install unzip
   apt: name=unzip state=present
 
@@ -64,7 +67,7 @@
   apt: name=memcached state=present
 
 - name: Enable unattended upgrades
-  lineinfile: dest=/etc/apt/apt.conf.d/10periodic line='APT::Periodic::Unattended-Upgrade "1";'
+  lineinfile: dest=/etc/apt/apt.conf.d/20auto-upgrades line='APT::Periodic::Unattended-Upgrade "1";'
 
 - name: Uninstall changelog review
   apt: name=apt-listchanges state=absent
