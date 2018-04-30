@@ -16,6 +16,7 @@
   postgresql_user:
     name="{{postgres_user}}"
     password="{{postgres_password}}"
+    encrypted=yes
     role_attr_flags=SUPERUSER
     state=present
     login_user=postgres
@@ -33,6 +34,7 @@
   postgresql_user:
     name="{{test_postgres_user}}"
     password="{{test_postgres_pass}}"
+    encrypted=yes
     role_attr_flags=SUPERUSER
     state=present
     login_user=postgres
