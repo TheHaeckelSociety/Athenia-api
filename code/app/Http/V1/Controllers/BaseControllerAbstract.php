@@ -18,13 +18,13 @@ use Illuminate\Routing\Controller;
  * Main Swagger block below...
  * @SWG\Swagger(
  *     schemes={"https"},
- *     host="dev-api.aldekaapp.com",
+ *     host="dev-api.projectathenia.com",
  *     basePath="/v1",
  *     produces={"application/json"},
  *     consumes={"application/json"},
  *     @SWG\Info(
  *         version="v1",
- *         title="Aldeka API"
+ *         title="Project Athenia API"
  *     )
  * )
  *
