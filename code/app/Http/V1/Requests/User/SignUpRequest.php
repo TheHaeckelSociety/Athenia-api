@@ -24,7 +24,8 @@ class SignUpRequest extends BaseUnauthenticatedRequest
     public function rules(User $user)
     {
         return [
-            'email' => 'required|string|max:256|email|unique:users,email',
+            'email' => 'required|string|max:120|email|unique:users,email',
+            'name' => 'required|string|max:120',
             'password' => 'required|string|min:6|max:256',
         ];
     }

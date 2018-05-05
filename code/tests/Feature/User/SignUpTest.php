@@ -31,6 +31,7 @@ class SignUpTest extends TestCase
     {
         $properties = [
             'email' => 'test@test.com',
+            'name' => 'Jerry McGuire',
             'password' => 'password',
         ];
 
@@ -45,6 +46,7 @@ class SignUpTest extends TestCase
 
         $this->assertEquals($properties, [
             'email' => $model->email,
+            'name' => 'Jerry McGuire',
         ]);
 
         $this->assertTrue(Hash::check($password, $model->password));
@@ -58,6 +60,7 @@ class SignUpTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'email' => ['The email field is required.'],
+                'name' => ['The name field is required.'],
                 'password' => ['The password field is required.'],
             ]
         ]);
@@ -67,11 +70,13 @@ class SignUpTest extends TestCase
     {
         $response = $this->json('POST', '/v1/sign-up', [
             'email' => 1,
+            'name' => 1,
             'password' => 1,
         ]);
 
         $response->assertJson(['errors' => [
             'email' => ['The email must be a string.'],
+            'name' => ['The name must be a string.'],
             'password' => ['The password must be a string.'],
         ]]);
 
@@ -93,11 +98,13 @@ class SignUpTest extends TestCase
     public function testWebsiteSignUpFailsTooLongFields()
     {
         $response = $this->json('POST', '/v1/sign-up', [
-            'email' => str_repeat('a', 257),
+            'email' => str_repeat('a', 121),
+            'name' => str_repeat('a', 121),
             'password' => str_repeat('a', 257),
         ]);
         $response->assertJson(['errors' => [
-            'email' => ['The email may not be greater than 256 characters.'],
+            'email' => ['The email may not be greater than 120 characters.'],
+            'name' => ['The name may not be greater than 120 characters.'],
             'password' => ['The password may not be greater than 256 characters.'],
         ]]);
 
