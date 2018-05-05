@@ -16,18 +16,20 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @package App\Models\User
  * @property int $id
  * @property string $email the email address of the user
+ * @property string $name the full name of the user
  * @property string $password the password of the user
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubject, HasPolicyContract
 {
@@ -95,6 +97,12 @@ class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubj
      *         type="string",
      *         maxLength=120,
      *         description="The email address of this user"
+     *     ),
+     *     @SWG\Property(
+     *         property="name",
+     *         type="string",
+     *         maxLength=120,
+     *         description="The name of this user"
      *     ),
      *     @SWG\Property(
      *         property="password",
