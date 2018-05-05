@@ -5,7 +5,7 @@ namespace App\Models\User;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -21,7 +21,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
@@ -33,7 +33,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubject, HasPolicyContract
 {
-    use Notifiable, Authenticatable;
+    use Authenticatable;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -44,6 +44,16 @@ class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubj
         'deleted_at',
         'password',
     ];
+
+    /**
+     * The messages that were sent to a user
+     *
+     * @return HasMany
+     */
+    public function messages() : HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
