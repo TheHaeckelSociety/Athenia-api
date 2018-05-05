@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\User\MessageRepositoryContract;
+use App\Models\User\Message;
+use App\Repositories\User\MessageRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -20,6 +23,7 @@ class AppRepositoryProvider extends ServiceProvider
     public function provides()
     {
         return [
+            MessageRepositoryContract::class,
             UserRepositoryContract::class,
         ];
     }
@@ -31,6 +35,9 @@ class AppRepositoryProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(MessageRepositoryContract::class, function() {
+            return new MessageRepository(new Message(), $this->app->make('log'));
+        });
         $this->app->bind(UserRepositoryContract::class, function() {
             return new UserRepository(new User(), $this->app->make('log'));
         });
