@@ -5,7 +5,7 @@
     <p>
         Thanks you for taking a look at Project Athenia! We are pretty excited to get this into the hands of everyone. We hope that through the input of user's like you, we can help start a narrative of in what way we could change the way that groups of people organize and discourse with each other.
     </p>
-    
+
     <p>
         Please take a look at everything in the system, and let us know what we can change or improve. This project is meaningless without your input.
     </p>
