@@ -5,8 +5,10 @@ namespace App\Providers;
 
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
+use App\Events\User\SignUpEvent;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
+use App\Listeners\User\SignUpListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -26,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MessageSentEvent::class => [
             MessageSentListener::class,
+        ],
+        SignUpEvent::class => [
+            SignUpListener::class,
         ],
     ];
 
