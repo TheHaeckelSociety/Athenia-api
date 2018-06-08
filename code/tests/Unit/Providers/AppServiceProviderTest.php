@@ -64,7 +64,8 @@ class AppServiceProviderTest extends TestCase
     public function testRegisterEnvironmentSpecificProviders()
     {
         $appMock = mock(Application::class);
-        $appMock->shouldReceive('environment')->andReturn('local');
+        $appMock->shouldReceive('bind');
+        $appMock->shouldReceive('environment')->once()->andReturn('local');
 
         $appMock->shouldReceive('register')->with(IdeHelperServiceProvider::class);
 
