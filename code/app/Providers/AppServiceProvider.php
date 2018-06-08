@@ -15,6 +15,16 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * @return array
+     */
+    public function provides()
+    {
+        return [
+            TokenGenerationServiceContract::class,
+        ];
+    }
+
+    /**
      * Register any application services.
      *
      * @return void
