@@ -5,9 +5,11 @@ namespace App\Providers;
 
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
+use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
+use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        ForgotPasswordEvent::class => [
+            ForgotPasswordListener::class,
+        ],
         MessageCreatedEvent::class => [
             MessageCreatedListener::class,
         ],
