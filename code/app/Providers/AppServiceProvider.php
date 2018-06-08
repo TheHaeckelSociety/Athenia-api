@@ -32,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerEnvironmentSpecificProviders();
+
+        $this->app->bind(TokenGenerationServiceContract::class, function() {
+            return new TokenGenerationService();
+        });
     }
 
     /**
@@ -42,8 +46,5 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() == 'local') {
             $this->app->register(IdeHelperServiceProvider::class);
         }
-        $this->app->bind(TokenGenerationServiceContract::class, function() {
-            return new TokenGenerationService();
-        });
     }
 }

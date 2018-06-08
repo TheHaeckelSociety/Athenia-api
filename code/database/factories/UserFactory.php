@@ -30,3 +30,9 @@ $factory->define(\App\Models\User\Message::class, function (Faker $faker) {
         'user_id' => factory(\App\Models\User\User::class)->create()->id,
     ];
 });
+$factory->define(\App\Models\User\PasswordToken::class, function (Faker $faker) {
+    return [
+        'token' => str_random(40),
+        'user_id' => factory(\App\Models\User\User::class)->create()->id,
+    ];
+});

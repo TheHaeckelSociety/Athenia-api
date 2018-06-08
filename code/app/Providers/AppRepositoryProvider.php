@@ -4,8 +4,13 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\User\MessageRepositoryContract;
+use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
+use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Models\User\Message;
+use App\Models\User\PasswordToken;
 use App\Repositories\User\MessageRepository;
+use App\Repositories\User\PasswordTokenRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -24,6 +29,7 @@ class AppRepositoryProvider extends ServiceProvider
     {
         return [
             MessageRepositoryContract::class,
+            PasswordTokenRepositoryContract::class,
             UserRepositoryContract::class,
         ];
     }
@@ -37,6 +43,14 @@ class AppRepositoryProvider extends ServiceProvider
     {
         $this->app->bind(MessageRepositoryContract::class, function() {
             return new MessageRepository(new Message(), $this->app->make('log'));
+        });
+        $this->app->bind(PasswordTokenRepositoryContract::class, function() {
+            return new PasswordTokenRepository(
+                new PasswordToken(),
+                $this->app->make('log'),
+                $this->app->make(Dispatcher::class),
+                $this->app->make(TokenGenerationServiceContract::class)
+            );
         });
         $this->app->bind(UserRepositoryContract::class, function() {
             return new UserRepository(new User(), $this->app->make('log'));
