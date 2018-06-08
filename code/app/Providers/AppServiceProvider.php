@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Services\TokenGenerationService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,5 +32,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() == 'local') {
             $this->app->register(IdeHelperServiceProvider::class);
         }
+        $this->app->bind(TokenGenerationServiceContract::class, function() {
+            return new TokenGenerationService();
+        });
     }
 }
