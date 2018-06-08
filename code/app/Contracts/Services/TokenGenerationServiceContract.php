@@ -1,7 +1,4 @@
 <?php
-/**
- * Service contract for token generation
- */
 declare(strict_types=1);
 
 namespace App\Contracts\Services;
