@@ -118,4 +118,16 @@ return [
 
     'attributes' => [],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | App Specific Validation Language
+    |--------------------------------------------------------------------------
+    |
+    | Language for validators that have been created for this app specifically
+    |
+    */
+    'token_is_not_expired' => 'The reset password token has expired. You are going to have to request a new one.',
+    'user_owns_token' => 'The reset password token does not seem to be for the entered email address.',
+
 ];
