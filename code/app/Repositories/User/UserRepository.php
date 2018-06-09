@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\User;
 
+use App\Models\BaseModelAbstract;
+use Illuminate\Contracts\Hashing\Hasher;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -18,13 +20,57 @@ class UserRepository extends BaseRepositoryAbstract implements UserRepositoryCon
     use NotImplemented\FindOrFail, NotImplemented\Delete, NotImplemented\FindAll;
 
     /**
+     * @var Hasher
+     */
+    private $hasher;
+
+    /**
      * UserRepository constructor.
      * @param User $model
      * @param LogContract $log
+     * @param Hasher $hasher
      */
-    public function __construct(User $model, LogContract $log)
+    public function __construct(User $model, LogContract $log, Hasher $hasher)
     {
         parent::__construct($model, $log);
+        $this->hasher = $hasher;
+    }
+
+    /**
+     * Overrides in order to hash the password properly
+     *
+     * @param array $data
+     * @param BaseModelAbstract|null $relatedModel
+     * @param array $forcedValues
+     * @return BaseModelAbstract|User
+     */
+    public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
+    {
+        if (isset($data['password'])) {
+            $data['password'] = $this->hasher->make($data['password']);
+        }
+
+        /** @var User $user */
+        $user = parent::create($data, $relatedModel, $forcedValues);
+
+        return $user;
+    }
+
+    /**
+     * Overrides in order to allow the syncing of roles
+     *
+     * @param BaseModelAbstract|User $model
+     * @param array $data
+     * @param array $forcedValues
+     * @return BaseModelAbstract
+     */
+    public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
+    {
+        if (isset($data['password'])) {
+            $data['password'] = $this->hasher->make($data['password']);
+        }
+
+        return parent::update($model, $data, $forcedValues);
     }
 
     /**

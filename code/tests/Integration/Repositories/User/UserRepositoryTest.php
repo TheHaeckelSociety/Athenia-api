@@ -6,6 +6,7 @@ namespace Tests\Integration\Repositories\User;
 use App\Exceptions\NotImplementedException;
 use App\Models\User\User;
 use App\Repositories\User\UserRepository;
+use Illuminate\Contracts\Hashing\Hasher;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -19,6 +20,11 @@ class UserRepositoryTest extends TestCase
     use DatabaseSetupTrait, MocksApplicationLog;
 
     /**
+     * @var Hasher
+     */
+    private $hasher;
+
+    /**
      * @var UserRepository
      */
     protected $repository;
@@ -28,7 +34,13 @@ class UserRepositoryTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
 
-        $this->repository = new UserRepository(new User(), $this->getGenericLogMock());
+        $this->hasher = $this->app->make(Hasher::class);
+
+        $this->repository = new UserRepository(
+            new User(),
+            $this->getGenericLogMock(),
+            $this->hasher
+        );
     }
 
     public function testFindAllThrowsException()
@@ -56,16 +68,20 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals(1, User::count());
         $this->assertEquals('test@test.com', $user->email);
         $this->assertEquals('Kelly Ann Conway', $user->name);
-        $this->assertEquals('Something secure', $user->password);
+        $this->assertTrue($this->hasher->check('Something secure', $user->password));
     }
 
     public function testUpdateSuccess()
     {
         $model = factory(User::class)->create(['email' => 'butts@butts.com']);
-        $this->repository->update($model, ['email' => 'bump@butts.com']);
+        $this->repository->update($model, [
+            'email' => 'bump@butts.com',
+            'password' => 'Something secure',
+        ]);
 
         $updated = User::find($model->id);
         $this->assertEquals('bump@butts.com', $updated->email);
+        $this->assertTrue($this->hasher->check('Something secure', $updated->password));
     }
 
     public function testDeleteThrowsException()

@@ -11,6 +11,7 @@ use App\Models\User\PasswordToken;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -53,7 +54,11 @@ class AppRepositoryProvider extends ServiceProvider
             );
         });
         $this->app->bind(UserRepositoryContract::class, function() {
-            return new UserRepository(new User(), $this->app->make('log'));
+            return new UserRepository(
+                new User(),
+                $this->app->make('log'),
+                $this->app->make(Hasher::class)
+            );
         });
     }
 }
