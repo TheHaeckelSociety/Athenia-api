@@ -25,6 +25,15 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
     });
 
     /**
+     * Forgot password routes
+     */
+    Route::post('forgot-password', 'ForgotPasswordController@forgotPassword')
+        ->name('forgot-password');
+
+    Route::post('reset-password', 'ForgotPasswordController@resetPassword')
+        ->name('reset-password');
+
+    /**
      * Authentication routes
      */
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function() {

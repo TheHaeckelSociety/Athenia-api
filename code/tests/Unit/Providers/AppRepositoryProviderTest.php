@@ -15,23 +15,6 @@ use Tests\TestCase;
  */
 class AppRepositoryProviderTest extends TestCase
 {
-    public function testBinds()
-    {
-        $app = new Application();
-        $app['env'] = 'testing';
-
-        $serviceProvider = new AppServiceProvider($app);
-        $serviceProvider->register();
-
-        $repositoryProvider = new AppRepositoryProvider($app);
-
-        $repositoryProvider->register();
-
-        foreach ($this->allProviders() as $contract) {
-            $app->make($contract[0]);
-        }
-    }
-
     public function testProvidesAll()
     {
         $app = new Application();
