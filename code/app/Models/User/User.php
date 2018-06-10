@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Models\Wiki\Article;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +22,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
@@ -44,6 +46,16 @@ class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubj
         'deleted_at',
         'password',
     ];
+
+    /**
+     * The articles that were created by this user
+     *
+     * @return HasMany
+     */
+    public function createdArticles() : HasMany
+    {
+        return $this->hasMany(Article::class, 'created_by_id');
+    }
 
     /**
      * The messages that were sent to a user
@@ -120,6 +132,12 @@ class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubj
      *         minLength=6,
      *         description="The password for this user. This cannot be read, and it can only be set."
      *     ),
+     *     @SWG\Property(
+     *         property="created_articles",
+     *         description="The articles that this user created.",
+     *         type="array",
+     *         @SWG\Items(ref="#/definitions/Articles")
+     *     )
      * )
      */
 }
