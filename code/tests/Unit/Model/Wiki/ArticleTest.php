@@ -5,6 +5,7 @@ namespace Tests\Unit\Models\Wiki;
 
 use App\Models\Wiki\Article;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
 /**
@@ -21,5 +22,17 @@ class ArticleTest extends TestCase
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
         $this->assertEquals('articles.created_by_id', $relation->getQualifiedForeignKey());
+    }
+
+    public function testIterations()
+    {
+        $article = new Article();
+        $relation = $article->iterations();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('articles.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('iterations.article_id', $relation->getQualifiedForeignKeyName());
+
+        $this->assertContains('order by "created_at" desc', $relation->toSql());
     }
 }
