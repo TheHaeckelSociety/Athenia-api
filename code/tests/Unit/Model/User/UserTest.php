@@ -23,6 +23,16 @@ class UserTest extends TestCase
         $this->assertEquals('articles.created_by_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testCreatedIterations()
+    {
+        $user = new User();
+        $relation = $user->createdIterations();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('iterations.created_by_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testMessages()
     {
         $user = new User();
