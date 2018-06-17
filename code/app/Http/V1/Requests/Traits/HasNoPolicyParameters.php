@@ -4,17 +4,17 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\Traits;
 
 /**
- * Class HasNoRules
+ * Trait HasNoPolicyParameters
  * @package App\Http\V1\Requests\Traits
  */
-trait HasNoRules
+trait HasNoPolicyParameters
 {
     /**
-     * Default Rules
+     * Gets any additional parameters needed for the policy function
      *
      * @return array
      */
-    public function rules(): array
+    protected function getPolicyParameters(): array
     {
         return [];
     }

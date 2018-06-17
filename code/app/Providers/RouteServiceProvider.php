@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Wiki\Article;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -13,6 +14,13 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
  */
 class RouteServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
+    private $modelPlaceHolders = [
+        'article' => Article::class,
+    ];
+
     /**
      * @var Router
      */
@@ -35,6 +43,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        foreach($this->modelPlaceHolders as $placeHolder => $model) {
+            $this->router->pattern($placeHolder, '^[0-9]+$');
+            $this->router->model($placeHolder, $model);
+        }
+
         parent::boot();
     }
 
