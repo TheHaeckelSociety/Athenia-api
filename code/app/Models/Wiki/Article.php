@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Wiki;
 
+use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Article extends BaseModelAbstract
+class Article extends BaseModelAbstract implements HasPolicyContract
 {
     /**
      * Values that are appending on a toArray function call

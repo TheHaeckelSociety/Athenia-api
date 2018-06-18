@@ -13,48 +13,6 @@ use Tests\TestCase;
  */
 class UserPolicyTest extends TestCase
 {
-    public function testBefore()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertNull($policy->before(new User()));
-    }
-
-    public function testAll()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertFalse($policy->all(new User()));
-    }
-
-    public function testView()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertFalse($policy->view(new User(), new User()));
-    }
-
-    public function testCreate()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertFalse($policy->create(new User()));
-    }
-
-    public function testUpdate()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertFalse($policy->update(new User(), new User()));
-    }
-
-    public function testDelete()
-    {
-        $policy = new UserPolicy();
-
-        $this->assertFalse($policy->delete(new User(), new User()));
-    }
-
     public function testViewSelfPasses()
     {
         $policy = new UserPolicy();
