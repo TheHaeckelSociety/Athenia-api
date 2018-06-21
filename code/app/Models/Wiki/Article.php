@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Models\Wiki;
 
 use App\Contracts\Models\HasPolicyContract;
+use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,8 +32,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Article extends BaseModelAbstract implements HasPolicyContract
+class Article extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
+    use HasValidationRules;
+
     /**
      * Values that are appending on a toArray function call
      *
@@ -71,6 +75,28 @@ class Article extends BaseModelAbstract implements HasPolicyContract
         /** @var Iteration|null $iteration */
         $iteration = $this->iterations->first();
         return $iteration ? $iteration->content : null;
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'title' => [
+                    'string',
+                    'max:120',
+                ],
+            ],
+            static::VALIDATION_RULES_CREATE => [
+                static::VALIDATION_PREPEND_REQUIRED => [
+                    'title',
+                ],
+            ],
+        ];
     }
 
     /**
