@@ -55,5 +55,14 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
 
         Route::get('users/me', 'UserController@me')
             ->name('view-self');
+
+        /**
+         * Article Context
+         */
+        Route::resource('articles', 'ArticleController', [
+            'except' => [
+                'create', 'edit'
+            ]
+        ]);
     });
 });
