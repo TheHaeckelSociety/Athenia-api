@@ -6,12 +6,13 @@ namespace App\Http\V1\Requests\Article;
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Wiki\Article;
+use App\Policies\ArticlePolicy;
 
 /**
- * Class DeleteRequest
+ * Class ViewRequest
  * @package App\Http\V1\Requests\Article
  */
-class DeleteRequest extends BaseAuthenticatedRequestAbstract
+class ViewRequest extends BaseAuthenticatedRequestAbstract
 {
     use HasNoRules;
 
@@ -22,7 +23,7 @@ class DeleteRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return ArticlePolicy::ACTION_DELETE;
+        return ArticlePolicy::ACTION_VIEW;
     }
 
     /**
