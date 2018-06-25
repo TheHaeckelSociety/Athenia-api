@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithoutEvents;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -57,5 +58,14 @@ abstract class TestCase extends BaseTestCase
         $logMock = mock(LogContract::class);
         $logMock->shouldReceive('info');
         return $logMock;
+    }
+
+    /**
+     * Call this to make the user an authenticated user
+     */
+    protected function actAsUser()
+    {
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
     }
 }
