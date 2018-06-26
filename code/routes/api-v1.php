@@ -61,7 +61,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
          */
         Route::resource('articles', 'ArticleController', [
             'except' => [
-                'create', 'edit'
+                'create', 'edit', 'destroy'
             ]
         ]);
     });
