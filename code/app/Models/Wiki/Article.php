@@ -10,6 +10,7 @@ use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Validation\Rule;
 
 /**
  * Class Article
@@ -90,10 +91,15 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
                     'string',
                     'max:120',
                 ],
+                'created_by_id' => [
+                    'integer',
+                    Rule::exists('users', 'id'),
+                ],
             ],
             static::VALIDATION_RULES_CREATE => [
                 static::VALIDATION_PREPEND_REQUIRED => [
                     'title',
+                    'created_by_id',
                 ],
             ],
         ];
