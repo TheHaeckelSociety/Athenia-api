@@ -21,6 +21,11 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
+     * @var User
+     */
+    protected $actingAs;
+
+    /**
      * Overriding this - because i am handling my own database stuff
      *
      * Boot the testing helper traits.
@@ -65,7 +70,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function actAsUser()
     {
-        $user = factory(User::class)->create();
-        $this->actingAs($user);
+        $this->actingAs = factory(User::class)->create();
+        $this->actingAs($this->actingAs);
     }
 }

@@ -91,15 +91,10 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
                     'string',
                     'max:120',
                 ],
-                'created_by_id' => [
-                    'integer',
-                    Rule::exists('users', 'id'),
-                ],
             ],
             static::VALIDATION_RULES_CREATE => [
                 static::VALIDATION_PREPEND_REQUIRED => [
                     'title',
-                    'created_by_id',
                 ],
             ],
         ];

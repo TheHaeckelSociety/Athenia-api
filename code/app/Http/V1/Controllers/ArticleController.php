@@ -11,6 +11,7 @@ use App\Models\Wiki\Article;
 use App\Repositories\Wiki\ArticleRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ArticleController
@@ -202,7 +203,11 @@ class ArticleController extends BaseControllerAbstract
      */
     public function store(Requests\Article\StoreRequest $request)
     {
-        $model = $this->repository->create($request->json()->all());
+        $user = Auth::user();
+        $data = $request->json()->all();
+        $data['created_by_id'] = $user->id;
+
+        $model = $this->repository->create($data);
         return new JsonResponse($model, 201);
     }
 

@@ -39,18 +39,15 @@ class ArticleCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        $user = factory(User::class)->create();
-
         $response = $this->json('POST', $this->path, [
             'title' => 'An Article',
-            'created_by_id' => $user->id,
         ]);
 
         $response->assertStatus(201);
 
         $response->assertJson([
             'title' => 'An Article',
-            'created_by_id' => $user->id,
+            'created_by_id' => $this->actingAs->id,
             'content' => '',
         ]);
     }
@@ -65,7 +62,6 @@ class ArticleCreateTest extends TestCase
 
         $response->assertJson([
             'errors' => [
-                'created_by_id' => ['The created by id field is required.'],
                 'title' => ['The title field is required.'],
             ]
         ]);
@@ -88,23 +84,6 @@ class ArticleCreateTest extends TestCase
         ]);
     }
 
-    public function testCreateFailsInvalidIntegerFields()
-    {
-        $this->actAsUser();
-
-        $response = $this->json('POST', $this->path, [
-            'created_by_id' => 'hi',
-        ]);
-
-        $response->assertStatus(400);
-
-        $response->assertJson([
-            'errors' => [
-                'created_by_id' => ['The created by id must be an integer.'],
-            ]
-        ]);
-    }
-
     public function testCreateFailsStringsTooLong()
     {
         $this->actAsUser();
@@ -118,23 +97,6 @@ class ArticleCreateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'title' => ['The title may not be greater than 120 characters.'],
-            ]
-        ]);
-    }
-
-    public function testCreateFailsInvalidModels()
-    {
-        $this->actAsUser();
-
-        $response = $this->json('POST', $this->path, [
-            'created_by_id' => 435,
-        ]);
-
-        $response->assertStatus(400);
-
-        $response->assertJson([
-            'errors' => [
-                'created_by_id' => ['The selected created by id is invalid.'],
             ]
         ]);
     }
