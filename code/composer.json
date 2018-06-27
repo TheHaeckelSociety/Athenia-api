@@ -10,6 +10,7 @@
         "fideloper/proxy": "~4.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
+        "orchid/socket": "^1.6",
         "pda/pheanstalk": "^3.1",
         "roave/security-advisories": "dev-master",
         "tymon/jwt-auth": "1.0.0-rc.2"
