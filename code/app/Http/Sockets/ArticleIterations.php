@@ -2,6 +2,7 @@
 
 namespace App\Http\Sockets;
 
+use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use Orchid\Socket\BaseSocketListener;
 use Ratchet\ConnectionInterface;
 
@@ -15,10 +16,17 @@ class ArticleIterations extends BaseSocketListener
     protected $clients;
 
     /**
-     * ArticleIterations constructor.
+     * @var IterationRepositoryContract
      */
-    public function __construct()
+    private $iterationRepository;
+
+    /**
+     * ArticleIterations constructor.
+     * @param IterationRepositoryContract $iterationRepository
+     */
+    public function __construct(IterationRepositoryContract $iterationRepository)
     {
+        $this->iterationRepository = $iterationRepository;
         $this->clients = new \SplObjectStorage();
     }
 
@@ -28,6 +36,7 @@ class ArticleIterations extends BaseSocketListener
     public function onOpen(ConnectionInterface $conn)
     {
         $this->clients->attach($conn);
+        echo "New connection!\n";
     }
 
     /**

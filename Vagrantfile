@@ -30,7 +30,8 @@ Vagrant.configure("2") do |config|
         dev.vm.network "private_network", ip: "172.28.145.110"
         dev.vm.hostname = "dev-api.projectathenia.com"
         dev.hostsupdater.aliases = [
-            "dev-assets.projectathenia.com"
+            "dev-assets.projectathenia.com",
+            "dev-socket.projectathenia.com",
         ]
 
         dev.vm.box = "ubuntu/bionic64"
@@ -60,6 +61,7 @@ Vagrant.configure("2") do |config|
             ansible.host_key_checking = false ## override for local
             ansible.extra_vars = {
                 server_name: dev.vm.hostname,
+                socket_server_name: "dev-socket.projectathenia.com",
                 asset_server_name: "dev-assets.projectathenia.com",
                 server_env: "development",
                 notification_email: "dev@projectathenia.com"

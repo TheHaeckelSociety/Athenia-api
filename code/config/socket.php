@@ -6,7 +6,7 @@ return [
      * $httpHost HTTP hostname clients intend to connect to.
      * MUST match JS `new WebSocket('ws://$httpHost')`.
      */
-    'httpHost'    => env('SOCKET_HTTP_HOST', 'localhost'),
+    'httpHost'    => env('SOCKET_HTTP_HOST', 'dev-socket.projectathenia.com'),
 
     /*
      * Port to listen on. If 80, assuming production,
@@ -17,7 +17,7 @@ return [
     /*
      * Public port for Nginx
      */
-    'public_port' => env('SOCKET_PUBLIC_PORT', '443'),
+    'public_port' => env('SOCKET_PUBLIC_PORT', '80'),
 
     /*
      * IP address to bind to. Default is localhost/proxy only.

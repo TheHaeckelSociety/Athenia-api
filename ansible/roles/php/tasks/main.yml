@@ -19,9 +19,6 @@
 
 - include: composer.yml
 
-- include: xdebug.yml
-  when: server_env == "development"
-
 - name: Set upload_max_filesize
   lineinfile: dest=/etc/php/7.2/fpm/php.ini regexp=^upload_max_filesize line='upload_max_filesize = 5M'
   notify:

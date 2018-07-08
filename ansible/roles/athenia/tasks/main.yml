@@ -10,6 +10,17 @@
     dest: /etc/nginx/sites-enabled/api.projectathenia.com.conf
     state: link
 
+- name: Copy across virtual host for socket
+  template:
+    src=socket.projectathenia.com.conf.j2
+    dest=/etc/nginx/sites-available/socket.projectathenia.com.conf
+
+- name: Enable virtual host for socket
+  file:
+    src: /etc/nginx/sites-available/socket.projectathenia.com.conf
+    dest: /etc/nginx/sites-enabled/socket.projectathenia.com.conf
+    state: link
+
 - name: Create postgres user
   become: true
   become_user: postgres
