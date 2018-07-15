@@ -36,7 +36,6 @@ class ArticleIterations extends BaseSocketListener
     public function onOpen(ConnectionInterface $conn)
     {
         $this->clients->attach($conn);
-        echo "New connection!\n";
     }
 
     /**
