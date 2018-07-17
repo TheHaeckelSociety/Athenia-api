@@ -10,4 +10,4 @@
 /** @var $this \Orchid\Socket\Console\Server */
 /** @var $socket \Ratchet\App */
 $articleIterationSocket = $this->getLaravel()->make('\App\Http\Sockets\ArticleIterations');
-$socket->route('/', $articleIterationSocket, ['*']);
+$socket->route('/articles/{article}/iterations', $articleIterationSocket, ['*']);
