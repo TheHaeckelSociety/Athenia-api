@@ -95,7 +95,7 @@ class ArticleIterations extends BaseSocketListener
      */
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        if ($data =$this->validateArticle($from)) {
+        if ($data = $this->validateArticle($from)) {
 
             /** @var ConnectionInterface $client */
             foreach ($data['connections'] as $client) {
