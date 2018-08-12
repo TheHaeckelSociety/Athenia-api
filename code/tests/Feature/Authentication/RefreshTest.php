@@ -52,11 +52,11 @@ class RefreshTest extends TestCase
         $response->assertJsonStructure(['token']);
 
         $token = $response->original['token'];
-// @todo add test for making sure the token works
-//        $response = $this->json('GET', '/v4/users/me', [], [
-//            'Authorization' => $token,
-//        ]);
-//
-//        $response->assertStatus(200);
+
+        $response = $this->json('GET', '/v1/users/me', [], [
+            'Authorization' => $token,
+        ]);
+
+        $response->assertStatus(200);
     }
 }
