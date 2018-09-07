@@ -13,6 +13,7 @@ use Psr\Http\Message\UriInterface;
 use Ratchet\ConnectionInterface;
 use Tests\CustomMockInterface;
 use Tests\TestCase;
+use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class ArticleIterationTest
@@ -31,6 +32,11 @@ class ArticleIterationsTest extends TestCase
     private $iterationRepository;
 
     /**
+     * @var JWTAuth
+     */
+    private $jwtAuth;
+
+    /**
      * @var ArticleIterations
      */
     private $socket;
@@ -40,7 +46,13 @@ class ArticleIterationsTest extends TestCase
         parent::setUp();
         $this->articleRepository = mock(ArticleRepositoryContract::class);
         $this->iterationRepository = mock(IterationRepositoryContract::class);
-        $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository);
+        $this->jwtAuth = mock(JWTAuth::class);
+        $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository, $this->jwtAuth);
+    }
+
+    public function testAuthenticateUserFailsNoHeader()
+    {
+
     }
 
     public function testValidateArticleFailsNoArticleID()

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Sockets;
 
@@ -56,17 +57,6 @@ class ArticleIterations extends BaseSocketListener
     }
 
     /**
-     * @param ConnectionInterface $conn
-     */
-    public function onOpen(ConnectionInterface $conn)
-    {
-        if ($this->authenticateUser($conn) && $data = $this->validateArticle($conn)) {
-
-            $data['connections']->attach($conn);
-        }
-    }
-
-    /**
      * Authenticates that the user is logged in properly
      *
      * @param ConnectionInterface $connection
@@ -81,34 +71,46 @@ class ArticleIterations extends BaseSocketListener
             $connection->send('This routes requires that the user is logged in.');
             $connection->close();
         }
+        else {
+            $authHeader = $httpRequest->getHeader('Authorization');
 
-        $authHeader = $httpRequest->getHeader('Authorization');
-
-        if (!count($authHeader)) {
-            $connection->send('Invalid auth header format.');
-            $connection->close();
-        }
-
-        $header = $authHeader[0];
-        $headerParts = explode(' ', $header);
-
-        if (!count($headerParts) > 1) {
-            $connection->send('Invalid auth header format.');
-            $connection->close();
-        } else {
-
-            $this->jwtAuth->setToken($headerParts[1]);
-
-            /** @var User $user */
-            if ($user = $this->jwtAuth->authenticate()) {
-                return $user;
+            if (!count($authHeader)) {
+                $connection->send('Invalid auth header format.');
+                $connection->close();
             }
 
-            $connection->send('Unable to authenticate user. Please try logging in again.');
-            $connection->close();
+            $header = $authHeader[0];
+            $headerParts = explode(' ', $header);
+
+            if (!count($headerParts) > 1) {
+                $connection->send('Invalid auth header format.');
+                $connection->close();
+            } else {
+
+                $this->jwtAuth->setToken($headerParts[1]);
+
+                /** @var User $user */
+                if ($user = $this->jwtAuth->authenticate()) {
+                    return $user;
+                }
+
+                $connection->send('Unable to authenticate user. Please try logging in again.');
+                $connection->close();
+            }
         }
 
         return null;
+    }
+
+    /**
+     * @param ConnectionInterface $conn
+     */
+    public function onOpen(ConnectionInterface $conn)
+    {
+        if ($this->authenticateUser($conn) && $data = $this->validateArticle($conn)) {
+
+            $data['connections']->attach($conn);
+        }
     }
 
     /**
