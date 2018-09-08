@@ -167,8 +167,7 @@ class ArticleIterationsTest extends TestCase
 
         $request->shouldReceive('getUri')->once()->andReturn($uri);
 
-        $conn->shouldReceive('send')->once();
-        $conn->shouldReceive('close')->once();
+        $this->expectException(\Exception::class);
 
         $this->socket->validateArticle($conn);
     }
@@ -191,8 +190,7 @@ class ArticleIterationsTest extends TestCase
         $this->articleRepository->shouldReceive('findOrFail')->once()->with(1)
             ->andThrow(new ModelNotFoundException());
 
-        $conn->shouldReceive('send')->once();
-        $conn->shouldReceive('close')->once();
+        $this->expectException(ModelNotFoundException::class);
 
         $this->socket->validateArticle($conn);
     }
@@ -226,14 +224,57 @@ class ArticleIterationsTest extends TestCase
 
     public function testOnOpen()
     {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+
+        $user = new User();
+        $user->id = 545;
+
+        $this->jwtAuth->shouldReceive('setToken')->once()->with('token');
+        $this->jwtAuth->shouldReceive('authenticate')->once()->andReturn($user);
+
+        /** @var CustomMockInterface|UriInterface $uri */
+        $uri = mock(UriInterface::class);
+
+        $uri->shouldReceive('getQuery')->once()->andReturn('article=1');
+
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $article = new Article();
+        $article->id = 1;
+
+        $this->articleRepository->shouldReceive('findOrFail')->once()->with(1)
+            ->andReturn($article);
+
+        /** @var CustomMockInterface|ConnectionInterface $conn */
         $conn = mock(ConnectionInterface::class);
+        $conn->httpRequest = $httpRequest;
 
         $this->socket->onOpen($conn);
     }
 
     public function testOnClose()
     {
+        $httpRequest = mock(RequestInterface::class);
+
+        /** @var CustomMockInterface|UriInterface $uri */
+        $uri = mock(UriInterface::class);
+
+        $uri->shouldReceive('getQuery')->once()->andReturn('article=1');
+
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $article = new Article();
+        $article->id = 1;
+
+        $this->articleRepository->shouldReceive('findOrFail')->once()->with(1)
+            ->andReturn($article);
+
+        /** @var CustomMockInterface|ConnectionInterface $conn */
         $conn = mock(ConnectionInterface::class);
+        $conn->httpRequest = $httpRequest;
 
         $this->socket->onClose($conn);
     }
