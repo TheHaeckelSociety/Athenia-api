@@ -5,7 +5,9 @@ namespace Tests\Unit\Http\Sockets;
 
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
+use App\Exceptions\AuthenticationException;
 use App\Http\Sockets\ArticleIterations;
+use App\Models\User\User;
 use App\Models\Wiki\Article;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Http\Message\RequestInterface;
@@ -32,7 +34,7 @@ class ArticleIterationsTest extends TestCase
     private $iterationRepository;
 
     /**
-     * @var JWTAuth
+     * @var CustomMockInterface|JWTAuth
      */
     private $jwtAuth;
 
@@ -50,9 +52,104 @@ class ArticleIterationsTest extends TestCase
         $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository, $this->jwtAuth);
     }
 
-    public function testAuthenticateUserFailsNoHeader()
+    public function testParseAuthHeaderFailsNoHeader()
     {
+        $httpRequest = mock(RequestInterface::class);
 
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(false);
+
+        $this->expectException(AuthenticationException::class);
+
+        $this->socket->parseAuthHeader($httpRequest);
+    }
+
+    public function testParseAuthHeaderFailsEmptyHeader()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn([]);
+
+        $this->expectException(AuthenticationException::class);
+
+        $this->socket->parseAuthHeader($httpRequest);
+    }
+
+    public function testParseAuthHeaderFailsInvalidHeader()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer']);
+
+        $this->expectException(AuthenticationException::class);
+
+        $this->socket->parseAuthHeader($httpRequest);
+    }
+
+    public function testParseAuthHeaderSuccess()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+
+        $this->assertEquals('token', $this->socket->parseAuthHeader($httpRequest));
+    }
+
+    public function testAuthenticationUserFailsParseHeaderFailure()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer']);
+
+        /** @var CustomMockInterface|ConnectionInterface $conn */
+        $conn = mock(ConnectionInterface::class);
+        $conn->httpRequest = $httpRequest;
+
+        $this->expectException(AuthenticationException::class);
+
+        $this->socket->authenticateUser($conn);
+    }
+
+    public function testAuthenticationUserFailsAuthenticateFails()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+
+        $this->jwtAuth->shouldReceive('setToken')->once()->with('token');
+        $this->jwtAuth->shouldReceive('authenticate')->once()->andReturn(null);
+
+        /** @var CustomMockInterface|ConnectionInterface $conn */
+        $conn = mock(ConnectionInterface::class);
+        $conn->httpRequest = $httpRequest;
+
+        $this->expectException(AuthenticationException::class);
+
+        $this->socket->authenticateUser($conn);
+    }
+
+    public function testAuthenticationUserSuccess()
+    {
+        $httpRequest = mock(RequestInterface::class);
+
+        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
+        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+
+        $user = new User();
+        $user->id = 545;
+
+        $this->jwtAuth->shouldReceive('setToken')->once()->with('token');
+        $this->jwtAuth->shouldReceive('authenticate')->once()->andReturn($user);
+
+        /** @var CustomMockInterface|ConnectionInterface $conn */
+        $conn = mock(ConnectionInterface::class);
+        $conn->httpRequest = $httpRequest;
+
+        $this->assertEquals($user, $this->socket->authenticateUser($conn));
     }
 
     public function testValidateArticleFailsNoArticleID()

@@ -5,9 +5,10 @@ namespace App\Http\Sockets;
 
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
+use App\Exceptions\AuthenticationException;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Wiki\Iteration;
 use Orchid\Socket\BaseSocketListener;
 use Psr\Http\Message\RequestInterface;
 use Ratchet\ConnectionInterface;
@@ -23,9 +24,9 @@ class ArticleIterations extends BaseSocketListener
     /**
      * A list of articles that have already been loaded
      *
-     * @var Article[]
+     * @var array[]
      */
-    protected $loadedArticles;
+    protected $loadedArticles = [];
 
     /**
      * @var ArticleRepositoryContract
@@ -57,6 +58,34 @@ class ArticleIterations extends BaseSocketListener
     }
 
     /**
+     * Parses the authentication header from a request
+     *
+     * @param RequestInterface $httpRequest
+     * @return string
+     */
+    public function parseAuthHeader(RequestInterface $httpRequest) : string
+    {
+        if (!$httpRequest->hasHeader('Authorization')) {
+            throw new AuthenticationException('This routes requires that the user is logged in.');
+        }
+
+        $authHeader = $httpRequest->getHeader('Authorization');
+
+        if (!count($authHeader)) {
+            throw new AuthenticationException('Invalid auth header format.');
+        }
+
+        $header = $authHeader[0];
+        $headerParts = explode(' ', $header);
+
+        if (count($headerParts) <= 1) {
+            throw new AuthenticationException('Invalid auth header format.');
+        }
+
+        return $headerParts[1];
+    }
+
+    /**
      * Authenticates that the user is logged in properly
      *
      * @param ConnectionInterface $connection
@@ -67,57 +96,24 @@ class ArticleIterations extends BaseSocketListener
         /** @var RequestInterface $httpRequest */
         $httpRequest = $connection->httpRequest;
 
-        if (!$httpRequest->hasHeader('Authorization')) {
-            $connection->send('This routes requires that the user is logged in.');
-            $connection->close();
-        }
-        else {
-            $authHeader = $httpRequest->getHeader('Authorization');
+        $authHeader = $this->parseAuthHeader($httpRequest);
 
-            if (!count($authHeader)) {
-                $connection->send('Invalid auth header format.');
-                $connection->close();
-            }
+        $this->jwtAuth->setToken($authHeader);
 
-            $header = $authHeader[0];
-            $headerParts = explode(' ', $header);
-
-            if (!count($headerParts) > 1) {
-                $connection->send('Invalid auth header format.');
-                $connection->close();
-            } else {
-
-                $this->jwtAuth->setToken($headerParts[1]);
-
-                /** @var User $user */
-                if ($user = $this->jwtAuth->authenticate()) {
-                    return $user;
-                }
-
-                $connection->send('Unable to authenticate user. Please try logging in again.');
-                $connection->close();
-            }
+        /** @var User $user */
+        if ($user = $this->jwtAuth->authenticate()) {
+            return $user;
         }
 
-        return null;
-    }
-
-    /**
-     * @param ConnectionInterface $conn
-     */
-    public function onOpen(ConnectionInterface $conn)
-    {
-        if ($this->authenticateUser($conn) && $data = $this->validateArticle($conn)) {
-
-            $data['connections']->attach($conn);
-        }
+        throw new AuthenticationException('Unable to authenticate user. Please try logging in again.');
     }
 
     /**
      * @param ConnectionInterface $connection
-     * @return array|null
+     * @return array
+     * @throws \Exception
      */
-    public function validateArticle(ConnectionInterface $connection) : ?array
+    public function validateArticle(ConnectionInterface $connection) : array
     {
         /** @var RequestInterface $httpRequest */
         $httpRequest = $connection->httpRequest;
@@ -127,27 +123,38 @@ class ArticleIterations extends BaseSocketListener
         $query = array_combine($result[1], $result[2]);
 
         if (!isset($query['article'])) {
-            $connection->send('Unknown error, please try again later');
-            $connection->close();
-        } else {
-            try {
-                if (!isset ($this->loadedArticles[$query['article']])) {
-                    $article = $this->articleRepository->findOrFail($query['article']);
-                    $this->loadedArticles[$query['article']] = [
-                        'model' => $article,
-                        'connections' => new SplObjectStorage(),
-                    ];
-                }
-
-                return $this->loadedArticles[$query['article']];
-
-            } catch (ModelNotFoundException $e) {
-                $connection->send('Article not found, please double check the article id');
-                $connection->close();
-            }
+            throw new \Exception('Unknown error, please try again later');
         }
 
-        return null;
+        $articleId = (int)$query['article'];
+
+        if (!isset ($this->loadedArticles[$articleId])) {
+            $article = $this->articleRepository->findOrFail($query['article']);
+            $this->loadedArticles[$articleId] = [
+                'model' => $article,
+                'connections' => new SplObjectStorage(),
+            ];
+        }
+
+        return $this->loadedArticles[$articleId];
+    }
+
+    /**
+     * @param ConnectionInterface $conn
+     */
+    public function onOpen(ConnectionInterface $conn)
+    {
+        try {
+            $user = $this->authenticateUser($conn);
+            $data = $this->validateArticle($conn);
+
+            $data['connections']->attach($conn, $user);
+
+        } catch (\Exception $e) {
+
+            $conn->send($e->getMessage());
+            $conn->close();
+        }
     }
 
     /**
@@ -156,13 +163,19 @@ class ArticleIterations extends BaseSocketListener
      */
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        $user = $this->authenticateUser($from);
-        $data = $this->validateArticle($from);
-        if ($user && $data) {
+        try {
+            $data = $this->validateArticle($from);
+
+            /** @var SplObjectStorage $connections */
+            $connections = $data['connections'];
+            /** @var Article $article */
+            $article = $data['model'];
+
+            $user = $connections->offsetGet($from);
 
             $msgData = json_decode($msg, true);
 
-            if ($updatedModel = $this->runAction($user, $data['model'], $msgData)) {
+            if ($updatedModel = $this->runAction($user, $article, $msgData)) {
 
                 $data['model'] = $updatedModel;
 
@@ -172,7 +185,13 @@ class ArticleIterations extends BaseSocketListener
                         $client->send($updatedModel->content);
                     }
                 }
+
+                $this->loadedArticles[$updatedModel->id] = $data;
             }
+        } catch (\Exception $e) {
+
+            $from->send($e->getMessage());
+            $from->close();
         }
     }
 
@@ -211,10 +230,13 @@ class ArticleIterations extends BaseSocketListener
         $length = $msg['length'] ?? null;
 
         if ($startPosition && $length) {
+            /** @var Iteration $iteration */
             $this->iterationRepository->create([
                 'content' => substr_replace($article->content, '', $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
+
+            return $article->fresh();
         }
 
         return null;
@@ -225,9 +247,11 @@ class ArticleIterations extends BaseSocketListener
      */
     public function onClose(ConnectionInterface $conn)
     {
-        if ($data = $this->validateArticle($conn)) {
-
+        try {
+            $data = $this->validateArticle($conn);
             $data['connections']->detach($conn);
+        } catch (\Exception $e) {
+            $conn->send($e->getMessage());
         }
     }
 
