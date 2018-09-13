@@ -236,7 +236,7 @@ class ArticleIterations extends BaseSocketListener
                 'created_by_id' => $user->id,
             ], $article);
 
-            return $article->fresh();
+            return $article->refresh();
         }
 
         return null;

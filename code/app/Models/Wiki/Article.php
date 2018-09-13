@@ -63,7 +63,7 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
      */
     public function iterations() : HasMany
     {
-        return $this->hasMany(Iteration::class)->orderByDesc('created_at');
+        return $this->hasMany(Iteration::class)->orderByDesc('created_at')->orderByDesc('id');
     }
 
     /**

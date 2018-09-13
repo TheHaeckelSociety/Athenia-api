@@ -18,6 +18,12 @@ class ArticleTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->setupDatabase();
+    }
+
     public function testContentReturnsNull()
     {
         /** @var Article $article */
@@ -48,6 +54,7 @@ class ArticleTest extends TestCase
         /** This should be appended */
         factory(Iteration::class)->create([
             'article_id' => $article->id,
+            'created_at' => Carbon::now(),
             'content' => 'Hello'
         ]);
 
