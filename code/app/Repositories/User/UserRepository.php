@@ -17,7 +17,7 @@ use App\Repositories\Traits\NotImplemented;
  */
 class UserRepository extends BaseRepositoryAbstract implements UserRepositoryContract
 {
-    use NotImplemented\FindOrFail, NotImplemented\Delete, NotImplemented\FindAll;
+    use NotImplemented\Delete, NotImplemented\FindAll;
 
     /**
      * @var Hasher

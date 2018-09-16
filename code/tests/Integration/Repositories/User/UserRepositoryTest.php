@@ -7,6 +7,7 @@ use App\Exceptions\NotImplementedException;
 use App\Models\User\User;
 use App\Repositories\User\UserRepository;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -50,12 +51,22 @@ class UserRepositoryTest extends TestCase
         $this->repository->findAll();
     }
 
-    public function testFindOrFailThrowsException()
+    public function testFindOrFailSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        $model = factory(User::class)->create();
 
-        $this->repository->findOrFail(5);
+        $foundModel = $this->repository->findOrFail($model->id);
+        $this->assertEquals($model->id, $foundModel->id);
     }
+
+    public function testFindOrFailFails()
+    {
+        factory(User::class)->create(['id' => 2]);
+
+        $this->expectException(ModelNotFoundException::class);
+        $this->repository->findOrFail(1);
+    }
+
 
     public function testCreateSuccess()
     {
