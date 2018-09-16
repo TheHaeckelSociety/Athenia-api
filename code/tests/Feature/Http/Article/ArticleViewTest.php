@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Feature\Article;
+namespace Tests\Feature\HttpArticle;
 
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
@@ -11,7 +11,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class ArticleViewTest
- * @package Tests\Feature\Article
+ * @package Tests\Feature\HttpArticle
  */
 class ArticleViewTest extends TestCase
 {

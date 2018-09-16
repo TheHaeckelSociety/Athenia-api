@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\HttpUser;
 
 use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +14,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class UserSignUpTest
- * @package Tests\Feature\User
+ * @package Tests\Feature\HttpUser
  */
 class SignUpTest extends TestCase
 {

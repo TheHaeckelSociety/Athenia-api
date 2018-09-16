@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Feature\ForgotPassword;
+namespace Tests\Feature\HttpForgotPassword;
 
 use App\Events\User\ForgotPasswordEvent;
 use App\Models\User\User;
@@ -12,7 +12,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class ForgotPasswordTest
- * @package Tests\Feature\ForgotPassword
+ * @package Tests\Feature\HttpForgotPassword
  */
 class ForgotPasswordTest extends TestCase
 {
