@@ -212,6 +212,9 @@ class ArticleIterations extends BaseSocketListener
 
                 case 'add':
                     return $this->handleAddAction($user, $article, $msg);
+
+                case 'replace':
+                    return $this->handleReplaceAction($user, $article, $msg);
             }
         }
 
@@ -264,6 +267,33 @@ class ArticleIterations extends BaseSocketListener
 
             $this->iterationRepository->create([
                 'content' => $beginningString . $content . $endString,
+                'created_by_id' => $user->id,
+            ], $article);
+
+            return $article->refresh();
+        }
+
+        return null;
+    }
+
+    /**
+     * Handles a replace action properly
+     *
+     * @param User $user
+     * @param Article $article
+     * @param array $msg
+     * @return Article|null
+     */
+    public function handleReplaceAction(User $user, Article $article, array $msg) : ?Article
+    {
+        $startPosition = $msg['start_position'] ?? null;
+        $length = $msg['length'] ?? null;
+        $content = $msg['content'] ?? null;
+
+        if ($startPosition !== null && $length !== null && $content) {
+
+            $this->iterationRepository->create([
+                'content' => substr_replace($article->content, $content, $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
 

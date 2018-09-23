@@ -180,4 +180,36 @@ class ArticleIterationTest extends TestCase
         ]);
         $this->socket->onMessage($fromConnection, $message);
     }
+
+    public function testReplaceActionMessage()
+    {
+        /**
+         * This should not receive any messages, since we are not going to be updating this article
+         */
+        $this->createValidConnection(factory(Article::class)->create());
+
+        $article = factory(Article::class)->create();
+        /**
+         * Create some old iterations that should not affect the output
+         */
+        factory(Iteration::class, 5)->create([
+            'article_id' => $article->id,
+        ]);
+        factory(Iteration::class)->create([
+            'article_id' => $article->id,
+            'content' => 'This is a replace test of this content.',
+        ]);
+        $listeningConnection = $this->createValidConnection($article);
+        $fromConnection = $this->createValidConnection($article);
+
+        $listeningConnection->shouldReceive('send')->once()->with('This is a replace test of new content.');
+
+        $message = json_encode([
+            'action' => 'replace',
+            'start_position' => 26,
+            'content' => 'new',
+            'length' => 4,
+        ]);
+        $this->socket->onMessage($fromConnection, $message);
+    }
 }

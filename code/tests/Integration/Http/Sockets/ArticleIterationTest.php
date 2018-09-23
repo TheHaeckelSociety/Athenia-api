@@ -157,4 +157,40 @@ class ArticleIterationTest extends TestCase
         $this->assertEquals($result->id, $article->id);
         $this->assertEquals("New sentence at the front. Test content with a hello \n line break now it ends.", $result->content);
     }
+
+    public function testHandleReplaceAction()
+    {
+        $user = factory(User::class)->create();
+        /** @var Article $article */
+        $article = factory(Article::class)->create();
+        /** @var Iteration $initialIteration */
+        factory(Iteration::class)->create([
+            'content' => "Test content with a \n line break",
+            'article_id' => $article->id,
+        ]);
+
+        $this->assertEquals("Test content with a \n line break", $article->content);
+
+        $this->assertNull($this->socket->handleAddAction($user, $article, []));
+
+        $msg = [
+            'start_position' => 20,
+            'content' => 'hello.',
+            'length' => 12
+        ];
+        $result = $this->socket->handleReplaceAction($user, $article, $msg);
+
+        $this->assertEquals($result->id, $article->id);
+        $this->assertEquals("Test content with a hello.", $result->content);
+
+        $msg = [
+            'start_position' => 5,
+            'content' => 'greeting',
+            'length' => 7,
+        ];
+        $result = $this->socket->handleReplaceAction($user, $article, $msg);
+
+        $this->assertEquals($result->id, $article->id);
+        $this->assertEquals("Test greeting with a hello.", $result->content);
+    }
 }
