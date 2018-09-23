@@ -9,7 +9,6 @@ use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\IterationRepository;
-use Carbon\Carbon;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 use Ratchet\ConnectionInterface;
@@ -120,7 +119,7 @@ class ArticleIterationTest extends TestCase
         $this->socket->onMessage($connection, '');
     }
 
-    public function testOnRemoveMessage()
+    public function testRemoveActionMessage()
     {
         /**
          * This should not receive any messages, since we are not going to be updating this article
@@ -147,6 +146,37 @@ class ArticleIterationTest extends TestCase
             'action' => 'remove',
             'start_position' => 26,
             'length' => 7,
+        ]);
+        $this->socket->onMessage($fromConnection, $message);
+    }
+
+    public function testAddActionMessage()
+    {
+        /**
+         * This should not receive any messages, since we are not going to be updating this article
+         */
+        $this->createValidConnection(factory(Article::class)->create());
+
+        $article = factory(Article::class)->create();
+        /**
+         * Create some old iterations that should not affect the output
+         */
+        factory(Iteration::class, 5)->create([
+            'article_id' => $article->id,
+        ]);
+        factory(Iteration::class)->create([
+            'article_id' => $article->id,
+            'content' => 'This is an add test of something.',
+        ]);
+        $listeningConnection = $this->createValidConnection($article);
+        $fromConnection = $this->createValidConnection($article);
+
+        $listeningConnection->shouldReceive('send')->once()->with('This is an add test of something new.');
+
+        $message = json_encode([
+            'action' => 'add',
+            'start_position' => 32,
+            'content' => ' new',
         ]);
         $this->socket->onMessage($fromConnection, $message);
     }

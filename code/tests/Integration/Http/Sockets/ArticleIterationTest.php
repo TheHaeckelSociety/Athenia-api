@@ -114,4 +114,47 @@ class ArticleIterationTest extends TestCase
         $this->assertEquals($result->id, $article->id);
         $this->assertEquals("Tecontent with ne break", $result->content);
     }
+
+    public function testHandleAddAction()
+    {
+        $user = factory(User::class)->create();
+        /** @var Article $article */
+        $article = factory(Article::class)->create();
+        /** @var Iteration $initialIteration */
+        factory(Iteration::class)->create([
+            'content' => "Test content with a \n line break",
+            'article_id' => $article->id,
+        ]);
+
+        $this->assertEquals("Test content with a \n line break", $article->content);
+
+        $this->assertNull($this->socket->handleAddAction($user, $article, []));
+
+        $msg = [
+            'start_position' => 20,
+            'content' => 'hello ',
+        ];
+        $result = $this->socket->handleAddAction($user, $article, $msg);
+
+        $this->assertEquals($result->id, $article->id);
+        $this->assertEquals("Test content with a hello \n line break", $result->content);
+
+        $msg = [
+            'start_position' => 0,
+            'content' => 'New sentence at the front. ',
+        ];
+        $result = $this->socket->handleAddAction($user, $article, $msg);
+
+        $this->assertEquals($result->id, $article->id);
+        $this->assertEquals("New sentence at the front. Test content with a hello \n line break", $result->content);
+
+        $msg = [
+            'start_position' => 100,
+            'content' => ' now it ends.',
+        ];
+        $result = $this->socket->handleAddAction($user, $article, $msg);
+
+        $this->assertEquals($result->id, $article->id);
+        $this->assertEquals("New sentence at the front. Test content with a hello \n line break now it ends.", $result->content);
+    }
 }
