@@ -19,9 +19,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
 
         Route::get('status', 'StatusController')
             ->name('status');
-
-        Route::post('sign-up', 'UserController@signUp')
-            ->name('sign-up');
     });
 
     /**
@@ -46,6 +43,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
 
         Route::post('logout', 'AuthenticationController@logout')
             ->name('logout');
+
+        Route::post('sign-up', 'AuthenticationController@signUp')
+            ->name('sign-up');
     });
 
     /**

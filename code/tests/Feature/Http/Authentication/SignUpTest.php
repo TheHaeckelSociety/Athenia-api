@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Feature\HttpUser;
+namespace Tests\Feature\Http\Authentication;
 
 use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +14,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class UserSignUpTest
- * @package Tests\Feature\HttpUser
+ * @package Tests\Feature\Http\Authentication
  */
 class SignUpTest extends TestCase
 {
@@ -27,7 +27,7 @@ class SignUpTest extends TestCase
         $this->mockApplicationLog();
     }
 
-    public function testWebsiteSuccess()
+    public function testSuccess()
     {
         $properties = [
             'email' => 'test@test.com',
@@ -35,9 +35,21 @@ class SignUpTest extends TestCase
             'password' => 'password',
         ];
 
-        $response = $this->json('POST', '/v1/sign-up', $properties);
+        $response = $this->json('POST', '/v1/auth/sign-up', $properties);
 
         $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'token'
+        ]);
+        $token = $response->json('token');
+
+        $this->actingAs = null;
+
+        $this->app['env'] = 'testing-override';
+        $response = $this->json('GET', '/v1/users/me', [], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertStatus(200);
         $model = $response->original;
 
         //Make sure the password was hashed properly separately
@@ -54,7 +66,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailureMissingRequiredFields()
     {
-        $response = $this->json('POST', '/v1/sign-up', []);
+        $response = $this->json('POST', '/v1/auth/sign-up', []);
 
         $response->assertStatus(400);
         $response->assertJson([
@@ -68,7 +80,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailsInvalidStringFields()
     {
-        $response = $this->json('POST', '/v1/sign-up', [
+        $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => 1,
             'name' => 1,
             'password' => 1,
@@ -85,7 +97,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailsTooShortFields()
     {
-        $response = $this->json('POST', '/v1/sign-up', [
+        $response = $this->json('POST', '/v1/auth/sign-up', [
             'password' => 'a',
         ]);
         $response->assertJson(['errors' => [
@@ -97,7 +109,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailsTooLongFields()
     {
-        $response = $this->json('POST', '/v1/sign-up', [
+        $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => str_repeat('a', 121),
             'name' => str_repeat('a', 121),
             'password' => str_repeat('a', 257),
@@ -113,7 +125,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailsInvalidEmailFields()
     {
-        $response = $this->json('POST', '/v1/sign-up', [
+        $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => 'asdf'
         ]);
         $response->assertJson(['errors' => [
@@ -127,7 +139,7 @@ class SignUpTest extends TestCase
     {
         factory(User::class)->create(['email' => 'test@test.com']);
 
-        $response = $this->json('POST', '/v1/sign-up', [
+        $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => 'test@test.com'
         ]);
         $response->assertJson(['errors' => [

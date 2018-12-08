@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Feature\HttpForgotPassword;
+namespace Tests\Feature\Http\ForgotPassword;
 
 use App\Models\User\PasswordToken;
 use App\Models\User\User;
@@ -13,7 +13,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class ResetPasswordTest
- * @package Tests\Feature\HttpForgotPassword
+ * @package Tests\Feature\Http\ForgotPassword
  */
 class ResetPasswordTest extends TestCase
 {

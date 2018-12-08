@@ -4,14 +4,14 @@
  */
 declare(strict_types=1);
 
-namespace App\Http\V1\Requests\User;
+namespace App\Http\V1\Requests\Authentication;
 
 use App\Http\V1\Requests\BaseUnauthenticatedRequest;
 use App\Models\User\User;
 
 /**
  * Class SignUpRequest
- * @package App\Http\V1\Requests\User
+ * @package App\Http\V1\Requests\Authentication
  */
 class SignUpRequest extends BaseUnauthenticatedRequest
 {

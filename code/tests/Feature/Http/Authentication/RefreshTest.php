@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Feature\HttpAuthentication;
+namespace Tests\Feature\Http\Authentication;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User\User;
@@ -14,7 +14,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class RefreshTest
- * @package Tests\Feature\HttpAuthentication
+ * @package Tests\Feature\Http\Authentication
  */
 class RefreshTest extends TestCase
 {

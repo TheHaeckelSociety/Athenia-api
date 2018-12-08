@@ -27,11 +27,10 @@ class UserPolicy extends BasePolicyAbstract implements BasePolicyContract
      * Determine if the user can view itself
      *
      * @param User $user
-     * @param User $requested
      * @return bool
      */
-    public function viewSelf(User $user, User $requested)
+    public function viewSelf(User $user)
     {
-        return $user->id == $requested->id;
+        return true;
     }
 }

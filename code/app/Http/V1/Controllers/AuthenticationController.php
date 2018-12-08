@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace App\Http\V1\Controllers;
 
+use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Models\User\User;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\V1\Requests;
@@ -30,16 +33,30 @@ use Tymon\JWTAuth\JWTAuth;
 class AuthenticationController extends BaseControllerAbstract
 {
     /**
+     * @var UserRepositoryContract
+     */
+    protected $userRepository;
+
+    /**
+     * @var Hasher
+     */
+    protected $hasher;
+
+    /**
      * @var JWTAuth
      */
-    private $auth;
+    protected $auth;
 
     /**
      * AuthenticationController constructor.
+     * @param UserRepositoryContract $userRepository
+     * @param Hasher $hasher
      * @param JWTAuth $auth
      */
-    public function __construct(JWTAuth $auth)
+    public function __construct(UserRepositoryContract $userRepository, Hasher $hasher, JWTAuth $auth)
     {
+        $this->userRepository = $userRepository;
+        $this->hasher = $hasher;
         $this->auth = $auth;
     }
 
@@ -152,6 +169,7 @@ class AuthenticationController extends BaseControllerAbstract
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws JWTException
      */
     public function refresh(Request $request)
     {
@@ -160,6 +178,76 @@ class AuthenticationController extends BaseControllerAbstract
         return new JsonResponse([
             'token' => $newToken,
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @SWG\Post(
+     *     path="/auth/sign-up",
+     *     summary="Signs Up a new user",
+     *     tags={"Auth","Users"},
+     *     @SWG\Parameter(ref="#/parameters/AuthorizationHeader"),
+     *     @SWG\Parameter(
+     *          name="incoming-model",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(ref="#/definitions/User"),
+     *          description="The model to create"
+     *     ),
+     *     @SWG\Response(
+     *          response=201,
+     *          description="User created successfully",
+     *          @SWG\Schema(ref="#/definitions/AuthenticationToken"),
+     *          @SWG\Header(
+     *              header="Location",
+     *              description="The URL to retrieve the newly created item",
+     *              type="string",
+     *              format="url"
+     *          ),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Limit",
+     *              description="The number of allowed requests in the period",
+     *              type="integer"
+     *          ),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Remaining",
+     *              description="The number of remaining requests in the period",
+     *              type="integer"
+     *          )
+     *      ),
+     *     @SWG\Response(
+     *          response=400,
+     *          ref="#/responses/Standard400BadRequestResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response=401,
+     *          ref="#/responses/Standard401UnauthorizedResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response="default",
+     *          ref="#/responses/Standard500ErrorResponse"
+     *      ),
+     * )
+     *
+     * @param Requests\Authentication\SignUpRequest $request
+     * @return JsonResponse
+     */
+    public function signUp(Requests\Authentication\SignUpRequest $request)
+    {
+        $data = $request->json()->all();
+
+        $forcedData = [
+            'password' => $this->hasher->make($data['password']),
+        ];
+
+        /** @var User $model */
+        $model = $this->userRepository->create($data, null, $forcedData);
+
+        $token = $this->auth->fromUser($model);
+        return new JsonResponse([
+            'token' => $token,
+        ], 201);
     }
 
     /**

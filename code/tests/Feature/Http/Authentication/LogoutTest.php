@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Feature\HttpAuthentication;
+namespace Tests\Feature\Http\Authentication;
 
 use App\Http\Middleware\LogMiddleware;
 use App\Models\User\User;
@@ -16,7 +16,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * Class LogoutTest
- * @package Tests\Feature\HttpAuthentication
+ * @package Tests\Feature\Http\Authentication
  */
 class LogoutTest extends TestCase
 {

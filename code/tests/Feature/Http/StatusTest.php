@@ -4,11 +4,15 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Http;
 
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
 
+/**
+ * Class StatusTest
+ * @package Tests\Feature\Http
+ */
 class StatusTest extends TestCase
 {
     use MocksApplicationLog;

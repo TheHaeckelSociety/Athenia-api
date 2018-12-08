@@ -9,6 +9,7 @@ use App\Http\V1\Requests;
 use App\Models\User\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class UserController
@@ -29,80 +30,17 @@ class UserController extends BaseControllerAbstract
     protected $hasher;
 
     /**
-     * UsersController constructor.
-     * @param UserRepositoryContract $userRepository
-     * @param Hasher $hasher
+     * @var JWTAuth
      */
-    public function __construct(UserRepositoryContract $userRepository, Hasher $hasher)
-    {
-        $this->userRepository = $userRepository;
-        $this->hasher = $hasher;
-    }
+    protected $auth;
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @SWG\Post(
-     *     path="/sign-up",
-     *     summary="Signs Up a new user",
-     *     tags={"Users"},
-     *     @SWG\Parameter(ref="#/parameters/AuthorizationHeader"),
-     *     @SWG\Parameter(
-     *          name="incoming-model",
-     *          in="body",
-     *          required=true,
-     *          @SWG\Schema(ref="#/definitions/User"),
-     *          description="The model to create"
-     *     ),
-     *     @SWG\Response(
-     *          response=201,
-     *          description="Model created successfully",
-     *          @SWG\Schema(ref="#/definitions/User"),
-     *          @SWG\Header(
-     *              header="Location",
-     *              description="The URL to retrieve the newly created item",
-     *              type="string",
-     *              format="url"
-     *          ),
-     *          @SWG\Header(
-     *              header="X-RateLimit-Limit",
-     *              description="The number of allowed requests in the period",
-     *              type="integer"
-     *          ),
-     *          @SWG\Header(
-     *              header="X-RateLimit-Remaining",
-     *              description="The number of remaining requests in the period",
-     *              type="integer"
-     *          )
-     *      ),
-     *     @SWG\Response(
-     *          response=400,
-     *          ref="#/responses/Standard400BadRequestResponse"
-     *      ),
-     *     @SWG\Response(
-     *          response=401,
-     *          ref="#/responses/Standard401UnauthorizedResponse"
-     *      ),
-     *     @SWG\Response(
-     *          response="default",
-     *          ref="#/responses/Standard500ErrorResponse"
-     *      ),
-     * )
-     *
-     * @param Requests\User\SignUpRequest $request
-     * @return JsonResponse
+     * UsersController constructor.
+     * @param UserRepositoryContract $userRepository
      */
-    public function signUp(Requests\User\SignUpRequest $request)
+    public function __construct(UserRepositoryContract $userRepository)
     {
-        $data = $request->json()->all();
-
-        $forcedData = [
-            'password' => $this->hasher->make($data['password']),
-        ];
-
-        $model = $this->userRepository->create($data, null, $forcedData);
-
-        return new JsonResponse($model, 201);
+        $this->userRepository = $userRepository;
     }
 
     /**

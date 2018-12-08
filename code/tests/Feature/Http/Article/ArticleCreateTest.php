@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Feature\HttpArticle;
+namespace Tests\Feature\Http\Article;
 
 use App\Models\User\User;
 use Tests\DatabaseSetupTrait;
@@ -10,7 +10,7 @@ use Tests\Traits\MocksApplicationLog;
 
 /**
  * Class ArticleCreateTest
- * @package Tests\Feature\HttpArticle
+ * @package Tests\Feature\Http\Article
  */
 class ArticleCreateTest extends TestCase
 {
