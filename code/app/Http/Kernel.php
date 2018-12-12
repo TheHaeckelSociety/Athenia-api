@@ -5,6 +5,7 @@ namespace App\Http;
 
 use App\Http\Middleware\LogMiddleware;
 use App\Http\Middleware\TrimStrings;
+use Barryvdh\Cors\HandleCors;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
@@ -34,6 +35,7 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         LogMiddleware::class,
+        HandleCors::class,
     ];
 
     /**
