@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Traits\HasValidationRules;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Auth\Authenticatable;
@@ -10,6 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
+use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
@@ -35,9 +38,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubject, HasPolicyContract
+class User extends BaseModelAbstract
+    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract
 {
-    use Authenticatable;
+    use Authenticatable, HasValidationRules;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -97,6 +101,41 @@ class User extends BaseModelAbstract implements AuthenticatableContract, JWTSubj
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        $emailUnique = Rule::unique('users', 'email');
+
+        $userId = count($params) ? $params[0]->id : null;
+
+        if ($userId) {
+            $emailUnique->ignore($userId);
+        }
+
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'email' => [
+                    'string',
+                    'max:120',
+                    'email',
+                    $emailUnique,
+                ],
+                'name' => [
+                    'string',
+                    'max:120',
+                ],
+                'password' => [
+                    'string',
+                    'min:6',
+                ],
+            ],
+        ];
     }
 
     /**

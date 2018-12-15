@@ -1,11 +1,9 @@
 <?php
-/**
- * User policy
- */
 declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Policies\BasePolicyContract;
 use App\Models\User\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -32,5 +30,29 @@ class UserPolicy extends BasePolicyAbstract implements BasePolicyContract
     public function viewSelf(User $user)
     {
         return true;
+    }
+
+    /**
+     * Anyone can view a user
+     *
+     * @param User $user
+     * @param HasPolicyContract $model
+     * @return bool
+     */
+    public function view(User $user, HasPolicyContract $model)
+    {
+        return true;
+    }
+
+    /**
+     * Anyone can view a user
+     *
+     * @param User $user
+     * @param User|HasPolicyContract $model
+     * @return bool
+     */
+    public function update(User $user, HasPolicyContract $model)
+    {
+        return $user->id == $model->id;
     }
 }

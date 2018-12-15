@@ -6,6 +6,7 @@ namespace App\Http\V1\Controllers;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Http\V1\Controllers\Traits\HasViewRequests;
 use App\Http\V1\Requests;
+use App\Models\BaseModelAbstract;
 use App\Models\User\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class UserController extends BaseControllerAbstract
     /**
      * @var UserRepositoryContract
      */
-    protected $userRepository;
+    protected $repository;
 
     /**
      * @var Hasher
@@ -36,11 +37,134 @@ class UserController extends BaseControllerAbstract
 
     /**
      * UsersController constructor.
-     * @param UserRepositoryContract $userRepository
+     * @param UserRepositoryContract $repository
      */
-    public function __construct(UserRepositoryContract $userRepository)
+    public function __construct(UserRepositoryContract $repository)
     {
-        $this->userRepository = $userRepository;
+        $this->repository = $repository;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @SWG\Get(
+     *     path="/users/{id}",
+     *     summary="Get a single user",
+     *     tags={"Users"},
+     *     @SWG\Parameter(ref="#/parameters/AuthorizationHeader"),
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          type="integer",
+     *          format="int32",
+     *          description="The ID of the model"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="Returns a single model",
+     *          @SWG\Schema(ref="#/definitions/User"),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Limit",
+     *              description="The number of allowed requests in the period",
+     *              type="integer"
+     *          ),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Remaining",
+     *              description="The number of remaining requests in the period",
+     *              type="integer"
+     *          )
+     *      ),
+     *     @SWG\Response(
+     *          response=400,
+     *          ref="#/responses/Standard400BadRequestResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response=401,
+     *          ref="#/responses/Standard401UnauthorizedResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response=404,
+     *          ref="#/responses/Standard404ItemNotFoundResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response="default",
+     *          ref="#/responses/Standard500ErrorResponse"
+     *      ),
+     * )
+     *
+     * @param Requests\User\ViewRequest $request
+     * @param User $user
+     * @return User
+     */
+    public function show(Requests\User\ViewRequest $request, User $user)
+    {
+        return $user->load($this->expand($request));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @SWG\Patch(
+     *     path="/users/{id}",
+     *     summary="Updates a single user",
+     *     tags={"Users"},
+     *     @SWG\Parameter(ref="#/parameters/AuthorizationHeader"),
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          type="integer",
+     *          format="int32",
+     *          description="The ID of the model"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="model",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(ref="#/definitions/User"),
+     *          description="The model updates to make"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="Successful update",
+     *          @SWG\Schema(ref="#/definitions/User"),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Limit",
+     *              description="The number of allowed requests in the period",
+     *              type="integer"
+     *          ),
+     *          @SWG\Header(
+     *              header="X-RateLimit-Remaining",
+     *              description="The number of remaining requests in the period",
+     *              type="integer"
+     *          )
+     *      ),
+     *     @SWG\Response(
+     *          response=400,
+     *          ref="#/responses/Standard400BadRequestResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response=401,
+     *          ref="#/responses/Standard401UnauthorizedResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response=404,
+     *          ref="#/responses/Standard404ItemNotFoundResponse"
+     *      ),
+     *     @SWG\Response(
+     *          response="default",
+     *          ref="#/responses/Standard500ErrorResponse"
+     *      ),
+     * )
+     *
+     * @param Requests\User\UpdateRequest $request
+     * @param User $user
+     * @return User|BaseModelAbstract
+     */
+    public function update(Requests\User\UpdateRequest $request, User $user)
+    {
+        return $this->repository->update($user, $request->json()->all());
     }
 
     /**

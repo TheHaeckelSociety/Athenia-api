@@ -1,21 +1,19 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Http\V1\Requests\User;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
-use App\Http\V1\Requests\Traits\HasNoPolicyParameters;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\User\User;
 use App\Policies\UserPolicy;
 
 /**
- * Class MeRequest
+ * Class ViewRequest
  * @package App\Http\V1\Requests\User
  */
-class MeRequest extends BaseAuthenticatedRequestAbstract
+class ViewRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoPolicyParameters;
+    use HasNoRules;
 
     /**
      * Get the policy action for the guard
@@ -24,7 +22,7 @@ class MeRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return UserPolicy::ACTION_VIEW_SELF;
+        return UserPolicy::ACTION_VIEW;
     }
 
     /**
@@ -35,5 +33,15 @@ class MeRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyModel(): string
     {
         return User::class;
+    }
+
+    /**
+     * Gets any additional parameters needed for the policy function
+     *
+     * @return array
+     */
+    protected function getPolicyParameters(): array
+    {
+        return [$this->route('user')];
     }
 }

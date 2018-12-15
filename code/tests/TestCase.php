@@ -67,10 +67,11 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Call this to make the user an authenticated user
+     * @param array $data
      */
-    protected function actAsUser()
+    protected function actAsUser($data = [])
     {
-        $this->actingAs = factory(User::class)->create();
+        $this->actingAs = factory(User::class)->create($data);
         $this->actingAs($this->actingAs);
     }
 }

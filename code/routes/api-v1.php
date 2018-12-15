@@ -56,6 +56,12 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
         Route::get('users/me', 'UserController@me')
             ->name('view-self');
 
+        Route::resource('users', 'UserController', [
+            'only' => [
+                'show', 'update',
+            ],
+        ]);
+
         /**
          * Article Context
          */

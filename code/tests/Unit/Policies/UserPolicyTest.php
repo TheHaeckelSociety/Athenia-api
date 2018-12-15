@@ -17,18 +17,38 @@ class UserPolicyTest extends TestCase
     {
         $policy = new UserPolicy();
 
-        $loggedInUser = new User(['id' => 5]);
+        $loggedInUser = new User();
+        $loggedInUser->id = 5;
 
-        $this->assertTrue($policy->viewSelf($loggedInUser, $loggedInUser));
+        $this->assertTrue($policy->viewSelf($loggedInUser));
     }
 
-    public function testViewSelfFails()
+    public function testViewSuccess()
     {
         $policy = new UserPolicy();
 
-        $loggedInUser = new User(['id' => 5]);
-        $requestedUser = new User(['id' => 9420]);
+        $this->assertTrue($policy->view(new User(), new User()));
+    }
 
-        $this->assertTrue($policy->viewSelf($loggedInUser, $requestedUser));
+    public function testUpdateSuccess()
+    {
+        $policy = new UserPolicy();
+
+        $loggedInUser = new User();
+        $loggedInUser->id = 5;
+
+        $this->assertTrue($policy->update($loggedInUser, $loggedInUser));
+    }
+
+    public function testUpdateBlocks()
+    {
+        $policy = new UserPolicy();
+
+        $loggedInUser = new User();
+        $loggedInUser->id = 5;
+        $requestedUser = new User();
+        $requestedUser->id = 9420;
+
+        $this->assertFalse($policy->update($loggedInUser, $requestedUser));
     }
 }
