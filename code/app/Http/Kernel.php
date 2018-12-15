@@ -5,6 +5,9 @@ namespace App\Http;
 
 use App\Http\Middleware\LogMiddleware;
 use App\Http\Middleware\TrimStrings;
+use App\Http\V1\Middleware\ExpandParsingMiddleware;
+use App\Http\V1\Middleware\Issue404IfPageAfterPaginationMiddleware;
+use App\Http\V1\Middleware\SearchFilterParsingMiddleware;
 use Barryvdh\Cors\HandleCors;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -47,6 +50,9 @@ class Kernel extends HttpKernel
         'api-v1' => [
             'throttle:60,1',
             'bindings',
+            Issue404IfPageAfterPaginationMiddleware::class,
+            SearchFilterParsingMiddleware::class,
+            ExpandParsingMiddleware::class,
         ],
     ];
 
