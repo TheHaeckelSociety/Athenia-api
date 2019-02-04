@@ -65,24 +65,12 @@ class ArticleIterations extends BaseSocketListener
      */
     public function parseAuthHeader(RequestInterface $httpRequest) : string
     {
-        if (!$httpRequest->hasHeader('Authorization')) {
-            throw new AuthenticationException('This routes requires that the user is logged in.');
+        $query = $this->parseQuery($httpRequest);
+        if (!isset($query['token'])) {
+            throw new AuthenticationException('This route requires that the user is logged in.');
         }
 
-        $authHeader = $httpRequest->getHeader('Authorization');
-
-        if (!count($authHeader)) {
-            throw new AuthenticationException('Invalid auth header format.');
-        }
-
-        $header = $authHeader[0];
-        $headerParts = explode(' ', $header);
-
-        if (count($headerParts) <= 1) {
-            throw new AuthenticationException('Invalid auth header format.');
-        }
-
-        return $headerParts[1];
+        return $query['token'];
     }
 
     /**
@@ -109,18 +97,27 @@ class ArticleIterations extends BaseSocketListener
     }
 
     /**
+     * Parses the query string properly
+     *
+     * @param RequestInterface $request
+     * @return array|false
+     */
+    public function parseQuery(RequestInterface $request)
+    {
+        $queryString = $request->getUri()->getQuery();
+        parse_str($queryString, $result);
+
+        return $result;
+    }
+
+    /**
      * @param ConnectionInterface $connection
      * @return array
      * @throws \Exception
      */
     public function validateArticle(ConnectionInterface $connection) : array
     {
-        /** @var RequestInterface $httpRequest */
-        $httpRequest = $connection->httpRequest;
-
-        $queryString = $httpRequest->getUri()->getQuery();
-        preg_match_all("/([^,= ]+)=([^,= ]+)/", $queryString, $result);
-        $query = array_combine($result[1], $result[2]);
+        $query = $this->parseQuery($connection->httpRequest);
 
         if (!isset($query['article'])) {
             throw new \Exception('Unknown error, please try again later');
