@@ -259,8 +259,10 @@ class ArticleIterations extends BaseSocketListener
 
         if ($startPosition !== null && $content) {
 
-            $beginningString = substr($article->content, 0, $startPosition);
-            $endString = substr($article->content, $startPosition);
+            $existingContent = $article->content ?? "";
+
+            $beginningString = substr($existingContent, 0, $startPosition);
+            $endString = substr($existingContent, $startPosition);
 
             $this->iterationRepository->create([
                 'content' => $beginningString . $content . $endString,
