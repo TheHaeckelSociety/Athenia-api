@@ -43,6 +43,20 @@ class Iteration extends BaseModelAbstract implements HasPolicyContract
     }
 
     /**
+     * Makes sure everything is by default ordered by the created at date in reverse
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newQuery()
+    {
+        $query = parent::newQuery();
+
+        $query->orderBy('created_at', 'desc');
+
+        return $query;
+    }
+
+    /**
      * The user that originally created this article
      *
      * @return BelongsTo
