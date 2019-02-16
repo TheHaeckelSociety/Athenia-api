@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Wiki;
 
+use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Iteration extends BaseModelAbstract
+class Iteration extends BaseModelAbstract implements HasPolicyContract
 {
     /**
      * The article that this iteration is for

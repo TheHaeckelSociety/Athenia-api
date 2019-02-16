@@ -54,11 +54,17 @@ class IterationRepositoryTest extends TestCase
         $this->repository->findOrFail(1);
     }
 
-    public function testFindAllThrowsException()
+    public function testFindAllSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        factory(Iteration::class, 5)->create();
+        $items = $this->repository->findAll();
+        $this->assertCount(5, $items);
+    }
 
-        $this->repository->findAll();
+    public function testFindAllEmpty()
+    {
+        $items = $this->repository->findAll();
+        $this->assertEmpty($items);
     }
 
     public function testCreateSuccess()

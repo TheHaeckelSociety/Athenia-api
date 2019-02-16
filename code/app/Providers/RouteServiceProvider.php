@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\Wiki\Article;
+use App\Models\Wiki\Iteration;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -19,6 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     private $modelPlaceHolders = [
         'article' => Article::class,
+        'iteration' => Iteration::class,
     ];
 
     /**

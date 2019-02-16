@@ -6,7 +6,9 @@ namespace App\Providers;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
+use App\Models\Wiki\Iteration;
 use App\Policies\ArticlePolicy;
+use App\Policies\IterationPolicy;
 use App\Policies\UserPolicy;
 use App\Services\UserAuthenticationService;
 use Illuminate\Auth\AuthManager;
@@ -27,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Article::class => ArticlePolicy::class,
+        Iteration::class => IterationPolicy::class,
         User::class => UserPolicy::class,
     ];
 

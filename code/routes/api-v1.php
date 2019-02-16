@@ -70,5 +70,12 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                 'create', 'edit', 'destroy'
             ]
         ]);
+        Route::group(['prefix' => 'articles/{article}', 'as' => 'article.'], function () {
+            Route::resource('iterations', 'Article\IterationController', [
+                'only' => [
+                    'index',
+                ],
+            ]);
+        });
     });
 });
