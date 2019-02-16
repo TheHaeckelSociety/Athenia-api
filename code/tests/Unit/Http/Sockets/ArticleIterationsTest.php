@@ -52,35 +52,14 @@ class ArticleIterationsTest extends TestCase
         $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository, $this->jwtAuth);
     }
 
-    public function testParseAuthHeaderFailsNoHeader()
+    public function testParseAuthHeaderFailsWithoutTokenInUri()
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(false);
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
 
-        $this->expectException(AuthenticationException::class);
-
-        $this->socket->parseAuthHeader($httpRequest);
-    }
-
-    public function testParseAuthHeaderFailsEmptyHeader()
-    {
-        $httpRequest = mock(RequestInterface::class);
-
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn([]);
-
-        $this->expectException(AuthenticationException::class);
-
-        $this->socket->parseAuthHeader($httpRequest);
-    }
-
-    public function testParseAuthHeaderFailsInvalidHeader()
-    {
-        $httpRequest = mock(RequestInterface::class);
-
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer']);
+        $uri->shouldReceive('getQuery')->andReturn('');
 
         $this->expectException(AuthenticationException::class);
 
@@ -91,8 +70,10 @@ class ArticleIterationsTest extends TestCase
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('token=token');
 
         $this->assertEquals('token', $this->socket->parseAuthHeader($httpRequest));
     }
@@ -101,8 +82,10 @@ class ArticleIterationsTest extends TestCase
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer']);
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('');
 
         /** @var CustomMockInterface|ConnectionInterface $conn */
         $conn = mock(ConnectionInterface::class);
@@ -117,8 +100,10 @@ class ArticleIterationsTest extends TestCase
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('token=token');
 
         $this->jwtAuth->shouldReceive('setToken')->once()->with('token');
         $this->jwtAuth->shouldReceive('authenticate')->once()->andReturn(null);
@@ -136,8 +121,10 @@ class ArticleIterationsTest extends TestCase
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('token=token');
 
         $user = new User();
         $user->id = 545;
@@ -226,21 +213,17 @@ class ArticleIterationsTest extends TestCase
     {
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(['Bearer token']);
+        /** @var CustomMockInterface|UriInterface $uri */
+        $uri = mock(UriInterface::class);
+        $httpRequest->shouldReceive('getUri')->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('article=1&token=token');
 
         $user = new User();
         $user->id = 545;
 
         $this->jwtAuth->shouldReceive('setToken')->once()->with('token');
         $this->jwtAuth->shouldReceive('authenticate')->once()->andReturn($user);
-
-        /** @var CustomMockInterface|UriInterface $uri */
-        $uri = mock(UriInterface::class);
-
-        $uri->shouldReceive('getQuery')->once()->andReturn('article=1');
-
-        $httpRequest->shouldReceive('getUri')->once()->andReturn($uri);
 
         $article = new Article();
         $article->id = 1;

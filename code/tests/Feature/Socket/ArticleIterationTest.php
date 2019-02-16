@@ -73,17 +73,11 @@ class ArticleIterationTest extends TestCase
 
         $httpRequest = mock(RequestInterface::class);
 
-        $httpRequest->shouldReceive('hasHeader')->once()->with('Authorization')->andReturn(true);
-        $httpRequest->shouldReceive('getHeader')->once()->with('Authorization')->andReturn(
-            ['Bearer ' . $this->jwtAuth->fromSubject($user)]
-        );
-
         /** @var CustomMockInterface|UriInterface $uri */
         $uri = mock(UriInterface::class);
-
-        $uri->shouldReceive('getQuery')->andReturn('article=' . $article->id);
-
         $httpRequest->shouldReceive('getUri')->andReturn($uri);
+
+        $uri->shouldReceive('getQuery')->andReturn('token=' . $this->jwtAuth->fromSubject($user) . '&article=' . $article->id);
 
         /** @var CustomMockInterface|ConnectionInterface $conn */
         $conn = mock(ConnectionInterface::class);
