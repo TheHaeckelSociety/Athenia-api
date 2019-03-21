@@ -18,7 +18,7 @@ class ArticleTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

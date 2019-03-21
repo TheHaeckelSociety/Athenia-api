@@ -1,7 +1,4 @@
 <?php
-/**
- * Listener for long test times
- */
 declare(strict_types=1);
 
 namespace Tests;

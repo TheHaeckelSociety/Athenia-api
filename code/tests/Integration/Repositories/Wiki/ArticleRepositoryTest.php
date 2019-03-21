@@ -25,7 +25,7 @@ class ArticleRepositoryTest extends TestCase
      */
     private $repository;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

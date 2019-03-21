@@ -22,7 +22,7 @@ class UserUpdateTest extends TestCase
      */
     private $path = '/v1/users';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

@@ -18,7 +18,7 @@ class ArticleIterationIndexTest extends TestCase
      */
     private $path = '/v1/articles/';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

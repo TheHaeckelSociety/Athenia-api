@@ -20,7 +20,7 @@ class RefreshTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->mockApplicationLog();

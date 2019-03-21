@@ -30,7 +30,7 @@ class UserRepositoryTest extends TestCase
      */
     protected $repository;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

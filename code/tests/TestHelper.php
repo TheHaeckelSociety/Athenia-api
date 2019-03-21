@@ -1,7 +1,4 @@
 <?php
-/**
- * A constant helper for making sure we don't re-run migrations all the time
- */
 declare(strict_types=1);
 
 namespace Tests;

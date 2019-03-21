@@ -43,7 +43,7 @@ class ArticleIterationsTest extends TestCase
      */
     private $socket;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->articleRepository = mock(ArticleRepositoryContract::class);

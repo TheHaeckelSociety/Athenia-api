@@ -45,7 +45,7 @@ class ArticleIterationTest extends TestCase
      */
     private $socket;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();

@@ -38,7 +38,7 @@ class UserOwnsValidatorTest extends TestCase
      */
     private $validator;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -17,7 +17,7 @@ class StatusTest extends TestCase
 {
     use MocksApplicationLog;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->mockApplicationLog();
