@@ -6,21 +6,21 @@
 - name: Install PHP and its modules
   apt: pkg={{ item }} state=latest
   with_items:
-    - php7.2
-    - php7.2-fpm
-    - php7.2-pgsql
-    - php7.2-curl
-    - php7.2-xml
-    - php7.2-mbstring
-    - php7.2-memcached
-    - php7.2-gd
+    - php7.3
+    - php7.3-fpm
+    - php7.3-pgsql
+    - php7.3-curl
+    - php7.3-xml
+    - php7.3-mbstring
+    - php7.3-memcached
+    - php7.3-gd
   notify:
     - restart nginx
 
 - include: composer.yml
 
 - name: Set upload_max_filesize
-  lineinfile: dest=/etc/php/7.2/fpm/php.ini regexp=^upload_max_filesize line='upload_max_filesize = 5M'
+  lineinfile: dest=/etc/php/7.3/fpm/php.ini regexp=^upload_max_filesize line='upload_max_filesize = 5M'
   notify:
     - restart nginx
 
@@ -31,6 +31,6 @@
   file: path=/etc/cron.d/php state=absent
 
 - name: Set session garbage collection on
-  lineinfile: dest=/etc/php/7.2/fpm/php.ini regexp=^session.gc_probability line='session.gc_probability = 1'
+  lineinfile: dest=/etc/php/7.3/fpm/php.ini regexp=^session.gc_probability line='session.gc_probability = 1'
   notify:
     - restart nginx
