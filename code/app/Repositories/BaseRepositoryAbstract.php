@@ -76,13 +76,13 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
 
             switch (true) {
                 case ($parentRelationship instanceof BelongsTo):
-                    $queryKey = $parentRelationship->getQualifiedForeignKey();
-                    $parentModelKeyField = $parentRelationship->getOwnerKey();
+                    $queryKey = $parentRelationship->getQualifiedForeignKeyName();
+                    $parentModelKeyField = $parentRelationship->getOwnerKeyName();
 
                     break;
 
                 case ($parentRelationship instanceof BelongsToMany):
-                    $queryKey = $parentRelationship->getQualifiedRelatedKeyName();
+                    $queryKey = $parentRelationship->getQualifiedRelatedPivotKeyName();
                     $parentModelKeyField = $parentRelationship->getRelated()->getKeyName();
                     break;
 
@@ -143,8 +143,8 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
 
             switch (true) {
                 case ($relationship instanceof BelongsTo):
-                    $parentKey = $relationship->getForeignKey();
-                    $parentIdKey = $relationship->getOwnerKey();
+                    $parentKey = $relationship->getForeignKeyName();
+                    $parentIdKey = $relationship->getOwnerKeyName();
                     $newModel->$parentKey = $relatedModel->$parentIdKey;
                     break;
 
