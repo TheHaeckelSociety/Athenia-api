@@ -1,7 +1,4 @@
 <?php
-/**
- * Integration test for the repository
- */
 declare(strict_types=1);
 
 namespace Tests\Integration\Repositories\User;
@@ -53,7 +50,7 @@ class MessageRepositoryTest extends TestCase
         $dispatcher->shouldAllowMockingMethod('fire');
 
         $dispatcher->shouldReceive('until');
-        $dispatcher->shouldReceive('fire')
+        $dispatcher->shouldReceive('dispatch')
             ->with(\Mockery::on(function (String $eventName) {
                 return true;
             }),
@@ -61,7 +58,7 @@ class MessageRepositoryTest extends TestCase
                 return true;
             })
         );
-        $dispatcher->shouldReceive('fire')->once()
+        $dispatcher->shouldReceive('dispatch')->once()
             ->with(\Mockery::on(function (MessageCreatedEvent $event) {
                 return true;
             })
@@ -103,9 +100,9 @@ class MessageRepositoryTest extends TestCase
     public function testUpdateThrowsException()
     {
         $dispatcher = mock(Dispatcher::class);
-        $dispatcher->shouldAllowMockingMethod('fire');
+        $dispatcher->shouldAllowMockingMethod('dispatch');
         $dispatcher->shouldReceive('until');
-        $dispatcher->shouldReceive('fire');
+        $dispatcher->shouldReceive('dispatch');
         Message::setEventDispatcher($dispatcher);
 
         $message = factory(Message::class)->create();
