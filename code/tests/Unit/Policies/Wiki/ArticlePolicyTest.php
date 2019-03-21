@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Policies;
+namespace Tests\Unit\Policies\Wiki;
 
 use App\Models\User\User;
 use App\Models\Wiki\Article;
-use App\Policies\ArticlePolicy;
+use App\Policies\Wiki\ArticlePolicy;
 use Tests\TestCase;
 
 /**
  * Class ArticlePolicyTest
- * @package Tests\Unit\Policies
+ * @package Tests\Unit\Policies\Wiki
  */
 class ArticlePolicyTest extends TestCase
 {

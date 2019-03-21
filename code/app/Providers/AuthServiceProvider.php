@@ -4,17 +4,12 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
-use App\Models\User\User;
-use App\Models\Wiki\Article;
-use App\Models\Wiki\Iteration;
-use App\Policies\ArticlePolicy;
-use App\Policies\IterationPolicy;
-use App\Policies\UserPolicy;
 use App\Services\UserAuthenticationService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class AuthServiceProvider
@@ -24,13 +19,13 @@ class AuthServiceProvider extends ServiceProvider
 {
     /**
      * The policy mappings for the application.
+     * Normally these will be automatically guessed as long as
+     *  the models directory structure matches the policies directory structure.
+     * Any exceptions should be set here.
      *
      * @var array
      */
     protected $policies = [
-        Article::class => ArticlePolicy::class,
-        Iteration::class => IterationPolicy::class,
-        User::class => UserPolicy::class,
     ];
 
     /**
@@ -53,5 +48,19 @@ class AuthServiceProvider extends ServiceProvider
 
             return new UserAuthenticationService($userRepository, $hasher);
         });
+
+        /** @var Gate $gate */
+        Gate::guessPolicyNamesUsing([$this, 'guessPolicyName']);
+    }
+
+    /**
+     * Automatically guesses a policies name based on the app structure
+     *
+     * @param string $modelClass
+     * @return string
+     */
+    public function guessPolicyName(string $modelClass): string
+    {
+        return str_replace('Models', 'Policies', $modelClass) . 'Policy';
     }
 }

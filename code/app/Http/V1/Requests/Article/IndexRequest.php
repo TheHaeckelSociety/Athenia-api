@@ -7,7 +7,7 @@ use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoPolicyParameters;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Wiki\Article;
-use App\Policies\ArticlePolicy;
+use App\Policies\Wiki\ArticlePolicy;
 
 /**
  * Class IndexRequest

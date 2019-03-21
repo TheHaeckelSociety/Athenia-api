@@ -7,7 +7,7 @@ use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoPolicyParameters;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Wiki\Iteration;
-use App\Policies\IterationPolicy;
+use App\Policies\Wiki\IterationPolicy;
 
 /**
  * Class IndexRequest

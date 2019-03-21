@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Policies;
+namespace App\Policies\User;
 
 use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Policies\BasePolicyContract;
 use App\Models\User\User;
+use App\Policies\BasePolicyAbstract;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 /**
  * Class UserPolicy
- * @package App\Policies
+ * @package App\Policies\User
  */
 class UserPolicy extends BasePolicyAbstract implements BasePolicyContract
 {

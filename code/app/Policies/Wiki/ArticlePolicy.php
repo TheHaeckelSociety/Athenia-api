@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Policies;
+namespace App\Policies\Wiki;
 
 use App\Models\User\User;
 use App\Models\Wiki\Article;
+use App\Policies\BasePolicyAbstract;
 
 /**
  * Class ArticlePolicy
- * @package App\Policies
+ * @package App\Policies\Wiki
  */
 class ArticlePolicy extends BasePolicyAbstract
 {

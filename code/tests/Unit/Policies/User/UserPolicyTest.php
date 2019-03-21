@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Policies;
+namespace Tests\Unit\Policies\User;
 
 use App\Models\User\User;
-use App\Policies\UserPolicy;
+use App\Policies\User\UserPolicy;
 use Tests\TestCase;
 
 /**
  * Class UserPolicyTest
- * @package Tests\Unit\Policies
+ * @package Tests\Unit\Policies\User
  */
 class UserPolicyTest extends TestCase
 {

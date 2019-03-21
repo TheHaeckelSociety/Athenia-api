@@ -5,7 +5,7 @@ namespace App\Http\V1\Requests\Article;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Models\Wiki\Article;
-use App\Policies\ArticlePolicy;
+use App\Policies\Wiki\ArticlePolicy;
 
 /**
  * Class UpdateRequest

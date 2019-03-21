@@ -7,7 +7,7 @@ use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoPolicyParameters;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\User\User;
-use App\Policies\UserPolicy;
+use App\Policies\User\UserPolicy;
 
 /**
  * Class MeRequest

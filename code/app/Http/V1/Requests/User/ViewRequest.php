@@ -5,7 +5,7 @@ namespace App\Http\V1\Requests\User;
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\User\User;
-use App\Policies\UserPolicy;
+use App\Policies\User\UserPolicy;
 
 /**
  * Class ViewRequest

@@ -1,12 +1,11 @@
 <?php
-/**
- * Unit test for the auth service provider
- */
 declare(strict_types=1);
 
 namespace Tests\Unit\Providers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Models\User\User;
+use App\Policies\User\UserPolicy;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Foundation\Application;
@@ -36,31 +35,6 @@ class AuthServiceProviderTest extends TestCase
         return $property->getValue($gate);
     }
 
-    public function testAllNonAbstractPoliciesAreRegistered()
-    {
-        $foundPolicies = $this->getObjectsInNamespace('App\Policies');
-
-        $provider = new AuthServiceProvider($this->app);
-        $provider->registerPolicies();
-
-        $registeredPolicies = array_values($this->getRegisteredPolicies());
-
-        $nonAbstractPolicies = [];
-        foreach ($foundPolicies as $policy) {
-            $reflection = new ReflectionClass($policy);
-
-            if ($reflection->isSubclassOf(BasePolicyAbstract::class) && !$reflection->isAbstract()) {
-                $nonAbstractPolicies[] = $policy;
-            }
-        }
-
-        $unregisteredPolicies = array_diff($nonAbstractPolicies, $registeredPolicies);
-
-        if (count($unregisteredPolicies)) {
-            $this->fail('Not all policies have been registered. Make sure the following policies are registered - ' . implode($unregisteredPolicies));
-        }
-    }
-
     public function testUserAuthenticationRegistered()
     {
         $app = mock(Application::class);
@@ -83,5 +57,12 @@ class AuthServiceProviderTest extends TestCase
         $provider = new AuthServiceProvider($app);
 
         $provider->boot();
+    }
+
+    public function testGuessPolicyName()
+    {
+        $provider = new AuthServiceProvider(mock(Application::class));
+
+        $this->assertEquals(UserPolicy::class, $provider->guessPolicyName(User::class));
     }
 }

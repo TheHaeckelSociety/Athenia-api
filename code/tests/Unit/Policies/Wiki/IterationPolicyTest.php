@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Policies;
+namespace Tests\Unit\Policies\Wiki;
 
 use App\Models\User\User;
 use App\Models\Wiki\Article;
-use App\Policies\IterationPolicy;
+use App\Policies\Wiki\IterationPolicy;
 use Tests\TestCase;
 
 /**
