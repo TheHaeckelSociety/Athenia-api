@@ -21,7 +21,7 @@ class PasswordTokenTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
 
-        $this->assertEquals('password_tokens.user_id', $relation->getQualifiedForeignKey());
+        $this->assertEquals('password_tokens.user_id', $relation->getQualifiedForeignKeyName());
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
     }
 }

@@ -20,6 +20,6 @@ class MessageTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('user_id', $relation->getForeignKey());
+        $this->assertEquals('messages.user_id', $relation->getQualifiedForeignKeyName());
     }
 }

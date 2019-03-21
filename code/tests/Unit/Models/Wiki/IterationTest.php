@@ -20,7 +20,7 @@ class IterationTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('articles.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('iterations.article_id', $relation->getQualifiedForeignKey());
+        $this->assertEquals('iterations.article_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testCreatedBy()
@@ -30,6 +30,6 @@ class IterationTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('iterations.created_by_id', $relation->getQualifiedForeignKey());
+        $this->assertEquals('iterations.created_by_id', $relation->getQualifiedForeignKeyName());
     }
 }

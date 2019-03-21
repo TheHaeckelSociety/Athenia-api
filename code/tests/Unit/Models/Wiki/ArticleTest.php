@@ -21,7 +21,7 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('articles.created_by_id', $relation->getQualifiedForeignKey());
+        $this->assertEquals('articles.created_by_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testIterations()
