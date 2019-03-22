@@ -3,17 +3,20 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
+use App\Repositories\Payment\PaymentMethodRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
@@ -42,6 +45,7 @@ class AppRepositoryProvider extends ServiceProvider
             IterationRepositoryContract::class,
             MessageRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
+            PaymentMethodRepositoryContract::class,
             RoleRepositoryContract::class,
             UserRepositoryContract::class,
 
@@ -74,6 +78,12 @@ class AppRepositoryProvider extends ServiceProvider
                 $this->app->make('log'),
                 $this->app->make(Dispatcher::class),
                 $this->app->make(TokenGenerationServiceContract::class),
+            );
+        });
+        $this->app->bind(PaymentMethodRepositoryContract::class, function() {
+            return new PaymentMethodRepository(
+                new PaymentMethod(),
+                $this->app->make('log'),
             );
         });
         $this->app->bind(RoleRepositoryContract::class, function() {
