@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Wiki\Article;
@@ -64,7 +65,7 @@ class User extends BaseModelAbstract
      *
      * @return HasMany
      */
-    public function createdArticles() : HasMany
+    public function createdArticles(): HasMany
     {
         return $this->hasMany(Article::class, 'created_by_id');
     }
@@ -74,7 +75,7 @@ class User extends BaseModelAbstract
      *
      * @return HasMany
      */
-    public function createdIterations() : HasMany
+    public function createdIterations(): HasMany
     {
         return $this->hasMany(Iteration::class, 'created_by_id');
     }
@@ -84,9 +85,19 @@ class User extends BaseModelAbstract
      *
      * @return HasMany
      */
-    public function messages() : HasMany
+    public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    /**
+     * A user can have many payment methods
+     *
+     * @return HasMany
+     */
+    public function paymentMethods(): HasMany
+    {
+        return $this->hasMany(PaymentMethod::class);
     }
 
     /**
