@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Role;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
@@ -29,6 +31,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
@@ -81,6 +87,40 @@ class User extends BaseModelAbstract
     public function messages() : HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    /**
+     * What roles this user has
+     *
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Add a Role to this user
+     *
+     * @param int $roleId
+     * @return $this
+     */
+    public function addRole(int $roleId)
+    {
+        $this->roles()->attach($roleId);
+        return $this;
+    }
+
+    /**
+     * Does this have the role
+     *
+     * @param mixed $roles
+     * @return bool
+     */
+    public function hasRole($roles)
+    {
+        $roles = (array)$roles;
+        return $this->roles()->whereIn('id', $roles)->exists();
     }
 
     /**

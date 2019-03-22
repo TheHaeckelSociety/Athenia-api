@@ -43,6 +43,17 @@ class UserTest extends TestCase
         $this->assertEquals('messages.user_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testRoles()
+    {
+        $role = new User();
+        $relation = $role->roles();
+
+        $this->assertEquals('role_user', $relation->getTable());
+        $this->assertEquals('role_user.user_id', $relation->getQualifiedForeignPivotKeyName());
+        $this->assertEquals('role_user.role_id', $relation->getQualifiedRelatedPivotKeyName());
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+    }
+
     public function testGetJWTIdentifier()
     {
         $user = new User();

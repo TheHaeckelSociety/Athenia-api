@@ -21,13 +21,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read \App\Models\Wiki\Article $article
  * @property-read \App\Models\User\User $createdBy
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereArticleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereCreatedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereArticleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereCreatedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Iteration extends BaseModelAbstract implements HasPolicyContract
