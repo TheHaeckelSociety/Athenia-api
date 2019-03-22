@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Article;
 
-use App\Models\User\User;
+use App\Models\Role;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\RolesTesting;
 
 /**
  * Class ArticleCreateTest
@@ -14,7 +15,7 @@ use Tests\Traits\MocksApplicationLog;
  */
 class ArticleCreateTest extends TestCase
 {
-    use DatabaseSetupTrait, MocksApplicationLog;
+    use DatabaseSetupTrait, MocksApplicationLog, RolesTesting;
 
     /**
      * @var string
@@ -35,9 +36,19 @@ class ArticleCreateTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function testIncorrectUserRoleBlocked()
+    {
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR]) as $role) {
+            $this->actAs($role);
+            $response = $this->json('POST', $this->path);
+
+            $response->assertStatus(403);
+        }
+    }
+
     public function testCreateSuccessful()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $response = $this->json('POST', $this->path, [
             'title' => 'An Article',
@@ -54,7 +65,7 @@ class ArticleCreateTest extends TestCase
 
     public function testCreateFailsRequiredFieldsNotPresent()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $response = $this->json('POST', $this->path);
 
@@ -69,7 +80,7 @@ class ArticleCreateTest extends TestCase
 
     public function testCreateFailsInvalidStringFields()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $response = $this->json('POST', $this->path, [
             'title' => 1,
@@ -86,7 +97,7 @@ class ArticleCreateTest extends TestCase
 
     public function testCreateFailsStringsTooLong()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $response = $this->json('POST', $this->path, [
             'title' => str_repeat('a', 121),

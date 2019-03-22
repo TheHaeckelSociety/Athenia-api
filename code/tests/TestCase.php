@@ -71,4 +71,15 @@ abstract class TestCase extends BaseTestCase
         $this->actingAs = factory(User::class)->create($data);
         $this->actingAs($this->actingAs);
     }
+
+    /**
+     * Act as a role type
+     *
+     * @param int $roleId
+     */
+    protected function actAs(int $roleId)
+    {
+        $this->actAsUser();
+        $this->actingAs->addRole($roleId);
+    }
 }

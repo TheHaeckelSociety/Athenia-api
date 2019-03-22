@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policies\Wiki;
 
+use App\Models\Role;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Policies\BasePolicyAbstract;
@@ -22,6 +23,6 @@ class IterationPolicy extends BasePolicyAbstract
      */
     public function all(User $user, Article $article)
     {
-        return true;
+        return $user->hasRole([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER]);
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\V1\Middleware;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -19,7 +20,7 @@ class SearchFilteringMiddlewareTest extends TestCase
     {
         parent::setUp();
         $this->setupDatabase();
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_VIEWER);
     }
 
     public function testSearchWithLike()

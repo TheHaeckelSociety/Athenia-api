@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Article;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\RolesTesting;
 
 /**
  * Class ArticleUpdateTest
@@ -14,7 +16,7 @@ use Tests\Traits\MocksApplicationLog;
  */
 class ArticleUpdateTest extends TestCase
 {
-    use DatabaseSetupTrait, MocksApplicationLog;
+    use DatabaseSetupTrait, MocksApplicationLog, RolesTesting;
 
     /**
      * @var string
@@ -36,6 +38,20 @@ class ArticleUpdateTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function testIncorrectUserRoleBlocked()
+    {
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR]) as $role) {
+            $this->actAs($role);
+
+            $article = factory(Article::class)->create([
+                'created_by_id' => $this->actingAs->id,
+            ]);
+            $response = $this->json('PUT', $this->path . '/' . $article->id);
+
+            $response->assertStatus(403);
+        }
+    }
+
     public function testNotFound()
     {
         $this->actAsUser();
@@ -47,7 +63,7 @@ class ArticleUpdateTest extends TestCase
 
     public function testUpdateSuccessful()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $article = factory(Article::class)->create([
             'title' => 'A title',
@@ -71,7 +87,7 @@ class ArticleUpdateTest extends TestCase
 
     public function testUpdateBlockedUserHasNotCreatedArticle()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
         
         $article = factory(Article::class)->create();
         $response = $this->json('PUT', $this->path . '/' . $article->id);
@@ -81,7 +97,7 @@ class ArticleUpdateTest extends TestCase
 
     public function testUpdateFailsInvalidStringFields()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $article = factory(Article::class)->create([
             'created_by_id' => $this->actingAs->id,
@@ -102,7 +118,7 @@ class ArticleUpdateTest extends TestCase
 
     public function testCreateFailsStringsTooLong()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_EDITOR);
 
         $article = factory(Article::class)->create([
             'created_by_id' => $this->actingAs->id,
@@ -120,5 +136,4 @@ class ArticleUpdateTest extends TestCase
             ]
         ]);
     }
-
 }

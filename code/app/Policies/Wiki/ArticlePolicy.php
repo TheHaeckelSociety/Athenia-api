@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policies\Wiki;
 
+use App\Models\Role;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Policies\BasePolicyAbstract;
@@ -21,7 +22,10 @@ class ArticlePolicy extends BasePolicyAbstract
      */
     public function all(User $user)
     {
-        return true;
+        return $user->hasRole([
+            Role::ARTICLE_VIEWER,
+            Role::ARTICLE_EDITOR,
+        ]);
     }
 
     /**
@@ -33,7 +37,10 @@ class ArticlePolicy extends BasePolicyAbstract
      */
     public function view(User $user, Article $model)
     {
-        return true;
+        return $user->hasRole([
+            Role::ARTICLE_VIEWER,
+            Role::ARTICLE_EDITOR,
+        ]);
     }
 
     /**
@@ -44,7 +51,7 @@ class ArticlePolicy extends BasePolicyAbstract
      */
     public function create(User $user)
     {
-        return true;
+        return $user->hasRole(Role::ARTICLE_EDITOR);
     }
 
     /**
@@ -56,6 +63,6 @@ class ArticlePolicy extends BasePolicyAbstract
      */
     public function update(User $user, Article $model)
     {
-        return $user->id == $model->created_by_id;
+        return $user->hasRole(Role::ARTICLE_EDITOR) && $user->id == $model->created_by_id;
     }
 }

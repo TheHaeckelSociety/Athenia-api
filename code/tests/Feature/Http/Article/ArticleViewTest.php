@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Article;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\RolesTesting;
 
 /**
  * Class ArticleViewTest
@@ -15,7 +17,7 @@ use Tests\Traits\MocksApplicationLog;
  */
 class ArticleViewTest extends TestCase
 {
-    use DatabaseSetupTrait, MocksApplicationLog;
+    use DatabaseSetupTrait, MocksApplicationLog, RolesTesting;
 
     /**
      * @var string
@@ -44,6 +46,17 @@ class ArticleViewTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function testIncorrectUserRoleBlocked()
+    {
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER]) as $role) {
+            $this->actAs($role);
+
+            $response = $this->json('GET', $this->path);
+
+            $response->assertStatus(403);
+        }
+    }
+
     public function testNotFound()
     {
         $this->actAsUser();
@@ -55,7 +68,7 @@ class ArticleViewTest extends TestCase
 
     public function testViewSuccessful()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_VIEWER);
 
         factory(Iteration::class)->create([
             'content' => 'hello',

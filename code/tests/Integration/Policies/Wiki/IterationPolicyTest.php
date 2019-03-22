@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Policies\Wiki;
 
-use App\Models\User\User;
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use App\Policies\Wiki\IterationPolicy;
+use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
+use Tests\Traits\RolesTesting;
 
 /**
  * Class IterationPolicyTest
@@ -14,10 +16,27 @@ use Tests\TestCase;
  */
 class IterationPolicyTest extends TestCase
 {
-    public function testAll()
+    use DatabaseSetupTrait, RolesTesting;
+
+    public function IterationPolicy()
     {
         $policy = new IterationPolicy();
 
-        $this->assertTrue($policy->all(new User(), new Article()));
+        foreach ([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER] as $role) {
+            $user = $this->getUserOfRole($role);
+
+            $this->assertTrue($policy->all($user, new Article()));
+        }
+    }
+
+    public function testAllBlocks()
+    {
+        $policy = new IterationPolicy();
+
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER]) as $role) {
+            $user = $this->getUserOfRole($role);
+
+            $this->assertFalse($policy->all($user, new Article()));
+        }
     }
 }

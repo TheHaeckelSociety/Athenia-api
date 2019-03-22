@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Article;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\RolesTesting;
 
 /**
  * Class ArticleIndexTest
@@ -14,7 +16,7 @@ use Tests\Traits\MocksApplicationLog;
  */
 class ArticleIndexTest extends TestCase
 {
-    use DatabaseSetupTrait, MocksApplicationLog;
+    use DatabaseSetupTrait, MocksApplicationLog, RolesTesting;
 
     /**
      * @var string
@@ -35,21 +37,34 @@ class ArticleIndexTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function testIncorrectUserRoleBlocked()
+    {
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_VIEWER, Role::ARTICLE_EDITOR]) as $role ) {
+            $this->actAs($role);
+            $response = $this->json('GET', $this->path);
+
+            $response->assertStatus(403);
+        }
+    }
+
     public function testGetPaginationEmpty()
     {
-        $this->actAsUser();
-        $response = $this->json('GET', $this->path);
+        foreach ([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER] as $role) {
+            $this->actAs($role);
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'total' => 0,
-            'data' => []
-        ]);
+            $response = $this->json('GET', $this->path);
+
+            $response->assertStatus(200);
+            $response->assertJson([
+                'total' => 0,
+                'data' => []
+            ]);
+        }
     }
 
     public function testGetPaginationResult()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_VIEWER);
         factory(Article::class, 15)->create();
 
         // first page

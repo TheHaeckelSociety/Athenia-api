@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\V4\Middleware;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -23,7 +24,7 @@ class Issue404IfPageAfterPaginationTest extends TestCase
 
     public function testGetPaginationResult()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_VIEWER);
 
         factory(Article::class, 3)->create();
 

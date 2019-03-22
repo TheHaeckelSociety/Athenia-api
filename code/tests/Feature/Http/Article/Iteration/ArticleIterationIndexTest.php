@@ -3,15 +3,21 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Article\Iteration;
 
+use App\Models\Role;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\RolesTesting;
 
+/**
+ * Class ArticleIterationIndexTest
+ * @package Tests\Feature\Http\Article\Iteration
+ */
 class ArticleIterationIndexTest extends TestCase
 {
-    use DatabaseSetupTrait, MocksApplicationLog;
+    use DatabaseSetupTrait, MocksApplicationLog, RolesTesting;
 
     /**
      * @var string
@@ -27,7 +33,6 @@ class ArticleIterationIndexTest extends TestCase
 
     public function testNotFound()
     {
-
         $response = $this->json('GET', $this->path . '124/iterations');
 
         $response->assertStatus(404);
@@ -41,22 +46,36 @@ class ArticleIterationIndexTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function testIncorrectUserRoleBlocked()
+    {
+        foreach ($this->rolesWithoutAdmins([Role::ARTICLE_VIEWER, Role::ARTICLE_EDITOR]) as $role) {
+            $this->actAs($role);
+
+            $article = factory(Article::class)->create();
+            $response = $this->json('GET', $this->path . $article->id . '/iterations');
+
+            $response->assertStatus(403);
+        }
+    }
+
     public function testGetPaginationEmpty()
     {
-        $this->actAsUser();
-        $article = factory(Article::class)->create();
-        $response = $this->json('GET', $this->path . $article->id . '/iterations');
+        foreach ([Role::ARTICLE_VIEWER, Role::ARTICLE_EDITOR] as $role) {
+            $this->actAs($role);
+            $article = factory(Article::class)->create();
+            $response = $this->json('GET', $this->path . $article->id . '/iterations');
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'total' => 0,
-            'data' => []
-        ]);
+            $response->assertStatus(200);
+            $response->assertJson([
+                'total' => 0,
+                'data' => []
+            ]);
+        }
     }
 
     public function testGetPaginationResult()
     {
-        $this->actAsUser();
+        $this->actAs(Role::ARTICLE_VIEWER);
         $article = factory(Article::class)->create();
         factory(Iteration::class, 15)->create([
             'article_id' => $article->id,
