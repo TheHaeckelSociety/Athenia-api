@@ -5,6 +5,7 @@ namespace App\Policies;
 
 use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Policies\BasePolicyContract;
+use App\Models\Role;
 use App\Models\User\User;
 
 /**
@@ -21,6 +22,6 @@ abstract class BasePolicyAbstract implements BasePolicyContract
      */
     public function before(User $user)
     {
-        return null;
+        return $user->hasRole([Role::SUPER_ADMIN]) ?: null;
     }
 }

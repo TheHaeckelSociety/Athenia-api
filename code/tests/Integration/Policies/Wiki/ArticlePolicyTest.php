@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Policies\Wiki;
+namespace Tests\Integration\Policies\Wiki;
 
 use App\Models\User\User;
 use App\Models\Wiki\Article;
@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * Class ArticlePolicyTest
- * @package Tests\Unit\Policies\Wiki
+ * @package Tests\Integration\Policies\Wiki
  */
 class ArticlePolicyTest extends TestCase
 {
