@@ -19,6 +19,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
 
         Route::get('status', 'StatusController')
             ->name('status');
+
+        // Add open routes below
     });
 
     /**
@@ -77,5 +79,16 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                 ],
             ]);
         });
+
+        /**
+         * Roles Context
+         */
+        Route::resource('roles', 'RolesController', [
+            'only' => [
+                'index'
+            ]
+        ]);
+
+        // add auth protected routes below
     });
 });
