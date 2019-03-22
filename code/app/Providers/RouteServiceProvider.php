@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
@@ -23,6 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     private $modelPlaceHolders = [
         'article' => Article::class,
         'iteration' => Iteration::class,
+        'payment_method' => PaymentMethod::class,
         'role' => Role::class,
         'user' => User::class,
     ];
@@ -35,6 +37,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * RouteServiceProvider constructor.
      * @param Application $app
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Application $app)
     {
