@@ -3,15 +3,18 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\RoleRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Models\Role;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
+use App\Repositories\RoleRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
 use App\Repositories\Wiki\ArticleRepository;
@@ -39,7 +42,10 @@ class AppRepositoryProvider extends ServiceProvider
             IterationRepositoryContract::class,
             MessageRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
+            RoleRepositoryContract::class,
             UserRepositoryContract::class,
+
+            // Put all application specific repositories below to avoid merge conflicts
         ];
     }
 
@@ -51,7 +57,10 @@ class AppRepositoryProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ArticleRepositoryContract::class, function() {
-            return new ArticleRepository(new Article(), $this->app->make('log'));
+            return new ArticleRepository(
+                new Article(),
+                $this->app->make('log'),
+            );
         });
         $this->app->bind(IterationRepositoryContract::class, function() {
             return new IterationRepository(new Iteration(), $this->app->make('log'));
@@ -64,15 +73,23 @@ class AppRepositoryProvider extends ServiceProvider
                 new PasswordToken(),
                 $this->app->make('log'),
                 $this->app->make(Dispatcher::class),
-                $this->app->make(TokenGenerationServiceContract::class)
+                $this->app->make(TokenGenerationServiceContract::class),
+            );
+        });
+        $this->app->bind(RoleRepositoryContract::class, function() {
+            return new RoleRepository(
+                new Role(),
+                $this->app->make('log'),
             );
         });
         $this->app->bind(UserRepositoryContract::class, function() {
             return new UserRepository(
                 new User(),
                 $this->app->make('log'),
-                $this->app->make(Hasher::class)
+                $this->app->make(Hasher::class),
             );
         });
+
+        // Put application specific binds below to avoid merge conflicts
     }
 }
