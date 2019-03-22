@@ -9,3 +9,9 @@ $factory->define(App\Models\Payment\PaymentMethod::class, function (Faker $faker
         'payment_method_type' => $faker->text(20),
     ];
 });
+$factory->define(App\Models\Payment\Payment::class, function (Faker $faker) {
+    return [
+        'payment_method_id' => factory(\App\Models\Payment\PaymentMethod::class)->create()->id,
+        'amount' => $faker->randomFloat(),
+    ];
+});

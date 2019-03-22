@@ -6,6 +6,7 @@ namespace App\Models\Payment;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class PaymentMethod
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read \App\Models\User\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newQuery()
@@ -33,6 +35,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PaymentMethod extends BaseModelAbstract
 {
+    /**
+     * All payments that have been made with this payment method
+     *
+     * @return HasMany
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * A payment will for the time being always belong to a user
      *
