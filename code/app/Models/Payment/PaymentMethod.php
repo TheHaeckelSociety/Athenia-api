@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Models\Payment;
 
+use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,8 +35,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereUserId($value)
  * @mixin \Eloquent
  */
-class PaymentMethod extends BaseModelAbstract
+class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContract
 {
+    use HasValidationRules;
+
     /**
      * All payments that have been made with this payment method
      *
@@ -54,4 +58,86 @@ class PaymentMethod extends BaseModelAbstract
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'payment_method_key' => [
+                    'string',
+                    'max:120',
+                ],
+                'payment_method_type' => [
+                    'string',
+                    'max:20',
+                ],
+            ],
+            static::VALIDATION_RULES_CREATE => [
+                static::VALIDATION_PREPEND_REQUIRED => [
+                    'payment_method_key',
+                    'payment_method_type',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Swagger definition below...
+     *
+     * @SWG\Definition(
+     *     type="object",
+     *     definition="PaymentMethod",
+     *     @SWG\Property(
+     *         property="id",
+     *         type="integer",
+     *         format="int32",
+     *         description="The primary id of the model",
+     *         readOnly=true
+     *     ),
+     *     @SWG\Property(
+     *         property="created_at",
+     *         type="string",
+     *         format="date-time",
+     *         description="UTC date of the time this was created",
+     *         readOnly=true
+     *     ),
+     *     @SWG\Property(
+     *         property="updated_at",
+     *         type="string",
+     *         format="date-time",
+     *         description="UTC date of the time this was last updated",
+     *         readOnly=true
+     *     ),
+     *     @SWG\Property(
+     *         property="payment_method_key",
+     *         type="string",
+     *         maxLength=120,
+     *         description="The key for the payment method on the remote server",
+     *     ),
+     *     @SWG\Property(
+     *         property="payment_method_type",
+     *         type="string",
+     *         maxLength=120,
+     *         description="The type of payment method this is. This refers to the the payment service.",
+     *     ),
+     *     @SWG\Property(
+     *         property="user_id",
+     *         type="integer",
+     *         format="int32",
+     *         description="The primary id of the user that this payment method is related to",
+     *         readOnly=true
+     *     ),
+     *     @SWG\Property(
+     *         property="user",
+     *         description="The users that this was sent to.",
+     *         type="array",
+     *         @SWG\Items(ref="#/definitions/User")
+     *     )
+     * )
+     */
 }

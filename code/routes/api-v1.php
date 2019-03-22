@@ -55,6 +55,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
      */
     Route::group(['middleware' => 'jwt.auth.protected'], function() {
 
+        /**
+         * User Context
+         */
         Route::get('users/me', 'UserController@me')
             ->name('view-self');
 
@@ -63,6 +66,13 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                 'show', 'update',
             ],
         ]);
+        Route::group(['prefix' => 'users/{user}', 'as' => 'user.'], function () {
+            Route::resource('payment-methods', 'User\PaymentMethodController', [
+                'only' => [
+                    'index', 'store',
+                ],
+            ]);
+        });
 
         /**
          * Article Context
@@ -83,7 +93,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
         /**
          * Roles Context
          */
-        Route::resource('roles', 'RolesController', [
+        Route::resource('roles', 'RoleController', [
             'only' => [
                 'index'
             ]

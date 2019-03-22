@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\V1\Requests\Roles;
+namespace App\Http\V1\Requests\Role;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\V1\Requests\Traits\HasNoPolicyParameters;

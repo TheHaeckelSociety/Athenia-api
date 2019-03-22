@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Role;
+use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,6 +23,8 @@ class RouteServiceProvider extends ServiceProvider
     private $modelPlaceHolders = [
         'article' => Article::class,
         'iteration' => Iteration::class,
+        'role' => Role::class,
+        'user' => User::class,
     ];
 
     /**

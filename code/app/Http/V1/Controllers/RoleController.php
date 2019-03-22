@@ -9,10 +9,10 @@ use App\Http\V1\Requests;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * Class RolesController
+ * Class RoleController
  * @package App\Http\V1\Controllers
  */
-class RolesController extends BaseControllerAbstract
+class RoleController extends BaseControllerAbstract
 {
     use HasIndexRequests;
 
@@ -94,10 +94,10 @@ class RolesController extends BaseControllerAbstract
      *     )
      * )
      *
-     * @param Requests\Roles\IndexRequest $request
+     * @param Requests\Role\IndexRequest $request
      * @return LengthAwarePaginator
      */
-    public function index(Requests\Roles\IndexRequest $request)
+    public function index(Requests\Role\IndexRequest $request)
     {
         return $this->roleRepository->findAll($this->refine($request), $this->expand($request), $this->limit($request));
     }

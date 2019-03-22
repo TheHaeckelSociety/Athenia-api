@@ -49,7 +49,8 @@ interface HasValidationRulesContract
 
     /**
      * Build the model validation rules
+     * @param array $params
      * @return array
      */
-    public function buildModelValidationRules(): array;
+    public function buildModelValidationRules(...$params): array;
 }
