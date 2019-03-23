@@ -21,6 +21,7 @@ use Illuminate\Validation\Rule;
  * @property \Carbon\Carbon|null $deleted_at
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan query()
@@ -88,6 +89,21 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Function that creates the current cost attribute
+     *
+     * @return null|float
+     */
+    public function getCurrentCostAttribute()
+    {
+        /** @var MembershipPlanRate $currentRate */
+        $currentRate = $this->membershipPlanRates()
+            ->where('active', true)
+            ->orderBy('created_at', 'DESC')->first();
+
+        return $currentRate ? $currentRate->cost : null;
     }
 
     /**
