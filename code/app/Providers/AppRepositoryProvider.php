@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
+use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
@@ -12,12 +13,14 @@ use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
+use App\Models\Subscription\MembershipPlan;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Payment\PaymentMethodRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\Subscription\MembershipPlanRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
 use App\Repositories\Wiki\ArticleRepository;
@@ -43,6 +46,7 @@ class AppRepositoryProvider extends ServiceProvider
         return [
             ArticleRepositoryContract::class,
             IterationRepositoryContract::class,
+            MembershipPlanRepositoryContract::class,
             MessageRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
@@ -68,6 +72,12 @@ class AppRepositoryProvider extends ServiceProvider
         });
         $this->app->bind(IterationRepositoryContract::class, function() {
             return new IterationRepository(new Iteration(), $this->app->make('log'));
+        });
+        $this->app->bind(MembershipPlanRepositoryContract::class, function() {
+            return new MembershipPlanRepository(
+                new MembershipPlan(),
+                $this->app->make('log'),
+            );
         });
         $this->app->bind(MessageRepositoryContract::class, function() {
             return new MessageRepository(new Message(), $this->app->make('log'));
