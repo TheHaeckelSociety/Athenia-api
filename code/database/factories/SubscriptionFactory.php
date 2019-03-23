@@ -8,6 +8,13 @@ $factory->define(App\Models\Subscription\MembershipPlan::class, function (Faker 
         'duration' => \App\Models\Subscription\MembershipPlan::DURATION_YEAR,
     ];
 });
+$factory->define(\App\Models\Subscription\MembershipPlanRate::class, function (Faker $faker) {
+    return [
+        'membership_plan_id' => factory(\App\Models\Subscription\MembershipPlan::class)->create()->id,
+        'cost' => 10.00,
+        'active' => 0,
+    ];
+});
 //
 //$factory->define(\App\Models\Subscription\Subscription::class, function (Faker $faker) {
 //    return [

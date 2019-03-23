@@ -4,22 +4,23 @@ declare(strict_types=1);
 namespace Tests\Integration\Repositories\Subscription;
 
 use App\Models\Subscription\MembershipPlan;
-use App\Repositories\Subscription\MembershipPlanRepository;
+use App\Models\Subscription\MembershipPlanRate;
+use App\Repositories\Subscription\MembershipPlanRateRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
 
 /**
- * Class MembershipPlanRepositoryTest
+ * Class MembershipPlanRateRepositoryTest
  * @package Tests\Integration\Repositories\Subscription
  */
-class MembershipPlanRepositoryTest extends TestCase
+class MembershipPlanRateRepositoryTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
     /**
-     * @var MembershipPlanRepository
+     * @var MembershipPlanRateRepository
      */
     protected $repository;
 
@@ -28,15 +29,15 @@ class MembershipPlanRepositoryTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
 
-        $this->repository = new MembershipPlanRepository(
-            new MembershipPlan(),
+        $this->repository = new MembershipPlanRateRepository(
+            new MembershipPlanRate(),
             $this->getGenericLogMock()
         );
     }
 
     public function testFindAllSuccess()
     {
-        factory(MembershipPlan::class, 5)->create();
+        factory(MembershipPlanRate::class, 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -49,7 +50,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = factory(MembershipPlanRate::class)->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -57,7 +58,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(MembershipPlan::class)->create(['id' => 19]);
+        factory(MembershipPlanRate::class)->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -65,35 +66,37 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        /** @var MembershipPlan $membershipPlan */
-        $membershipPlan = $this->repository->create([
-            'duration' => MembershipPlan::DURATION_YEAR,
-            'name' => 'a plan',
-        ]);
+        $membershipPlan = factory(MembershipPlan::class)->create();
+        /** @var MembershipPlanRate $membershipPlanRate */
+        $membershipPlanRate = $this->repository->create([
+            'cost' => 10.12,
+            'active' => false,
+        ], $membershipPlan);
 
-        $this->assertEquals(MembershipPlan::DURATION_YEAR, $membershipPlan->duration);
-        $this->assertEquals('a plan', $membershipPlan->name);
+        $this->assertEquals(10.12, $membershipPlanRate->cost);
+        $this->assertEquals($membershipPlan->id, $membershipPlanRate->membership_plan_id);
     }
 
     public function testUpdateSuccess()
     {
-        $model = factory(MembershipPlan::class)->create([
-            'name' => 'a plan'
+        $model = factory(MembershipPlanRate::class)->create([
+            'active' => 1,
         ]);
         $this->repository->update($model, [
-            'name' => 'the same plan',
+            'active' => 0,
         ]);
 
-        $updated = MembershipPlan::find($model->id);
-        $this->assertEquals('the same plan', $updated->name);
+        /** @var MembershipPlanRate $updated */
+        $updated = MembershipPlanRate::find($model->id);
+        $this->assertFalse($updated->active);
     }
 
     public function testDeleteSuccess()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = factory(MembershipPlanRate::class)->create();
 
         $this->repository->delete($model);
 
-        $this->assertNull(MembershipPlan::find($model->id));
+        $this->assertNull(MembershipPlanRate::find($model->id));
     }
 }

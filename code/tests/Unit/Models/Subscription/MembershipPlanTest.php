@@ -13,13 +13,23 @@ use Tests\TestCase;
  */
 class MembershipPlanTest extends TestCase
 {
-    public function testSubscriptions()
+    public function testMembershipPlanRates()
     {
         $user = new MembershipPlan();
-        $relation = $user->subscriptions();
+        $relation = $user->membershipPlanRates();
 
         $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('subscriptions.membership_plan_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('membership_plan_rates.membership_plan_id', $relation->getQualifiedForeignKeyName());
     }
+
+//    public function testSubscriptions()
+//    {
+//        $user = new MembershipPlan();
+//        $relation = $user->subscriptions();
+//
+//        $this->assertInstanceOf(HasMany::class, $relation);
+//        $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
+//        $this->assertEquals('subscriptions.membership_plan_id', $relation->getQualifiedForeignKeyName());
+//    }
 }

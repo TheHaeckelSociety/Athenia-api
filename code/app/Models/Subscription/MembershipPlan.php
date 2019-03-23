@@ -15,7 +15,7 @@ use Illuminate\Validation\Rule;
  *
  * @package App\Models\MembershipPlan
  * @property int $id
- * @property float|null $cost
+ * @property float|null $current_cost
  * @property string $name
  * @property string $duration
  * @property \Carbon\Carbon|null $deleted_at
@@ -62,11 +62,30 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     ];
 
     /**
+     * Values that are appending on a toArray function call
+     *
+     * @var array
+     */
+    protected $appends = [
+        'current_cost',
+    ];
+
+    /**
+     * All membership plan rates that have
+     *
+     * @return HasMany
+     */
+    public function membershipPlanRates(): HasMany
+    {
+        return $this->hasMany(MembershipPlanRate::class);
+    }
+
+    /**
      * All subscriptions that have been signed up for this membership plan
      *
      * @return HasMany
      */
-    public function subscriptions() : HasMany
+    public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
     }
@@ -140,9 +159,9 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      *         readOnly=true
      *     ),
      *     @SWG\Property(
-     *         property="cost",
+     *         property="current_cost",
      *         type="number",
-     *         description="The cost of the membership plan"
+     *         description="The current cost of the membership plan"
      *     ),
      *     @SWG\Property(
      *         property="duration",
