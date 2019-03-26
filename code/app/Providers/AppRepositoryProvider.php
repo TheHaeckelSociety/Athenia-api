@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
+use App\Contracts\Repositories\Subscription\MembershipPlanRateRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
@@ -14,12 +15,14 @@ use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
+use App\Models\Subscription\MembershipPlanRate;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Payment\PaymentMethodRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\MembershipPlanRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
@@ -47,6 +50,7 @@ class AppRepositoryProvider extends ServiceProvider
             ArticleRepositoryContract::class,
             IterationRepositoryContract::class,
             MembershipPlanRepositoryContract::class,
+            MembershipPlanRateRepositoryContract::class,
             MessageRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
@@ -76,6 +80,13 @@ class AppRepositoryProvider extends ServiceProvider
         $this->app->bind(MembershipPlanRepositoryContract::class, function() {
             return new MembershipPlanRepository(
                 new MembershipPlan(),
+                $this->app->make('log'),
+                $this->app->make(MembershipPlanRateRepositoryContract::class),
+            );
+        });
+        $this->app->bind(MembershipPlanRateRepositoryContract::class, function() {
+            return new MembershipPlanRateRepository(
+                new MembershipPlanRate(),
                 $this->app->make('log'),
             );
         });

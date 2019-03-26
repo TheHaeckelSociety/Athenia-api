@@ -121,7 +121,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                     'max:120',
                 ],
 
-                'cost' => [
+                'current_cost' => [
                     'numeric',
                     'min:0.00',
                     'max:999999.99',
@@ -135,7 +135,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
             self::VALIDATION_RULES_CREATE => [
                 self::VALIDATION_PREPEND_REQUIRED => [
                     'name',
-                    'cost',
+                    'current_cost',
                     'duration',
                 ],
             ],

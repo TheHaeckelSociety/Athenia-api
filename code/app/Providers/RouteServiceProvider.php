@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
+use App\Models\Subscription\MembershipPlan;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
@@ -24,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
     private $modelPlaceHolders = [
         'article' => Article::class,
         'iteration' => Iteration::class,
+        'membership_plan' => MembershipPlan::class,
         'payment_method' => PaymentMethod::class,
         'role' => Role::class,
         'user' => User::class,

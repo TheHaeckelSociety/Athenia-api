@@ -56,6 +56,22 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
     Route::group(['middleware' => 'jwt.auth.protected'], function() {
 
         /**
+         * Article Context
+         */
+        Route::resource('articles', 'ArticleController', [
+            'except' => [
+                'create', 'edit', 'destroy'
+            ]
+        ]);
+        Route::group(['prefix' => 'articles/{article}', 'as' => 'article.'], function () {
+            Route::resource('iterations', 'Article\IterationController', [
+                'only' => [
+                    'index',
+                ],
+            ]);
+        });
+
+        /**
          * User Context
          */
         Route::get('users/me', 'UserController@me')
@@ -75,20 +91,13 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
         });
 
         /**
-         * Article Context
+         * Membership Plan Context
          */
-        Route::resource('articles', 'ArticleController', [
+        Route::resource('membership-plans', 'MembershipPlanController', [
             'except' => [
-                'create', 'edit', 'destroy'
+                'create', 'edit'
             ]
         ]);
-        Route::group(['prefix' => 'articles/{article}', 'as' => 'article.'], function () {
-            Route::resource('iterations', 'Article\IterationController', [
-                'only' => [
-                    'index',
-                ],
-            ]);
-        });
 
         /**
          * Roles Context

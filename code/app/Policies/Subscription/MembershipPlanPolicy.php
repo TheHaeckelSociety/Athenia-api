@@ -6,12 +6,13 @@ namespace App\Policies\Subscription;
 use App\Contracts\Policies\BasePolicyContract;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\User\User;
+use App\Policies\BasePolicyAbstract;
 
 /**
  * Class MembershipPlanPolicy
  * @package App\Policies\Subscription
  */
-class MembershipPlanPolicy implements BasePolicyContract
+class MembershipPlanPolicy extends BasePolicyAbstract implements BasePolicyContract
 {
     /**
      * All users can index membership plans
