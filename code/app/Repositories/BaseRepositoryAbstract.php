@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -63,10 +64,12 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      * @param array $where
      * @param array $with
      * @param array $belongsToArray
-     * @return QueryBuilder
+     * @param array $searches
+     * @return EloquentJoinBuilder
      */
-    protected function buildFindAllQuery(array $where = [], array $with = [], array $belongsToArray = [])
+    protected function buildFindAllQuery(array $where = [], array $searches = [], array $with = [], array $belongsToArray = [])
     {
+        /** @var EloquentJoinBuilder $result */
         $result = $this->model->with($with);
 
         foreach ($belongsToArray as $parentModel) {
@@ -99,22 +102,39 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
             });
         }
 
-        return $result->where($where);
+        foreach ($where as $key => $query) {
+            if (is_array($query)) {
+                $result->whereJoin(...$query);
+            } else {
+                $result->whereJoin($key, '=', $query);
+            }
+        }
+
+        if (count($searches)) {
+
+            $result->where(function (EloquentJoinBuilder $query) use ($searches) {
+                foreach ($searches as $search) {
+                    $query->orWhereJoin($search[0], $search[1], $search[2]);
+                }
+            });
+        }
+
+        return $result;
     }
 
     /**
      * Find all
      *
-     * @param array $where
+     * @param array $filters
+     * @param array $searches
      * @param array $with
      * @param int $limit
-     * @param array $belongsToArray array of models that this could belong to
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     * @throws NotImplementedException
+     * @param array $belongsToArray array of models this should belong to
+     * @return LengthAwarePaginator
      */
-    public function findAll(array $where = [], array $with = [], int $limit = 10, array $belongsToArray = [])
+    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = [])
     {
-        return $this->buildFindAllQuery($where, $with, $belongsToArray)->paginate($limit)->appends(Input::except('page'));
+        return $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray)->paginate($limit)->appends(Input::except('page'));
     }
 
     /**
@@ -173,7 +193,9 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
             }
         }
 
-        if (!$newModel->wasRecentlyCreated) $newModel->save(); // because one of the parent model relationships saves it first.
+        if (!$newModel->wasRecentlyCreated) {
+            $newModel->save(); // because one of the parent model relationships saves it first.
+        }
 
         $this->log->info('Created model', ['model_id'=>$newModel->id, 'model' => get_class($newModel)]);
         return $newModel;
@@ -189,21 +211,28 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      */
     public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
     {
-        if ($forcedValues) $model->forceFill($forcedValues);
-        if (!$model->update($data)) throw new \DomainException(sprintf('%s[%d] failed to update', get_class($model), $model->id));
+        if ($forcedValues) {
+            $model->forceFill($forcedValues);
+        }
+        if (!$model->update($data)) {
+            throw new \DomainException(sprintf('%s[%d] failed to update', get_class($model), $model->id));
+        }
         $this->log->info('Updated model', ['model_id' => $model->id, 'model' => get_class($model)]);
         return $model;
     }
 
     /**
      * Delete this single model
-     * 
+     *
      * @param BaseModelAbstract $model
      * @return bool|null
+     * @throws \Exception
      */
     public function delete(BaseModelAbstract $model)
     {
-        if (!$model->delete()) throw new \DomainException(sprintf('%s[%d] failed to delete', get_class($model), $model->id));
+        if (!$model->delete()) {
+            throw new \DomainException(sprintf('%s[%d] failed to delete', get_class($model), $model->id));
+        }
         $this->log->info('Deleted model', ['model_id' => $model->id, 'model' => get_class($model)]);
         return true;
     }

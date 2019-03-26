@@ -99,6 +99,6 @@ class IterationController extends BaseControllerAbstract
      */
     public function index(Requests\Article\IndexRequest $request, Article $article)
     {
-        return $this->repository->findAll($this->refine($request), $this->expand($request), $this->limit($request), [$article]);
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$article]);
     }
 }

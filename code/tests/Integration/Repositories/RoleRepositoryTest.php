@@ -32,7 +32,7 @@ class RoleRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        $items = $this->repository->findAll([],[],0);
+        $items = $this->repository->findAll([],[],[], 0);
         $this->assertCount(Role::count(), $items);
     }
 

@@ -93,7 +93,7 @@ class ArticleController extends BaseControllerAbstract
      */
     public function index(Requests\Article\IndexRequest $request)
     {
-        return $this->repository->findAll($this->refine($request), $this->expand($request), $this->limit($request));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request));
     }
 
     /**

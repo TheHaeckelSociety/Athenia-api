@@ -18,14 +18,25 @@ trait HasIndexRequests
     use ValidatesRequests, HasViewRequests;
 
     /**
-     * Get the refine / where statement
+     * Get the search statement
      *
      * @param BaseRequestAbstract $request
      * @return array
      */
-    protected function refine(BaseRequestAbstract $request): array
+    protected function filter(BaseRequestAbstract $request): array
     {
-        return $request->input('refine', []);
+        return $request->input('cleaned_filter', []);
+    }
+
+    /**
+     * Get the search statement
+     *
+     * @param BaseRequestAbstract $request
+     * @return array
+     */
+    protected function search(BaseRequestAbstract $request): array
+    {
+        return $request->input('cleaned_search', []);
     }
 
     /**

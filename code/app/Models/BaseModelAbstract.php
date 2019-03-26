@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fico7489\Laravel\EloquentJoin\Traits\EloquentJoin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 abstract class BaseModelAbstract extends Model
 {
+    use EloquentJoin;
+
     /**
      * The default fields that are guarded in all models
      *

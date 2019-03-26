@@ -25,13 +25,14 @@ interface BaseRepositoryContract
     /**
      * Find all
      *
-     * @param array $where
+     * @param array $filters
+     * @param array $searches
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray array of models this should belong to
      * @return LengthAwarePaginator
      */
-    public function findAll(array $where = [], array $with = [], int $limit = 10, array $belongsToArray = []);
+    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = []);
 
     /**
      * Save a new instance of this model, and then return the instance
