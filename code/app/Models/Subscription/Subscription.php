@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @package App\Models\Subscription
  * @property int $id
  * @property int $membership_plan_rate_id
- * @property int $payment_methods
+ * @property int $payment_method_id
  * @property int $user_id
  * @property string|null $last_renewed_at
  * @property string|null $subscribed_at

@@ -8,6 +8,7 @@ use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRateRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
+use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
@@ -18,6 +19,7 @@ use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
+use App\Models\Subscription\Subscription;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
@@ -27,6 +29,7 @@ use App\Repositories\Payment\PaymentRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\MembershipPlanRepository;
+use App\Repositories\Subscription\SubscriptionRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
 use App\Repositories\Wiki\ArticleRepository;
@@ -59,6 +62,7 @@ class AppRepositoryProvider extends ServiceProvider
             PaymentRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
             RoleRepositoryContract::class,
+            SubscriptionRepositoryContract::class,
             UserRepositoryContract::class,
 
             // Put all application specific repositories below to avoid merge conflicts
@@ -120,6 +124,12 @@ class AppRepositoryProvider extends ServiceProvider
         $this->app->bind(RoleRepositoryContract::class, function() {
             return new RoleRepository(
                 new Role(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(SubscriptionRepositoryContract::class, function() {
+            return new SubscriptionRepository(
+                new Subscription(),
                 $this->app->make('log'),
             );
         });
