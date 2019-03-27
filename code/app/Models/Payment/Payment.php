@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Models\Payment;
 
 use App\Models\BaseModelAbstract;
+use App\Models\Subscription\Subscription;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Payment
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Payment\PaymentMethod $paymentMethod
+ * @property-read \App\Models\Subscription\Subscription[] $subscription
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
@@ -50,5 +53,15 @@ class Payment extends BaseModelAbstract
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * The subscriptions paid for
+     *
+     * @return BelongsTo
+     */
+    public function subscription(): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class);
     }
 }

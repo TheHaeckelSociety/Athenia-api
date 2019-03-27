@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Models\Subscription;
 
+use App\Models\Subscription\MembershipPlan;
+use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
 /**
@@ -21,6 +25,16 @@ class SubscriptionTest extends TestCase
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('membership_plan_rates.id', $relation->getQualifiedOwnerKeyName());
         $this->assertEquals('subscriptions.membership_plan_rate_id', $relation->getQualifiedForeignKeyName());
+    }
+
+    public function testPayments()
+    {
+        $user = new Subscription();
+        $relation = $user->payments();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('subscriptions.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('payments.subscription_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testPaymentMethod()
@@ -41,5 +55,52 @@ class SubscriptionTest extends TestCase
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
         $this->assertEquals('subscriptions.user_id', $relation->getQualifiedForeignKeyName());
+    }
+
+    public function testIsLifetime()
+    {
+        $yearSubscription = new Subscription([
+            'membershipPlanRate' => new MembershipPlanRate([
+                'membershipPlan' => new MembershipPlan([
+                    'duration' => MembershipPlan::DURATION_YEAR,
+                ]),
+            ]),
+        ]);
+
+        $this->assertFalse($yearSubscription->isLifetime());
+
+        $lifetimeSubscription = new Subscription([
+            'membershipPlanRate' => new MembershipPlanRate([
+                'membershipPlan' => new MembershipPlan([
+                    'duration' => MembershipPlan::DURATION_LIFETIME,
+                ]),
+            ]),
+        ]);
+
+        $this->assertTrue($lifetimeSubscription->isLifetime());
+    }
+
+    public function testFormattedExpiresAt()
+    {
+        $subscription = new Subscription();
+        $this->assertNull($subscription->formatted_expires_at);
+
+        $subscription = new Subscription([
+            'expires_at' => new Carbon('2018-02-12'),
+        ]);
+        $this->assertEquals('February 12th 2018', $subscription->formatted_expires_at);
+    }
+
+    public function testFormattedCost()
+    {
+        $subscription = new Subscription();
+        $this->assertNull($subscription->formatted_cost);
+
+        $subscription = new Subscription([
+            'membershipPlanRate' => new MembershipPlanRate([
+                'cost' => 1,
+            ]),
+        ]);
+        $this->assertEquals('1.00', $subscription->formatted_cost);
     }
 }
