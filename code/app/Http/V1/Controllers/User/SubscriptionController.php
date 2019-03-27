@@ -192,6 +192,7 @@ class SubscriptionController extends BaseControllerAbstract
 
         if (isset ($data['cancel']) && $data['cancel']) {
             $data['canceled_at'] = Carbon::now();
+            unset($data['cancel']);
         }
 
         return $this->repository->update($subscription, $data);
