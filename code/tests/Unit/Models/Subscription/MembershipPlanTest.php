@@ -22,14 +22,4 @@ class MembershipPlanTest extends TestCase
         $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('membership_plan_rates.membership_plan_id', $relation->getQualifiedForeignKeyName());
     }
-
-//    public function testSubscriptions()
-//    {
-//        $user = new MembershipPlan();
-//        $relation = $user->subscriptions();
-//
-//        $this->assertInstanceOf(HasMany::class, $relation);
-//        $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
-//        $this->assertEquals('subscriptions.membership_plan_id', $relation->getQualifiedForeignKeyName());
-//    }
 }

@@ -36,6 +36,28 @@ class CreateSubscriptionsModels extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->unsignedInteger('membership_plan_rate_id');
+            $table->foreign('membership_plan_rate_id')->references('id')->on('membership_plan_rates');
+
+            $table->unsignedInteger('payment_method_id');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
+
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->timestamp('last_renewed_at')->nullable();
+            $table->timestamp('subscribed_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('canceled_at')->nullable();
+
+            $table->boolean('recurring')->default(false);
+
+            $table->softDeletes();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -45,6 +67,7 @@ class CreateSubscriptionsModels extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('subscriptions');
         Schema::dropIfExists('membership_plan_rates');
         Schema::dropIfExists('membership_plans');
     }

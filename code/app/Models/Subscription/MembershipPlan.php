@@ -82,16 +82,6 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     }
 
     /**
-     * All subscriptions that have been signed up for this membership plan
-     *
-     * @return HasMany
-     */
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class);
-    }
-
-    /**
      * Function that creates the current cost attribute
      *
      * @return null|float

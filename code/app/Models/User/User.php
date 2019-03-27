@@ -6,6 +6,7 @@ namespace App\Models\User;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
+use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
@@ -47,6 +48,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeCustomerKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  */
 class User extends BaseModelAbstract
     implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract
@@ -111,6 +113,16 @@ class User extends BaseModelAbstract
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * All Subscriptions this user has signed up to
+     *
+     * @return HasMany
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     /**

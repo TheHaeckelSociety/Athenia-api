@@ -15,9 +15,10 @@ $factory->define(\App\Models\Subscription\MembershipPlanRate::class, function (F
         'active' => 0,
     ];
 });
-//
-//$factory->define(\App\Models\Subscription\Subscription::class, function (Faker $faker) {
-//    return [
-//        'membership_plan_id' => factory(\App\Models\Subscription\MembershipPlan::class)->create()->id,
-//    ];
-//});
+$factory->define(\App\Models\Subscription\Subscription::class, function (Faker $faker) {
+    return [
+        'membership_plan_rate_id' => factory(\App\Models\Subscription\MembershipPlanRate::class)->create()->id,
+        'payment_method_id' => factory(\App\Models\Payment\PaymentMethod::class)->create()->id,
+        'user_id' => factory(\App\Models\User\User::class)->create()->id,
+    ];
+});

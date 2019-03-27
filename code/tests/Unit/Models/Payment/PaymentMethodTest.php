@@ -24,6 +24,16 @@ class PaymentMethodTest extends TestCase
         $this->assertEquals('payments.payment_method_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testSubscriptions()
+    {
+        $user = new PaymentMethod();
+        $relation = $user->subscriptions();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('payment_methods.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('subscriptions.payment_method_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testUser()
     {
         $model = new PaymentMethod();

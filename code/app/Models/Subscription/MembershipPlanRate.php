@@ -5,6 +5,7 @@ namespace App\Models\Subscription;
 
 use App\Models\BaseModelAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class MembershipPlanRate
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\Subscription\MembershipPlan $membershipPlan
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate query()
@@ -39,5 +41,15 @@ class MembershipPlanRate extends BaseModelAbstract
     public function membershipPlan(): BelongsTo
     {
         return $this->belongsTo(MembershipPlan::class);
+    }
+
+    /**
+     * All subscriptions that have been signed up for this membership plan rate
+     *
+     * @return HasMany
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 }
