@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
+use App\Models\Subscription\Subscription;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
@@ -28,6 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         'membership_plan' => MembershipPlan::class,
         'payment_method' => PaymentMethod::class,
         'role' => Role::class,
+        'subscription' => Subscription::class,
         'user' => User::class,
     ];
 

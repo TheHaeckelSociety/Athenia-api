@@ -88,6 +88,11 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                     'store', 'destroy',
                 ],
             ]);
+            Route::resource('subscriptions', 'User\SubscriptionController', [
+                'only' => [
+                    'store', 'update',
+                ],
+            ]);
         });
 
         /**

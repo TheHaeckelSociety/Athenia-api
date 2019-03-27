@@ -10,6 +10,7 @@ use App\Models\Payment\PaymentMethod;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use App\Validators\Subscription\MembershipPlanRateIsActiveValidator;
+use App\Validators\Subscription\PaymentMethodIsOwnedByUserValidator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -158,8 +159,8 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
                 ],
                 'payment_method_id' => [
                     'integer',
-                    Rule::exists('membership_plan_rates', 'id'),
-                    MembershipPlanRateIsActiveValidator::KEY,
+                    Rule::exists('payment_methods', 'id'),
+                    PaymentMethodIsOwnedByUserValidator::KEY,
                 ],
                 'recurring' => [
                     'boolean',
@@ -169,6 +170,9 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
                 self::VALIDATION_PREPEND_REQUIRED => [
                     'membership_plan_rate_id',
                     'payment_method_id',
+                ],
+                self::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'cancel',
                 ],
             ],
             self::VALIDATION_RULES_UPDATE => [
