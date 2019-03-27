@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace App\Models\Subscription;
 
+use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
+use App\Validators\Subscription\MembershipPlanRateIsActiveValidator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Validation\Rule;
 
 /**
  * Class Subscription
@@ -50,8 +54,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereUserId($value)
  * @mixin \Eloquent
  */
-class Subscription extends BaseModelAbstract
+class Subscription extends BaseModelAbstract implements HasValidationRulesContract
 {
+    use HasValidationRules;
+
     /**
      * @var array All dates for the subscription
      */
@@ -131,5 +137,45 @@ class Subscription extends BaseModelAbstract
     {
         return $this->membershipPlanRate && $this->membershipPlanRate->cost ?
             number_format((float)$this->membershipPlanRate->cost, 2) : null;
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            self::VALIDATION_RULES_BASE => [
+                'cancel' => [
+                    'boolean',
+                ],
+                'membership_plan_rate_id' => [
+                    'integer',
+                    Rule::exists('membership_plan_rates', 'id'),
+                    MembershipPlanRateIsActiveValidator::KEY,
+                ],
+                'payment_method_id' => [
+                    'integer',
+                    Rule::exists('membership_plan_rates', 'id'),
+                    MembershipPlanRateIsActiveValidator::KEY,
+                ],
+                'recurring' => [
+                    'boolean',
+                ],
+            ],
+            self::VALIDATION_RULES_CREATE => [
+                self::VALIDATION_PREPEND_REQUIRED => [
+                    'membership_plan_rate_id',
+                    'payment_method_id',
+                ],
+            ],
+            self::VALIDATION_RULES_UPDATE => [
+                self::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'membership_plan_rate_id',
+                ],
+            ],
+        ];
     }
 }
