@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
+use App\Events\Payment\PaymentReversedEvent;
 use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
 use App\Listeners\Message\MessageCreatedListener;
@@ -33,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MessageSentEvent::class => [
             MessageSentListener::class,
+        ],
+        PaymentReversedEvent::class => [
+
         ],
         SignUpEvent::class => [
             SignUpListener::class,

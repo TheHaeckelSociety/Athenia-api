@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
+use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRateRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
@@ -12,6 +13,7 @@ use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
@@ -21,6 +23,7 @@ use App\Models\User\PasswordToken;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Payment\PaymentMethodRepository;
+use App\Repositories\Payment\PaymentRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\MembershipPlanRepository;
@@ -53,6 +56,7 @@ class AppRepositoryProvider extends ServiceProvider
             MembershipPlanRateRepositoryContract::class,
             MessageRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
+            PaymentRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
             RoleRepositoryContract::class,
             UserRepositoryContract::class,
@@ -99,6 +103,12 @@ class AppRepositoryProvider extends ServiceProvider
                 $this->app->make('log'),
                 $this->app->make(Dispatcher::class),
                 $this->app->make(TokenGenerationServiceContract::class),
+            );
+        });
+        $this->app->bind(PaymentRepositoryContract::class, function() {
+            return new PaymentRepository(
+                new Payment(),
+                $this->app->make('log'),
             );
         });
         $this->app->bind(PaymentMethodRepositoryContract::class, function() {

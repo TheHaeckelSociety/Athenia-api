@@ -3,9 +3,17 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
+use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
+use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\Services\StripeCustomerServiceContract;
+use App\Contracts\Services\StripePaymentServiceContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Services\StripeCustomerService;
+use App\Services\StripePaymentService;
 use App\Services\TokenGenerationService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -20,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
+            StripeCustomerServiceContract::class,
+            StripePaymentServiceContract::class,
             TokenGenerationServiceContract::class,
         ];
     }
@@ -33,6 +43,23 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerEnvironmentSpecificProviders();
 
+        $this->app->bind(StripeCustomerServiceContract::class, function () {
+            return new StripeCustomerService(
+                $this->app->make(UserRepositoryContract::class),
+                $this->app->make(PaymentMethodRepositoryContract::class),
+                $this->app->make('stripe')->customers(),
+                $this->app->make('stripe')->cards(),
+            );
+        });
+        $this->app->bind(StripePaymentServiceContract::class, function () {
+            $stripe = $this->app->make('stripe');
+            return new StripePaymentService(
+                $this->app->make(PaymentRepositoryContract::class),
+                $this->app->make(Dispatcher::class),
+                $stripe->charges(),
+                $stripe->refunds(),
+            );
+        });
         $this->app->bind(TokenGenerationServiceContract::class, function() {
             return new TokenGenerationService();
         });

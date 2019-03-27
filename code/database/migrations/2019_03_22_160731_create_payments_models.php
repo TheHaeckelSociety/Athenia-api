@@ -13,6 +13,9 @@ class CreatePaymentsModels extends Migration
      */
     public function up()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('stripe_customer_key', 120)->nullable();
+        });
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
 
@@ -49,6 +52,9 @@ class CreatePaymentsModels extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('stripe_customer_key');
+        });
         Schema::dropIfExists('payments');
         Schema::dropIfExists('payment_methods');
     }
