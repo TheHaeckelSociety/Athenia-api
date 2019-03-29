@@ -7,6 +7,9 @@ use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Traits\HasValidationRules;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\Rule;
 
@@ -16,23 +19,23 @@ use Illuminate\Validation\Rule;
  * @package App\Models\MembershipPlan
  * @property int $id
  * @property float|null $current_cost
+ * @property-read null|float $current_rate_id
  * @property string $name
  * @property string $duration
- * @property \Carbon\Carbon|null $deleted_at
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan query()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlan whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|MembershipPlanRate[] $membershipPlanRates
+ * @method static Builder|MembershipPlan newQuery()
+ * @method static Builder|MembershipPlan newModelQuery()
+ * @method static Builder|MembershipPlan query()
+ * @method static Builder|MembershipPlan whereCreatedAt($value)
+ * @method static Builder|MembershipPlan whereDeletedAt($value)
+ * @method static Builder|MembershipPlan whereDuration($value)
+ * @method static Builder|MembershipPlan whereId($value)
+ * @method static Builder|MembershipPlan whereName($value)
+ * @method static Builder|MembershipPlan whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
@@ -69,6 +72,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      */
     protected $appends = [
         'current_cost',
+        'current_rate_id',
     ];
 
     /**
@@ -94,6 +98,21 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
             ->orderBy('created_at', 'DESC')->first();
 
         return $currentRate ? $currentRate->cost : null;
+    }
+
+    /**
+     * Function that creates the current cost attribute
+     *
+     * @return null|float
+     */
+    public function getCurrentRateIdAttribute()
+    {
+        /** @var MembershipPlanRate $currentRate */
+        $currentRate = $this->membershipPlanRates()
+            ->where('active', true)
+            ->orderBy('created_at', 'DESC')->first();
+
+        return $currentRate ? $currentRate->id : null;
     }
 
     /**
@@ -168,6 +187,12 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      *         property="current_cost",
      *         type="number",
      *         description="The current cost of the membership plan"
+     *     ),
+     *     @SWG\Property(
+     *         property="current_rate_id",
+     *         type="number",
+     *         readonly=true,
+     *         description="The current id of the membership plan rate"
      *     ),
      *     @SWG\Property(
      *         property="duration",

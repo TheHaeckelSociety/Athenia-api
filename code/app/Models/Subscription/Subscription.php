@@ -54,6 +54,7 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription wherePaymentMethodId($value)
  */
 class Subscription extends BaseModelAbstract implements HasValidationRulesContract
 {
