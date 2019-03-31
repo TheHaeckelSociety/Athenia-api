@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Http\V1\Controllers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Http\V1\Controllers\Traits\HasViewRequests;
 use App\Http\V1\Requests;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
+use Exception;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\JWTAuth;
@@ -26,22 +28,20 @@ class UserController extends BaseControllerAbstract
     protected $repository;
 
     /**
-     * @var Hasher
+     * @var StripeCustomerServiceContract
      */
-    protected $hasher;
-
-    /**
-     * @var JWTAuth
-     */
-    protected $auth;
+    protected $stripeCustomerService;
 
     /**
      * UsersController constructor.
      * @param UserRepositoryContract $repository
+     * @param StripeCustomerServiceContract $stripeCustomerService
      */
-    public function __construct(UserRepositoryContract $repository)
+    public function __construct(UserRepositoryContract $repository,
+                                StripeCustomerServiceContract $stripeCustomerService)
     {
         $this->repository = $repository;
+        $this->stripeCustomerService = $stripeCustomerService;
     }
 
     /**
@@ -215,6 +215,13 @@ class UserController extends BaseControllerAbstract
     {
         /** @var User $user */
         $user = auth()->user();
+
+        if (!$user->stripe_customer_key) {
+            try {
+                $this->stripeCustomerService->createCustomer($user);
+            } catch (Exception $e) {}
+        }
+
         return new JsonResponse($user->load($this->expand($request)));
     }
 }
