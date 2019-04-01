@@ -130,11 +130,13 @@ class StripeCustomerServiceTest extends TestCase
             'card_number'
         ])->andReturn([
             'id' => 'card_id',
+            'last4' => '1234',
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
+            'identifier' => '1234',
         ], \Mockery::on(function(User $user) {
             $this->assertEquals($user->email, 'test@test.com');
             return true;
@@ -156,11 +158,13 @@ class StripeCustomerServiceTest extends TestCase
             'card_number'
         ])->andReturn([
             'id' => 'card_id',
+            'last4' => '1234',
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
+            'identifier' => '1234',
         ], \Mockery::on(function(User $user) {
             $this->assertEquals($user->email, 'test@test.com');
             return true;

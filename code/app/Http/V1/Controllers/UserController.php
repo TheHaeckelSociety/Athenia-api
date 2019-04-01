@@ -216,12 +216,6 @@ class UserController extends BaseControllerAbstract
         /** @var User $user */
         $user = auth()->user();
 
-        if (!$user->stripe_customer_key) {
-            try {
-                $this->stripeCustomerService->createCustomer($user);
-            } catch (Exception $e) {}
-        }
-
         return new JsonResponse($user->load($this->expand($request)));
     }
 }

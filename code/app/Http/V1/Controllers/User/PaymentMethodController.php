@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Controllers\User;
 
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
+use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Http\V1\Controllers\BaseControllerAbstract;
 use App\Http\V1\Controllers\Traits\HasIndexRequests;
 use App\Http\V1\Requests;
@@ -25,12 +26,20 @@ class PaymentMethodController extends BaseControllerAbstract
     private $repository;
 
     /**
+     * @var StripeCustomerServiceContract
+     */
+    private $stripeCustomerService;
+
+    /**
      * PaymentMethodController constructor.
      * @param PaymentMethodRepositoryContract $repository
+     * @param StripeCustomerServiceContract $stripeCustomerService
      */
-    public function __construct(PaymentMethodRepositoryContract $repository)
+    public function __construct(PaymentMethodRepositoryContract $repository,
+                                StripeCustomerServiceContract $stripeCustomerService)
     {
         $this->repository = $repository;
+        $this->stripeCustomerService = $stripeCustomerService;
     }
 
     /**
@@ -93,7 +102,7 @@ class PaymentMethodController extends BaseControllerAbstract
     {
         $data = $request->json()->all();
 
-        $model = $this->repository->create($data, $user);
+        $model = $this->stripeCustomerService->createPaymentMethod($user, $data['token']);
         return new JsonResponse($model, 201);
     }
 

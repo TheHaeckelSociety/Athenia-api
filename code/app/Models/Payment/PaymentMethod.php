@@ -8,9 +8,11 @@ use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
-use Cartalyst\Stripe\Api\Subscriptions;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class PaymentMethod
@@ -18,24 +20,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @package App\Models\Payment
  * @property int $id
  * @property int $user_id
+ * @property string|null $identifier
  * @property string|null $payment_method_key
  * @property string $payment_method_type
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
- * @property-read \App\Models\User\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod query()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod wherePaymentMethodKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod wherePaymentMethodType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereUserId($value)
+ * @property Carbon|null $deleted_at
+ * @property-read Collection|Payment[] $payments
+ * @property-read Collection|Subscription[] $subscriptions
+ * @property-read User $user
+ * @method static Builder|PaymentMethod newModelQuery()
+ * @method static Builder|PaymentMethod newQuery()
+ * @method static Builder|PaymentMethod query()
+ * @method static Builder|PaymentMethod whereCreatedAt($value)
+ * @method static Builder|PaymentMethod whereDeletedAt($value)
+ * @method static Builder|PaymentMethod whereId($value)
+ * @method static Builder|PaymentMethod whereIdentifier($value)
+ * @method static Builder|PaymentMethod wherePaymentMethodKey($value)
+ * @method static Builder|PaymentMethod wherePaymentMethodType($value)
+ * @method static Builder|PaymentMethod whereUpdatedAt($value)
+ * @method static Builder|PaymentMethod whereUserId($value)
  * @mixin \Eloquent
  */
 class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContract
@@ -81,19 +85,14 @@ class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContr
     {
         return [
             static::VALIDATION_RULES_BASE => [
-                'payment_method_key' => [
+                'token' => [
                     'string',
                     'max:120',
-                ],
-                'payment_method_type' => [
-                    'string',
-                    'max:20',
                 ],
             ],
             static::VALIDATION_RULES_CREATE => [
                 static::VALIDATION_PREPEND_REQUIRED => [
-                    'payment_method_key',
-                    'payment_method_type',
+                    'token',
                 ],
             ],
         ];

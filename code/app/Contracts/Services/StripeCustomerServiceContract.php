@@ -35,7 +35,7 @@ interface StripeCustomerServiceContract
      * @param array $paymentData
      * @return mixed
      */
-    public function createPaymentMethod(User $user, array $paymentData): PaymentMethod;
+    public function createPaymentMethod(User $user, $paymentData): PaymentMethod;
 
     /**
      * Interacts with stripe in order to properly delete a user's card

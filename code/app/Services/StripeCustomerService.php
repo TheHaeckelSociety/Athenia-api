@@ -98,7 +98,7 @@ class StripeCustomerService implements StripeCustomerServiceContract
      * @param array $paymentData
      * @return mixed
      */
-    public function createPaymentMethod(User $user, array $paymentData): PaymentMethod
+    public function createPaymentMethod(User $user, $paymentData): PaymentMethod
     {
         if (!$user->stripe_customer_key) {
             $this->createCustomer($user);
@@ -109,6 +109,7 @@ class StripeCustomerService implements StripeCustomerServiceContract
         return $this->paymentMethodRepository->create([
             'payment_method_key' => $data['id'],
             'payment_method_type' => 'stripe',
+            'identifier' => $data['last4'],
         ], $user);
     }
 

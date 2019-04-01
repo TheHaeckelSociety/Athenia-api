@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\User\PaymentMethod;
 
+use App\Contracts\Services\StripeCustomerServiceContract;
+use App\Models\Payment\PaymentMethod;
 use App\Models\User\User;
+use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -56,9 +59,24 @@ class UserPaymentMethodCreateTest extends TestCase
     {
         $this->actingAs($this->user);
 
+        /** @var StripeCustomerServiceContract|CustomMockInterface $stripeCustomerService */
+        $stripeCustomerService = $this->mock(StripeCustomerServiceContract::class);
+
+        $this->app->bind(StripeCustomerServiceContract::class, function() use ($stripeCustomerService) {
+            return $stripeCustomerService;
+        });
+
+        $stripeCustomerService->shouldReceive('createPaymentMethod')->once()
+            ->with(\Mockery::on(function(User $user) {
+                $this->assertEquals($user->id, $this->user->id);
+                return true;
+            }), 'test_token')->andReturn(new PaymentMethod([
+                'payment_method_key' => 'test_key',
+                'payment_method_type' => 'test_type',
+            ]));
+
         $response = $this->json('POST', $this->path, [
-            'payment_method_key' => 'test_key',
-            'payment_method_type' => 'test_type',
+            'token' => 'test_token',
         ]);
 
         $response->assertStatus(201);
@@ -79,8 +97,7 @@ class UserPaymentMethodCreateTest extends TestCase
 
         $response->assertJson([
             'errors' => [
-                'payment_method_key' => ['The payment method key field is required.'],
-                'payment_method_type' => ['The payment method type field is required.'],
+                'token' => ['The token field is required.'],
             ]
         ]);
     }
@@ -90,16 +107,14 @@ class UserPaymentMethodCreateTest extends TestCase
         $this->actingAs($this->user);
 
         $response = $this->json('POST', $this->path, [
-            'payment_method_key' => 1,
-            'payment_method_type' => 1,
+            'token' => 1,
         ]);
 
         $response->assertStatus(400);
 
         $response->assertJson([
             'errors' => [
-                'payment_method_key' => ['The payment method key must be a string.'],
-                'payment_method_type' => ['The payment method type must be a string.'],
+                'token' => ['The token must be a string.'],
             ]
         ]);
     }
@@ -109,16 +124,14 @@ class UserPaymentMethodCreateTest extends TestCase
         $this->actingAs($this->user);
 
         $response = $this->json('POST', $this->path, [
-            'payment_method_key' => str_repeat('a', 121),
-            'payment_method_type' => str_repeat('a', 21),
+            'token' => str_repeat('a', 121),
         ]);
 
         $response->assertStatus(400);
 
         $response->assertJson([
             'errors' => [
-                'payment_method_key' => ['The payment method key may not be greater than 120 characters.'],
-                'payment_method_type' => ['The payment method type may not be greater than 20 characters.'],
+                'token' => ['The token may not be greater than 120 characters.'],
             ]
         ]);
     }
