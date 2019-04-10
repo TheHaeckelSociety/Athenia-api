@@ -58,6 +58,10 @@ class CreateSubscriptionsModels extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        Schema::table('payments', function (Blueprint $table) {
+            $table->unsignedInteger('subscription_id');
+            $table->foreign('subscription_id')->references('id')->on('subscriptions');
+        });
     }
 
     /**
@@ -67,6 +71,9 @@ class CreateSubscriptionsModels extends Migration
      */
     public function down()
     {
+        Schema::table('payments', function (Blueprint $table) {
+            $table->dropColumn('subscription_id');
+        });
         Schema::dropIfExists('subscriptions');
         Schema::dropIfExists('membership_plan_rates');
         Schema::dropIfExists('membership_plans');

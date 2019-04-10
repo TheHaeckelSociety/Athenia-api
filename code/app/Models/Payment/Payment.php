@@ -5,8 +5,10 @@ namespace App\Models\Payment;
 
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Payment
@@ -14,26 +16,28 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @package App\Models\Payment
  * @property int $id
  * @property int $payment_method_id
+ * @property int $subscription_id
  * @property float $amount
  * @property string|null $transaction_key
- * @property \Illuminate\Support\Carbon|null $refunded_at
+ * @property Carbon|null $refunded_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\Payment\PaymentMethod $paymentMethod
- * @property-read \App\Models\Subscription\Subscription[] $subscription
- * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereRefundedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTransactionKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $deleted_at
+ * @property-read PaymentMethod $paymentMethod
+ * @property-read Subscription[] $subscription
+ * @method static Builder|Payment newModelQuery()
+ * @method static Builder|Payment newQuery()
+ * @method static Builder|Payment query()
+ * @method static Builder|Payment whereAmount($value)
+ * @method static Builder|Payment whereCreatedAt($value)
+ * @method static Builder|Payment whereDeletedAt($value)
+ * @method static Builder|Payment whereId($value)
+ * @method static Builder|Payment wherePaymentMethodId($value)
+ * @method static Builder|Payment whereRefundedAt($value)
+ * @method static Builder|Payment whereSubscriptionId($value)
+ * @method static Builder|Payment whereTransactionKey($value)
+ * @method static Builder|Payment whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Payment extends BaseModelAbstract
 {
