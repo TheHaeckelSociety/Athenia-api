@@ -29,8 +29,6 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $expires_at
  * @property Carbon|null $canceled_at
  * @property bool $recurring
- * @property-read null|string $formatted_cost
- * @property-read null|string $formatted_expires_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
