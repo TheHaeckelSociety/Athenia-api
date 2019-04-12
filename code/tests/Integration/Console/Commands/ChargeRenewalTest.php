@@ -9,6 +9,7 @@ use App\Contracts\Services\StripePaymentServiceContract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
+use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
@@ -57,7 +58,11 @@ class ChargeRenewalTest extends TestCase
         $paymentService = mock(StripePaymentServiceContract::class);
         $subscriptionRepository = new SubscriptionRepository(
             new Subscription(),
-            $this->getGenericLogMock()
+            $this->getGenericLogMock(),
+            new MembershipPlanRateRepository(
+                new MembershipPlanRate(),
+                $this->getGenericLogMock(),
+            )
         );
 
         $command = new ChargeRenewal($paymentService, $subscriptionRepository, $messageRepository);

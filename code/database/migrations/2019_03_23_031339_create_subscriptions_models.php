@@ -59,7 +59,7 @@ class CreateSubscriptionsModels extends Migration
             $table->timestamps();
         });
         Schema::table('payments', function (Blueprint $table) {
-            $table->unsignedInteger('subscription_id');
+            $table->unsignedInteger('subscription_id')->nullable();
             $table->foreign('subscription_id')->references('id')->on('subscriptions');
         });
     }

@@ -131,6 +131,7 @@ class AppRepositoryProvider extends ServiceProvider
             return new SubscriptionRepository(
                 new Subscription(),
                 $this->app->make('log'),
+                $this->app->make(MembershipPlanRateRepositoryContract::class),
             );
         });
         $this->app->bind(UserRepositoryContract::class, function() {

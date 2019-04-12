@@ -7,6 +7,7 @@ use App\Models\Payment\PaymentMethod;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
+use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -34,7 +35,11 @@ class SubscriptionRepositoryTest extends TestCase
 
         $this->repository = new SubscriptionRepository(
             new Subscription(),
-            $this->getGenericLogMock()
+            $this->getGenericLogMock(),
+            new MembershipPlanRateRepository(
+                new MembershipPlanRate(),
+                $this->getGenericLogMock(),
+            )
         );
     }
 

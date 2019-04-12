@@ -7,6 +7,7 @@ use App\Console\Commands\SendRenewalReminders;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
+use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use Carbon\Carbon;
 use Tests\CustomMockInterface;
@@ -31,7 +32,11 @@ class SendRenewalRemindersTest extends TestCase
     {
         $subscriptionRepository = new SubscriptionRepository(
             new Subscription(),
-            $this->getGenericLogMock()
+            $this->getGenericLogMock(),
+            new MembershipPlanRateRepository(
+                new MembershipPlanRate(),
+                $this->getGenericLogMock(),
+            )
         );
         /** @var MessageRepositoryContract|CustomMockInterface $messageRepository */
         $messageRepository = mock(MessageRepositoryContract::class);
