@@ -1,7 +1,4 @@
 <?php
-/**
- * Request class for someone to login
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Requests\Authentication;

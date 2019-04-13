@@ -25,7 +25,7 @@
     - restart nginx
 
 - name: Make sure CLI logs to syslog
-  lineinfile: dest=/etc/php/7.2/cli/php.ini regexp=^;?error_log line='error_log = syslog'
+  lineinfile: dest=/etc/php/7.3/cli/php.ini regexp=^;?error_log line='error_log = syslog'
 
 - name: Delete the cron php file
   file: path=/etc/cron.d/php state=absent

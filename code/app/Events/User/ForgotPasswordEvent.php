@@ -4,13 +4,17 @@ declare(strict_types=1);
 namespace App\Events\User;
 
 use App\Models\User\PasswordToken;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * Class ForgotPasswordEvent
  * @package App\Events\User
  */
-class ForgotPasswordEvent
+class ForgotPasswordEvent implements ShouldQueue
 {
+    use Queueable;
+
     /**
      * @var PasswordToken
      */

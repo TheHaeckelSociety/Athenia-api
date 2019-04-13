@@ -150,7 +150,7 @@ class ChargeRenewal extends Command
             'expires_at' => Carbon::now()->addYear(),
         ]);
         $this->messageRepository->create([
-            'subject' => 'SGC Membership Successfully Renewed',
+            'subject' => 'Successfully Renewed',
             'template' => 'membership-renewed',
             'email' => $subscription->user->email,
             'data' => [
@@ -183,7 +183,7 @@ class ChargeRenewal extends Command
     public function sendExpirationEmail(Subscription $subscription)
     {
         $this->messageRepository->create([
-            'subject' => 'SGC Membership Expired',
+            'subject' => 'Expired',
             'template' => 'membership-expired',
             'email' => $subscription->user->email,
             'data' => [
@@ -202,7 +202,7 @@ class ChargeRenewal extends Command
     public function sendFailureEmail(Subscription $subscription, string $reason)
     {
         $this->messageRepository->create([
-            'subject' => 'SGC Membership Renewal Failed',
+            'subject' => 'Renewal Failed',
             'template' => 'membership-renewal-failure',
             'email' => $subscription->user->email,
             'data' => [

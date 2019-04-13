@@ -1,7 +1,4 @@
 <?php
-/**
- * Validate the user can signup
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Requests\Authentication;

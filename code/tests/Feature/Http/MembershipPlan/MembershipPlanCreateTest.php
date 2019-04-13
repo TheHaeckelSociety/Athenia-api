@@ -33,7 +33,7 @@ class MembershipPlanCreateTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function testNotUserUserBlocked()
+    public function testNotAdminUserBlocked()
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);

@@ -68,7 +68,7 @@ class SendRenewalReminders extends Command
         /** @var Subscription $subscription */
         foreach ($this->subscriptionRepository->findExpiring($expirationCarbon) as $subscription) {
             $this->messageRepository->create([
-                'subject' => 'SGC International Membership Renewal Reminder',
+                'subject' => 'Membership Renewal Reminder',
                 'template' => 'renewal-reminder',
                 'email' => $subscription->user->email,
                 'data' => [
