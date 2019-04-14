@@ -69,6 +69,18 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'last_renewed_at' => 'datetime:c',
+        'subscribed_at' => 'datetime:c',
+        'expires_at' => 'datetime:c',
+        'canceled_at' => 'datetime:c',
+    ];
+
+    /**
      * The membership plan rate this subscription is signed up for
      *
      * @return BelongsTo
