@@ -36,6 +36,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
@@ -48,7 +49,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeCustomerKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  */
 class User extends BaseModelAbstract
     implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract
@@ -248,6 +248,12 @@ class User extends BaseModelAbstract
      *         type="string",
      *         minLength=6,
      *         description="The password for this user. This cannot be read, and it can only be set."
+     *     ),
+     *     @SWG\Property(
+     *         property="roles",
+     *         description="The roles that this user has.",
+     *         type="array",
+     *         @SWG\Items(ref="#/definitions/Role")
      *     ),
      *     @SWG\Property(
      *         property="created_articles",

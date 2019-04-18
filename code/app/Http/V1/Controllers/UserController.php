@@ -9,10 +9,7 @@ use App\Http\V1\Controllers\Traits\HasViewRequests;
 use App\Http\V1\Requests;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
-use Exception;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
-use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class UserController

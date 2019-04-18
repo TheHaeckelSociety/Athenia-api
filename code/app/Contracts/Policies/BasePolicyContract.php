@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace App\Contracts\Policies;
 
-use App\Contracts\Models\HasPolicyContract;
-use App\Models\User\User;
-
 /**
  * Interface BasePolicyContract
  * @package App\Contracts\Policies

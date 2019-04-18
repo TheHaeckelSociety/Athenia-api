@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Events\Message\MessageCreatedEvent;
 use App\Models\BaseModelAbstract;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Message

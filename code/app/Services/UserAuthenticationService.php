@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Exceptions\AuthenticationException;
+use App\Exceptions\NotImplementedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Contracts\Repositories\User\UserRepositoryContract;
-use App\Exceptions\AuthenticationException;
-use App\Exceptions\NotImplementedException;
 
 /**
  * Class UserAuthenticationService
