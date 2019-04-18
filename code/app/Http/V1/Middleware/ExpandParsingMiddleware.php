@@ -31,7 +31,9 @@ class ExpandParsingMiddleware
             }
         }
         
-        if ($with) $request->query->set('with', $with);
+        if ($with) {
+            $request->query->set('with', $with);
+        }
         
         return $next($request);
     }

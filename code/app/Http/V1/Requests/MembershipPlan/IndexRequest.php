@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\MembershipPlan;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use App\Http\V1\Requests\Traits\HasNoPolicyParameters;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Subscription\MembershipPlan;
@@ -15,7 +16,7 @@ use App\Policies\Subscription\MembershipPlanPolicy;
  */
 class IndexRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoPolicyParameters;
+    use HasNoRules, HasNoPolicyParameters, HasNoExpands;
 
     /**
      * Get the policy action for the guard

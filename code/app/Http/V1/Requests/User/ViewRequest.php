@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\V1\Requests\User;
 
@@ -43,5 +44,17 @@ class ViewRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [$this->route('user')];
+    }
+
+    /**
+     * All expands that are allowed for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'roles',
+        ];
     }
 }

@@ -36,4 +36,21 @@ class MeRequest extends BaseAuthenticatedRequestAbstract
     {
         return User::class;
     }
+
+    /**
+     * All expands that are allowed for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'paymentMethods',
+            'roles',
+            'subscriptions',
+            'subscriptions.membershipPlanRate',
+            'subscriptions.membershipPlanRate.membershipPlan',
+            'subscriptions.paymentMethod',
+        ];
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\User;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use App\Models\User\User;
 use App\Policies\User\UserPolicy;
 
@@ -13,6 +14,8 @@ use App\Policies\User\UserPolicy;
  */
 class UpdateRequest extends BaseAuthenticatedRequestAbstract
 {
+    use HasNoExpands;
+
     /**
      * Get the policy action for the guard
      *

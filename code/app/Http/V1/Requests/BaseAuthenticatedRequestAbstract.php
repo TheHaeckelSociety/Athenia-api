@@ -1,7 +1,4 @@
 <?php
-/**
- * The base request class for all requests in the system that require authentication
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Requests;
@@ -43,9 +40,11 @@ abstract class BaseAuthenticatedRequestAbstract extends BaseRequestAbstract
      * Determine if the user is authorized to make this request.
      *
      * @return bool
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function authorize() : bool
     {
+        $this->authorizeExpands();
         $parameters = array_merge([$this->getPolicyModel()], $this->getPolicyParameters());
         $this->authorizeRequest($this->getPolicyAction(), $parameters);
         return true;

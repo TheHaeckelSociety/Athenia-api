@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\Article;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use App\Models\Wiki\Article;
 use App\Policies\Wiki\ArticlePolicy;
 
@@ -13,6 +14,8 @@ use App\Policies\Wiki\ArticlePolicy;
  */
 class UpdateRequest extends BaseAuthenticatedRequestAbstract
 {
+    use HasNoExpands;
+
     /**
      * Get the policy action for the guard
      *

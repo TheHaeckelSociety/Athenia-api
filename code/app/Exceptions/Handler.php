@@ -85,6 +85,7 @@ class Handler extends ExceptionHandler
 
             case $exception instanceof AuthorizationException:
                 $status = 403;
+                $response['details'] = $exception->getMessage();
                 break;
 
             case $exception instanceof HttpException:

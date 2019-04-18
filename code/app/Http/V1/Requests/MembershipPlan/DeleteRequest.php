@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\MembershipPlan;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Subscription\MembershipPlan;
 use App\Policies\Subscription\MembershipPlanPolicy;
@@ -14,7 +15,7 @@ use App\Policies\Subscription\MembershipPlanPolicy;
  */
 class DeleteRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules;
+    use HasNoRules, HasNoExpands;
 
     /**
      * Get the policy action for the guard

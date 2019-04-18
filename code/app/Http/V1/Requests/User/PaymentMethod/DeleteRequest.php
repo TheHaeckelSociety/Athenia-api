@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\User\PaymentMethod;
 
 use App\Http\V1\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use App\Http\V1\Requests\Traits\HasNoRules;
 use App\Models\Payment\PaymentMethod;
 use App\Policies\Payment\PaymentMethodPolicy;
@@ -14,7 +15,7 @@ use App\Policies\Payment\PaymentMethodPolicy;
  */
 class DeleteRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules;
+    use HasNoRules, HasNoExpands;
 
     /**
      * Get the policy action for the guard

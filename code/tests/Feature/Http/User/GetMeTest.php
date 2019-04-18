@@ -37,4 +37,19 @@ class GetMeTest extends TestCase
         $response->assertExactJson($myCurrentUser->toArray());
         $response->assertStatus(200);
     }
+
+    public function testGetMeFailsWithTooManyExpands()
+    {
+        $myCurrentUser = factory(User::class)->create();
+
+        $this->actingAs($myCurrentUser);
+
+        $response = $this->json('GET', '/v1/users/me?expand[roles.users]=*');
+
+        $response->assertStatus(403);
+        $response->assertJson([
+            'message' => 'Sorry, something went wrong.',
+            'details' => 'The relation roles.users cannot be expanded on this request.'
+        ]);
+    }
 }

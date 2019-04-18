@@ -45,4 +45,17 @@ class ViewRequest extends BaseAuthenticatedRequestAbstract
     {
         return [$this->route('article')];
     }
+
+    /**
+     * All expands that are allowed for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'createdBy',
+            'iterations',
+        ];
+    }
 }

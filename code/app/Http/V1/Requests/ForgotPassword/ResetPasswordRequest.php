@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\V1\Requests\ForgotPassword;
 
 use App\Http\V1\Requests\BaseUnauthenticatedRequest;
+use App\Http\V1\Requests\Traits\HasNoExpands;
 use Illuminate\Validation\Rule;
 
 /**
@@ -12,6 +13,8 @@ use Illuminate\Validation\Rule;
  */
 class ResetPasswordRequest extends BaseUnauthenticatedRequest
 {
+    use HasNoExpands;
+
     /**
      * get the validation rules for resetting a password
      *
