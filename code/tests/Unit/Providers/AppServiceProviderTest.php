@@ -7,6 +7,7 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
 use App\Providers\AppServiceProvider;
+use Laracasts\Generators\GeneratorsServiceProvider;
 use Tests\TestCase;
 
 /**
@@ -66,6 +67,7 @@ class AppServiceProviderTest extends TestCase
         $appMock = mock(Application::class);
         $appMock->shouldReceive('environment')->once()->andReturn('local');
 
+        $appMock->shouldReceive('register')->with(GeneratorsServiceProvider::class);
         $appMock->shouldReceive('register')->with(IdeHelperServiceProvider::class);
 
         $provider = new AppServiceProvider($appMock);

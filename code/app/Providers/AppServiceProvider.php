@@ -15,6 +15,7 @@ use App\Services\TokenGenerationService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
+use Laracasts\Generators\GeneratorsServiceProvider;
 
 /**
  * Class AppServiceProvider
@@ -71,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
     public function registerEnvironmentSpecificProviders()
     {
         if ($this->app->environment() == 'local') {
+            $this->app->register(GeneratorsServiceProvider::class);
             $this->app->register(IdeHelperServiceProvider::class);
         }
     }
