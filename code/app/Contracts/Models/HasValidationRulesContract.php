@@ -43,9 +43,10 @@ interface HasValidationRulesContract
      * Get Validation Rules
      *
      * @param string|null $context
+     * @param array $params
      * @return array
      */
-    public function getValidationRules(string $context = null): array;
+    public function getValidationRules(string $context = null, ...$params): array;
 
     /**
      * Build the model validation rules

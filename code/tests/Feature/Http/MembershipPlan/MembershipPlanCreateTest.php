@@ -50,6 +50,7 @@ class MembershipPlanCreateTest extends TestCase
             'name' => 'Hellow',
             'duration' => MembershipPlan::DURATION_LIFETIME,
             'current_cost' => 60.00,
+            'order' => 1,
         ];
 
         $response = $this->json('POST', $this->route, $properties);
@@ -72,6 +73,7 @@ class MembershipPlanCreateTest extends TestCase
                 'name' => ['The name field is required.'],
                 'current_cost' => ['The current cost field is required.'],
                 'duration' => ['The duration field is required.'],
+                'order' => ['The order field is required.'],
             ]
         ]);
     }
@@ -80,7 +82,8 @@ class MembershipPlanCreateTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('POST', $this->route, [
-            'current_cost' => 'hi'
+            'current_cost' => 'hi',
+            'order' => 'hi',
         ]);
 
         $response->assertStatus(400);
@@ -88,6 +91,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be a number.'],
+                'order' => ['The order must be an integer.'],
             ]
         ]);
     }
@@ -96,7 +100,8 @@ class MembershipPlanCreateTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('POST', $this->route, [
-            'current_cost' => -1
+            'current_cost' => -1,
+            'order' => -1,
         ]);
 
         $response->assertStatus(400);
@@ -104,6 +109,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be at least 0.00.'],
+                'order' => ['The order must be at least 0.'],
             ]
         ]);
     }

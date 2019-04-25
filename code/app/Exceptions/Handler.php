@@ -15,6 +15,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 /**
  * Class Handler
@@ -34,6 +35,7 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
+        TokenExpiredException::class,
     ];
 
     /**
@@ -45,17 +47,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        list($status, $response) = $this->parseException($exception);
+        if ($request->getContentType() == 'json') {
+            list($status, $response) = $this->parseException($exception);
 
-        // if we're in debug mode, add extra information for us
-        if (config('app.debug')) {
-            $response['exception_class'] = get_class($exception);
-            $response['exception_message'] = $exception->getMessage();
-            $response['exception_trace'] = $exception->getTrace();
+            // if we're in debug mode, add extra information for us
+            if (config('app.debug')) {
+                $response['exception_class'] = get_class($exception);
+                $response['exception_message'] = $exception->getMessage();
+                $response['exception_trace'] = $exception->getTrace();
+            }
+
+            // Return a JSON response with the response array and status code
+            return response()->json($response, $status);
+
         }
 
-        // Return a JSON response with the response array and status code
-        return response()->json($response, $status);
+        return parent::render($request, $exception);
     }
 
     /**

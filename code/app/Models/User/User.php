@@ -66,6 +66,15 @@ class User extends BaseModelAbstract
     ];
 
     /**
+     * The url of the profile image
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image_url',
+    ];
+
+    /**
      * The articles that were created by this user
      *
      * @return HasMany
@@ -98,11 +107,31 @@ class User extends BaseModelAbstract
     /**
      * A user can have many payment methods
      *
+     * @return HasManyThrough
+     */
+    public function payments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Payment::class, PaymentMethod::class);
+    }
+
+    /**
+     * A user can have many payment methods
+     *
      * @return HasMany
      */
     public function paymentMethods(): HasMany
     {
         return $this->hasMany(PaymentMethod::class);
+    }
+
+    /**
+     * The asset that contains the profile image for this user
+     *
+     * @return BelongsTo
+     */
+    public function profileImage() : BelongsTo
+    {
+        return $this->belongsTo(ProfileImage::class, 'profile_image_id');
     }
 
     /**
@@ -123,6 +152,16 @@ class User extends BaseModelAbstract
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Any threads this user is apart of
+     *
+     * @return BelongsToMany
+     */
+    public function threads() : BelongsToMany
+    {
+        return $this->belongsToMany(Thread::class);
     }
 
     /**
@@ -147,6 +186,41 @@ class User extends BaseModelAbstract
     {
         $roles = (array)$roles;
         return $this->roles()->whereIn('id', $roles)->exists();
+    }
+
+    /**
+     * Get the URL for the profile image
+     *
+     * @return null|string
+     */
+    public function getProfileImageUrlAttribute()
+    {
+        return $this->profileImage ? $this->profileImage->url : null;
+    }
+
+    /**
+     * Loads the users lifetime subscription if there is one present
+     *
+     * @return Subscription|null
+     */
+    public function lifetimeSubscription() : ?Subscription
+    {
+        return $this->subscriptions->first(function(Subscription $subscription) {
+            return $subscription->isLifetime();
+        });
+    }
+
+    /**
+     * Leads the users current active subscription if there is one
+     *
+     * @return Subscription|null
+     */
+    public function currentSubscription() : ?Subscription
+    {
+        return $this->subscriptions->first(function (Subscription $subscription) {
+            return $subscription->isLifetime() ? true :
+                ($subscription->expires_at ? $subscription->expires_at->greaterThan(Carbon::now()) : false);
+        });
     }
 
     /**
@@ -199,6 +273,17 @@ class User extends BaseModelAbstract
                 'password' => [
                     'string',
                     'min:6',
+                ],
+                // social media attributes
+                'push_notification_key' => [
+                    'string',
+                    'max:512'
+                ],
+                'allow_users_to_add_me' => [
+                    'boolean',
+                ],
+                'receive_push_notifications' => [
+                    'boolean',
                 ],
             ],
         ];

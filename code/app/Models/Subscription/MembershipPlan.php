@@ -16,7 +16,7 @@ use Illuminate\Validation\Rule;
 /**
  * Class Plan
  *
- * @package App\Models\MembershipPlan
+ * @package App\Models\Subscription
  * @property int $id
  * @property float|null $current_cost
  * @property-read null|float $current_rate_id
@@ -36,6 +36,18 @@ use Illuminate\Validation\Rule;
  * @method static Builder|MembershipPlan whereName($value)
  * @method static Builder|MembershipPlan whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int $visible
+ * @property int $active
+ * @property int $order
+ * @property string|null $legacy_paypal_key
+ * @property string|null $stripe_product_key
+ * @property int $only_for_conference
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereLegacyPaypalKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOnlyForConference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereStripeProductKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereVisible($value)
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
@@ -140,12 +152,17 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                     'string',
                     Rule::in(MembershipPlan::AvailableDurations),
                 ],
+
+                'order' => [
+                    'int',
+                ],
             ],
             self::VALIDATION_RULES_CREATE => [
                 self::VALIDATION_PREPEND_REQUIRED => [
                     'name',
                     'current_cost',
                     'duration',
+                    'order',
                 ],
             ],
             self::VALIDATION_RULES_UPDATE => [

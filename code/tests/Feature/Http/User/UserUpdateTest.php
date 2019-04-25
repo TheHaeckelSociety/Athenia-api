@@ -61,7 +61,6 @@ class UserUpdateTest extends TestCase
         $this->actAsUser();
 
         $data = [
-            'name' => 'Lance',
             'email' => 'test@test.com',
         ];
 
@@ -73,7 +72,7 @@ class UserUpdateTest extends TestCase
         /** @var User $updated */
         $updated = User::find($this->actingAs->id);
 
-        $this->assertEquals('Lance', $updated->name);
+        $this->assertEquals('test@test.com', $updated->email);
     }
 
     public function testUpdatePasswordSuccessful()

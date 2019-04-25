@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface as LogContract;
@@ -130,11 +131,17 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray array of models this should belong to
-     * @return LengthAwarePaginator
+     * @param int $pageNumber
+     * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = [])
+    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
     {
-        return $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray)->paginate($limit)->appends(Input::except('page'));
+        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+
+        if ($limit) {
+            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
+        }
+        return $query->get();
     }
 
     /**
