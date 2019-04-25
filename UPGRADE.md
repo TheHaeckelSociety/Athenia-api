@@ -2,6 +2,32 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.12.1
+
+This is a minor code clean up update with a number of classes that need to be updated. The test `code/tests/Unit/Providers/RouteServiceProviderTest.php` should also be removed. The test `code/tests/Feature/Http/User/GetMeTest.php` should also be replaced with `code/tests/Feature/Http/User/UserMeTest.php`.
+
+### Updated Files
+
+* code/app/Console/Commands/ChargeRenewal.php
+* code/app/Http/Middleware/LogMiddleware.php
+* code/app/Http/V1/Controllers/AuthenticationController.php
+* code/app/Http/V1/Controllers/BaseControllerAbstract.php
+* code/app/Http/V1/Controllers/StatusController.php
+* code/app/Http/V1/Middleware/JWTGetUserFromTokenProtectedRouteMiddleware.php
+* code/app/Http/V1/Middleware/JWTGetUserFromTokenUnprotectedRouteMiddleware.php
+* code/app/Http/V1/Requests/Traits/HasNoRules.php
+* code/app/Models/Traits/HasValidationRules.php
+* code/app/Policies/BasePolicyAbstract.php
+* code/app/Providers/RouteServiceProvider.php
+* code/tests/Feature/Http/Authentication/LoginTest.php
+* code/tests/Feature/Http/Authentication/LogoutTest.php
+* code/tests/Feature/Http/Authentication/RefreshTest.php
+* code/tests/Feature/Http/Authentication/SignUpTest.php
+* code/tests/Integration/Repositories/Subscription/MembershipPlanRateRepositoryTest.php
+* code/tests/Unit/Models/Wiki/ArticleTest.php
+* code/tests/Unit/Providers/AppRepositoryProviderTest.php
+* code/tests/Unit/Providers/EventServiceProviderTest.php
+
 ## 0.12.0
 
 This is a very important security release that will require lots of modifications to existing requests. This release closes a large security hole that would previously allow a user to expand unlimited amount of server data.
