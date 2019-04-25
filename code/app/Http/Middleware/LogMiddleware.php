@@ -11,7 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 
 /**
  * Class LogMiddleware
- * @package App\Http\V4\Middleware
+ * @package App\Http\Middleware
  */
 class LogMiddleware
 {

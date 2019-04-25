@@ -96,7 +96,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
         /** @var MembershipPlanRate $updated */
         $updated = MembershipPlanRate::find($model->id);
-        $this->assertFalse($updated->active);
+        $this->assertNotTrue($updated->active);
     }
 
     public function testDeleteSuccess()

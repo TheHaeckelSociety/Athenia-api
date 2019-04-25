@@ -1,7 +1,4 @@
 <?php
-/**
- * Unit test for the event service provider
- */
 declare(strict_types=1);
 
 namespace Tests\Unit\Providers;

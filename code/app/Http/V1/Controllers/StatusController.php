@@ -1,7 +1,4 @@
 <?php
-/**
- * Gives a JSON Status of the API
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Controllers;

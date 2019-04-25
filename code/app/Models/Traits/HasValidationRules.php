@@ -1,7 +1,4 @@
 <?php
-/**
- * Rules system for the models
- */
 declare(strict_types=1);
 
 namespace App\Models\Traits;

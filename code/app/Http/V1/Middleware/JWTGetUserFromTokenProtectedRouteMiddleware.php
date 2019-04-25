@@ -1,9 +1,4 @@
 <?php
-/**
- * Modification of the JWT Middleware Item (by tymon)
- * 
- * Gets the user from the JWT and throws an exception if it cannot
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Middleware;

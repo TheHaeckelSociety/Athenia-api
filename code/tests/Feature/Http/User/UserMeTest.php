@@ -3,20 +3,16 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\User;
 
-use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Models\User\User;
-use Exception;
-use Mockery;
-use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
 
 /**
- * Class GetMeTest
+ * Class UserMeTest
  * @package Tests\Feature\Http\User
  */
-class GetMeTest extends TestCase
+class UserMeTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
@@ -27,8 +23,17 @@ class GetMeTest extends TestCase
         $this->mockApplicationLog();
     }
 
+    public function testNotLoggedUserBlocked()
+    {
+        $response = $this->json('GET', '/v1/users/me');
+
+        $response->assertStatus(403);
+    }
+
     public function testGetMeSuccess()
     {
+        User::unsetEventDispatcher();
+        /** @var User $myCurrentUser */
         $myCurrentUser = factory(User::class)->create();
 
         $this->actingAs($myCurrentUser);

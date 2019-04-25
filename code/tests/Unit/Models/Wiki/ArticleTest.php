@@ -33,6 +33,8 @@ class ArticleTest extends TestCase
         $this->assertEquals('articles.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('iterations.article_id', $relation->getQualifiedForeignKeyName());
 
-        $this->assertContains('order by "created_at" desc', $relation->toSql());
+        $this->assertContains('order by', $relation->toSql());
+        $this->assertContains('created_at', $relation->toSql());
+        $this->assertContains('desc', $relation->toSql());
     }
 }

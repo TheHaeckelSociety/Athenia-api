@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Policies\BasePolicyContract;
 use App\Models\Role;
 use App\Models\User\User;

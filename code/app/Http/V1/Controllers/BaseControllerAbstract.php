@@ -1,7 +1,4 @@
 <?php
-/**
- * Base class for all controllers in the app
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Controllers;

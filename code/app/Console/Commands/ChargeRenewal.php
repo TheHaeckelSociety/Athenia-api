@@ -106,7 +106,6 @@ class ChargeRenewal extends Command
             $sleepTime = $this->getLaravel()->environment() == 'production' ? 60 : 0;
             $this->reattemptCharge($subscription, $sleepTime);
         } catch (Exception $e) {
-            dd($e);
             $this->sendFailureEmail($subscription, 'Unknown Error');
         }
     }
@@ -173,7 +172,6 @@ class ChargeRenewal extends Command
         sleep($seconds);
         $this->chargeStripe($subscription);
     }
-
 
     /**
      * Sends the expiration email to the user when the user chose to not have their membership auto renew

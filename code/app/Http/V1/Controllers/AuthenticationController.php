@@ -1,7 +1,4 @@
 <?php
-/**
- * Controller that contains all functions to handle API Authentication
- */
 declare(strict_types=1);
 
 namespace App\Http\V1\Controllers;

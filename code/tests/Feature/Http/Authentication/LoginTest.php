@@ -1,7 +1,4 @@
 <?php
-/**
- * Feature test for the login end point
- */
 declare(strict_types=1);
 
 namespace Tests\Feature\Http\Authentication;

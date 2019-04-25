@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Providers;
 
 use App\Providers\AppRepositoryProvider;
-use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
 use Tests\TestCase;

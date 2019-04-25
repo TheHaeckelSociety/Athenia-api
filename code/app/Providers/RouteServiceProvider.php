@@ -34,22 +34,6 @@ class RouteServiceProvider extends ServiceProvider
     ];
 
     /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * RouteServiceProvider constructor.
-     * @param Application $app
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public function __construct(Application $app)
-    {
-        parent::__construct($app);
-        $this->router = $app->make(Router::class);
-    }
-
-    /**
      * Define your route model bindings, pattern filters, etc.
      *
      * @return void
@@ -57,8 +41,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         foreach($this->modelPlaceHolders as $placeHolder => $model) {
-            $this->router->pattern($placeHolder, '^[0-9]+$');
-            $this->router->model($placeHolder, $model);
+            Route::pattern($placeHolder, '^[0-9]+$');
+            Route::model($placeHolder, $model);
         }
 
         parent::boot();
@@ -71,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->router->middleware('api-v1')
+        Route::middleware('api-v1')
             ->namespace('App\Http\V1\Controllers')
             ->group(base_path('routes/api-v1.php'));
     }

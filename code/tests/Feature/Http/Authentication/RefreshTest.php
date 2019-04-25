@@ -1,7 +1,4 @@
 <?php
-/**
- * Feature test for refreshing authentication tokens
- */
 declare(strict_types=1);
 
 namespace Tests\Feature\Http\Authentication;
