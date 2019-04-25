@@ -10,9 +10,8 @@ use App\Models\Subscription\Subscription;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class RouteServiceProvider
