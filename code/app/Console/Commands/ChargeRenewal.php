@@ -62,7 +62,8 @@ class ChargeRenewal extends Command
      * @param SubscriptionRepositoryContract $subscriptionRepository
      * @param MessageRepositoryContract $messageRepository
      */
-    public function __construct(StripePaymentServiceContract $paymentService, SubscriptionRepositoryContract $subscriptionRepository,
+    public function __construct(StripePaymentServiceContract $paymentService,
+                                SubscriptionRepositoryContract $subscriptionRepository,
                                 MessageRepositoryContract $messageRepository)
     {
         parent::__construct();
