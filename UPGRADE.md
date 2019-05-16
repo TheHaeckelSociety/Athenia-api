@@ -2,6 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.13.0
+
+This update adds a description paramater to the stripe payment services that will then give more information on the Stripe dashboard when viewing payments made via the app. The Athenia core usages of the services have been updated to automatically report information based on purchased membership plan information, but additional usages of the service will need to be updated or the app will not process payments properly. Please update the following files in your app.
+
+* code/app/Console/Commands/ChargeRenewal.php
+* code/app/Contracts/Services/StripePaymentServiceContract.php
+* code/app/Http/V1/Controllers/User/SubscriptionController.php
+* code/app/Services/StripePaymentService.php
+* code/tests/Integration/Console/Commands/ChargeRenewalTest.php
+* code/tests/Unit/Services/StripePaymentServiceTest.php
+
 ## 0.12.2
 
 This is another minor update. This version has a bit of code clean up, and it also adds some more detailed tests. There are only two files that need to be updated, and they are as follows.
