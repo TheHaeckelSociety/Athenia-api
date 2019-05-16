@@ -72,7 +72,7 @@ class ChargeRenewalTest extends TestCase
             return true;
         }), 35.0, \Mockery::on(function(PaymentMethod $paymentMethod) {
             return true;
-        }), [
+        }), 'Subscription renewal for ' . $stripeSubscription->membershipPlan->name, [
             'subscription_id' => $stripeSubscription->id,
         ]);
 
@@ -88,7 +88,7 @@ class ChargeRenewalTest extends TestCase
             if ($stripeSubscription->user->email != $data['email']) {
                 return false;
             }
-            if (!Str::contains($data['data']['greeting'], $stripeSubscription->user->name)) {
+            if (!Str::contains($data['data']['greeting'], $stripeSubscription->user->first_name)) {
                 return false;
             }
             if (!Str::contains($data['data']['membership_cost'], '35.00')) {
@@ -119,7 +119,7 @@ class ChargeRenewalTest extends TestCase
             if ($nonRecurringSubscription->user->email != $data['email']) {
                 return false;
             }
-            if (!Str::contains($data['data']['greeting'], $nonRecurringSubscription->user->name)) {
+            if (!Str::contains($data['data']['greeting'], $nonRecurringSubscription->user->first_name)) {
                 return false;
             }
 
