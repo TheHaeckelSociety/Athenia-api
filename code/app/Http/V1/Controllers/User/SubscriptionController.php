@@ -106,7 +106,8 @@ class SubscriptionController extends BaseControllerAbstract
         $model = $this->repository->create($data, $user);
 
         try {
-            $this->stripeChargeService->createPayment($user, (float)$model->membershipPlanRate->cost, $model->paymentMethod, [
+            $this->stripeChargeService->createPayment($user, (float)$model->membershipPlanRate->cost, $model->paymentMethod,
+                'Subscription Payment for ' . $model->membershipPlan->name, [
                 'subscription_id' => $model->id,
             ]);
 
