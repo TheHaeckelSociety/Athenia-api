@@ -11,6 +11,10 @@ use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
 use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotCompletionRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\VoteRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
@@ -22,6 +26,10 @@ use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
+use App\Models\Vote\Ballot;
+use App\Models\Vote\BallotCompletion;
+use App\Models\Vote\BallotSubject;
+use App\Models\Vote\Vote;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Payment\PaymentMethodRepository;
@@ -32,6 +40,10 @@ use App\Repositories\Subscription\MembershipPlanRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
+use App\Repositories\Vote\BallotCompletionRepository;
+use App\Repositories\Vote\BallotRepository;
+use App\Repositories\Vote\BallotSubjectRepository;
+use App\Repositories\Vote\VoteRepository;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\IterationRepository;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -54,6 +66,9 @@ class AppRepositoryProvider extends ServiceProvider
     {
         return [
             ArticleRepositoryContract::class,
+            BallotRepositoryContract::class,
+            BallotCompletionRepositoryContract::class,
+            BallotSubjectRepositoryContract::class,
             IterationRepositoryContract::class,
             MembershipPlanRepositoryContract::class,
             MembershipPlanRateRepositoryContract::class,
@@ -63,6 +78,7 @@ class AppRepositoryProvider extends ServiceProvider
             PaymentMethodRepositoryContract::class,
             RoleRepositoryContract::class,
             SubscriptionRepositoryContract::class,
+            VoteRepositoryContract::class,
             UserRepositoryContract::class,
 
             // Put all application specific repositories below to avoid merge conflicts
@@ -79,6 +95,25 @@ class AppRepositoryProvider extends ServiceProvider
         $this->app->bind(ArticleRepositoryContract::class, function() {
             return new ArticleRepository(
                 new Article(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(BallotRepositoryContract::class, function () {
+            return new BallotRepository(
+                new Ballot(),
+                $this->app->make('log'),
+                $this->app->make(BallotSubjectRepositoryContract::class),
+            );
+        });
+        $this->app->bind(BallotCompletionRepositoryContract::class, function () {
+            return new BallotCompletionRepository(
+                new BallotCompletion(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(BallotSubjectRepositoryContract::class, function () {
+            return new BallotSubjectRepository(
+                new BallotSubject(),
                 $this->app->make('log'),
             );
         });
@@ -139,6 +174,12 @@ class AppRepositoryProvider extends ServiceProvider
                 new User(),
                 $this->app->make('log'),
                 $this->app->make(Hasher::class),
+            );
+        });
+        $this->app->bind(VoteRepositoryContract::class, function () {
+            return new VoteRepository(
+                new Vote(),
+                $this->app->make('log'),
             );
         });
 
