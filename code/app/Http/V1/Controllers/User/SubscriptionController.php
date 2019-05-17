@@ -107,7 +107,7 @@ class SubscriptionController extends BaseControllerAbstract
 
         try {
             $this->stripeChargeService->createPayment($user, (float)$model->membershipPlanRate->cost, $model->paymentMethod,
-                'Subscription Payment for ' . $model->membershipPlan->name, [
+                'Subscription Payment for ' . $model->membershipPlanRate->membershipPlan->name, [
                 'subscription_id' => $model->id,
             ]);
 

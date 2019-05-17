@@ -95,7 +95,7 @@ class ChargeRenewal extends Command
     {
         try {
             $this->paymentService->createPayment($subscription->user, (float)$subscription->membershipPlanRate->cost, $subscription->paymentMethod,
-                'Subscription renewal for ' . $subscription->membershipPlan->name, [
+                'Subscription renewal for ' . $subscription->membershipPlanRate->membershipPlan->name, [
                 'subscription_id' => $subscription->id,
             ]);
             $this->handleSuccess($subscription);
@@ -155,7 +155,7 @@ class ChargeRenewal extends Command
             'template' => 'membership-renewed',
             'email' => $subscription->user->email,
             'data' => [
-                'greeting' => 'Hello ' . $updatedSubscription->user->first_name,
+                'greeting' => 'Hello ' . $updatedSubscription->user->name,
                 'membership_name' => $updatedSubscription->membershipPlanRate->membershipPlan->name,
                 'membership_cost' => $updatedSubscription->formatted_cost,
                 'expiration_date' => $updatedSubscription->formatted_expires_at . ' ' . $updatedSubscription->expires_at->format('Y'),
@@ -187,7 +187,7 @@ class ChargeRenewal extends Command
             'template' => 'membership-expired',
             'email' => $subscription->user->email,
             'data' => [
-                'greeting' => 'Hello ' . $subscription->user->first_name,
+                'greeting' => 'Hello ' . $subscription->user->name,
                 'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
             ],
         ], $subscription->user);
@@ -206,7 +206,7 @@ class ChargeRenewal extends Command
             'template' => 'membership-renewal-failure',
             'email' => $subscription->user->email,
             'data' => [
-                'greeting' => 'Hello ' . $subscription->user->first_name,
+                'greeting' => 'Hello ' . $subscription->user->name,
                 'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
                 'reason' => $reason,
             ],
