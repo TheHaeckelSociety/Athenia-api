@@ -46,6 +46,8 @@ class EventServiceProvider extends ServiceProvider
         VoteCreatedEvent::class => [
             VoteCreatedListener::class,
         ],
+
+        // Register all application level events below
     ];
 
     /**
