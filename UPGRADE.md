@@ -2,6 +2,44 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.14.0
+
+This update adds a brand new voting data module. This new data module does not have any public available routes, but all piping is now in place for future flexible voting systems. This build also fixes a bug generated from the last build, and adds an important update to the base repository class.
+
+### Voting Module
+
+This module is meant to be incredibly flexible, and it comes with a vote model, ballot model, ballot completion model, and a ballot subject model. The ballot subject model uses a morph relationship that allows for any possible piece of data to be voted upon via this module. To update this module start by copying over the `Vote` directories from the following locations.
+
+* code/app/Contracts/Repositories/
+* code/app/Models/
+* code/app/Repositories/
+* code/tests/Integration/Repositories/
+* code/tests/Unit/Models/
+
+Then copy over the following files.
+
+* code/app/Events/Vote/VoteCreatedEvent.php
+* code/app/Listeners/Vote/VoteCreatedListener.php
+* code/database/factories/VoteFactory.php
+* code/database/migrations/2019_05_16_203134_create_votes_model.php
+* code/tests/Unit/Events/Vote/VoteCreatedEventTest.php
+* code/tests/Unit/Listeners/Vote/VoteCreatedListenerTest.php
+
+Then update the user model, and associated test to have the new `ballotCompletions` relationship, and finally updated the `AppRepositoryProvider` to have all new repositories registered, and the `EventServiceProvider` to have the vote created event registered.
+
+### BaseRepositoryAbstract Update
+
+The `BaseRepositoryAbstract` class should also be copied over. This now has a sync children that will make linking children models very easy. Any similar functionality to this can be updated to use this new function, and an example of how to do this can be found in the ballot repository.
+
+### Stripe Reporting Bug Fix
+
+The stripe description reporting had a bug in it, which can be fixed by updating the following files again.
+
+* code/app/Console/Commands/ChargeRenewal.php
+* code/app/Http/V1/Controllers/User/SubscriptionController.php
+* code/app/Models/Subscription/Subscription.php
+* code/tests/Integration/Console/Commands/ChargeRenewalTest.php
+
 ## 0.13.0
 
 This update adds a description paramater to the stripe payment services that will then give more information on the Stripe dashboard when viewing payments made via the app. The Athenia core usages of the services have been updated to automatically report information based on purchased membership plan information, but additional usages of the service will need to be updated or the app will not process payments properly. Please update the following files in your app.
