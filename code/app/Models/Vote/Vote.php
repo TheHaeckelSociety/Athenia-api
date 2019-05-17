@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Vote;
 
+use App\Events\Vote\VoteCreatedEvent;
 use App\Models\BaseModelAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -33,6 +34,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Vote extends BaseModelAbstract
 {
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => VoteCreatedEvent::class,
+    ];
+
     /**
      * The ballot completion that this is part of
      *
