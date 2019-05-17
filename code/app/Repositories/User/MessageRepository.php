@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\User;
 
+use App\Models\BaseModelAbstract;
+use App\Models\User\User;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Models\User\Message;
@@ -25,6 +27,27 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     public function __construct(Message $model, LogContract $log)
     {
         parent::__construct($model, $log);
+    }
+
+    /**
+     * Sends an email directly to a user
+     *
+     * @param User $user
+     * @param string $subject
+     * @param string $template
+     * @param array $baseTemplateData
+     * @return Message|BaseModelAbstract
+     */
+    public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = []): Message
+    {
+        return $this->create([
+            'subject' => $subject,
+            'template' => $template,
+            'email' => $user->email,
+            'data' => array_merge($baseTemplateData, [
+                'greeting' => 'Hello ' . $user->name,
+            ]),
+        ], $user);
     }
 
     /**

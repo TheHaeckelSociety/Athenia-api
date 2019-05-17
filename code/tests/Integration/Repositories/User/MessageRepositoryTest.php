@@ -116,4 +116,39 @@ class MessageRepositoryTest extends TestCase
         $this->assertEquals('2018-05-13 00:00:00', $result->scheduled_at->toDateTimeString());
         $this->assertEquals('2018-05-13 00:00:02', $result->sent_at->toDateTimeString());
     }
+
+    public function testSendEmailToUser()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $dispatcher = mock(Dispatcher::class);
+
+        $dispatcher->shouldAllowMockingMethod('fire');
+
+        $dispatcher->shouldReceive('until');
+        $dispatcher->shouldReceive('dispatch')
+            ->with(\Mockery::on(function (String $eventName) {
+                return true;
+            }),
+            \Mockery::on(function (Message $message) {
+                return true;
+            })
+        );
+        $dispatcher->shouldReceive('dispatch')->once()
+            ->with(\Mockery::on(function (MessageCreatedEvent $event) {
+                return true;
+            })
+        );
+
+        Message::setEventDispatcher($dispatcher);
+
+        $result = $this->repository->sendEmailToUser($user, 'A Subject', 'template', ['yes' => 'no']);
+
+        $this->assertEquals('A Subject', $result->subject);
+        $this->assertEquals('template', $result->template);
+        $this->assertEquals($user->email, $result->email);
+        $this->assertEquals('no', $result->data['yes']);
+        $this->assertNotNull($result->data['greeting']);
+    }
 }
