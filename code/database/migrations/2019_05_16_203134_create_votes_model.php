@@ -14,7 +14,7 @@ class CreateVotesModel extends Migration
     public function up()
     {
         Schema::create('ballots', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->string('name', 128)->nullable();
             $table->string('type');
@@ -23,7 +23,7 @@ class CreateVotesModel extends Migration
             $table->timestamps();
         });
         Schema::create('ballot_subjects', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->unsignedInteger('ballot_id');
             $table->foreign('ballot_id')->references('id')->on('ballots');
@@ -38,7 +38,7 @@ class CreateVotesModel extends Migration
             $table->timestamps();
         });
         Schema::create('ballot_completions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->unsignedInteger('ballot_id');
             $table->foreign('ballot_id')->references('id')->on('ballots');
@@ -50,7 +50,7 @@ class CreateVotesModel extends Migration
             $table->timestamps();
         });
         Schema::create('votes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->unsignedInteger('ballot_subject_id');
             $table->foreign('ballot_subject_id')->references('id')->on('ballot_subjects');

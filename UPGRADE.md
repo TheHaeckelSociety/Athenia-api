@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.14.1
+
+Quick little patch. The migration for creating the votes module needs to be copied over in order for it to work in MySQL.
+
 ## 0.14.0
 
 This update adds a brand new voting data module. This new data module does not have any public available routes, but all piping is now in place for future flexible voting systems. This build also fixes a bug generated from the last build, and adds an important update to the base repository class.
