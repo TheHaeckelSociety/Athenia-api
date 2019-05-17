@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
+use App\Exceptions\NotImplementedException;
+use App\Models\BaseModelAbstract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\User\User;
 use Cartalyst\Stripe\Api\Cards;
@@ -58,20 +61,28 @@ class StripeCustomerService implements StripeCustomerServiceContract
     /**
      * Creates a new stripe customer for a user
      *
-     * @param User $user
+     * @param HasPaymentMethodsContract $hasPaymentMethod
      * @return mixed
      */
-    public function createCustomer(User $user)
+    public function createCustomer(HasPaymentMethodsContract $hasPaymentMethod)
     {
+        if ($hasPaymentMethod->morphRelationName() == 'user') {
+            /** @var User $hasPaymentMethod */
+            $email = $hasPaymentMethod->email;
+            $repository = $this->userRepository;
+            // Add more possible payment method owners here
+        } else {
+            throw new NotImplementedException('Please make sure to setup your other payment method owners before interacting with stripe');
+        }
         $data = $this->customerHelper->create([
-            'email' => $user->email,
+            'email' => $email,
         ]);
 
-        $this->userRepository->update($user, [
+        $repository->update($hasPaymentMethod, [
             'stripe_customer_key' => $data['id'],
         ]);
 
-        $user->stripe_customer_key = $data['id'];
+        $hasPaymentMethod->stripe_customer_key = $data['id'];
 
         return $data;
     }
@@ -79,38 +90,40 @@ class StripeCustomerService implements StripeCustomerServiceContract
     /**
      * Retrieves a customer from stripe
      *
-     * @param User $user
+     * @param HasPaymentMethodsContract $hasPaymentMethod
      * @return mixed
      */
-    public function retrieveCustomer(User $user)
+    public function retrieveCustomer(HasPaymentMethodsContract $hasPaymentMethod)
     {
-        if (!$user->stripe_customer_key) {
+        if (!$hasPaymentMethod->stripe_customer_key) {
             throw new InvalidArgumentException('The passed in user does not have a stripe customer key associated with their account.');
         }
 
-        return $this->customerHelper->find($user->stripe_customer_key);
+        return $this->customerHelper->find($hasPaymentMethod->stripe_customer_key);
     }
 
     /**
      * Creates a new payment method
      *
-     * @param User $user
+     * @param BaseModelAbstract|HasPaymentMethodsContract $hasPaymentMethod
      * @param array $paymentData
      * @return mixed
      */
-    public function createPaymentMethod(User $user, $paymentData): PaymentMethod
+    public function createPaymentMethod(HasPaymentMethodsContract $hasPaymentMethod, $paymentData): PaymentMethod
     {
-        if (!$user->stripe_customer_key) {
-            $this->createCustomer($user);
+        if (!$hasPaymentMethod->stripe_customer_key) {
+            $this->createCustomer($hasPaymentMethod);
         }
 
-        $data = $this->cardHelper->create($user->stripe_customer_key, $paymentData);
+        $data = $this->cardHelper->create($hasPaymentMethod->stripe_customer_key, $paymentData);
 
         return $this->paymentMethodRepository->create([
             'payment_method_key' => $data['id'],
             'payment_method_type' => 'stripe',
             'identifier' => $data['last4'],
-        ], $user);
+            'owner_id' => $hasPaymentMethod->id,
+            'owner_type' => $hasPaymentMethod->morphRelationName(),
+        ]);
     }
 
     /**
@@ -121,11 +134,11 @@ class StripeCustomerService implements StripeCustomerServiceContract
      */
     public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
-        if (!$paymentMethod->user->stripe_customer_key) {
+        if (!$paymentMethod->owner->stripe_customer_key) {
             throw new InvalidArgumentException('The passed in user does not have a stripe customer key associated with their account.');
         }
 
-        return $this->cardHelper->delete($paymentMethod->user->stripe_customer_key, $paymentMethod->payment_method_key);
+        return $this->cardHelper->delete($paymentMethod->owner->stripe_customer_key, $paymentMethod->payment_method_key);
     }
 
     /**
@@ -136,8 +149,8 @@ class StripeCustomerService implements StripeCustomerServiceContract
      */
     public function retrievePaymentMethod(PaymentMethod $paymentMethod)
     {
-        if ($paymentMethod->user->stripe_customer_key) {
-            return $this->cardHelper->find($paymentMethod->user->stripe_customer_key, $paymentMethod->payment_method_key);
+        if ($paymentMethod->owner->stripe_customer_key) {
+            return $this->cardHelper->find($paymentMethod->owner->stripe_customer_key, $paymentMethod->payment_method_key);
         }
 
         return null;

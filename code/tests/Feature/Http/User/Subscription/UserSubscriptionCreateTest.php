@@ -64,7 +64,7 @@ class UserSubscriptionCreateTest extends TestCase
             'active' => true,
         ]);
         $paymentMethod = factory(PaymentMethod::class)->create([
-            'user_id' => $this->user->id,
+            'owner_id' => $this->user->id,
         ]);
 
         $response = $this->json('POST', $this->path, [
@@ -98,7 +98,7 @@ class UserSubscriptionCreateTest extends TestCase
             'active' => true,
         ]);
         $paymentMethod = factory(PaymentMethod::class)->create([
-            'user_id' => $this->user->id,
+            'owner_id' => $this->user->id,
         ]);
 
         $response = $this->json('POST', $this->path, [

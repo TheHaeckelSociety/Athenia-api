@@ -58,9 +58,8 @@ class UserTest extends TestCase
         $user = new User();
         $relation = $user->paymentMethods();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('payment_methods.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testRoles()

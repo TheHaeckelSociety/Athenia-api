@@ -61,7 +61,7 @@ class PaymentMethodIsOwnedByUserValidator extends BaseValidatorAbstract
             /** @var User $user */
             $user = $this->request->route('user');
 
-            return $user->id == $paymentMethod->user_id;
+            return $user->id == $paymentMethod->owner_id && $paymentMethod->owner_type == 'user';
 
         } catch (\Exception $e) {
             return false;

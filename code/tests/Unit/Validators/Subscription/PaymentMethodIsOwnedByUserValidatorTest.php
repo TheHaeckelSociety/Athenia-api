@@ -35,11 +35,30 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
         $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
 
         $paymentMethod = new PaymentMethod([
-            'user_id' => 3242,
+            'owner_id' => 3242,
+            'owner_type' => 'user',
         ]);
         $repository->shouldReceive('findOrFail')->andReturn($paymentMethod);
         $user = new User();
         $user->id = 324;
+        $request->shouldReceive('route')->andReturn($user);
+
+        $this->assertFalse($validator->validate('payment_method_id', 214));
+    }
+
+    public function testValidateFailsWithMismatchedOwnerType()
+    {
+        $repository = mock(PaymentMethodRepositoryContract::class);
+        $request = mock(Request::class);
+        $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
+
+        $paymentMethod = new PaymentMethod([
+            'owner_id' => 3242,
+            'owner_type' => 'company',
+        ]);
+        $repository->shouldReceive('findOrFail')->andReturn($paymentMethod);
+        $user = new User();
+        $user->id = 3242;
         $request->shouldReceive('route')->andReturn($user);
 
         $this->assertFalse($validator->validate('payment_method_id', 214));
@@ -52,7 +71,8 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
         $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
 
         $paymentMethod = new PaymentMethod([
-            'user_id' => 3242,
+            'owner_id' => 3242,
+            'owner_type' => 'user',
         ]);
         $repository->shouldReceive('findOrFail')->andReturn($paymentMethod);
         $user = new User();

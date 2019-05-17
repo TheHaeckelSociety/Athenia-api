@@ -35,6 +35,7 @@ class PaymentMethodPolicy extends BasePolicyAbstract
      */
     public function delete(User $user, User $requestedUser, PaymentMethod $paymentMethod)
     {
-        return $user->id == $requestedUser->id && $requestedUser->id == $paymentMethod->user_id;
+        return $user->id == $requestedUser->id &&
+            $requestedUser->id == $paymentMethod->owner_id && 'user' == $paymentMethod->owner_type;
     }
 }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
-use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
-use App\Models\Subscription\Subscription;
+use App\Models\Traits\HasPaymentMethods;
+use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
@@ -17,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -54,9 +54,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @mixin Eloquent
  */
 class User extends BaseModelAbstract
-    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract
+    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract
 {
-    use Authenticatable, HasValidationRules;
+    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -109,16 +109,6 @@ class User extends BaseModelAbstract
     }
 
     /**
-     * A user can have many payment methods
-     *
-     * @return HasMany
-     */
-    public function paymentMethods(): HasMany
-    {
-        return $this->hasMany(PaymentMethod::class);
-    }
-
-    /**
      * What roles this user has
      *
      * @return BelongsToMany
@@ -126,16 +116,6 @@ class User extends BaseModelAbstract
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
-    }
-
-    /**
-     * All Subscriptions this user has signed up to
-     *
-     * @return MorphMany
-     */
-    public function subscriptions(): MorphMany
-    {
-        return $this->morphMany(Subscription::class, 'subscriber');
     }
 
     /**
@@ -160,6 +140,16 @@ class User extends BaseModelAbstract
     {
         $roles = (array)$roles;
         return $this->roles()->whereIn('id', $roles)->exists();
+    }
+
+    /**
+     * The name of the morph relation
+     *
+     * @return string
+     */
+    public function morphRelationName(): string
+    {
+        return 'user';
     }
 
     /**

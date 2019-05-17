@@ -71,10 +71,12 @@ class PaymentMethodRepositoryTest extends TestCase
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->repository->create([
             'payment_method_type' => 'cash',
-        ], $user);
+            'owner_id' => $user->id,
+            'owner_type' => 'user',
+        ]);
 
         $this->assertEquals('cash', $paymentMethod->payment_method_type);
-        $this->assertEquals($user->id, $paymentMethod->user_id);
+        $this->assertEquals($user->id, $paymentMethod->owner_id);
     }
 
     public function testUpdateSuccess()
