@@ -35,7 +35,7 @@ class SubscriptionPolicyTest extends TestCase
         $user1 = factory(User::class)->create();
         $user2 = factory(User::class)->create();
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $user1->id,
+            'subscriber_id' => $user1->id,
         ]);
 
         $this->assertFalse($policy->update($user1, $user2, $subscription));

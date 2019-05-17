@@ -48,6 +48,7 @@ use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\IterationRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -92,6 +93,11 @@ class AppRepositoryProvider extends ServiceProvider
      */
     public function register()
     {
+        Relation::morphMap([
+            'user' => User::class,
+
+            // Put application relations below
+        ]);
         $this->app->bind(ArticleRepositoryContract::class, function() {
             return new ArticleRepository(
                 new Article(),

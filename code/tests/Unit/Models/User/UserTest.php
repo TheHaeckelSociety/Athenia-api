@@ -79,9 +79,8 @@ class UserTest extends TestCase
         $user = new User();
         $relation = $user->subscriptions();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('subscriptions.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('subscriptions.subscriber_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testGetJWTIdentifier()

@@ -82,11 +82,13 @@ class SubscriptionRepositoryTest extends TestCase
         $subscription = $this->repository->create([
             'payment_method_id' => $paymentMethod->id,
             'membership_plan_rate_id' => $membershipPlanRate->id,
-        ], $user);
+            'subscriber_id' => $user->id,
+            'subscriber_type' => 'user',
+        ]);
 
         $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
         $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
-        $this->assertEquals($user->id, $subscription->user_id);
+        $this->assertEquals($user->id, $subscription->subscriber_id);
     }
 
     public function testUpdateSuccess()

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Validation\Rule;
 
 /**
@@ -26,12 +27,13 @@ use Illuminate\Validation\Rule;
  * @property int $id
  * @property int $membership_plan_rate_id
  * @property int $payment_method_id
- * @property int $user_id
  * @property Carbon|null $last_renewed_at
  * @property Carbon|null $subscribed_at
  * @property Carbon|null $expires_at
  * @property Carbon|null $canceled_at
  * @property bool $recurring
+ * @property int $subscriber_id
+ * @property string $subscriber_type
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
@@ -40,7 +42,7 @@ use Illuminate\Validation\Rule;
  * @property-read MembershipPlanRate $membershipPlanRate
  * @property-read Collection|Payment[] $payments
  * @property-read PaymentMethod $paymentMethod
- * @property-read User $user
+ * @property-read User $subscriber
  * @method static Builder|Subscription newModelQuery()
  * @method static Builder|Subscription newQuery()
  * @method static Builder|Subscription query()
@@ -54,8 +56,9 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Subscription wherePaymentMethodId($value)
  * @method static Builder|Subscription whereRecurring($value)
  * @method static Builder|Subscription whereSubscribedAt($value)
+ * @method static Builder|Subscription whereSubscriberId($value)
+ * @method static Builder|Subscription whereSubscriberType($value)
  * @method static Builder|Subscription whereUpdatedAt($value)
- * @method static Builder|Subscription whereUserId($value)
  * @mixin Eloquent
  */
 class Subscription extends BaseModelAbstract implements HasValidationRulesContract
@@ -115,13 +118,13 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     }
 
     /**
-     * The user this subscription is for
+     * The subscriber this subscription is for
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function user(): BelongsTo
+    public function subscriber(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
     /**

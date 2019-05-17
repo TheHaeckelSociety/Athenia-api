@@ -79,7 +79,7 @@ class UserSubscriptionCreateTest extends TestCase
 
         $this->assertEquals($subscription->membership_plan_rate_id, $membershipPlanRate->id);
         $this->assertEquals($subscription->payment_method_id, $paymentMethod->id);
-        $this->assertEquals($subscription->user_id, $this->user->id);
+        $this->assertEquals($subscription->subscriber_id, $this->user->id);
     }
 
     public function testCreateFailsWhenStripeFails()

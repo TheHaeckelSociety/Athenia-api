@@ -67,17 +67,18 @@ class SendRenewalReminders extends Command
         $expirationCarbon = Carbon::now()->addWeek(2);
         /** @var Subscription $subscription */
         foreach ($this->subscriptionRepository->findExpiring($expirationCarbon) as $subscription) {
-            $this->messageRepository->create([
-                'subject' => 'Membership Renewal Reminder',
-                'template' => 'renewal-reminder',
-                'email' => $subscription->user->email,
-                'data' => [
-                    'greeting' => 'Hello ' . $subscription->user->name . ',',
-                    'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
-                    'recurring' => $subscription->recurring,
-                    'membership_cost' => $subscription->formatted_cost,
-                ],
-            ], $subscription->user);
+            if ($subscription->subscriber_type == 'user') {
+                $this->messageRepository->sendEmailToUser(
+                    $subscription->subscriber,
+                    'Membership Renewal Reminder',
+                    'renewal-reminder',
+                    [
+                        'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
+                        'recurring' => $subscription->recurring,
+                        'membership_cost' => $subscription->formatted_cost,
+                    ]
+                );
+            }
         }
     }
 }

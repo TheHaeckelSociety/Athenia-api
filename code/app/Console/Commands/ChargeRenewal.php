@@ -94,7 +94,7 @@ class ChargeRenewal extends Command
     public function chargeStripe(Subscription $subscription)
     {
         try {
-            $this->paymentService->createPayment($subscription->user, (float)$subscription->membershipPlanRate->cost, $subscription->paymentMethod,
+            $this->paymentService->createPayment($subscription->subscriber, (float)$subscription->membershipPlanRate->cost, $subscription->paymentMethod,
                 'Subscription renewal for ' . $subscription->membershipPlanRate->membershipPlan->name, [
                 'subscription_id' => $subscription->id,
             ]);
@@ -119,7 +119,7 @@ class ChargeRenewal extends Command
      */
     public function checkPayPal(Subscription $subscription)
     {
-
+        // @todo check into PayPal if a payment should have been made there
     }
 
     /**
@@ -150,17 +150,11 @@ class ChargeRenewal extends Command
             'last_renewed_at' => Carbon::now(),
             'expires_at' => Carbon::now()->addYear(),
         ]);
-        $this->messageRepository->create([
-            'subject' => 'SGC Membership Successfully Renewed',
-            'template' => 'membership-renewed',
-            'email' => $subscription->user->email,
-            'data' => [
-                'greeting' => 'Hello ' . $updatedSubscription->user->name,
-                'membership_name' => $updatedSubscription->membershipPlanRate->membershipPlan->name,
-                'membership_cost' => $updatedSubscription->formatted_cost,
-                'expiration_date' => $updatedSubscription->formatted_expires_at . ' ' . $updatedSubscription->expires_at->format('Y'),
-            ],
-        ], $subscription->user);
+        $this->sendSubscriberEmail($subscription, 'SGC Membership Successfully Renewed', 'membership-renewed', [
+            'membership_name' => $updatedSubscription->membershipPlanRate->membershipPlan->name,
+            'membership_cost' => $updatedSubscription->formatted_cost,
+            'expiration_date' => $updatedSubscription->formatted_expires_at . ' ' . $updatedSubscription->expires_at->format('Y'),
+        ]);
     }
 
     /**
@@ -182,15 +176,9 @@ class ChargeRenewal extends Command
      */
     public function sendExpirationEmail(Subscription $subscription)
     {
-        $this->messageRepository->create([
-            'subject' => 'SGC Membership Expired',
-            'template' => 'membership-expired',
-            'email' => $subscription->user->email,
-            'data' => [
-                'greeting' => 'Hello ' . $subscription->user->name,
-                'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
-            ],
-        ], $subscription->user);
+        $this->sendSubscriberEmail($subscription, 'SGC Membership Expired', 'membership-expired', [
+            'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
+        ]);
     }
 
     /**
@@ -201,15 +189,24 @@ class ChargeRenewal extends Command
      */
     public function sendFailureEmail(Subscription $subscription, string $reason)
     {
-        $this->messageRepository->create([
-            'subject' => 'SGC Membership Renewal Failed',
-            'template' => 'membership-renewal-failure',
-            'email' => $subscription->user->email,
-            'data' => [
-                'greeting' => 'Hello ' . $subscription->user->name,
-                'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
-                'reason' => $reason,
-            ],
-        ], $subscription->user);
+        $this->sendSubscriberEmail($subscription, 'SGC Membership Renewal Failed', 'membership-renewal-failure', [
+            'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
+            'reason' => $reason,
+        ]);
+    }
+
+    /**
+     * Sends an email to a subscriber properly
+     *
+     * @param Subscription $subscription
+     * @param string $subject
+     * @param string $template
+     * @param array $baseData
+     */
+    private function sendSubscriberEmail(Subscription $subscription, string $subject, string $template, array $baseData)
+    {
+        if ($subscription->subscriber_type == 'user') {
+            $this->messageRepository->sendEmailToUser($subscription->subscriber, $subject, $template, $baseData);
+        }
     }
 }

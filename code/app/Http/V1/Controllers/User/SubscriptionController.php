@@ -102,8 +102,10 @@ class SubscriptionController extends BaseControllerAbstract
     {
         $data = $request->json()->all();
 
+        $data['subscriber_id'] = $user->id;
+        $data['subscriber_type'] = 'user';
         /** @var Subscription $model */
-        $model = $this->repository->create($data, $user);
+        $model = $this->repository->create($data);
 
         try {
             $this->stripeChargeService->createPayment($user, (float)$model->membershipPlanRate->cost, $model->paymentMethod,

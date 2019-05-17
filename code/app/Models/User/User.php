@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -130,11 +131,11 @@ class User extends BaseModelAbstract
     /**
      * All Subscriptions this user has signed up to
      *
-     * @return HasMany
+     * @return MorphMany
      */
-    public function subscriptions(): HasMany
+    public function subscriptions(): MorphMany
     {
-        return $this->hasMany(Subscription::class);
+        return $this->morphMany(Subscription::class, 'subscriber');
     }
 
     /**
