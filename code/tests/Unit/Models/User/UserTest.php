@@ -13,6 +13,16 @@ use Tests\TestCase;
  */
 class UserTest extends TestCase
 {
+    public function testBallotCompletions()
+    {
+        $user = new User();
+        $relation = $user->ballotCompletions();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('ballot_completions.user_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testCreatedArticles()
     {
         $user = new User();

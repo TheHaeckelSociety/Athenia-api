@@ -8,6 +8,7 @@ use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasValidationRules;
+use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Auth\Authenticatable;
@@ -31,6 +32,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
@@ -64,6 +66,16 @@ class User extends BaseModelAbstract
         'deleted_at',
         'password',
     ];
+
+    /**
+     * The ballot completions the user has done
+     *
+     * @return HasMany
+     */
+    public function ballotCompletions(): HasMany
+    {
+        return $this->hasMany(BallotCompletion::class);
+    }
 
     /**
      * The articles that were created by this user
