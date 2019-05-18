@@ -2,6 +2,65 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.15.0
+
+Decoupling! This version modifies the subscription and payments module in order to decouple them from the user. This means that no modifications will be necessary to these core modules anymore in order to link them to any piece of data that may be required. Along with that a new helper function has been added to the message repository that will make it easier to send emails in the future.
+
+### Message Repository
+
+The new helper function will automatically put together an email template along with sending it. To add this update copy over the following files.
+
+* code/app/Contracts/Repositories/User/MessageRepositoryContract.php
+* code/app/Repositories/User/MessageRepository.php
+* code/tests/Integration/Repositories/User/MessageRepositoryTest.php
+
+### Decoupling
+
+This is a fairly complicated change, so make sure to follow this guide very closely. The first thing to do would be to make sure the app name is set properly within the app config. This config variable is now being used to send subscription emails, so it is very important to make sure it is set.
+
+#### Simple Files to copy
+
+These files can just be copied over without any issues.
+
+* code/app/Console/Commands/ChargeRenewal.php
+* code/app/Console/Commands/SendRenewalReminders.php
+* code/app/Contracts/Models/CanBeMorphedTo.php
+* code/app/Contracts/Models/HasPaymentMethodsContract.php
+* code/app/Contracts/Services/StripeCustomerServiceContract.php
+* code/app/Http/V1/Controllers/User/SubscriptionController.php
+* code/app/Models/Payment/PaymentMethod.php
+* code/app/Models/Subscription/Subscription.php
+* code/app/Models/Traits/HasPaymentMethods.php
+* code/app/Models/Traits/HasSubscriptions.php
+* code/app/Policies/Payment/PaymentMethodPolicy.php
+* code/app/Policies/Subscription/SubscriptionPolicy.php
+* code/app/Services/StripeCustomerService.php
+* code/app/Validators/Subscription/PaymentMethodIsOwnedByUserValidator.php
+* code/database/factories/PaymentFactory.php
+* code/database/factories/SubscriptionFactory.php
+* code/database/migrations/2019_05_17_201626_decouple_user_related_data.php
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodDeleteTest.php
+* code/tests/Feature/Http/User/Subscription/UserSubscriptionCreateTest.php
+* code/tests/Feature/Http/User/Subscription/UserSubscriptionUpdateTest.php
+* code/tests/Integration/Console/Commands/ChargeRenewalTest.php
+* code/tests/Integration/Console/Commands/SendRenewalRemindersTest.php
+* code/tests/Integration/Policies/Payment/PaymentMethodPolicyTest.php
+* code/tests/Integration/Policies/Subscription/SubscriptionPolicyTest.php
+* code/tests/Integration/Repositories/Payment/PaymentMethodRepositoryTest.php
+* code/tests/Integration/Repositories/Subscription/SubscriptionRepositoryTest.php
+* code/tests/Unit/Models/Payment/PaymentMethodTest.php
+* code/tests/Unit/Models/Subscription/SubscriptionTest.php
+* code/tests/Unit/Services/StripeCustomerServiceTest.php
+* code/tests/Unit/Validators/Subscription/PaymentMethodIsOwnedByUserValidatorTest.php
+
+#### User Model
+
+This model needs to have some extensive changes. First you should remove the current subscriptions, and paymentMethods. Then you should make your user model implement the `HasPaymentMethodsContract` interface. Then you are also going to want to use the traits `HasPaymentMethods` and `HasSubscriptions`. At this point you will have to implement the method `morphRelationName`, and make it return the string 'user'.
+
+#### App Repository Provider
+
+This will need to have the morph map imported that will cast the user model to the string user.
+
 ## 0.14.1
 
 Quick little patch. The migration for creating the votes module needs to be copied over in order for it to work in MySQL.
