@@ -12,6 +12,7 @@ use App\Models\Subscription\Subscription;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use Carbon\Carbon;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Tests\DatabaseSetupTrait;
@@ -64,8 +65,10 @@ class ChargeRenewalTest extends TestCase
                 $this->getGenericLogMock(),
             )
         );
+        $config = mock(Repository::class);
+        $config->shouldReceive('get')->once()->with('app.name')->andReturn('Athenia');
 
-        $command = new ChargeRenewal($paymentService, $subscriptionRepository, $messageRepository);
+        $command = new ChargeRenewal($paymentService, $subscriptionRepository, $messageRepository, $config);
 
         $paymentService->shouldReceive('createPayment')->once()->with(\Mockery::on(function ($user) use ($stripeSubscription) {
             $this->assertEquals($user->id, $stripeSubscription->subscriber_id);
@@ -80,7 +83,7 @@ class ChargeRenewalTest extends TestCase
             \Mockery::on(function($user) use($stripeSubscription) {
                 return $user->id == $stripeSubscription->subscriber_id;
             }),
-            'SGC Membership Successfully Renewed',
+            'Athenia Membership Successfully Renewed',
             'membership-renewed',
             \Mockery::on(function($data) use($stripeSubscription) {
 
@@ -106,7 +109,7 @@ class ChargeRenewalTest extends TestCase
             \Mockery::on(function($user) use($nonRecurringSubscription) {
                 return $user->id == $nonRecurringSubscription->subscriber_id;
             }),
-            'SGC Membership Expired',
+            'Athenia Membership Expired',
             'membership-expired',
             \Mockery::on(function($data) {
 

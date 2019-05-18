@@ -13,6 +13,7 @@ use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Exception\NotFoundException;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Config\Repository;
 
 /**
  * Class ChargeRenewal
@@ -57,19 +58,27 @@ class ChargeRenewal extends Command
     private $subscriptionRepository;
 
     /**
+     * @var mixed The name of the app
+     */
+    private $appName;
+
+    /**
      * ChargeRenewal constructor.
      * @param StripePaymentServiceContract $paymentService
      * @param SubscriptionRepositoryContract $subscriptionRepository
      * @param MessageRepositoryContract $messageRepository
+     * @param Repository $config
      */
     public function __construct(StripePaymentServiceContract $paymentService,
                                 SubscriptionRepositoryContract $subscriptionRepository,
-                                MessageRepositoryContract $messageRepository)
+                                MessageRepositoryContract $messageRepository,
+                                Repository $config)
     {
         parent::__construct();
         $this->paymentService = $paymentService;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->messageRepository = $messageRepository;
+        $this->appName = $config->get('app.name');
     }
 
     /**
@@ -150,7 +159,7 @@ class ChargeRenewal extends Command
             'last_renewed_at' => Carbon::now(),
             'expires_at' => Carbon::now()->addYear(),
         ]);
-        $this->sendSubscriberEmail($subscription, 'SGC Membership Successfully Renewed', 'membership-renewed', [
+        $this->sendSubscriberEmail($subscription, $this->appName . ' Membership Successfully Renewed', 'membership-renewed', [
             'membership_name' => $updatedSubscription->membershipPlanRate->membershipPlan->name,
             'membership_cost' => $updatedSubscription->formatted_cost,
             'expiration_date' => $updatedSubscription->formatted_expires_at . ' ' . $updatedSubscription->expires_at->format('Y'),
@@ -176,7 +185,7 @@ class ChargeRenewal extends Command
      */
     public function sendExpirationEmail(Subscription $subscription)
     {
-        $this->sendSubscriberEmail($subscription, 'SGC Membership Expired', 'membership-expired', [
+        $this->sendSubscriberEmail($subscription, $this->appName . ' Membership Expired', 'membership-expired', [
             'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
         ]);
     }
@@ -189,7 +198,7 @@ class ChargeRenewal extends Command
      */
     public function sendFailureEmail(Subscription $subscription, string $reason)
     {
-        $this->sendSubscriberEmail($subscription, 'SGC Membership Renewal Failed', 'membership-renewal-failure', [
+        $this->sendSubscriberEmail($subscription, $this->appName . ' Membership Renewal Failed', 'membership-renewal-failure', [
             'membership_name' => $subscription->membershipPlanRate->membershipPlan->name,
             'reason' => $reason,
         ]);
