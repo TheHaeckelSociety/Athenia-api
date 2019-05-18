@@ -35,6 +35,7 @@ class SubscriptionPolicy extends BasePolicyAbstract
      */
     public function update(User $loggedInUser, User $requestedUser, Subscription $subscription)
     {
-        return $loggedInUser->id == $requestedUser->id && $requestedUser->id == $subscription->user_id;
+        return $loggedInUser->id == $requestedUser->id &&
+            $requestedUser->id == $subscription->subscriber_id && $subscription->subscriber_type == 'user';
     }
 }

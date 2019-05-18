@@ -19,6 +19,7 @@ $factory->define(\App\Models\Subscription\Subscription::class, function (Faker $
     return [
         'membership_plan_rate_id' => factory(\App\Models\Subscription\MembershipPlanRate::class)->create()->id,
         'payment_method_id' => factory(\App\Models\Payment\PaymentMethod::class)->create()->id,
-        'user_id' => factory(\App\Models\User\User::class)->create()->id,
+        'subscriber_id' => factory(\App\Models\User\User::class)->create()->id,
+        'subscriber_type' => 'user',
     ];
 });

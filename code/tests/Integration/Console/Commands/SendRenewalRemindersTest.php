@@ -57,26 +57,22 @@ class SendRenewalRemindersTest extends TestCase
             'membership_plan_rate_id' => factory(MembershipPlanRate::class)->create()->id,
         ]);
 
-        $messageRepository->shouldReceive('create')->once()->with(\Mockery::on(function($data) use($subscription) {
+        $messageRepository->shouldReceive('sendEmailToUser')->once()->with(
+            \Mockery::on(function($user) use($subscription) {
+                $this->assertEquals($user, $subscription->subscriber);
+                return true;
+            }),
+            'Membership Renewal Reminder',
+            'renewal-reminder',
+            \Mockery::on(function($data) use($subscription) {
 
-            $this->assertArrayHasKey('email', $data);
-            $this->assertArrayHasKey('template', $data);
-            $this->assertArrayHasKey('data', $data);
-            $this->assertArrayHasKey('subject', $data);
+                $this->assertArrayHasKey('membership_name', $data);
+                $this->assertArrayHasKey('recurring', $data);
+                $this->assertArrayHasKey('membership_cost', $data);
 
-            $this->assertArrayHasKey('greeting', $data['data']);
-            $this->assertArrayHasKey('membership_name', $data['data']);
-            $this->assertArrayHasKey('recurring', $data['data']);
-            $this->assertArrayHasKey('membership_cost', $data['data']);
-
-            $this->assertEquals($subscription->user->email, $data['email']);
-            $this->assertContains($subscription->user->name, $data['data']['greeting']);
-
-            return true;
-        }), \Mockery::on(function($user) use($subscription) {
-            $this->assertEquals($user, $subscription->user);
-            return true;
-        }));
+                return true;
+            })
+        );
 
         $command->handle();
     }

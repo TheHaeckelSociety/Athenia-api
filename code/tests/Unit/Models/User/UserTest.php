@@ -13,6 +13,16 @@ use Tests\TestCase;
  */
 class UserTest extends TestCase
 {
+    public function testBallotCompletions()
+    {
+        $user = new User();
+        $relation = $user->ballotCompletions();
+
+        $this->assertInstanceOf(HasMany::class, $relation);
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('ballot_completions.user_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testCreatedArticles()
     {
         $user = new User();
@@ -59,9 +69,8 @@ class UserTest extends TestCase
         $user = new User();
         $relation = $user->paymentMethods();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('payment_methods.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testRoles()
@@ -80,9 +89,8 @@ class UserTest extends TestCase
         $user = new User();
         $relation = $user->subscriptions();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('subscriptions.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('subscriptions.subscriber_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testGetJWTIdentifier()

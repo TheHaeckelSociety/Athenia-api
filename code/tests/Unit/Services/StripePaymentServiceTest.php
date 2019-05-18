@@ -81,6 +81,7 @@ class StripePaymentServiceTest extends TestCase
             'amount' => 35.00,
             'currency' => 'usd',
             'capture' => true,
+            'description' => 'A Description',
             'customer' => 'cus_test',
             'source' => 'card_test',
         ])->andReturn([
@@ -96,7 +97,7 @@ class StripePaymentServiceTest extends TestCase
             'subscription_id' => 423,
         ], $paymentMethod)->andReturn($payment);
 
-        $result = $this->service->createPayment($user, 35.00, $paymentMethod, ['subscription_id' => 423]);
+        $result = $this->service->createPayment($user, 35.00, $paymentMethod, 'A Description', ['subscription_id' => 423]);
 
         $this->assertEquals($result, $payment);
     }
@@ -114,7 +115,7 @@ class StripePaymentServiceTest extends TestCase
             'subscription_id' => 423,
         ], $paymentMethod)->andReturn($payment);
 
-        $result = $this->service->createPayment($user, 0.00, $paymentMethod, ['subscription_id' => 423]);
+        $result = $this->service->createPayment($user, 0.00, $paymentMethod, 'A Description', ['subscription_id' => 423]);
 
         $this->assertEquals($result, $payment);
     }
@@ -148,7 +149,7 @@ class StripePaymentServiceTest extends TestCase
 
                 return true;
             })
-        );
+            );
         $this->refundHandler->shouldReceive('create')->once()->with('test_key');
         $this->dispatcher->shouldReceive('dispatch')->once()
             ->with(\Mockery::on(function(PaymentReversedEvent $event) use ($payment) {
@@ -156,7 +157,7 @@ class StripePaymentServiceTest extends TestCase
 
                 return true;
             })
-        );
+            );
 
         $this->service->reversePayment($payment);
     }

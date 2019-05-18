@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
-use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
-use App\Models\Subscription\Subscription;
+use App\Models\Traits\HasPaymentMethods;
+use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
+use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Auth\Authenticatable;
@@ -31,6 +33,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
@@ -51,9 +54,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @mixin Eloquent
  */
 class User extends BaseModelAbstract
-    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract
+    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract
 {
-    use Authenticatable, HasValidationRules;
+    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -73,6 +76,16 @@ class User extends BaseModelAbstract
     protected $appends = [
         'profile_image_url',
     ];
+
+    /**
+     * The ballot completions the user has done
+     *
+     * @return HasMany
+     */
+    public function ballotCompletions(): HasMany
+    {
+        return $this->hasMany(BallotCompletion::class);
+    }
 
     /**
      * The articles that were created by this user
@@ -115,16 +128,6 @@ class User extends BaseModelAbstract
     }
 
     /**
-     * A user can have many payment methods
-     *
-     * @return HasMany
-     */
-    public function paymentMethods(): HasMany
-    {
-        return $this->hasMany(PaymentMethod::class);
-    }
-
-    /**
      * The asset that contains the profile image for this user
      *
      * @return BelongsTo
@@ -142,16 +145,6 @@ class User extends BaseModelAbstract
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
-    }
-
-    /**
-     * All Subscriptions this user has signed up to
-     *
-     * @return HasMany
-     */
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class);
     }
 
     /**
@@ -221,6 +214,16 @@ class User extends BaseModelAbstract
             return $subscription->isLifetime() ? true :
                 ($subscription->expires_at ? $subscription->expires_at->greaterThan(Carbon::now()) : false);
         });
+    }
+
+    /**
+     * The name of the morph relation
+     *
+     * @return string
+     */
+    public function morphRelationName(): string
+    {
+        return 'user';
     }
 
     /**

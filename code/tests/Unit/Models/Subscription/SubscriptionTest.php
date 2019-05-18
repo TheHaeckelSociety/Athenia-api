@@ -47,14 +47,13 @@ class SubscriptionTest extends TestCase
         $this->assertEquals('subscriptions.payment_method_id', $relation->getQualifiedForeignKeyName());
     }
 
-    public function testUser()
+    public function testSubscriber()
     {
         $model = new Subscription();
-        $relation = $model->user();
+        $relation = $model->subscriber();
 
-        $this->assertInstanceOf(BelongsTo::class, $relation);
-        $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('subscriptions.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('subscriptions.subscriber_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('subscriber_type', $relation->getMorphType());
     }
 
     public function testIsLifetime()

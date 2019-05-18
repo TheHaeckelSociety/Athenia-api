@@ -61,16 +61,18 @@ class StripePaymentService implements StripePaymentServiceContract
     /**
      * @param float $amount
      * @param PaymentMethod $paymentMethod
+     * @param string $description
      * @param string|null $customerKey
      * @return array
      */
-    public function captureCharge(float $amount, PaymentMethod $paymentMethod, string $customerKey = null)
+    public function captureCharge(float $amount, PaymentMethod $paymentMethod, string $description, string $customerKey = null)
     {
         $data = [
             'amount' => $amount,
             'currency' => 'usd',
             'capture' => true,
             'source' => $paymentMethod->payment_method_key,
+            'description' => $description,
         ];
 
         if ($customerKey) {
@@ -84,13 +86,14 @@ class StripePaymentService implements StripePaymentServiceContract
      * @param User $user
      * @param float $amount
      * @param PaymentMethod $paymentMethod
+     * @param string $description
      * @param array $paymentData
      * @return BaseModelAbstract|Payment
      */
-    public function createPayment(User $user, float $amount, PaymentMethod $paymentMethod, $paymentData = []) : Payment
+    public function createPayment(User $user, float $amount, PaymentMethod $paymentMethod, string $description, $paymentData = []) : Payment
     {
         if ($amount > 0) {
-            $chargeData = $this->captureCharge($amount, $paymentMethod, $user->stripe_customer_key);
+            $chargeData = $this->captureCharge($amount, $paymentMethod, $description, $user->stripe_customer_key);
             if (isset ($chargeData['id'])) {
                 $paymentData['transaction_key'] = $chargeData['id'];
             }

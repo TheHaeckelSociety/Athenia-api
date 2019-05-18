@@ -229,6 +229,40 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
     }
 
     /**
+     * Syncs all child data with full models
+     *
+     * @param BaseRepositoryContract $childRepository
+     * @param BaseModelAbstract $parentModel
+     * @param array $childrenData
+     * @param Collection|null $existingChildren
+     */
+    protected function syncChildModels(BaseRepositoryContract $childRepository, BaseModelAbstract $parentModel,
+                                       array $childrenData, Collection $existingChildren = null)
+    {
+        if ($existingChildren) {
+            $newChildrenIds = collect($childrenData)->pluck('id');
+
+            foreach ($existingChildren as $child) {
+                if (!$newChildrenIds->contains($child->id)) {
+                    $childRepository->delete($child);
+                }
+            }
+        }
+
+        foreach ($childrenData as $childrenDatum) {
+            $id = $childrenDatum['id'] ?? null;
+            /** @var BaseModelAbstract|null $existingModel */
+            $existingModel = $id && $existingChildren ? $existingChildren->firstWhere('id', $id) : null;
+
+            if ($existingModel) {
+                $childRepository->update($existingModel, $childrenDatum);
+            } else {
+                $childRepository->create($childrenDatum, $parentModel);
+            }
+        }
+    }
+
+    /**
      * Delete this single model
      *
      * @param BaseModelAbstract $model

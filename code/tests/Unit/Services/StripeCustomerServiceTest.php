@@ -116,6 +116,7 @@ class StripeCustomerServiceTest extends TestCase
         $user = new User([
             'email' => 'test@test.com',
         ]);
+        $user->id = 324;
 
         $this->customerHelper->shouldReceive('create')->once()->with([
             'email' => 'test@test.com',
@@ -137,10 +138,9 @@ class StripeCustomerServiceTest extends TestCase
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
-        ], \Mockery::on(function(User $user) {
-            $this->assertEquals($user->email, 'test@test.com');
-            return true;
-        }))->andReturn(new PaymentMethod());
+            'owner_id' => 324,
+            'owner_type' => 'user',
+        ])->andReturn(new PaymentMethod());
 
         $this->service->createPaymentMethod($user, [
             'card_number'
@@ -153,6 +153,7 @@ class StripeCustomerServiceTest extends TestCase
             'email' => 'test@test.com',
             'stripe_customer_key' => 'cus_test',
         ]);
+        $user->id = 324;
 
         $this->cardHelper->shouldReceive('create')->once()->with('cus_test', [
             'card_number'
@@ -165,10 +166,9 @@ class StripeCustomerServiceTest extends TestCase
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
-        ], \Mockery::on(function(User $user) {
-            $this->assertEquals($user->email, 'test@test.com');
-            return true;
-        }))->andReturn(new PaymentMethod());
+            'owner_id' => 324,
+            'owner_type' => 'user',
+        ])->andReturn(new PaymentMethod());
 
         $this->service->createPaymentMethod($user, [
             'card_number'
@@ -178,7 +178,7 @@ class StripeCustomerServiceTest extends TestCase
     public function testDeletePaymentMethodFailsWithoutToken()
     {
         $paymentMethod = new PaymentMethod([
-            'user' => new User(),
+            'owner' => new User(),
         ]);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -190,7 +190,7 @@ class StripeCustomerServiceTest extends TestCase
     {
         $paymentMethod = new PaymentMethod([
             'payment_method_key' => 'card_test',
-            'user' => new User([
+            'owner' => new User([
                 'stripe_customer_key' => 'cus_test',
             ]),
         ]);
@@ -210,7 +210,7 @@ class StripeCustomerServiceTest extends TestCase
     {
         $paymentMethod = new PaymentMethod([
             'payment_method_key' => 'card_test',
-            'user' => new User([
+            'owner' => new User([
                 'stripe_customer_key' => null,
             ]),
         ]);
@@ -222,7 +222,7 @@ class StripeCustomerServiceTest extends TestCase
     {
         $paymentMethod = new PaymentMethod([
             'payment_method_key' => 'card',
-            'user' => new User([
+            'owner' => new User([
                 'stripe_customer_key' => 'customer',
             ]),
         ]);

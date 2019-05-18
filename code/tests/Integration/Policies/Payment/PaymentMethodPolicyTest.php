@@ -36,7 +36,7 @@ class PaymentMethodPolicyTest extends TestCase
         $other = factory(User::class)->create();
 
         $paymentMethod = factory(PaymentMethod::class)->create([
-            'user_id' => $me->id,
+            'owner_id' => $me->id,
         ]);
 
         $this->assertFalse($policy->delete($me, $other, $paymentMethod));

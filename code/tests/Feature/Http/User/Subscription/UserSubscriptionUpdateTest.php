@@ -43,7 +43,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testNotLoggedInUserBlocked()
     {
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id);
 
@@ -54,7 +54,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id);
 
@@ -74,7 +74,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'cancel' => true,
@@ -90,7 +90,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'membership_plan_rate_id' => 32,
@@ -108,7 +108,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'recurring' => 'hello',
@@ -128,7 +128,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'payment_method_id' => 'hi',
@@ -146,7 +146,7 @@ class UserSubscriptionUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'payment_method_id' => 54,
@@ -165,7 +165,7 @@ class UserSubscriptionUpdateTest extends TestCase
         $paymentMethod = factory(PaymentMethod::class)->create();
         $this->actingAs($this->user);
         $subscription = factory(Subscription::class)->create([
-            'user_id' => $this->user->id,
+            'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'payment_method_id' => $paymentMethod->id,

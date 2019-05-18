@@ -3,15 +3,18 @@ declare(strict_types=1);
 
 namespace App\Models\Payment;
 
+use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,7 +22,8 @@ use Illuminate\Support\Carbon;
  *
  * @package App\Models\Payment
  * @property int $id
- * @property int $user_id
+ * @property int $owner_id
+ * @property string $owner_type
  * @property string|null $identifier
  * @property string|null $payment_method_key
  * @property string $payment_method_type
@@ -28,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read Collection|Payment[] $payments
  * @property-read Collection|Subscription[] $subscriptions
- * @property-read User $user
+ * @property-read HasPaymentMethodsContract|User $owner
  * @method static Builder|PaymentMethod newModelQuery()
  * @method static Builder|PaymentMethod newQuery()
  * @method static Builder|PaymentMethod query()
@@ -36,11 +40,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PaymentMethod whereDeletedAt($value)
  * @method static Builder|PaymentMethod whereId($value)
  * @method static Builder|PaymentMethod whereIdentifier($value)
+ * @method static Builder|PaymentMethod whereOwnerId($value)
+ * @method static Builder|PaymentMethod whereOwnerType($value)
  * @method static Builder|PaymentMethod wherePaymentMethodKey($value)
  * @method static Builder|PaymentMethod wherePaymentMethodType($value)
  * @method static Builder|PaymentMethod whereUpdatedAt($value)
- * @method static Builder|PaymentMethod whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContract
 {
@@ -67,13 +72,13 @@ class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContr
     }
 
     /**
-     * A payment will for the time being always belong to a user
+     * A payment method will have a morph to relation to the owner of the payment method
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function user(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
     /**

@@ -12,6 +12,7 @@ use App\Models\Subscription\Subscription;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
 use Carbon\Carbon;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Tests\DatabaseSetupTrait;
@@ -64,70 +65,61 @@ class ChargeRenewalTest extends TestCase
                 $this->getGenericLogMock(),
             )
         );
+        $config = mock(Repository::class);
+        $config->shouldReceive('get')->once()->with('app.name')->andReturn('Athenia');
 
-        $command = new ChargeRenewal($paymentService, $subscriptionRepository, $messageRepository);
+        $command = new ChargeRenewal($paymentService, $subscriptionRepository, $messageRepository, $config);
 
         $paymentService->shouldReceive('createPayment')->once()->with(\Mockery::on(function ($user) use ($stripeSubscription) {
-            $this->assertEquals($user->id, $stripeSubscription->user_id);
+            $this->assertEquals($user->id, $stripeSubscription->subscriber_id);
             return true;
         }), 35.0, \Mockery::on(function(PaymentMethod $paymentMethod) {
             return true;
-        }), [
+        }), 'Subscription renewal for ' . $stripeSubscription->membershipPlanRate->membershipPlan->name, [
             'subscription_id' => $stripeSubscription->id,
         ]);
 
-        $messageRepository->shouldReceive('create')->once()->with(\Mockery::on(function($data) use($stripeSubscription) {
+        $messageRepository->shouldReceive('sendEmailToUser')->once()->with(
+            \Mockery::on(function($user) use($stripeSubscription) {
+                return $user->id == $stripeSubscription->subscriber_id;
+            }),
+            'Athenia Membership Successfully Renewed',
+            'membership-renewed',
+            \Mockery::on(function($data) use($stripeSubscription) {
 
-            if (!Arr::has($data, ['email', 'template', 'data', 'subject'])) {
-                return false;
-            }
-            if (!Arr::has($data['data'], ['greeting', 'membership_name', 'membership_cost', 'expiration_date'])) {
-                return false;
-            }
+                if (!Arr::has($data, ['membership_name', 'membership_cost', 'expiration_date'])) {
+                    return false;
+                }
 
-            if ($stripeSubscription->user->email != $data['email']) {
-                return false;
-            }
-            if (!Str::contains($data['data']['greeting'], $stripeSubscription->user->name)) {
-                return false;
-            }
-            if (!Str::contains($data['data']['membership_cost'], '35.00')) {
-                return false;
-            }
-            if (!Str::contains($data['data']['membership_name'], $stripeSubscription->membershipPlanRate->membershipPlan->name)) {
-                return false;
-            }
-            if (!Str::contains($data['data']['expiration_date'], 'January 21st 2019')) {
-                return false;
-            }
+                if (!Str::contains($data['membership_cost'], '35.00')) {
+                    return false;
+                }
+                if (!Str::contains($data['membership_name'], $stripeSubscription->membershipPlanRate->membershipPlan->name)) {
+                    return false;
+                }
+                if (!Str::contains($data['expiration_date'], 'January 21st 2019')) {
+                    return false;
+                }
 
-            return true;
-        }), \Mockery::on(function($user) use($stripeSubscription) {
-            $this->assertEquals($user, $stripeSubscription->user);
-            return true;
-        }));
+                return true;
+            })
+        );
 
-        $messageRepository->shouldReceive('create')->once()->with(\Mockery::on(function($data) use($nonRecurringSubscription) {
+        $messageRepository->shouldReceive('sendEmailToUser')->once()->with(
+            \Mockery::on(function($user) use($nonRecurringSubscription) {
+                return $user->id == $nonRecurringSubscription->subscriber_id;
+            }),
+            'Athenia Membership Expired',
+            'membership-expired',
+            \Mockery::on(function($data) {
 
-            if (!Arr::has($data, ['email', 'template', 'data', 'subject'])) {
-                return false;
-            }
-            if (!Arr::has($data['data'], ['greeting', 'membership_name'])) {
-                return false;
-            }
+                if (!Arr::has($data, ['membership_name'])) {
+                    return false;
+                }
 
-            if ($nonRecurringSubscription->user->email != $data['email']) {
-                return false;
-            }
-            if (!Str::contains($data['data']['greeting'], $nonRecurringSubscription->user->name)) {
-                return false;
-            }
-
-            return true;
-        }), \Mockery::on(function($user) use($nonRecurringSubscription) {
-            $this->assertEquals($user, $nonRecurringSubscription->user);
-            return true;
-        }));
+                return true;
+            })
+        );
 
         $command->handle();
     }

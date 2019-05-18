@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Contracts\Services;
 
+use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Models\Payment\PaymentMethod;
-use App\Models\User\User;
 
 /**
  * Interface StripeCustomerServiceContract
@@ -15,27 +15,27 @@ interface StripeCustomerServiceContract
     /**
      * Creates a new stripe customer for a user
      *
-     * @param User $user
+     * @param HasPaymentMethodsContract $hasPaymentMethod
      * @return mixed
      */
-    public function createCustomer(User $user);
+    public function createCustomer(HasPaymentMethodsContract $hasPaymentMethod);
 
     /**
      * Retrieves a customer from stripe
      *
-     * @param User $user
+     * @param HasPaymentMethodsContract $hasPaymentMethod
      * @return mixed
      */
-    public function retrieveCustomer(User $user);
+    public function retrieveCustomer(HasPaymentMethodsContract $hasPaymentMethod);
 
     /**
      * Creates a new payment method
      *
-     * @param User $user
+     * @param HasPaymentMethodsContract $hasPaymentMethod
      * @param array $paymentData
      * @return mixed
      */
-    public function createPaymentMethod(User $user, $paymentData): PaymentMethod;
+    public function createPaymentMethod(HasPaymentMethodsContract $hasPaymentMethod, $paymentData): PaymentMethod;
 
     /**
      * Interacts with stripe in order to properly delete a user's card

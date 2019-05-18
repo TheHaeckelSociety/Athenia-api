@@ -8,10 +8,12 @@ use App\Events\Message\MessageSentEvent;
 use App\Events\Payment\PaymentReversedEvent;
 use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
+use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
 use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
+use App\Listeners\Vote\VoteCreatedListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -41,6 +43,11 @@ class EventServiceProvider extends ServiceProvider
         SignUpEvent::class => [
             SignUpListener::class,
         ],
+        VoteCreatedEvent::class => [
+            VoteCreatedListener::class,
+        ],
+
+        // Register all application level events below
     ];
 
     /**

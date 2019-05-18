@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Models\Payment;
 
 use App\Models\Payment\PaymentMethod;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
@@ -34,13 +33,12 @@ class PaymentMethodTest extends TestCase
         $this->assertEquals('subscriptions.payment_method_id', $relation->getQualifiedForeignKeyName());
     }
 
-    public function testUser()
+    public function testOwner()
     {
         $model = new PaymentMethod();
-        $relation = $model->user();
+        $relation = $model->owner();
 
-        $this->assertInstanceOf(BelongsTo::class, $relation);
-        $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('payment_methods.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('owner_type', $relation->getMorphType());
     }
 }
