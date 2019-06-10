@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.15.1
+
+A bug fix! This version fixes a bug that would cause the articles index to load all iterations of an article. To apply this fix simply copy the `getContentAttribute` function from the `Article` model.
+
 ## 0.15.0
 
 Decoupling! This version modifies the subscription and payments module in order to decouple them from the user. This means that no modifications will be necessary to these core modules anymore in order to link them to any piece of data that may be required. Along with that a new helper function has been added to the message repository that will make it easier to send emails in the future.
