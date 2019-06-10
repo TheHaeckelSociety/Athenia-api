@@ -77,7 +77,7 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
     public function getContentAttribute() : ?string
     {
         /** @var Iteration|null $iteration */
-        $iteration = $this->iterations->first();
+        $iteration = $this->iterations()->limit(1)->get()->first();
         return $iteration ? $iteration->content : null;
     }
 
