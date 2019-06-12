@@ -30,6 +30,7 @@ class UserMessagesMergeListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->repository = mock(MessageRepositoryContract::class);
         $this->listener = new UserMessagesMergeListener($this->repository);
     }

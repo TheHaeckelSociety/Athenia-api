@@ -30,6 +30,7 @@ class UserCreatedIterationsMergeListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->repository = mock(IterationRepositoryContract::class);
         $this->listener = new UserCreatedIterationsMergeListener($this->repository);
     }

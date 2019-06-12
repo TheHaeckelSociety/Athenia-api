@@ -30,6 +30,7 @@ class UserSubscriptionsMergeListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->repository = mock(SubscriptionRepositoryContract::class);
         $this->listener = new UserSubscriptionsMergeListener($this->repository);
     }

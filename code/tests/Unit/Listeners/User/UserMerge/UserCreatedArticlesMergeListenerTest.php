@@ -30,6 +30,7 @@ class UserCreatedArticlesMergeListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->repository = mock(ArticleRepositoryContract::class);
         $this->listener = new UserCreatedArticlesMergeListener($this->repository);
     }

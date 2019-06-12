@@ -30,6 +30,7 @@ class UserBallotCompletionsMergeListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->repository = mock(BallotCompletionRepositoryContract::class);
         $this->listener = new UserBallotCompletionsMergeListener($this->repository);
     }
