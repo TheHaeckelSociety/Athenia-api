@@ -32,11 +32,11 @@ class UserBallotCompletionsMergeListener
     public function handle(UserMergeEvent $event)
     {
         $mainUser = $event->getMainUser();
-        $mergeUer = $event->getMergeUser();
+        $mergeUser = $event->getMergeUser();
         $mergeOptions = $event->getMergeOptions();
 
         if ($mergeOptions['ballot_completions'] ?? false) {
-            foreach ($mergeUer->ballotCompletions as $ballotCompletion) {
+            foreach ($mergeUser->ballotCompletions as $ballotCompletion) {
                 $this->ballotCompletionRepository->update($ballotCompletion, [
                     'user_id' => $mainUser->id,
                 ]);

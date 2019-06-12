@@ -32,11 +32,11 @@ class UserCreatedArticlesMergeListener
     public function handle(UserMergeEvent $event)
     {
         $mainUser = $event->getMainUser();
-        $mergeUer = $event->getMergeUser();
+        $mergeUser = $event->getMergeUser();
         $mergeOptions = $event->getMergeOptions();
 
         if ($mergeOptions['created_articles'] ?? false) {
-            foreach ($mergeUer->createdArticles as $article) {
+            foreach ($mergeUser->createdArticles as $article) {
                 $this->articleRepository->update($article, [
                     'created_by_id' => $mainUser->id,
                 ]);

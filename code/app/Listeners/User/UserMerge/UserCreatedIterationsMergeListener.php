@@ -32,11 +32,11 @@ class UserCreatedIterationsMergeListener
     public function handle(UserMergeEvent $event)
     {
         $mainUser = $event->getMainUser();
-        $mergeUer = $event->getMergeUser();
+        $mergeUser = $event->getMergeUser();
         $mergeOptions = $event->getMergeOptions();
 
         if ($mergeOptions['created_iterations'] ?? false) {
-            foreach ($mergeUer->createdIterations as $iteration) {
+            foreach ($mergeUser->createdIterations as $iteration) {
                 $this->iterationRepository->update($iteration, [
                     'created_by_id' => $mainUser->id,
                 ]);
