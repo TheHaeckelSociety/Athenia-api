@@ -2,6 +2,24 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.16.0
+
+User merge! This build adds a brand new event that you can trigger to merge two users into one based on a set of options. This also includes a lot of listeners to this event that will merge various pieces of user data based on the passed in options. To complete this upgrade start by copying over the following locations.
+
+* code/app/Events/User/UserMergeEvent.php 
+* code/app/Listeners/User/UserMerge/
+* code/database/migrations/2019_06_11_212824_add_merged_to_id_to_users.php
+* code/tests/Unit/Events/User/UserMergeEventTest.php
+* code/tests/Unit/Listeners/User/UserMerge/
+
+After that is complete make sure to update your event provider with the new listeners. Then there is a bit of optional code cleanup. The following files have had changes made to their imports and headers, so copying those can be optional.
+
+* code/app/Models/Payment/PaymentMethod.php
+* code/app/Models/User/Message.php
+* code/app/Models/User/User.php
+* code/app/Models/Vote/BallotCompletion.php
+* code/app/Models/Wiki/Article.php
+
 ## 0.15.1
 
 A bug fix! This version fixes a bug that would cause the articles index to load all iterations of an article. To apply this fix simply copy the `getContentAttribute` function from the `Article` model.
