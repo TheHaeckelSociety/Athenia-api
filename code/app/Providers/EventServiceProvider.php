@@ -8,11 +8,18 @@ use App\Events\Message\MessageSentEvent;
 use App\Events\Payment\PaymentReversedEvent;
 use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
+use App\Events\User\UserMergeEvent;
 use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
 use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
+use App\Listeners\User\UserMerge\UserBallotCompletionsMergeListener;
+use App\Listeners\User\UserMerge\UserCreatedArticlesMergeListener;
+use App\Listeners\User\UserMerge\UserCreatedIterationsMergeListener;
+use App\Listeners\User\UserMerge\UserMessagesMergeListener;
+use App\Listeners\User\UserMerge\UserPropertiesMergeListener;
+use App\Listeners\User\UserMerge\UserSubscriptionsMergeListener;
 use App\Listeners\Vote\VoteCreatedListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -42,6 +49,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         SignUpEvent::class => [
             SignUpListener::class,
+        ],
+        UserMergeEvent::class => [
+            // It is recommended to put additional merge listeners above
+            UserBallotCompletionsMergeListener::class,
+            UserCreatedArticlesMergeListener::class,
+            UserCreatedIterationsMergeListener::class,
+            UserMessagesMergeListener::class,
+            UserPropertiesMergeListener::class,
+            UserSubscriptionsMergeListener::class,
         ],
         VoteCreatedEvent::class => [
             VoteCreatedListener::class,

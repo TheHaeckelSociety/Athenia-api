@@ -5,15 +5,20 @@ namespace App\Models\User;
 
 use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
+use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
@@ -26,31 +31,33 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *
  * @package App\Models\User
  * @property int $id
+ * @property int|null $merged_to_id
  * @property string $email the email address of the user
  * @property string $name the full name of the user
  * @property string $password the password of the user
  * @property string|null $stripe_customer_key
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeCustomerKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property-read Collection|BallotCompletion[] $ballotCompletions
+ * @property-read Collection|Article[] $createdArticles
+ * @property-read Collection|Iteration[] $createdIterations
+ * @property-read Collection|Message[] $messages
+ * @property-read Collection|PaymentMethod[] $paymentMethods
+ * @property-read Collection|Role[] $roles
+ * @property-read Collection|Subscription[] $subscriptions
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereMergedToId($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereStripeCustomerKey($value)
+ * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
 class User extends BaseModelAbstract

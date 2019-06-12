@@ -5,6 +5,9 @@ namespace App\Models\User;
 
 use App\Events\Message\MessageCreatedEvent;
 use App\Models\BaseModelAbstract;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,27 +20,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $data
  * @property string $email
  * @property int $user_id
- * @property \Carbon\Carbon|null $scheduled_at
- * @property \Carbon\Carbon|null $sent_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \App\Models\User\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Message query()
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereScheduledAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereSentAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereSubject($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereTemplate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereUserId($value)
- * @mixin \Eloquent
+ * @property Carbon|null $scheduled_at
+ * @property Carbon|null $sent_at
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
+ * @method static Builder|Message newModelQuery()
+ * @method static Builder|Message newQuery()
+ * @method static Builder|Message query()
+ * @method static Builder|Message whereCreatedAt($value)
+ * @method static Builder|Message whereData($value)
+ * @method static Builder|Message whereDeletedAt($value)
+ * @method static Builder|Message whereEmail($value)
+ * @method static Builder|Message whereId($value)
+ * @method static Builder|Message whereScheduledAt($value)
+ * @method static Builder|Message whereSentAt($value)
+ * @method static Builder|Message whereSubject($value)
+ * @method static Builder|Message whereTemplate($value)
+ * @method static Builder|Message whereUpdatedAt($value)
+ * @method static Builder|Message whereUserId($value)
+ * @mixin Eloquent
  */
 class Message extends BaseModelAbstract
 {
