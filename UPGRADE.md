@@ -2,6 +2,18 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.17.0
+
+Partial Refund! This is a simple build that adds a new helper function to the payment service. There are also some typos that have been fixed in this build too. To run this update copy over the following files.
+
+* code/app/Contracts/Services/StripePaymentServiceContract.php
+* code/app/Listeners/User/UserMerge/UserBallotCompletionsMergeListener.php
+* code/app/Listeners/User/UserMerge/UserCreatedArticlesMergeListener.php
+* code/app/Listeners/User/UserMerge/UserCreatedIterationsMergeListener.php
+* code/app/Listeners/User/UserMerge/UserMessagesMergeListener.php
+* code/app/Services/StripePaymentService.php
+* code/tests/Unit/Services/StripePaymentServiceTest.php
+
 ## 0.16.0
 
 User merge! This build adds a brand new event that you can trigger to merge two users into one based on a set of options. This also includes a lot of listeners to this event that will merge various pieces of user data based on the passed in options. To complete this upgrade start by copying over the following locations.
