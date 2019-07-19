@@ -151,4 +151,54 @@ class SubscriptionRepositoryTest extends TestCase
         $this->assertNotContains($subscription6->id, $result->pluck('id'));
         $this->assertNotContains($subscription7->id, $result->pluck('id'));
     }
+
+    public function testFindExpiresAfter()
+    {
+        $expirationDate = new Carbon('2018-10-21 04:00:00');
+
+        $subscription1 = factory(Subscription::class)->create([
+            'expires_at' => '2018-10-19 07:10:00'
+        ]);
+        $subscription2 = factory(Subscription::class)->create([
+            'expires_at' => '2018-10-21 22:10:44'
+        ]);
+        $subscription3 = factory(Subscription::class)->create([
+            'expires_at' => '2018-10-25 23:59:59'
+        ]);
+        $subscription4 = factory(Subscription::class)->create([
+            'expires_at' => '2017-10-21 00:00:00'
+        ]);
+        $subscription5 = factory(Subscription::class)->create([
+            'expires_at' => '2018-10-22 00:00:00'
+        ]);
+        $subscription6 = factory(Subscription::class)->create([
+            'expires_at' => null
+        ]);
+        $subscription7 = factory(Subscription::class)->create([
+            'expires_at' => '2019-04-12 12:40:23',
+            'subscriber_type' => 'organization'
+        ]);
+
+        $result = $this->repository->findExpiresAfter($expirationDate, 'user');
+
+        $this->assertCount(4, $result);
+        $this->assertContains($subscription2->id, $result->pluck('id'));
+        $this->assertContains($subscription3->id, $result->pluck('id'));
+        $this->assertContains($subscription5->id, $result->pluck('id'));
+        $this->assertContains($subscription6->id, $result->pluck('id'));
+        $this->assertNotContains($subscription1->id, $result->pluck('id'));
+        $this->assertNotContains($subscription4->id, $result->pluck('id'));
+        $this->assertNotContains($subscription7->id, $result->pluck('id'));
+
+        $result = $this->repository->findExpiresAfter($expirationDate);
+
+        $this->assertCount(5, $result);
+        $this->assertContains($subscription2->id, $result->pluck('id'));
+        $this->assertContains($subscription3->id, $result->pluck('id'));
+        $this->assertContains($subscription5->id, $result->pluck('id'));
+        $this->assertContains($subscription6->id, $result->pluck('id'));
+        $this->assertContains($subscription7->id, $result->pluck('id'));
+        $this->assertNotContains($subscription1->id, $result->pluck('id'));
+        $this->assertNotContains($subscription4->id, $result->pluck('id'));
+    }
 }

@@ -78,4 +78,25 @@ class SubscriptionRepository extends BaseRepositoryAbstract implements Subscript
             ->where('expires_at', '<=', Carbon::instance($expiresAt)->setTime(23,59,59))
             ->get();
     }
+
+    /**
+     * Finds all subscriptions that expire after the passed in expiration date
+     *  The optional type field will filter out all subscriptions that are not to a specific subscriber type
+     *
+     * @param Carbon $expirationDate
+     * @param string|null $type
+     * @return Collection
+     */
+    public function findExpiresAfter(Carbon $expirationDate, string $type = null): Collection
+    {
+        $query = $this->model->newQuery()
+            ->whereNull('expires_at')
+            ->orWhere('expires_at', '>=', $expirationDate);
+
+        if ($type) {
+            $query->where('subscriber_type', '=', $type);
+        }
+
+        return $query->get();
+    }
 }

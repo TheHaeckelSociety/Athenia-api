@@ -2,6 +2,14 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.18.0
+
+New Subscription Function! This build adds a function the subscription repository that allows developers to find all subscriptions of a specific subscriber type that expire after a certain date. To update to this build copy over the following files.
+
+* code/app/Contracts/Repositories/Subscription/SubscriptionRepositoryContract.php
+* code/app/Repositories/Subscription/SubscriptionRepository.php
+* code/tests/Integration/Repositories/Subscription/SubscriptionRepositoryTest.php
+
 ## 0.17.0
 
 Partial Refund! This is a simple build that adds a new helper function to the payment service. There are also some typos that have been fixed in this build too. To run this update copy over the following files.
