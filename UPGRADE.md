@@ -2,6 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.19.0
+
+This version starts off with an upgrade from laravel 5.8 to laravel 6. Follow the following instructions in order to complete this part of the update.
+
+1) Update the composer json core dependencies to the ones found in this project
+2) Add the new ignore found in .gitignore
+3) Copy over code/app/Repositories/BaseRepositoryAbstract.php in order to fix a broken dependency
+4) Copy over code/tests/Unit/Exceptions/HandlerTest.php in order to fix some phpunit deprecation warnings
+5) Copy over code/tests/Unit/Http/Sockets/ArticleIterationsTest.php in order to fix some phpunit deprecation warnings
+6) Copy over code/tests/Unit/Models/Wiki/ArticleTest.php in order to fix some phpunit deprecation warnings
+
 ## 0.18.0
 
 New Subscription Function! This build adds a function the subscription repository that allows developers to find all subscriptions of a specific subscriber type that expire after a certain date. To update to this build copy over the following files.
@@ -217,7 +228,7 @@ This is a patch version that simply added some code cleanup, and additional serv
 
 Add the generators dependency in the requires-dev section.
 
-```json
+```
         "laracasts/generators": "^1.1",
 ```
 
