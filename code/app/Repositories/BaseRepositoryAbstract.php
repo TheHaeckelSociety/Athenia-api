@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\BaseRepositoryContract;
@@ -135,7 +135,7 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      */
     public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = [])
     {
-        return $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray)->paginate($limit)->appends(Input::except('page'));
+        return $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray)->paginate($limit)->appends(Request::except('page'));
     }
 
     /**

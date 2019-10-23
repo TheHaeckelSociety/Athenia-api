@@ -25,7 +25,7 @@ class HandlerTest extends TestCase
         $exception = new ValidationException();
 
         $responseJson = $handler->render($request, $exception)->content();
-        $this->assertContains('trace', $responseJson);
+        $this->assertStringContainsString('trace', $responseJson);
     }
 
     public function testDebugFalseNoTraceInfoInResponse()
@@ -37,7 +37,7 @@ class HandlerTest extends TestCase
         $exception = new ValidationException();
 
         $responseJson = $handler->render($request, $exception)->content();
-        $this->assertNotContains('trace', $responseJson);
+        $this->assertStringNotContainsString('trace', $responseJson);
     }
     
     public function testMessageSetSpecialForNotFoundHttpException()

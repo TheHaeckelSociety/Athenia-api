@@ -205,7 +205,8 @@ class ArticleIterationsTest extends TestCase
 
         $result = $this->socket->validateArticle($conn);
 
-        $this->assertArraySubset(['model' => $article], $result);
+        $this->assertArrayHasKey('model', $result);
+        $this->assertEquals($result['model'], $article);
         $this->assertCount(0, $result['connections']);
     }
 
