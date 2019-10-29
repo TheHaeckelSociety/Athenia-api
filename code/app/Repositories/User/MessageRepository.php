@@ -41,13 +41,14 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = []): Message
     {
         return $this->create([
+            'to_id' => $user->id,
             'subject' => $subject,
             'template' => $template,
             'email' => $user->email,
             'data' => array_merge($baseTemplateData, [
                 'greeting' => 'Hello ' . $user->name,
             ]),
-        ], $user);
+        ]);
     }
 
     /**

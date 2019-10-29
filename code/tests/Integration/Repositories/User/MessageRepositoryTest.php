@@ -72,7 +72,8 @@ class MessageRepositoryTest extends TestCase
             'template' => 'test_template',
             'email' => 'test@test.com',
             'data' => ['greeting' => 'hello'],
-        ], $user);
+            'to_id' => $user->id,
+        ]);
 
 
         $this->assertCount(1, Message::all());
@@ -80,7 +81,7 @@ class MessageRepositoryTest extends TestCase
         $this->assertEquals('test_template', $message->template);
         $this->assertEquals('test@test.com', $message->email);
         $this->assertEquals(['greeting' => 'hello'], $message->data);
-        $this->assertEquals($user->id, $message->user_id);
+        $this->assertEquals($user->id, $message->to_id);
     }
 
     public function testDeleteThrowsException()

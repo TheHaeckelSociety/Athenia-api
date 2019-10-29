@@ -3,48 +3,63 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\AssetRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
+use App\Contracts\Repositories\ResourceRepositoryContract;
 use App\Contracts\Repositories\RoleRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRateRepositoryContract;
 use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
 use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
+use App\Contracts\Repositories\User\ContactRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
+use App\Contracts\Repositories\User\ThreadRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotCompletionRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
 use App\Contracts\Repositories\Vote\VoteRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
+use App\Contracts\Repositories\Wiki\ArticleVersionRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Models\Asset;
 use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Resource;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
+use App\Models\User\Contact;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
+use App\Models\User\Thread;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Vote\BallotSubject;
 use App\Models\Vote\Vote;
 use App\Models\Wiki\Article;
+use App\Models\Wiki\ArticleVersion;
 use App\Models\Wiki\Iteration;
+use App\Repositories\AssetRepository;
 use App\Repositories\Payment\PaymentMethodRepository;
 use App\Repositories\Payment\PaymentRepository;
+use App\Repositories\ResourceRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
 use App\Repositories\Subscription\MembershipPlanRepository;
 use App\Repositories\Subscription\SubscriptionRepository;
+use App\Repositories\User\ContactRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
+use App\Repositories\User\ThreadRepository;
 use App\Repositories\Vote\BallotCompletionRepository;
 use App\Repositories\Vote\BallotRepository;
 use App\Repositories\Vote\BallotSubjectRepository;
 use App\Repositories\Vote\VoteRepository;
 use App\Repositories\Wiki\ArticleRepository;
+use App\Repositories\Wiki\ArticleVersionRepository;
 use App\Repositories\Wiki\IterationRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -67,8 +82,11 @@ class AppRepositoryProvider extends ServiceProvider
     {
         return [
             ArticleRepositoryContract::class,
+            ArticleVersionRepositoryContract::class,
+            AssetRepositoryContract::class,
             BallotRepositoryContract::class,
             BallotCompletionRepositoryContract::class,
+            ContactRepositoryContract::class,
             BallotSubjectRepositoryContract::class,
             IterationRepositoryContract::class,
             MembershipPlanRepositoryContract::class,
@@ -77,8 +95,10 @@ class AppRepositoryProvider extends ServiceProvider
             PasswordTokenRepositoryContract::class,
             PaymentRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
+            ResourceRepositoryContract::class,
             RoleRepositoryContract::class,
             SubscriptionRepositoryContract::class,
+            ThreadRepositoryContract::class,
             VoteRepositoryContract::class,
             UserRepositoryContract::class,
 
@@ -104,6 +124,21 @@ class AppRepositoryProvider extends ServiceProvider
                 $this->app->make('log'),
             );
         });
+        $this->app->bind(ArticleVersionRepositoryContract::class, function() {
+            return new ArticleVersionRepository(
+                new ArticleVersion(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(AssetRepositoryContract::class, function() {
+            return new AssetRepository(
+                new Asset(),
+                $this->app->make('log'),
+                $this->app->make('filesystem'),
+                $this->app->make('config')->get('app.asset_url'),
+                "assets"
+            );
+        });
         $this->app->bind(BallotRepositoryContract::class, function () {
             return new BallotRepository(
                 new Ballot(),
@@ -120,6 +155,12 @@ class AppRepositoryProvider extends ServiceProvider
         $this->app->bind(BallotSubjectRepositoryContract::class, function () {
             return new BallotSubjectRepository(
                 new BallotSubject(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(ContactRepositoryContract::class, function () {
+            return new ContactRepository(
+                new Contact(),
                 $this->app->make('log'),
             );
         });
@@ -162,6 +203,12 @@ class AppRepositoryProvider extends ServiceProvider
                 $this->app->make('log'),
             );
         });
+        $this->app->bind(ResourceRepositoryContract::class, function() {
+            return new ResourceRepository(
+                new Resource(),
+                $this->app->make('log'),
+            );
+        });
         $this->app->bind(RoleRepositoryContract::class, function() {
             return new RoleRepository(
                 new Role(),
@@ -173,6 +220,12 @@ class AppRepositoryProvider extends ServiceProvider
                 new Subscription(),
                 $this->app->make('log'),
                 $this->app->make(MembershipPlanRateRepositoryContract::class),
+            );
+        });
+        $this->app->bind(ThreadRepositoryContract::class, function() {
+            return new ThreadRepository(
+                new Thread(),
+                $this->app->make('log'),
             );
         });
         $this->app->bind(UserRepositoryContract::class, function() {
