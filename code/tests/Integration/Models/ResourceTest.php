@@ -18,6 +18,7 @@ class ResourceTest extends TestCase
 
     public function testResource()
     {
+        User::unsetEventDispatcher();
         $user = factory(User::class)->create();
 
         /** @var Resource $resource */

@@ -6,6 +6,7 @@ namespace Tests\Integration\Models\User;
 use App\Models\User\Message;
 use App\Models\User\Thread;
 use Illuminate\Contracts\Events\Dispatcher;
+use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 
 /**
@@ -14,6 +15,8 @@ use Tests\TestCase;
  */
 class ThreadTest extends TestCase
 {
+    use DatabaseSetupTrait;
+
     public function testLastMessage()
     {
         $messageDispatcher = mock(Dispatcher::class);

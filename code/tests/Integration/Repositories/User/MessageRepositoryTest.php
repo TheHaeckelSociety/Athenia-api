@@ -47,8 +47,6 @@ class MessageRepositoryTest extends TestCase
 
         $dispatcher = mock(Dispatcher::class);
 
-        $dispatcher->shouldAllowMockingMethod('fire');
-
         $dispatcher->shouldReceive('until');
         $dispatcher->shouldReceive('dispatch')
             ->with(\Mockery::on(function (String $eventName) {
@@ -74,7 +72,6 @@ class MessageRepositoryTest extends TestCase
             'data' => ['greeting' => 'hello'],
             'to_id' => $user->id,
         ]);
-
 
         $this->assertCount(1, Message::all());
         $this->assertEquals('Hello', $message->subject);

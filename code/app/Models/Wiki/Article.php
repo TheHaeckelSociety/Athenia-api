@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $created_by_id
  * @property string $title
  * @property-read null|string $content
+ * @property-read null|string $last_iteration_content
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -95,6 +96,18 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
         /** @var ArticleVersion|null $iteration */
         $version = $this->versions()->limit(1)->get()->first();
         return $version && $version->iteration ? $version->iteration->content : null;
+    }
+
+    /**
+     * Gets the content of the article
+     *
+     * @return null|string
+     */
+    public function getLastIterationContentAttribute() : ?string
+    {
+        /** @var Iteration|null $iteration */
+        $iteration = $this->iterations()->limit(1)->get()->first();
+        return $iteration ? $iteration->content : null;
     }
 
     /**

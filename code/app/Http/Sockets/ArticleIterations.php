@@ -179,13 +179,14 @@ class ArticleIterations extends BaseSocketListener
                 /** @var ConnectionInterface $client */
                 foreach ($data['connections'] as $client) {
                     if ($from !== $client) {
-                        $client->send($updatedModel->content);
+                        $client->send($updatedModel->last_iteration_content);
                     }
                 }
 
                 $this->loadedArticles[$updatedModel->id] = $data;
             }
         } catch (\Exception $e) {
+            dd($e);
 
             $from->send($e->getMessage());
             $from->close();
@@ -234,7 +235,7 @@ class ArticleIterations extends BaseSocketListener
         if ($startPosition !== null && $length !== null) {
             /** @var Iteration $iteration */
             $this->iterationRepository->create([
-                'content' => substr_replace($article->content, '', $startPosition, $length),
+                'content' => substr_replace($article->last_iteration_content, '', $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
 
@@ -259,7 +260,7 @@ class ArticleIterations extends BaseSocketListener
 
         if ($startPosition !== null && $content) {
 
-            $existingContent = $article->content ?? "";
+            $existingContent = $article->last_iteration_content ?? "";
 
             $beginningString = substr($existingContent, 0, $startPosition);
             $endString = substr($existingContent, $startPosition);
@@ -292,7 +293,7 @@ class ArticleIterations extends BaseSocketListener
         if ($startPosition !== null && $length !== null && $content) {
 
             $this->iterationRepository->create([
-                'content' => substr_replace($article->content, $content, $startPosition, $length),
+                'content' => substr_replace($article->last_iteration_content, $content, $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
 

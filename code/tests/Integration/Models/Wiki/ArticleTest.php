@@ -83,4 +83,40 @@ class ArticleTest extends TestCase
 
         $this->assertEquals('Hello', $article->content);
     }
+
+    public function testLastIterationContentReturnsModelContent()
+    {
+        /** @var Article $article */
+        $article = factory(Article::class)->create();
+
+        /** @var Iteration $iteration This should be appended */
+        factory(Iteration::class)->create([
+            'article_id' => $article->id,
+            'content' => 'Hello'
+        ]);
+
+        $this->assertEquals('Hello', $article->last_iteration_content);
+    }
+
+    public function testLastIterationContentReturnsCorrectModel()
+    {
+        /** @var Article $article */
+        $article = factory(Article::class)->create();
+
+        /** This should be appended */
+        factory(Iteration::class)->create([
+            'article_id' => $article->id,
+            'created_at' => Carbon::now(),
+            'content' => 'Hello'
+        ]);
+
+        /** This is an old iteration that should not be appended */
+        factory(Iteration::class)->create([
+            'article_id' => $article->id,
+            'created_at' => Carbon::now()->subDay(),
+            'content' => 'old content'
+        ]);
+
+        $this->assertEquals('Hello', $article->last_iteration_content);
+    }
 }

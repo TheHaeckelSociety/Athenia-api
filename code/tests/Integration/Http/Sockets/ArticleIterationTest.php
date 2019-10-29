@@ -92,7 +92,7 @@ class ArticleIterationTest extends TestCase
             'article_id' => $article->id,
         ]);
 
-        $this->assertEquals("Test content with a \n line break", $article->content);
+        $this->assertEquals("Test content with a \n line break", $article->last_iteration_content);
 
         $this->assertNull($this->socket->handleRemoveAction($user, $article, []));
 
@@ -103,7 +103,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleRemoveAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("Tecontent with a \n line break", $result->content);
+        $this->assertEquals("Tecontent with a \n line break", $result->last_iteration_content);
 
         $msg = [
             'start_position' => 15,
@@ -112,7 +112,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleRemoveAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("Tecontent with ne break", $result->content);
+        $this->assertEquals("Tecontent with ne break", $result->last_iteration_content);
     }
 
     public function testHandleAddAction()
@@ -126,7 +126,7 @@ class ArticleIterationTest extends TestCase
             'article_id' => $article->id,
         ]);
 
-        $this->assertEquals("Test content with a \n line break", $article->content);
+        $this->assertEquals("Test content with a \n line break", $article->last_iteration_content);
 
         $this->assertNull($this->socket->handleAddAction($user, $article, []));
 
@@ -137,7 +137,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleAddAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("Test content with a hello \n line break", $result->content);
+        $this->assertEquals("Test content with a hello \n line break", $result->last_iteration_content);
 
         $msg = [
             'start_position' => 0,
@@ -146,7 +146,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleAddAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("New sentence at the front. Test content with a hello \n line break", $result->content);
+        $this->assertEquals("New sentence at the front. Test content with a hello \n line break", $result->last_iteration_content);
 
         $msg = [
             'start_position' => 100,
@@ -155,7 +155,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleAddAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("New sentence at the front. Test content with a hello \n line break now it ends.", $result->content);
+        $this->assertEquals("New sentence at the front. Test content with a hello \n line break now it ends.", $result->last_iteration_content);
     }
 
     public function testHandleReplaceAction()
@@ -169,7 +169,7 @@ class ArticleIterationTest extends TestCase
             'article_id' => $article->id,
         ]);
 
-        $this->assertEquals("Test content with a \n line break", $article->content);
+        $this->assertEquals("Test content with a \n line break", $article->last_iteration_content);
 
         $this->assertNull($this->socket->handleAddAction($user, $article, []));
 
@@ -181,7 +181,7 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleReplaceAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("Test content with a hello.", $result->content);
+        $this->assertEquals("Test content with a hello.", $result->last_iteration_content);
 
         $msg = [
             'start_position' => 5,
@@ -191,6 +191,6 @@ class ArticleIterationTest extends TestCase
         $result = $this->socket->handleReplaceAction($user, $article, $msg);
 
         $this->assertEquals($result->id, $article->id);
-        $this->assertEquals("Test greeting with a hello.", $result->content);
+        $this->assertEquals("Test greeting with a hello.", $result->last_iteration_content);
     }
 }
