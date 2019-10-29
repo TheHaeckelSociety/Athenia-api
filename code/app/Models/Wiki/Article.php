@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read User $createdBy
  * @property-read Collection|Iteration[] $iterations
+ * @property-read Collection|ArticleVersion[] $versions
+ * @property-read int|null $iterations_count
+ * @property-read int|null $versions_count
  * @method static Builder|Article newModelQuery()
  * @method static Builder|Article newQuery()
  * @method static Builder|Article query()
@@ -51,6 +54,16 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
     protected $appends = [
         'content',
     ];
+
+    /**
+     * All versions related to this article
+     *
+     * @return HasMany
+     */
+    public function versions() : HasMany
+    {
+        return $this->hasMany(ArticleVersion::class)->orderByDesc('created_at')->orderByDesc('id');
+    }
 
     /**
      * The user that originally created this article
@@ -79,9 +92,9 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
      */
     public function getContentAttribute() : ?string
     {
-        /** @var Iteration|null $iteration */
-        $iteration = $this->iterations()->limit(1)->get()->first();
-        return $iteration ? $iteration->content : null;
+        /** @var ArticleVersion|null $iteration */
+        $version = $this->versions()->limit(1)->get()->first();
+        return $version && $version->iteration ? $version->iteration->content : null;
     }
 
     /**

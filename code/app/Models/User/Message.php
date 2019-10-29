@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
-use App\Events\Message\MessageCreatedEvent;
-use App\Models\BaseModelAbstract;
+use App\Contracts\Models\HasPolicyContract;
+use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Traits\HasValidationRules;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Events\Message\MessageCreatedEvent;
+use App\Models\BaseModelAbstract;
 
 /**
  * Class Message
@@ -19,35 +22,54 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $template
  * @property mixed $data
  * @property string $email
- * @property int $user_id
+ * @property int $to_id
+ * @property int $from_id
+ * @property int|null $thread_id
+ * @property array $via
+ * @property string|null $action
  * @property Carbon|null $scheduled_at
  * @property Carbon|null $sent_at
+ * @property Carbon|null $seen_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
- * @method static Builder|Message newModelQuery()
- * @method static Builder|Message newQuery()
- * @method static Builder|Message query()
+ * @property-read User $to
+ * @property-read User $from
+ * @property-read Thread|null $thread
+ * @method static Builder|Message whereAction($value)
  * @method static Builder|Message whereCreatedAt($value)
  * @method static Builder|Message whereData($value)
  * @method static Builder|Message whereDeletedAt($value)
  * @method static Builder|Message whereEmail($value)
+ * @method static Builder|Message whereFromId($value)
  * @method static Builder|Message whereId($value)
  * @method static Builder|Message whereScheduledAt($value)
+ * @method static Builder|Message whereSeenAt($value)
  * @method static Builder|Message whereSentAt($value)
  * @method static Builder|Message whereSubject($value)
  * @method static Builder|Message whereTemplate($value)
+ * @method static Builder|Message whereThreadId($value)
+ * @method static Builder|Message whereToId($value)
  * @method static Builder|Message whereUpdatedAt($value)
  * @method static Builder|Message whereUserId($value)
+ * @method static Builder|Message whereVia($value)
  * @mixin Eloquent
+ * @method static Builder|Message newModelQuery()
+ * @method static Builder|Message newQuery()
+ * @method static Builder|Message query()
  */
-class Message extends BaseModelAbstract
+class Message extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
+    use HasValidationRules;
+
+    const VIA_EMAIL = 'email';
+    const VIA_PUSH_NOTIFICATION = 'push';
+
     /**
      * @var array
      */
     protected $dates = [
+        'seen_at',
         'sent_at',
         'scheduled_at',
     ];
@@ -56,7 +78,8 @@ class Message extends BaseModelAbstract
      * @var array
      */
     protected $casts = [
-        'data' => 'array'
+        'data' => 'array',
+        'via' => 'array',
     ];
 
     /**
@@ -73,92 +96,57 @@ class Message extends BaseModelAbstract
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function from() : BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'from_id');
     }
 
     /**
-     * Swagger definition below...
+     * The thread that this message is in
      *
-     * @SWG\Definition(
-     *     type="object",
-     *     definition="Message",
-     *     @SWG\Property(
-     *         property="id",
-     *         type="integer",
-     *         format="int32",
-     *         description="The primary id of the model",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="created_at",
-     *         type="string",
-     *         format="date-time",
-     *         description="UTC date of the time this was created",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="updated_at",
-     *         type="string",
-     *         format="date-time",
-     *         description="UTC date of the time this was last updated",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="template",
-     *         type="string",
-     *         maxLength=32,
-     *         description="The template for this message",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="email",
-     *         type="string",
-     *         maxLength=120,
-     *         description="The email address that this message was sent to",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="subject",
-     *         type="string",
-     *         maxLength=256,
-     *         description="The subject of the email that was sent",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="data",
-     *         type="object",
-     *         description="A JSON object of the data used to fill the template",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="scheduled_at",
-     *         type="string",
-     *         format="date-time",
-     *         description="UTC date of when this message was put into the queue",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="sent_at",
-     *         type="string",
-     *         format="date-time",
-     *         description="UTC date of when this message was sent to the user",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="user_id",
-     *         type="integer",
-     *         format="int32",
-     *         description="The primary id of the user that this was sent to",
-     *         readOnly=true
-     *     ),
-     *     @SWG\Property(
-     *         property="user",
-     *         description="The users that this was sent to.",
-     *         type="array",
-     *         @SWG\Items(ref="#/definitions/User")
-     *     )
-     * )
+     * @return BelongsTo
      */
+    public function thread() : BelongsTo
+    {
+        return $this->belongsTo(Thread::class);
+    }
+
+    /**
+     * Each message belongs to a user
+     *
+     * @return BelongsTo
+     */
+    public function to() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'to_id');
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'message' => [
+                    'string',
+                ],
+                'seen' => [
+                    'boolean',
+                ]
+            ],
+            static::VALIDATION_RULES_CREATE => [
+                static::VALIDATION_PREPEND_REQUIRED => [
+                    'message',
+                ],
+            ],
+            static::VALIDATION_RULES_UPDATE => [
+                static::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'message',
+                ],
+            ],
+        ];
+    }
 }

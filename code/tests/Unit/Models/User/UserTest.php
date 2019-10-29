@@ -13,6 +13,15 @@ use Tests\TestCase;
  */
 class UserTest extends TestCase
 {
+    public function testAssets()
+    {
+        $user = new User();
+        $relation = $user->assets();
+
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('assets.user_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testBallotCompletions()
     {
         $user = new User();
@@ -48,9 +57,8 @@ class UserTest extends TestCase
         $user = new User();
         $relation = $user->messages();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
-        $this->assertEquals('messages.user_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('messages.to_id', $relation->getQualifiedForeignKeyName());
     }
 
     public function testPaymentMethods()
@@ -60,6 +68,16 @@ class UserTest extends TestCase
 
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
+    }
+
+    public function testResource()
+    {
+        $user = new User();
+        $relation = $user->resource();
+
+        $this->assertEquals('resources.resource_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('resources.resource_type', $relation->getQualifiedMorphType());
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
     }
 
     public function testRoles()
@@ -80,6 +98,17 @@ class UserTest extends TestCase
 
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('subscriptions.subscriber_id', $relation->getQualifiedForeignKeyName());
+    }
+
+    public function testThreads()
+    {
+        $model = new User();
+        $relation = $model->threads();
+
+        $this->assertEquals('thread_user', $relation->getTable());
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('thread_user.user_id', $relation->getQualifiedForeignPivotKeyName());
+        $this->assertEquals('thread_user.thread_id', $relation->getQualifiedRelatedPivotKeyName());
     }
 
     public function testGetJWTIdentifier()

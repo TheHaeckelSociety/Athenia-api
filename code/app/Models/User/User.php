@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Contracts\Models\CanBeIndexedContract;
 use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Asset;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Resource;
 use App\Models\Role;
 use App\Models\Subscription\Subscription;
+use App\Models\Traits\CanBeIndexed;
 use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
@@ -23,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -39,6 +44,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property-read Resource $resource
+ * @property-read Collection|Asset[] $assets
  * @property-read Collection|BallotCompletion[] $ballotCompletions
  * @property-read Collection|Article[] $createdArticles
  * @property-read Collection|Iteration[] $createdIterations
@@ -46,6 +53,16 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read Collection|PaymentMethod[] $paymentMethods
  * @property-read Collection|Role[] $roles
  * @property-read Collection|Subscription[] $subscriptions
+ * @property-read Collection|Thread[] $threads
+ * @property-read int|null $assets_count
+ * @property-read int|null $ballot_completions_count
+ * @property-read int|null $created_articles_count
+ * @property-read int|null $created_iterations_count
+ * @property-read int|null $messages_count
+ * @property-read int|null $payment_methods_count
+ * @property-read int|null $roles_count
+ * @property-read int|null $subscriptions_count
+ * @property-read int|null $threads_count
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
@@ -61,9 +78,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @mixin Eloquent
  */
 class User extends BaseModelAbstract
-    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract
+    implements AuthenticatableContract, JWTSubject,
+            HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract,
+            CanBeIndexedContract
 {
-    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions;
+    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions, CanBeIndexed;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -74,6 +93,16 @@ class User extends BaseModelAbstract
         'deleted_at',
         'password',
     ];
+
+    /**
+     * All assets this user has created
+     *
+     * @return HasMany
+     */
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
+    }
 
     /**
      * The ballot completions the user has done
@@ -112,7 +141,17 @@ class User extends BaseModelAbstract
      */
     public function messages(): HasMany
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class, 'to_id');
+    }
+
+    /**
+     * The resource object for this user
+     *
+     * @return MorphOne
+     */
+    public function resource() : MorphOne
+    {
+        return $this->morphOne(Resource::class, 'resource');
     }
 
     /**
@@ -123,6 +162,16 @@ class User extends BaseModelAbstract
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Any threads this user is apart of
+     *
+     * @return BelongsToMany
+     */
+    public function threads(): BelongsToMany
+    {
+        return $this->belongsToMany(Thread::class);
     }
 
     /**
@@ -157,6 +206,16 @@ class User extends BaseModelAbstract
     public function morphRelationName(): string
     {
         return 'user';
+    }
+
+    /**
+     * Gets the content string to index
+     *
+     * @return string
+     */
+    public function getContentString(): string
+    {
+        return $this->name;
     }
 
     /**

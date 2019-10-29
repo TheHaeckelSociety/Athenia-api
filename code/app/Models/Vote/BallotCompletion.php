@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property-read int|null $votes_count
  * @property-read Ballot $ballot
  * @property-read User $user
  * @property-read Collection|Vote[] $votes

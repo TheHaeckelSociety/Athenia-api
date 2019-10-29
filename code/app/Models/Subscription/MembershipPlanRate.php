@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace App\Models\Subscription;
 
 use App\Models\BaseModelAbstract;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class MembershipPlanRate
@@ -14,22 +18,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $membership_plan_id
  * @property float $cost
  * @property bool $active
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property-read \App\Models\Subscription\MembershipPlan $membershipPlan
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate query()
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereMembershipPlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MembershipPlanRate whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property-read MembershipPlan $membershipPlan
+ * @property-read Collection|Subscription[] $subscriptions
+ * @property-read int|null $subscriptions_count
+ * @method static Builder|MembershipPlanRate newModelQuery()
+ * @method static Builder|MembershipPlanRate newQuery()
+ * @method static Builder|MembershipPlanRate query()
+ * @method static Builder|MembershipPlanRate whereActive($value)
+ * @method static Builder|MembershipPlanRate whereCost($value)
+ * @method static Builder|MembershipPlanRate whereCreatedAt($value)
+ * @method static Builder|MembershipPlanRate whereDeletedAt($value)
+ * @method static Builder|MembershipPlanRate whereId($value)
+ * @method static Builder|MembershipPlanRate whereMembershipPlanId($value)
+ * @method static Builder|MembershipPlanRate whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class MembershipPlanRate extends BaseModelAbstract
 {
