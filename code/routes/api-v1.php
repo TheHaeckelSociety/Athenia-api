@@ -72,6 +72,15 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
         });
 
         /**
+         * Resource Context
+         */
+        Route::resource('resources', 'ResourceController', [
+            'only' => [
+                'index',
+            ],
+        ]);
+
+        /**
          * User Context
          */
         Route::get('users/me', 'UserController@me')
