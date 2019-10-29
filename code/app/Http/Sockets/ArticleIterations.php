@@ -186,8 +186,6 @@ class ArticleIterations extends BaseSocketListener
                 $this->loadedArticles[$updatedModel->id] = $data;
             }
         } catch (\Exception $e) {
-            dd($e);
-
             $from->send($e->getMessage());
             $from->close();
         }
