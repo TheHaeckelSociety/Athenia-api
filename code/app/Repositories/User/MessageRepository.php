@@ -5,6 +5,8 @@ namespace App\Repositories\User;
 
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Models\User\Message;
@@ -17,7 +19,7 @@ use App\Repositories\Traits\NotImplemented as NotImplemented;
  */
 class MessageRepository extends BaseRepositoryAbstract implements MessageRepositoryContract
 {
-    use NotImplemented\FindAll, NotImplemented\Delete, NotImplemented\FindOrFail;
+    use NotImplemented\Delete, NotImplemented\FindOrFail;
 
     /**
      * MessageRepository constructor.
@@ -30,25 +32,88 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     }
 
     /**
+     * Overrides to make sure to use the related model for the to field
+     *
+     * @param array $data
+     * @param User|BaseModelAbstract|null $relatedModel
+     * @param array $forcedValues
+     * @return BaseModelAbstract
+     */
+    public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
+    {
+        if ($relatedModel) {
+            $data['to_id'] = $relatedModel->id;
+        }
+
+        return parent::create($data, null, $forcedValues);
+    }
+
+    /**
      * Sends an email directly to a user
      *
      * @param User $user
      * @param string $subject
      * @param string $template
      * @param array $baseTemplateData
+     * @param null $greeting
      * @return Message|BaseModelAbstract
      */
-    public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = []): Message
+    public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = [], $greeting = null): Message
     {
         return $this->create([
-            'to_id' => $user->id,
             'subject' => $subject,
             'template' => $template,
             'email' => $user->email,
             'data' => array_merge($baseTemplateData, [
-                'greeting' => 'Hello ' . $user->name,
+                'greeting' => $greeting ?? 'Hello ' . $user->first_name,
             ]),
-        ]);
+        ], $user);
+    }
+
+    /**
+     * Find all
+     *
+     * @param array $filters
+     * @param array $searches
+     * @param array $with
+     * @param int|null $limit pass null to get all
+     * @param array $belongsToArray array of models this should belong to
+     * @param int $pageNumber
+     * @return LengthAwarePaginator|Collection
+     */
+    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
+    {
+        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+
+        $query->orderBy('created_at', 'desc');
+
+        if ($limit) {
+            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
+        }
+        return $query->get();
+    }
+
+    /**
+     * Find all
+     *
+     * @param array $filters
+     * @param array $searches
+     * @param array $with
+     * @param int|null $limit pass null to get all
+     * @param array $belongsToArray array of models this should belong to
+     * @param int $pageNumber
+     * @return LengthAwarePaginator|Collection
+     */
+    public function findAllOrderedByOldest(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
+    {
+        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+
+        $query->orderBy('created_at', 'asc');
+
+        if ($limit) {
+            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
+        }
+        return $query->get();
     }
 
     /**

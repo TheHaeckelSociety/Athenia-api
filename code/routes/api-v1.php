@@ -92,6 +92,12 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
             ],
         ]);
         Route::group(['prefix' => 'users/{user}', 'as' => 'user.'], function () {
+            Route::resource('contacts', 'User\ContactController', [
+                'only' => [
+                    'index', 'store', 'update',
+                ],
+            ]);
+
             Route::resource('payment-methods', 'User\PaymentMethodController', [
                 'only' => [
                     'store', 'destroy',
@@ -102,6 +108,20 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                     'store', 'update',
                 ],
             ]);
+
+            Route::resource('threads', 'User\ThreadController', [
+                'only' => [
+                    'index', 'store',
+                ],
+            ]);
+
+            Route::group(['prefix' => 'threads/{thread}', 'as' => 'thread.'], function () {
+                Route::resource('messages', 'User\Thread\MessageController', [
+                    'only' => [
+                        'index', 'store', 'update',
+                    ],
+                ]);
+            });
         });
 
         /**

@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.2.0",
         "barryvdh/laravel-cors": "^0.11.4",
+        "benwilkins/laravel-fcm-notification": "^4.0",
         "cartalyst/stripe-laravel": "^11.0",
         "doctrine/dbal": "^2.9",
         "fico7489/laravel-eloquent-join": "^4.0",

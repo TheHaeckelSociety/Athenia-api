@@ -76,7 +76,11 @@ class Cusco extends Migration
         });
 
         Schema::table('messages', function (Blueprint $table) {
-            $table->renameColumn('user_id', 'to_id');
+
+            $table->string('email', 120)->nullable()->change();
+            $table->string('subject', 256)->nullable()->change();
+            $table->string('template', 32)->nullable()->change();
+            $table->unsignedInteger('user_id')->nullable()->change();
 
             $table->json('via')->nullable();
             $table->string('action', 128)->nullable();
@@ -88,6 +92,8 @@ class Cusco extends Migration
             $table->foreign('thread_id')->references('id')->on('threads');
 
             $table->dateTime('seen_at')->nullable();
+
+            $table->renameColumn('user_id', 'to_id');
         });
 
         Schema::create('resources', function(Blueprint $table) {
