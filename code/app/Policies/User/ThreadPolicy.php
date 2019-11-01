@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policies\User;
 
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
 use App\Models\User\User;
 use App\Policies\BasePolicyAbstract;
 
@@ -13,15 +14,37 @@ use App\Policies\BasePolicyAbstract;
 class ThreadPolicy extends BasePolicyAbstract
 {
     /**
+     * @var ThreadSubjectGateProviderContract
+     */
+    private $provider;
+
+    /**
+     * ThreadPolicy constructor.
+     * @param ThreadSubjectGateProviderContract $provider
+     */
+    public function __construct(ThreadSubjectGateProviderContract $provider)
+    {
+        $this->provider = $provider;
+    }
+
+    /**
      * A user can see all of their threads
      *
      * @param User $loggedInUser
      * @param User $requestedUser
+     * @param string $threadSubject
+     * @param null|int $subjectId
      * @return bool
      */
-    public function all(User $loggedInUser, User $requestedUser)
+    public function all(User $loggedInUser, User $requestedUser, string $threadSubject, $subjectId = null)
     {
-        return $loggedInUser->id == $requestedUser->id;
+        $gate = $this->provider->createGate($threadSubject);
+
+        if ($gate == null) {
+            return false;
+        }
+
+        return $loggedInUser->id == $requestedUser->id && $gate->authorizeSubject($loggedInUser, $subjectId);
     }
 
     /**
@@ -29,25 +52,18 @@ class ThreadPolicy extends BasePolicyAbstract
      *
      * @param User $loggedInUser
      * @param User $requestedUser
-     * @param array $userIds
+     * @param string $threadSubject
+     * @param null $subjectId
      * @return bool
      */
-    public function create(User $loggedInUser, User $requestedUser, array $userIds)
+    public function create(User $loggedInUser, User $requestedUser, string $threadSubject, $subjectId = null)
     {
-        if ($loggedInUser->id != $requestedUser->id) {
+        $gate = $this->provider->createGate($threadSubject);
+
+        if ($gate == null) {
             return false;
         }
 
-        $userCollection = collect($userIds);
-
-        foreach ($requestedUser->threads as $thread) {
-            if ($thread->users->some(function (User $user) use ($userCollection){
-                return $userCollection->contains($user->id);
-            })) {
-                return false;
-            }
-        }
-
-        return true;
+        return $loggedInUser->id == $requestedUser->id && $gate->authorizeSubject($loggedInUser, $subjectId);
     }
 }
