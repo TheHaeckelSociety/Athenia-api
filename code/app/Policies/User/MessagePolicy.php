@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policies\User;
 
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
 use App\Models\User\Message;
 use App\Models\User\Thread;
 use App\Models\User\User;
@@ -15,6 +16,20 @@ use App\Policies\BasePolicyAbstract;
 class MessagePolicy extends BasePolicyAbstract
 {
     /**
+     * @var ThreadSubjectGateProviderContract
+     */
+    private $provider;
+
+    /**
+     * ThreadPolicy constructor.
+     * @param ThreadSubjectGateProviderContract $provider
+     */
+    public function __construct(ThreadSubjectGateProviderContract $provider)
+    {
+        $this->provider = $provider;
+    }
+
+    /**
      * A user can see all of their threads
      *
      * @param User $loggedInUser
@@ -24,7 +39,13 @@ class MessagePolicy extends BasePolicyAbstract
      */
     public function all(User $loggedInUser, User $requestedUser, Thread $thread)
     {
-        return $loggedInUser->id == $requestedUser->id && $thread->users->contains($requestedUser->id);
+        $gate = $this->provider->createGate($thread->subject_type);
+
+        if ($gate == null) {
+            return false;
+        }
+
+        return $loggedInUser->id == $requestedUser->id && $gate->authorizeThread($loggedInUser, $thread);
     }
 
     /**
@@ -37,7 +58,13 @@ class MessagePolicy extends BasePolicyAbstract
      */
     public function create(User $loggedInUser, User $requestedUser, Thread $thread)
     {
-        return $loggedInUser->id == $requestedUser->id && $thread->users->pluck('id')->contains($requestedUser->id);
+        $gate = $this->provider->createGate($thread->subject_type);
+
+        if ($gate == null) {
+            return false;
+        }
+
+        return $loggedInUser->id == $requestedUser->id && $gate->authorizeThread($loggedInUser, $thread);
     }
 
     /**
@@ -51,8 +78,13 @@ class MessagePolicy extends BasePolicyAbstract
      */
     public function update(User $loggedInUser, User $requestedUser, Thread $thread, Message $message)
     {
-        return $loggedInUser->id == $requestedUser->id &&
-            $thread->users->pluck('id')->contains($requestedUser->id) &&
+        $gate = $this->provider->createGate($thread->subject_type);
+
+        if ($gate == null) {
+            return false;
+        }
+
+        return $loggedInUser->id == $requestedUser->id && $gate->authorizeThread($loggedInUser, $thread) &&
             $thread->id == $message->thread_id && $message->to_id == $loggedInUser->id;
     }
 }

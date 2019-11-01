@@ -43,8 +43,13 @@ class IndexRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyParameters(): array
     {
+        $subjectType = $this->input('subject_type', '');
+        $subjectId = $this->input('subject_id', null);
+
         return [
             $this->route('user'),
+            $subjectType,
+            $subjectId,
         ];
     }
 

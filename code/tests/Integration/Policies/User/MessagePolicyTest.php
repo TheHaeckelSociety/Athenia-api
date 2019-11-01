@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Policies\User;
 
+use App\Contracts\ThreadSecurity\ThreadSubjectGateContract;
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
 use App\Models\User\Message;
 use App\Models\User\Thread;
 use App\Models\User\User;
 use App\Policies\User\MessagePolicy;
+use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 
@@ -18,137 +21,247 @@ class MessagePolicyTest extends TestCase
 {
     use DatabaseSetupTrait;
 
-    public function testAllBlocksUserMismatch()
-    {
-        $policy = new MessagePolicy();
+    /**
+     * @var ThreadSubjectGateProviderContract|CustomMockInterface
+     */
+    private $gateProvider;
 
-        $thread = factory(Thread::class)->create();
+    /**
+     * @var MessagePolicy
+     */
+    private $policy;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setupDatabase();
+        $this->gateProvider = mock(ThreadSubjectGateProviderContract::class);
+        $this->policy = new MessagePolicy($this->gateProvider);
+    }
+
+    public function testAllBlocksWhenGateNotFound()
+    {
         $loggedInUser = factory(User::class)->create();
         $requestedUser = factory(User::class)->create();
 
-        $this->assertFalse($policy->all($loggedInUser, $requestedUser, $thread));
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
+
+        $this->assertFalse($this->policy->all($loggedInUser, $requestedUser, $thread));
     }
 
-    public function testAllBlocksNotInThread()
+    public function testAllBlockWhenAccessingAnotherUser()
     {
-        $policy = new MessagePolicy();
+        $loggedInUser = factory(User::class)->create();
+        $requestedUser = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
 
-        $this->assertFalse($policy->all($user, $user, $thread));
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+
+        $this->assertFalse($this->policy->all($loggedInUser, $requestedUser, $thread));
+    }
+
+    public function testAllBlockWhenGateFails()
+    {
+        $loggedInUser = factory(User::class)->create();
+
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
+
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($loggedInUser, $thread)->andReturnFalse();
+
+        $this->assertFalse($this->policy->all($loggedInUser, $loggedInUser, $thread));
     }
 
     public function testAllPasses()
     {
-        $policy = new MessagePolicy();
+        $loggedInUser = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
 
-        $thread->users()->sync([$user->id]);
+        $gate = mock(ThreadSubjectGateContract::class);
 
-        $this->assertTrue($policy->all($user, $user, $thread));
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($loggedInUser, $thread)->andReturnTrue();
+
+        $this->assertTrue($this->policy->all($loggedInUser, $loggedInUser, $thread));
     }
 
-    public function testCreateBlocksUserMismatch()
+    public function testCreateBlocksWhenGateNotFound()
     {
-        $policy = new MessagePolicy();
-
-        $thread = factory(Thread::class)->create();
         $loggedInUser = factory(User::class)->create();
         $requestedUser = factory(User::class)->create();
 
-        $this->assertFalse($policy->create($loggedInUser, $requestedUser, $thread));
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
+
+        $this->assertFalse($this->policy->create($loggedInUser, $requestedUser, $thread));
     }
 
-    public function testCreateBlocksNotInThread()
+    public function testCreateBlockWhenAccessingAnotherUser()
     {
-        $policy = new MessagePolicy();
+        $loggedInUser = factory(User::class)->create();
+        $requestedUser = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
 
-        $this->assertFalse($policy->create($user, $user, $thread));
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+
+        $this->assertFalse($this->policy->create($loggedInUser, $requestedUser, $thread));
+    }
+
+    public function testCreateBlockWhenGateFails()
+    {
+        $loggedInUser = factory(User::class)->create();
+
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
+
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($loggedInUser, $thread)->andReturnFalse();
+
+        $this->assertFalse($this->policy->create($loggedInUser, $loggedInUser, $thread));
     }
 
     public function testCreatePasses()
     {
-        $policy = new MessagePolicy();
+        $loggedInUser = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
 
-        $thread->users()->sync([$user->id]);
+        $gate = mock(ThreadSubjectGateContract::class);
 
-        $this->assertTrue($policy->create($user, $user, $thread));
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($loggedInUser, $thread)->andReturnTrue();
+
+        $this->assertTrue($this->policy->create($loggedInUser, $loggedInUser, $thread));
+    }
+
+    public function testUpdateBlocksWhenGateNotFound()
+    {
+        $loggedInUser = factory(User::class)->create();
+        $requestedUser = factory(User::class)->create();
+
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
+        $message = factory(Message::class)->create();
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
+
+        $this->assertFalse($this->policy->update($loggedInUser, $requestedUser, $thread, $message));
     }
 
     public function testUpdateBlocksUserMismatch()
     {
-        $policy = new MessagePolicy();
-
-        $thread = factory(Thread::class)->create();
         $loggedInUser = factory(User::class)->create();
         $requestedUser = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
         $message = factory(Message::class)->create();
 
-        $this->assertFalse($policy->update($loggedInUser, $requestedUser, $thread, $message));
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+
+        $this->assertFalse($this->policy->update($loggedInUser, $requestedUser, $thread, $message));
     }
 
-    public function testUpdateBlocksUserNotInThread()
+    public function testUpdateBlockWhenGateFails()
     {
-        $policy = new MessagePolicy();
+        $loggedInUser = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
         $message = factory(Message::class)->create();
 
-        $this->assertFalse($policy->update($user, $user, $thread, $message));
+        $gate = mock(ThreadSubjectGateContract::class);
+
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($loggedInUser, $thread)->andReturnFalse();
+
+        $this->assertFalse($this->policy->update($loggedInUser, $loggedInUser, $thread, $message));
     }
 
     public function testUpdateBlocksMessageNotInThread()
     {
-        $policy = new MessagePolicy();
-
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
         $user = factory(User::class)->create();
         $message = factory(Message::class)->create();
 
-        $thread->users()->sync([$user->id]);
+        $gate = mock(ThreadSubjectGateContract::class);
 
-        $this->assertFalse($policy->update($user, $user, $thread, $message));
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($user, $thread)->andReturnTrue();
+
+        $this->assertFalse($this->policy->update($user, $user, $thread, $message));
     }
 
     public function testUpdateBlocksUserNotSentMessage()
     {
-        $policy = new MessagePolicy();
-
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
         $user = factory(User::class)->create();
         $message = factory(Message::class)->create([
             'thread_id' => $thread->id,
             'to_id' => factory(User::class)->create()->id,
         ]);
 
-        $thread->users()->sync([$user->id]);
+        $gate = mock(ThreadSubjectGateContract::class);
 
-        $this->assertFalse($policy->update($user, $user, $thread, $message));
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($user, $thread)->andReturnTrue();
+
+        $this->assertFalse($this->policy->update($user, $user, $thread, $message));
     }
 
     public function testUpdatePasses()
     {
-        $policy = new MessagePolicy();
-
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'a_type',
+        ]);
         $user = factory(User::class)->create();
         $message = factory(Message::class)->create([
             'thread_id' => $thread->id,
             'to_id' => $user->id,
         ]);
 
-        $thread->users()->sync([$user->id]);
+        $gate = mock(ThreadSubjectGateContract::class);
 
-        $this->assertTrue($policy->update($user, $user, $thread, $message));
+        $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturn($gate);
+        $gate->shouldReceive('authorizeThread')->once()->with($user, $thread)->andReturnTrue();
+
+        $this->assertTrue($this->policy->update($user, $user, $thread, $message));
     }
 }

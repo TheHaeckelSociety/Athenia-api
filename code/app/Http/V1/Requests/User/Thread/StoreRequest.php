@@ -43,12 +43,13 @@ class StoreRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyParameters(): array
     {
-        $users = $this->input('users', []);
-        $users = is_array($users) ? $users : [];
+        $subjectType = $this->input('subject_type', '');
+        $subjectId = $this->input('subject_id', null);
 
         return [
             $this->route('user'),
-            $users,
+            $subjectType,
+            $subjectId,
         ];
     }
 
