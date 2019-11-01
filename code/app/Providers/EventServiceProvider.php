@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
 use App\Events\Payment\PaymentReversedEvent;
+use App\Events\User\Contact\ContactCreatedEvent;
 use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
 use App\Events\User\UserMergeEvent;
@@ -35,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        ContactCreatedEvent::class => [
+
+        ],
         ForgotPasswordEvent::class => [
             ForgotPasswordListener::class,
         ],

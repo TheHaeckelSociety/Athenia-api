@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Providers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
 use App\Models\User\User;
 use App\Policies\User\UserPolicy;
 use Illuminate\Auth\AuthManager;
@@ -53,6 +54,7 @@ class AuthServiceProviderTest extends TestCase
         }));
 
         $app->shouldReceive('make')->once()->with('auth')->andReturn($auth);
+        $app->shouldReceive('bind')->once();
 
         $provider = new AuthServiceProvider($app);
 
