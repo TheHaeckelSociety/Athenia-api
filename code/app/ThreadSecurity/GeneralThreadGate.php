@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Gate;
+namespace App\ThreadSecurity;
 
-use App\Contracts\Gate\ThreadSubjectGateContract;
+use App\Contracts\ThreadSecurity\ThreadSubjectGateContract;
 use App\Models\User\Thread;
 use App\Models\User\User;
 
 /**
- * Class PrivateThreadGate
- * @package App\Gate
+ * Class GeneralThreadGate
+ * @package App\ThreadSecurity
  */
-class PrivateThreadGate implements ThreadSubjectGateContract
+class GeneralThreadGate implements ThreadSubjectGateContract
 {
     /**
      * Authorizes the passed in user to make sure that they can access the thread subject
@@ -35,6 +35,6 @@ class PrivateThreadGate implements ThreadSubjectGateContract
      */
     public function authorizeThread(User $user, Thread $thread): bool
     {
-        return $thread->users->pluck('id')->contains($user->id);
+        return true;
     }
 }

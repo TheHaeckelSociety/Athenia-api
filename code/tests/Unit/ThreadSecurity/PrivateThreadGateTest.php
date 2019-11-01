@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Gate;
+namespace Tests\Unit\ThreadSecurity;
 
-use App\Gate\PrivateThreadGate;
 use App\Models\User\Thread;
 use App\Models\User\User;
+use App\ThreadSecurity\PrivateThreadGate;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
  * Class PrivateThreadGateTest
- * @package Tests\Unit\Gate
+ * @package Tests\Unit\ThreadSecurity
  */
 class PrivateThreadGateTest extends TestCase
 {

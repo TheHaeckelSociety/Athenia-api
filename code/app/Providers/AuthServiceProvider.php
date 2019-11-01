@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
 use App\Gate\GeneralThreadGate;
 use App\Services\UserAuthenticationService;
+use App\ThreadSecurity\ThreadSubjectGateProvider;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -38,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        $this->app->bind(ThreadSubjectGateProviderContract::class, function() {
+            return new ThreadSubjectGateProvider($this->app);
+        });
+
         /** @var AuthManager $auth */
         $auth = $this->app->make('auth');
 
@@ -63,18 +69,5 @@ class AuthServiceProvider extends ServiceProvider
     public function guessPolicyName(string $modelClass): string
     {
         return str_replace('Models', 'Policies', $modelClass) . 'Policy';
-    }
-
-    /**
-     * Registers any thread subject gates needed
-     */
-    public function registerThreadSubjectGates()
-    {
-        $this->app->bind('thread_gate.general', function() {
-            return new GeneralThreadGate();
-        });
-        $this->app->bind('thread_gate.private', function() {
-            return new GeneralThreadGate();
-        });
     }
 }

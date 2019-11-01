@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Contracts\Gate;
+namespace App\Contracts\ThreadSecurity;
 
 use App\Models\User\Thread;
 use App\Models\User\User;
 
 /**
  * Interface ThreadSubjectGateContract
- * @package App\Contracts\Gate
+ * @package App\Contracts\ThreadSecurity
  */
 interface ThreadSubjectGateContract
 {

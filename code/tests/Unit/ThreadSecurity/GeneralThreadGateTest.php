@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Gate;
+namespace Tests\Unit\ThreadSecurity;
 
-use App\Gate\GeneralThreadGate;
 use App\Models\User\Thread;
 use App\Models\User\User;
+use App\ThreadSecurity\GeneralThreadGate;
 use Tests\TestCase;
 
 /**
  * Class GeneralThreadGateTest
- * @package Tests\Unit\Gate
+ * @package Tests\Unit\ThreadSecurity
  */
 class GeneralThreadGateTest extends TestCase
 {
