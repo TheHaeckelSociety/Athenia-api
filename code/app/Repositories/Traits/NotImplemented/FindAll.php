@@ -19,9 +19,10 @@ trait FindAll
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray
+     * @param int $page
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|void
      */
-    public function findAll(array $filter = [], array $search = [], array $with = [], int $limit = 10, array $belongsToArray = [])
+    public function findAll(array $filter = [], array $search = [], array $with = [], int $limit = 10, array $belongsToArray = [], int $page = 1)
     {
         throw new NotImplementedException();
     }

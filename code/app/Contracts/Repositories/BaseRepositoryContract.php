@@ -30,9 +30,10 @@ interface BaseRepositoryContract
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray array of models this should belong to
+     * @param int $page
      * @return LengthAwarePaginator
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = []);
+    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = [], int $page = 1);
 
     /**
      * Save a new instance of this model, and then return the instance
