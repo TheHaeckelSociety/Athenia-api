@@ -57,6 +57,7 @@ class UserThreadCreateTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('POST', $this->path, [
+            'subject_type' => 'private_message',
             'users' => [$user->id],
         ]);
 
@@ -70,26 +71,12 @@ class UserThreadCreateTest extends TestCase
         $this->assertTrue($thread->users->contains($user->id));
     }
 
-    public function testCreateMissingRequiredFields()
-    {
-        $this->actingAs($this->user);
-
-        $response = $this->json('POST', $this->path);
-
-        $response->assertStatus(400);
-
-        $response->assertJson([
-            'errors' => [
-                'users' => ['The users field is required.']
-            ],
-        ]);
-    }
-
     public function testCreateInvalidArrayFields()
     {
         $this->actingAs($this->user);
 
         $response = $this->json('POST', $this->path, [
+            'subject_type' => 'private_message',
             'users' => 'hi',
         ]);
 
@@ -107,6 +94,8 @@ class UserThreadCreateTest extends TestCase
         $this->actingAs($this->user);
 
         $response = $this->json('POST', $this->path, [
+            'subject_type' => 'private_message',
+            'subject_id' => 'hi',
             'users' => ['hi'],
         ]);
 
@@ -114,6 +103,7 @@ class UserThreadCreateTest extends TestCase
 
         $response->assertJson([
             'errors' => [
+                'subject_id' => ['The subject id must be an integer.'],
                 'users.0' => ['The users.0 must be an integer.'],
             ],
         ]);
@@ -124,6 +114,7 @@ class UserThreadCreateTest extends TestCase
         $this->actingAs($this->user);
 
         $response = $this->json('POST', $this->path, [
+            'subject_type' => 'private_message',
             'users' => [546],
         ]);
 

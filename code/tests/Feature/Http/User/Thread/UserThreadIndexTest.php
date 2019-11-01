@@ -63,7 +63,7 @@ class UserThreadIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        $response = $this->json('GET', $this->path. $this->actingAs->id . '/threads');
+        $response = $this->json('GET', $this->path. $this->actingAs->id . '/threads?subject_type=private_message');
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -76,8 +76,12 @@ class UserThreadIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Thread::class, 5)->create();
-        $threads = factory(Thread::class, 15)->create();
+        factory(Thread::class, 5)->create([
+            'subject_type' => 'private_message'
+        ]);
+        $threads = factory(Thread::class, 15)->create([
+            'subject_type' => 'private_message'
+        ]);
 
         /** @var Thread $thread */
         foreach ($threads as $thread) {
@@ -88,7 +92,7 @@ class UserThreadIndexTest extends TestCase
         }
 
         // first page
-        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads');
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?subject_type=private_message');
         $response->assertStatus(200);
         $response->assertJson([
             'total' => 15,
@@ -106,7 +110,7 @@ class UserThreadIndexTest extends TestCase
         $this->assertNotNull($response->original[0]['last_message']);
 
         // second page
-        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?page=2');
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?page=2&subject_type=private_message');
         $response->assertStatus(200);
         $response->assertJson([
             'total' =>  15,
@@ -123,7 +127,7 @@ class UserThreadIndexTest extends TestCase
             ]);
 
         // page with limit
-        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?page=2&limit=5');
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?page=2&limit=5&subject_type=private_message');
         $response->assertStatus(200);
         $response->assertJson([
             'total' =>  15,
@@ -144,8 +148,12 @@ class UserThreadIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Thread::class, 5)->create();
-        $threads = factory(Thread::class, 15)->create();
+        factory(Thread::class, 5)->create([
+            'subject_type' => 'private_message'
+        ]);
+        $threads = factory(Thread::class, 15)->create([
+            'subject_type' => 'private_message'
+        ]);
 
         /** @var Thread $thread */
         foreach ($threads as $thread) {
@@ -156,7 +164,7 @@ class UserThreadIndexTest extends TestCase
         }
 
         // first page
-        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?expand[users]=*');
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads?expand[users]=*&subject_type=private_message');
         $response->assertStatus(200);
         $response->assertJson([
             'total' => 15,

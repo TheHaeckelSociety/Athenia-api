@@ -95,13 +95,33 @@ class Thread extends BaseModelAbstract implements HasPolicyContract, HasValidati
     {
         return [
             static::VALIDATION_RULES_BASE => [
+                'subject_type' => [
+                    'bail',
+                    'string',
+                ],
+                'subject_id' => [
+                    'int',
+                ],
                 'users' => [
-                    'required',
                     'array',
                 ],
                 'users.*' => [
                     'integer',
                     Rule::exists('users', 'id'),
+                ],
+            ],
+            static::VALIDATION_RULES_CREATE => [
+                static::VALIDATION_PREPEND_REQUIRED => [
+                    'subject_type',
+                ],
+            ],
+            static::VALIDATION_RULES_UPDATE => [
+                static::VALIDATION_PREPEND_REQUIRED => [
+                    'users',
+                ],
+                static::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'subject_type',
+                    'subject_id',
                 ],
             ],
         ];

@@ -34,7 +34,9 @@ class UserThreadMessageIndexTest extends TestCase
     public function testNotLoggedInUserBlocked()
     {
         $user = factory(User::class)->create();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $response = $this->json('GET', $this->path . $user->id . '/threads/' . $thread->id . '/messages');
 
@@ -45,7 +47,9 @@ class UserThreadMessageIndexTest extends TestCase
     {
         $this->actAsUser();
         $user = factory(User::class)->create();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $response = $this->json('GET', $this->path . $user->id . '/threads/' . $thread->id . '/messages');
 
@@ -55,7 +59,9 @@ class UserThreadMessageIndexTest extends TestCase
     public function testUserNotPartOfThreadBlocked()
     {
         $this->actAsUser();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads/' . $thread->id . '/messages');
 
@@ -74,7 +80,9 @@ class UserThreadMessageIndexTest extends TestCase
     public function testGetPaginationEmpty()
     {
         $this->actAsUser();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $thread->users()->sync([$this->actingAs->id]);
 
@@ -90,7 +98,9 @@ class UserThreadMessageIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAsUser();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $thread->users()->sync([$this->actingAs->id]);
 
@@ -154,7 +164,9 @@ class UserThreadMessageIndexTest extends TestCase
     public function testGetPaginationWithProperOrder()
     {
         $this->actAsUser();
-        $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create([
+            'subject_type' => 'private_message',
+        ]);
 
         $thread->users()->sync([$this->actingAs->id]);
 
