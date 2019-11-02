@@ -18,6 +18,7 @@ use Illuminate\Validation\Rule;
  *
  * @package App\Models
  * @property int $id
+ * @property int|null $user_id
  * @property string $url
  * @property string|null $name
  * @property string|null $caption
@@ -35,6 +36,7 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Asset whereName($value)
  * @method static Builder|Asset whereUpdatedAt($value)
  * @method static Builder|Asset whereUrl($value)
+ * @method static Builder|Asset whereUserId($value)
  * @mixin Eloquent
  */
 class Asset extends BaseModelAbstract implements HasValidationRulesContract
