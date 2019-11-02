@@ -93,11 +93,11 @@ class IterationController extends BaseControllerAbstract
      *     }
      * )
      *
-     * @param Requests\Article\IndexRequest $request
+     * @param Requests\Article\Iteration\IndexRequest $request
      * @param Article $article
      * @return LengthAwarePaginator
      */
-    public function index(Requests\Article\IndexRequest $request, Article $article)
+    public function index(Requests\Article\Iteration\IndexRequest $request, Article $article)
     {
         return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$article], (int)$request->input('page', 1));
     }

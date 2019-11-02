@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
 use App\Events\Payment\PaymentReversedEvent;
@@ -36,6 +37,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        ArticleVersionCreatedEvent::class => [
+
+        ],
         ContactCreatedEvent::class => [
 
         ],

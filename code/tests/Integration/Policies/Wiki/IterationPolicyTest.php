@@ -25,7 +25,7 @@ class IterationPolicyTest extends TestCase
         foreach ([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER] as $role) {
             $user = $this->getUserOfRole($role);
 
-            $this->assertTrue($policy->all($user, new Article()));
+            $this->assertTrue($policy->all($user));
         }
     }
 
@@ -36,7 +36,7 @@ class IterationPolicyTest extends TestCase
         foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER]) as $role) {
             $user = $this->getUserOfRole($role);
 
-            $this->assertFalse($policy->all($user, new Article()));
+            $this->assertFalse($policy->all($user));
         }
     }
 }

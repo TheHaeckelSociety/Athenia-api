@@ -8,6 +8,7 @@ use App\Models\User\User;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Wiki\IterationRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -47,10 +48,19 @@ class IterationRepositoryTest extends TestCase
         $this->repository->update(new Iteration(), []);
     }
 
-    public function testFindOrFailThrowsException()
+    public function testFindOrFailSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        $model = factory(Iteration::class)->create();
 
+        $foundModel = $this->repository->findOrFail($model->id);
+        $this->assertEquals($model->id, $foundModel->id);
+    }
+
+    public function testFindOrFailFails()
+    {
+        factory(Iteration::class)->create(['id' => 2]);
+
+        $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
     }
 

@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace App\Models\Wiki;
 
+use App\Contracts\Models\HasValidationRulesContract;
+use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Models\BaseModelAbstract;
+use App\Models\Traits\HasValidationRules;
+use App\Validators\ArticleVersion\SelectedIterationBelongsToArticleValidator;
 use Eloquent;
 use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 /**
  * Class ArticleVersion
@@ -35,8 +40,19 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ArticleVersion whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class ArticleVersion extends BaseModelAbstract
+class ArticleVersion extends BaseModelAbstract implements HasValidationRulesContract
 {
+    use HasValidationRules;
+
+    /**
+     * Array of events that need to be dispatched
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => ArticleVersionCreatedEvent::class
+    ];
+
     /**
      * The article this version is for
      *
@@ -55,5 +71,25 @@ class ArticleVersion extends BaseModelAbstract
     public function iteration(): BelongsTo
     {
         return $this->belongsTo(Iteration::class);
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'iteration_id' => [
+                    'bail',
+                    'required',
+                    'int',
+                    Rule::exists('iterations', 'id'),
+                    SelectedIterationBelongsToArticleValidator::KEY,
+                ],
+            ],
+        ];
     }
 }

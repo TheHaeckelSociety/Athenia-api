@@ -69,6 +69,12 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                     'index',
                 ],
             ]);
+
+            Route::resource('versions', 'Article\ArticleVersionController', [
+                'only' => [
+                    'index', 'store',
+                ],
+            ]);
         });
 
         /**
@@ -97,6 +103,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                     'index', 'store', 'update', 'destroy',
                 ],
             ]);
+
             Route::resource('contacts', 'User\ContactController', [
                 'only' => [
                     'index', 'store', 'update',
