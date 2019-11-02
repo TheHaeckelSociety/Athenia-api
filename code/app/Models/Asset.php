@@ -68,7 +68,16 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
         return [
             self::VALIDATION_RULES_BASE => [
                 'file_contents' => [
-                    'required',
+                    'string',
+                ],
+
+                'name' => [
+                    'nullable',
+                    'string',
+                ],
+
+                'caption' => [
+                    'nullable',
                     'string',
                 ],
 
@@ -81,6 +90,16 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
                     ]),
                 ],
             ],
+            self::VALIDATION_RULES_CREATE => [
+                self::VALIDATION_PREPEND_REQUIRED => [
+                    'file_contents',
+                ],
+            ],
+            self::VALIDATION_RULES_UPDATE => [
+                self::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'file_contents',
+                ],
+            ]
         ];
     }
 }

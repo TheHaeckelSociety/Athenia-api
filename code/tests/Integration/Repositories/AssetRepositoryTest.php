@@ -38,11 +38,17 @@ class AssetRepositoryTest extends TestCase
         );
     }
 
-    public function testFindAllFails()
+    public function testFindAllSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        factory(Asset::class, 5)->create();
+        $items = $this->repository->findAll();
+        $this->assertCount(5, $items);
+    }
 
-        $this->repository->findAll();
+    public function testFindAllEmpty()
+    {
+        $items = $this->repository->findAll();
+        $this->assertEmpty($items);
     }
 
     public function testFindOrFailSuccess()

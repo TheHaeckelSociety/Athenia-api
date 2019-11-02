@@ -92,6 +92,11 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
             ],
         ]);
         Route::group(['prefix' => 'users/{user}', 'as' => 'user.'], function () {
+            Route::resource('assets', 'User\AssetController', [
+                'only' => [
+                    'index', 'store', 'update', 'destroy',
+                ],
+            ]);
             Route::resource('contacts', 'User\ContactController', [
                 'only' => [
                     'index', 'store', 'update',

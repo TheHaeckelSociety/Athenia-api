@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface as LogContract;
  */
 class AssetRepository extends BaseRepositoryAbstract implements AssetRepositoryContract
 {
-    use NotImplemented\FindAll, NotImplemented\FindOrFail, CanGetAndUnset;
+    use NotImplemented\FindOrFail, CanGetAndUnset;
 
     /**
      * @var Filesystem
