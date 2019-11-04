@@ -60,6 +60,8 @@ class UserViewTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertJson($this->user->toArray());
+        $data = $this->user->toArray();
+        unset($data['resource']);
+        $response->assertJson($data);
     }
 }
