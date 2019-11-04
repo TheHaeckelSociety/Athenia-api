@@ -128,14 +128,20 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      * @param array $filters
      * @param array $searches
      * @param array $with
-     * @param int $limit
+     * @param int|null $limit pass null to get all
      * @param array $belongsToArray array of models this should belong to
      * @param int $page
-     * @return LengthAwarePaginator
+     * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], int $limit = 10, array $belongsToArray = [], int $page = 1)
+    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1)
     {
-        return $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray)->paginate($limit)->appends($page);
+        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+
+        if ($limit) {
+            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $page);
+        }
+
+        return $query->get();
     }
 
     /**
