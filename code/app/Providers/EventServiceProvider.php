@@ -14,6 +14,7 @@ use App\Events\User\UserMergeEvent;
 use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
+use App\Listeners\User\Contact\ContactCreatedListener;
 use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
 use App\Listeners\User\UserMerge\UserBallotCompletionsMergeListener;
@@ -43,7 +44,7 @@ class EventServiceProvider extends ServiceProvider
 
         ],
         ContactCreatedEvent::class => [
-
+            ContactCreatedListener::class,
         ],
         ForgotPasswordEvent::class => [
             ForgotPasswordListener::class,
