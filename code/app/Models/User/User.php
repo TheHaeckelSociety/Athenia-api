@@ -213,7 +213,7 @@ class User extends BaseModelAbstract
      *
      * @return string
      */
-    public function getContentString(): string
+    public function getContentString(): ?string
     {
         return $this->name;
     }

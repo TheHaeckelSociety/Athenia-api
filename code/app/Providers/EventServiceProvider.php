@@ -23,6 +23,8 @@ use App\Listeners\User\UserMerge\UserMessagesMergeListener;
 use App\Listeners\User\UserMerge\UserPropertiesMergeListener;
 use App\Listeners\User\UserMerge\UserSubscriptionsMergeListener;
 use App\Listeners\Vote\VoteCreatedListener;
+use App\Models\User\User;
+use App\Observers\IndexableModelObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -82,5 +84,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        User::observe(IndexableModelObserver::class);
     }
 }

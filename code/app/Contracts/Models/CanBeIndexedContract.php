@@ -19,7 +19,7 @@ interface CanBeIndexedContract extends CanBeMorphedTo
      *
      * @return string
      */
-    public function getContentString(): string;
+    public function getContentString(): ?string;
 
     /**
      * The resource object for this indexable model

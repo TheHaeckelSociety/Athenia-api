@@ -44,11 +44,17 @@ class UserRepositoryTest extends TestCase
         );
     }
 
-    public function testFindAllThrowsException()
+    public function testFindAllSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        factory(User::class, 5)->create();
+        $items = $this->repository->findAll();
+        $this->assertCount(5, $items);
+    }
 
-        $this->repository->findAll();
+    public function testFindAllEmpty()
+    {
+        $items = $this->repository->findAll();
+        $this->assertEmpty($items);
     }
 
     public function testFindOrFailSuccess()
