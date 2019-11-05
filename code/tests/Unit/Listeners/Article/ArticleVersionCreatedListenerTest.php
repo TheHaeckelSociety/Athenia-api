@@ -8,6 +8,7 @@ use App\Contracts\Services\ArticleVersionCalculationServiceContract;
 use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Listeners\Article\ArticleVersionCreatedListener;
 use App\Models\Wiki\ArticleVersion;
+use App\Models\Wiki\Iteration;
 use Tests\CustomMockInterface;
 use Tests\TestCase;
 
@@ -45,8 +46,15 @@ class ArticleVersionCreatedListenerTest extends TestCase
     {
         $oldVersion = new ArticleVersion([
             'name' => '12.45.23',
+            'iteration' => new Iteration([
+                'content' => 'Some Content',
+            ]),
         ]);
-        $newVersion = new ArticleVersion();
+        $newVersion = new ArticleVersion([
+            'iteration' => new Iteration([
+                'content' => 'Some new Content',
+            ]),
+        ]);
 
         $event = new ArticleVersionCreatedEvent($newVersion, $oldVersion);
         $this->calculationService->shouldReceive('determineIfMajor')->andReturnTrue();
@@ -59,8 +67,15 @@ class ArticleVersionCreatedListenerTest extends TestCase
     {
         $oldVersion = new ArticleVersion([
             'name' => '12.45.23',
+            'iteration' => new Iteration([
+                'content' => 'Some Content',
+            ]),
         ]);
-        $newVersion = new ArticleVersion();
+        $newVersion = new ArticleVersion([
+            'iteration' => new Iteration([
+                'content' => 'Some new Content',
+            ]),
+        ]);
 
         $event = new ArticleVersionCreatedEvent($newVersion, $oldVersion);
         $this->calculationService->shouldReceive('determineIfMajor')->andReturnFalse();
@@ -74,8 +89,15 @@ class ArticleVersionCreatedListenerTest extends TestCase
     {
         $oldVersion = new ArticleVersion([
             'name' => '12.45.23',
+            'iteration' => new Iteration([
+                'content' => 'Some Content',
+            ]),
         ]);
-        $newVersion = new ArticleVersion();
+        $newVersion = new ArticleVersion([
+            'iteration' => new Iteration([
+                'content' => 'Some new Content',
+            ]),
+        ]);
 
         $event = new ArticleVersionCreatedEvent($newVersion, $oldVersion);
         $this->calculationService->shouldReceive('determineIfMajor')->andReturnFalse();
