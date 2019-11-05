@@ -2,16 +2,270 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
-## 0.19.0
+## 0.19.0 - Cusco Spec
 
 This version starts off with an upgrade from laravel 5.8 to laravel 6. Follow the following instructions in order to complete this part of the update.
 
 1) Update the composer json core dependencies to the ones found in this project
 2) Add the new ignore found in .gitignore
-3) Copy over code/app/Repositories/BaseRepositoryAbstract.php in order to fix a broken dependency
-4) Copy over code/tests/Unit/Exceptions/HandlerTest.php in order to fix some phpunit deprecation warnings
-5) Copy over code/tests/Unit/Http/Sockets/ArticleIterationsTest.php in order to fix some phpunit deprecation warnings
-6) Copy over code/tests/Unit/Models/Wiki/ArticleTest.php in order to fix some phpunit deprecation warnings
+3) Copy over code/tests/Unit/Exceptions/HandlerTest.php in order to fix some phpunit deprecation warnings
+4) Copy over code/tests/Unit/Http/Sockets/ArticleIterationsTest.php in order to fix some phpunit deprecation warnings
+5) Copy over code/tests/Unit/Models/Wiki/ArticleTest.php in order to fix some phpunit deprecation warnings
+6) The Vagrantfile has also been updated, but you may not want to copy that
+
+### New Files
+
+Then we have a whole pile of changes made for the Cusco spec. To start this process copy over the following new files.
+
+### Console
+
+* code/app/Console/Commands/ReindexResources.php
+
+### Contracts
+
+* code/app/Contracts/Models/CanBeIndexedContract.php
+* code/app/Contracts/Repositories/AssetRepositoryContract.php
+* code/app/Contracts/Repositories/ResourceRepositoryContract.php
+* code/app/Contracts/Repositories/User/ContactRepositoryContract.php
+* code/app/Contracts/Repositories/User/ThreadRepositoryContract.php
+* code/app/Contracts/Repositories/Wiki/ArticleVersionRepositoryContract.php
+* code/app/Contracts/Services/ArticleVersionCalculationServiceContract.php
+* code/app/Contracts/ThreadSecurity/ThreadSubjectGateContract.php 
+* code/app/Contracts/ThreadSecurity/ThreadSubjectGateProviderContract.php
+
+### Events
+
+* code/app/Events/Article/ArticleVersionCreatedEvent.php
+* code/app/Events/User/Contact/ContactCreatedEvent.php
+
+### HTTP
+
+* code/app/Http/V1/Controllers/Article/ArticleVersionController.php
+* code/app/Http/V1/Controllers/ResourceController.php
+* code/app/Http/V1/Controllers/User/AssetController.php
+* code/app/Http/V1/Controllers/User/ContactController.php
+* code/app/Http/V1/Controllers/User/Thread/MessageController.php
+* code/app/Http/V1/Controllers/User/ThreadController.php
+* code/app/Http/V1/Requests/Article/ArticleVersion/
+* code/app/Http/V1/Requests/BaseAssetUploadRequestAbstract.php
+* code/app/Http/V1/Requests/Resource/
+* code/app/Http/V1/Requests/User/Asset/
+* code/app/Http/V1/Requests/User/Contact/
+* code/app/Http/V1/Requests/User/Thread/
+
+### Listeners
+
+* code/app/Listeners/Article/ArticleVersionCreatedListener.php 
+* code/app/Listeners/User/Contact/ContactCreatedListener.php
+
+### Models
+
+* code/app/Models/Asset.php
+* code/app/Models/Resource.php 
+* code/app/Models/Traits/CanBeIndexed.php
+* code/app/Models/User/Contact.php
+* code/app/Models/User/Thread.php
+* code/app/Models/Wiki/ArticleVersion.php
+
+### Observers
+
+* code/app/Observers/IndexableModelObserver.php
+
+### Policies
+
+* code/app/Policies/AssetPolicy.php
+* code/app/Policies/ResourcePolicy.php
+* code/app/Policies/User/ContactPolicy.php
+* code/app/Policies/User/MessagePolicy.php
+* code/app/Policies/User/ThreadPolicy.php
+* code/app/Policies/Wiki/ArticleVersionPolicy.php
+
+### Repositories
+
+* code/app/Repositories/AssetRepository.php
+* code/app/Repositories/ResourceRepository.php
+* code/app/Repositories/User/ContactRepository.php
+* code/app/Repositories/User/ThreadRepository.php
+* code/app/Repositories/Wiki/ArticleVersionRepository.php
+
+### Services
+
+* code/app/Services/ArticleVersionCalculationService.php
+
+### Security
+
+* code/app/ThreadSecurity/
+* code/app/Validators/ArticleVersion/SelectedIterationBelongsToArticleValidator.php
+
+### database
+
+* code/database/factories/AssetFactory.php 
+* code/database/factories/ResourceFactory.php
+* code/database/migrations/2019_10_29_154335_cusco.php
+
+### Feature Tests
+
+* code/tests/Feature/Http/Article/ArticleVersion/
+* code/tests/Feature/Http/User/Asset/
+* code/tests/Feature/Http/User/Contact/
+* code/tests/Feature/Http/User/Thread/
+
+### Integration Tests
+
+* code/tests/Integration/Console/Commands/ReindexResourcesTest.php
+* code/tests/Integration/Models/ResourceTest.php
+* code/tests/Integration/Models/User/ThreadTest.php
+* code/tests/Integration/Policies/AssetPolicyTest.php
+* code/tests/Integration/Policies/ResourcePolicyTest.php 
+* code/tests/Integration/Policies/User/ContactPolicyTest.php
+* code/tests/Integration/Policies/User/MessagePolicyTest.php
+* code/tests/Integration/Policies/User/ThreadPolicyTest.php
+* code/tests/Integration/Policies/Wiki/ArticleVersionPolicyTest.php
+* code/tests/Integration/Repositories/AssetRepositoryTest.php
+* code/tests/Integration/Repositories/ResourceRepositoryTest.php
+* code/tests/Integration/Repositories/User/ContactRepositoryTest.php
+* code/tests/Integration/Repositories/User/ThreadRepositoryTest.php
+* code/tests/Integration/Repositories/Wiki/ArticleVersionRepositoryTest.php
+
+### Unit Tests
+
+* code/tests/Unit/Events/Article/ArticleVersionCreatedEventTest.php
+* code/tests/Unit/Events/User/Contact/ContactCreatedEventTest.php
+* code/tests/Unit/Listeners/Article/ArticleVersionCreatedListenerTest.php
+* code/tests/Unit/Listeners/User/Contact/ContactCreatedListenerTest.php
+* code/tests/Unit/Models/AssetTest.php
+* code/tests/Unit/Models/User/ContactTest.php
+* code/tests/Unit/Models/User/ThreadTest.php
+* code/tests/Unit/Models/Wiki/ArticleVersionTest.php
+* code/tests/Unit/Observers/IndexableModelObserverTest.php
+* code/tests/Unit/Services/ArticleVersionCalculationServiceTest.php 
+* code/tests/Unit/ThreadSecurity/
+* code/tests/Unit/Validators/ArticleVersion/SelectedIterationBelongsToArticleValidatorTest.php
+
+### Modified Files
+
+Then we have to update a bunch of files that were modified in the core.
+
+### configuration
+
+In .env.example a new ASSET_URL variable has now been added. This is also in conjunction with a new configuration variable added in code/config/app.php.
+
+### Repositories
+
+#### findAll - Breaking Change
+
+The findAll function within the data repositories has been updated quite a bit to allow for the injection of the page number, and to allow for querying for every record in a model with the limit variable. In order to complete this update then copy over the following files.
+
+* code/app/Contracts/Repositories/BaseRepositoryContract.php
+* code/app/Http/V1/Controllers/Article/IterationController.php
+* code/app/Http/V1/Controllers/ArticleController.php
+* code/app/Http/V1/Controllers/MembershipPlanController.php
+* code/app/Http/V1/Controllers/RoleController.php
+* code/app/Repositories/BaseRepositoryAbstract.php
+* code/app/Repositories/Traits/NotImplemented/FindAll.php
+
+Then once these files are copied make sure to copy over this snippet `, (int)$request->input('page', 1)` after the belongsTo variable into all findAll function calls throughout your app. This is specifically related to the index functions within controllers.
+
+#### MessageRepository Changes - Non-Breaking Change
+
+This adds a new function to the message repository as well as a new parameter to an existing function. This will not break any existing implementations, so copy over these files without worry.
+
+* code/app/Contracts/Repositories/User/MessageRepositoryContract.php
+* code/app/Repositories/User/MessageRepository.php
+* code/tests/Integration/Repositories/User/MessageRepositoryTest.php
+
+#### Implementation of findAll - Non-Breaking Change
+
+A couple more findAll queries were implemented. Simply copy over the following files for this change.
+
+* code/app/Repositories/User/UserRepository.php
+* code/app/Repositories/Wiki/IterationRepository.php
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php
+* code/tests/Integration/Repositories/Wiki/IterationRepositoryTest.php 
+
+### Models
+
+#### Article Content Field - Breaking Change
+
+The field on the article named content is now being pulled from the most recent article version. The old functionality of using the most recently created article iteration has been moved to a private field named `last_iteration_content`. To update for this change copy over the following files.
+
+* code/app/Http/Sockets/ArticleIterations.php
+* code/app/Models/Wiki/Article.php
+* code/tests/Feature/Http/Article/ArticleViewTest.php 
+* code/tests/Integration/Http/Sockets/ArticleIterationTest.php
+* code/tests/Integration/Models/Wiki/ArticleTest.php 
+
+After that make sure that versions are created for any articles that you are using. The migration should take care of this, but a new version will need to be made anytime an article is ready to be published from here on out.
+
+#### Message Expansion - Breaking Change
+
+The message model has been expanded in numerous ways. The old user_id has been changed to a to_id along with the addition of a from_id. It now has validation rules, and a number of new fields that control what the message does.
+
+* code/app/Listeners/Message/MessageCreatedListener.php
+* code/app/Mail/MessageMailer.php
+* code/app/Models/User/Message.php
+* code/tests/Unit/Listeners/Message/MessageCreatedListenerTest.php
+* code/tests/Unit/Mail/MessageMailerTest.php
+* code/tests/Unit/Models/User/MessageTest.php
+
+#### User Expansion - Non-Breaking Change
+
+The user has had a number of relations added to it, and it has also had an indexable relation added to it. It is probably best to run a diff to see everyting on this, but the changed files are as follows.
+
+* code/app/Models/User/User.php 
+* code/tests/Unit/Models/User/UserTest.php
+
+#### Iteration Version Relation - Non-Breaking Change
+
+A new relation has been added to the iteration model with the following files changed.
+
+* code/app/Models/Wiki/Iteration.php
+* code/tests/Unit/Models/Wiki/IterationTest.php
+
+#### Cleanup - Non-Breaking Change
+
+Mostly just header clean ups.
+
+* code/app/Models/Payment/PaymentMethod.php
+* code/app/Models/Role.php
+* code/app/Models/Subscription/MembershipPlan.php
+* code/app/Models/Subscription/MembershipPlanRate.php
+* code/app/Models/Subscription/Subscription.php
+* code/app/Models/Vote/Ballot.php
+* code/app/Models/Vote/BallotCompletion.php
+* code/app/Models/Vote/BallotSubject.php 
+
+### Miscellaneous 
+
+#### Iteration Policy Bug
+
+* code/app/Policies/Wiki/IterationPolicy.php
+* code/tests/Integration/Policies/Wiki/IterationPolicyTest.php
+
+#### UserViewTest Update 
+
+This test has been updated due to an issue with the new resource model.
+
+* code/tests/Feature/Http/User/UserViewTest.php 
+
+#### AuthServiceProviderTest change
+
+This test was modified very slightly.
+
+* code/tests/Unit/Providers/AuthServiceProviderTest.php
+
+#### Database Factories
+
+These factories have been modified. 
+
+* code/database/factories/UserFactory.php
+* code/database/factories/WikiFactory.php
+
+#### Registrations
+
+Make sure to copy over the Athenia portion of the AppRepositoryProvider. The ArticleVersionCalculationService also needs to be registered in the AppServiceProvider. The new validator then needs to be registered in both the AppValidatorProvider and the validation language. Then the ThreadSubjectGateProvider should be registered in the AuthServiceProvider. Then the new events need to be added in the EventServiceProvider, and the User model needs to have the indexable model observer added to it. Finally make sure to copy over the Athenia specific routes from the v1 router.
+
+Hooray! That's it for the Cusco update.
 
 ## 0.18.0
 
