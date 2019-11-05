@@ -128,6 +128,7 @@ class AppRepositoryProvider extends ServiceProvider
             return new ArticleVersionRepository(
                 new ArticleVersion(),
                 $this->app->make('log'),
+                $this->app->make(Dispatcher::class),
             );
         });
         $this->app->bind(AssetRepositoryContract::class, function() {

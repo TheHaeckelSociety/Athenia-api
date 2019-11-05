@@ -33,6 +33,22 @@ class ArticleTest extends TestCase
         $this->assertNull($article->content);
     }
 
+    public function testCurrentVersionReturnsProperVersion()
+    {
+        /** @var Article $article */
+        $article = factory(Article::class)->create();
+
+        factory(ArticleVersion::class)->create([
+            'article_id' => $article->id,
+        ]);
+
+        $expected = factory(ArticleVersion::class)->create([
+            'article_id' => $article->id,
+        ]);
+
+        $this->assertEquals($expected->id, $article->current_version->id);
+    }
+
     public function testContentReturnsModelContent()
     {
         /** @var Article $article */

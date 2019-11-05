@@ -13,12 +13,27 @@ use Tests\TestCase;
  */
 class ArticleVersionCreatedEventTest extends TestCase
 {
-    public function testGetArticleVersion()
+    public function testGetNewVersion()
     {
-        $model = new ArticleVersion();
+        $newVersion = new ArticleVersion();
+        $newVersion->id = 455;
+        $oldVersion = new ArticleVersion();
+        $oldVersion->id = 346;
 
-        $event = new ArticleVersionCreatedEvent($model);
+        $event = new ArticleVersionCreatedEvent($newVersion, $oldVersion);
 
-        $this->assertEquals($model, $event->getArticleVersion());
+        $this->assertEquals($newVersion, $event->getNewVersion());
+    }
+
+    public function testGetOldVersion()
+    {
+        $newVersion = new ArticleVersion();
+        $newVersion->id = 455;
+        $oldVersion = new ArticleVersion();
+        $oldVersion->id = 346;
+
+        $event = new ArticleVersionCreatedEvent($newVersion, $oldVersion);
+
+        $this->assertEquals($oldVersion, $event->getOldVersion());
     }
 }

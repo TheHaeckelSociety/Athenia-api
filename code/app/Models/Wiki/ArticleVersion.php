@@ -45,15 +45,6 @@ class ArticleVersion extends BaseModelAbstract implements HasValidationRulesCont
     use HasValidationRules;
 
     /**
-     * Array of events that need to be dispatched
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'created' => ArticleVersionCreatedEvent::class
-    ];
-
-    /**
      * The article this version is for
      *
      * @return BelongsTo

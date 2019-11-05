@@ -12,6 +12,7 @@ use App\Events\User\ForgotPasswordEvent;
 use App\Events\User\SignUpEvent;
 use App\Events\User\UserMergeEvent;
 use App\Events\Vote\VoteCreatedEvent;
+use App\Listeners\Article\ArticleVersionCreatedListener;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
 use App\Listeners\User\Contact\ContactCreatedListener;
@@ -41,7 +42,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         ArticleVersionCreatedEvent::class => [
-
+            ArticleVersionCreatedListener::class,
         ],
         ContactCreatedEvent::class => [
             ContactCreatedListener::class,

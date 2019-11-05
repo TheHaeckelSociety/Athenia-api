@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Repositories\Wiki;
 
+use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\ArticleVersion;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Wiki\ArticleVersionRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -25,14 +28,22 @@ class ArticleVersionRepositoryTest extends TestCase
      */
     protected $repository;
 
+    /**
+     * @var Dispatcher|CustomMockInterface
+     */
+    private $dispatcher;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->setupDatabase();
 
+        $this->dispatcher = mock(Dispatcher::class);
+
         $this->repository = new ArticleVersionRepository(
             new ArticleVersion(),
             $this->getGenericLogMock(),
+            $this->dispatcher,
         );
     }
 
@@ -70,11 +81,14 @@ class ArticleVersionRepositoryTest extends TestCase
         $article = factory(Article::class)->create();
         $iteration = factory(Iteration::class)->create();
 
+        $this->dispatcher->shouldReceive('dispatch')->once()->with(\Mockery::on(function (ArticleVersionCreatedEvent $event) {
+            return true;
+        }));
+
         /** @var ArticleVersion $articleVersion */
         $articleVersion = $this->repository->create([
-            'article_id' => $article->id,
             'iteration_id' => $iteration->id,
-        ]);
+        ], $article);
 
         $this->assertEquals($articleVersion->article_id, $article->id);
         $this->assertEquals($articleVersion->iteration_id, $iteration->id);

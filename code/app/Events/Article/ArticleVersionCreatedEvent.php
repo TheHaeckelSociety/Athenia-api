@@ -14,22 +14,37 @@ class ArticleVersionCreatedEvent
     /**
      * @var ArticleVersion
      */
-    private $articleVersion;
+    private $newVersion;
+
+    /**
+     * @var ArticleVersion
+     */
+    private $oldVersion;
 
     /**
      * ArticleVersionCreatedEvent constructor.
-     * @param ArticleVersion $articleVersion
+     * @param ArticleVersion $newVersion
+     * @param ArticleVersion|null $oldVersion
      */
-    public function __construct(ArticleVersion $articleVersion)
+    public function __construct(ArticleVersion $newVersion, ?ArticleVersion $oldVersion)
     {
-        $this->articleVersion = $articleVersion;
+        $this->newVersion = $newVersion;
+        $this->oldVersion = $oldVersion;
     }
 
     /**
      * @return ArticleVersion
      */
-    public function getArticleVersion(): ArticleVersion
+    public function getNewVersion(): ArticleVersion
     {
-        return $this->articleVersion;
+        return $this->newVersion;
+    }
+
+    /**
+     * @return ArticleVersion
+     */
+    public function getOldVersion(): ArticleVersion
+    {
+        return $this->oldVersion;
     }
 }
