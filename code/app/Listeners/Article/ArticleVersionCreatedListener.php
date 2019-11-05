@@ -57,18 +57,22 @@ class ArticleVersionCreatedListener implements ShouldQueue
 
             if (count($oldVersionNumber) >= 3) {
 
+                $newVersionContent = $newVersion->iteration ? $newVersion->iteration->content : null;
+                $oldVersionContent = $oldVersion->iteration ? $oldVersion->iteration->content : null;
+
                 $major = $oldVersionNumber[0] - 0;
                 $minor = $oldVersionNumber[1] - 0;
                 $patch = $oldVersionNumber[2] - 0;
 
                 switch (true) {
-                    case $this->calculationService->determineIfMajor($newVersion, $oldVersion):
+                    case $newVersionContent == null || $oldVersionContent == null:
+                    case $this->calculationService->determineIfMajor($newVersionContent, $oldVersionContent):
                         $major++;
                         $minor = 0;
                         $patch = 0;
                         break;
 
-                    case $this->calculationService->determineIfMinor($newVersion, $oldVersion):
+                    case $this->calculationService->determineIfMinor($newVersionContent, $oldVersionContent):
                         $minor++;
                         $patch = 0;
                         break;

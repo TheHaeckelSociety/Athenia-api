@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81a00d7b326fec1399ae7ddb2f2425f7",
+    "content-hash": "55676d1ce147f464085ac3e5850950cb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1998,6 +1998,118 @@
                 "php"
             ],
             "time": "2019-10-25T18:33:07+00:00"
+        },
+        {
+            "name": "nochso/diff",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nochso/diff.git",
+                "reference": "fb03e39933c4c777771698c8c1e1fd398e82bdde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nochso/diff/zipball/fb03e39933c4c777771698c8c1e1fd398e82bdde",
+                "reference": "fb03e39933c4c777771698c8c1e1fd398e82bdde",
+                "shasum": ""
+            },
+            "require": {
+                "nochso/omni": "^0.3.0",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "dev-master",
+                "fabpot/php-cs-fixer": "^1.11",
+                "phpunit/phpunit": "^5.2",
+                "symfony/var-dumper": "^3.0"
+            },
+            "suggest": {
+                "symfony/var-dumper": "Required by nochso\\Diff\\Escape\\Cli"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "nochso\\Diff\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "Developer of original library"
+                },
+                {
+                    "name": "Kore Nordmann",
+                    "email": "mail@kore-nordmann.de",
+                    "role": "Developer of original library"
+                },
+                {
+                    "name": "Marcel Voigt",
+                    "email": "mv@noch.so",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Diff implementation",
+            "homepage": "https://github.com/nochso/diff",
+            "keywords": [
+                "diff",
+                "lcs"
+            ],
+            "time": "2016-05-31T18:04:43+00:00"
+        },
+        {
+            "name": "nochso/omni",
+            "version": "0.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nochso/omni.git",
+                "reference": "3c5b7c1af72592e37f820527edfce4a1e8d84640"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nochso/omni/zipball/3c5b7c1af72592e37f820527edfce4a1e8d84640",
+                "reference": "3c5b7c1af72592e37f820527edfce4a1e8d84640",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "symfony/polyfill-mbstring": "^1.1"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.11",
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^5.2"
+            },
+            "suggest": {
+                "fabpot/php-cs-fixer": "Automatically fix PHP code style issues. See namespace \\nochso\\Omni\\PhpCsFixer"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "nochso\\Omni\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Voigt",
+                    "email": "mv@noch.so"
+                }
+            ],
+            "description": "Helps with every day nuisances like path or EOL handling.",
+            "time": "2016-04-17T06:52:57+00:00"
         },
         {
             "name": "opis/closure",
