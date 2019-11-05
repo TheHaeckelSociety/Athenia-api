@@ -41,9 +41,9 @@ class ArticleVersionCreatedEvent
     }
 
     /**
-     * @return ArticleVersion
+     * @return ArticleVersion|null
      */
-    public function getOldVersion(): ArticleVersion
+    public function getOldVersion(): ?ArticleVersion
     {
         return $this->oldVersion;
     }

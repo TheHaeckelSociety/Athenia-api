@@ -51,7 +51,7 @@ class ArticleVersionCreatedListener implements ShouldQueue
         $minor = 0;
         $patch = 0;
 
-        if ($oldVersion || !$oldVersion->name) {
+        if ($oldVersion && !$oldVersion->name) {
 
             $oldVersionNumber = explode('.', $oldVersion->name);
 
