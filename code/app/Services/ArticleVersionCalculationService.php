@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\Services\ArticleVersionCalculationServiceContract;
-use nochso\Diff\ContextDiff;
 use nochso\Diff\Diff;
-use nochso\Diff\Differ;
 use nochso\Diff\DiffLine;
 
 /**
@@ -135,6 +133,11 @@ class ArticleVersionCalculationService implements ArticleVersionCalculationServi
                 }
             }
 
+            // If there is a section that is now found with a match then it is a major version
+            if ($removal && !$addition) {
+                return true;
+            }
+
             if ($removal && $addition) {
                 return $this->calculateTextDiffPercentage($addition->getText(), $removal->getText()) > .5;
             }
@@ -153,6 +156,26 @@ class ArticleVersionCalculationService implements ArticleVersionCalculationServi
     {
         if (!$this->diff) {
             $this->parseDiff($new, $old);
+        }
+
+        // Any time there is new content, it is a minor bump
+        if ($this->addedLinesOfContent > $this->removedLinesOfContent) {
+            return true;
+        }
+
+        foreach ($this->matches as $match) {
+
+            /** @var DiffLine|null $removal */
+            $removal = $match['removal'];
+            /** @var DiffLine|null $addition */
+            $addition = $match['addition'];
+
+            // If either of these are not here, then we can be 100% certain that there was a pretty big change
+            if (!$removal || !$addition) {
+                return true;
+            }
+
+            return $this->calculateTextDiffPercentage($addition->getText(), $removal->getText()) > .2;
         }
 
         return false;
