@@ -58,22 +58,30 @@ class UserUpdateTest extends TestCase
 
     public function testUpdateSuccessful()
     {
-        $this->actAsUser();
+        $user = factory(User::class)->create([
+            'allow_users_to_add_me' => true,
+            'receive_push_notifications' => true,
+            'push_notification_key' => 'a key'
+        ]);
+        $this->actingAs($user);
 
         $data = [
-            'name' => 'Lance',
             'email' => 'test@test.com',
+            'allow_users_to_add_me' => false,
+            'receive_push_notifications' => false,
         ];
 
-        $response = $this->json('PUT', $this->path . '/' . $this->actingAs->id, $data);
+        $response = $this->json('PUT', $this->path . '/' . $user->id, $data);
 
         $response->assertStatus(200);
-        $response->assertJson($data);
 
         /** @var User $updated */
-        $updated = User::find($this->actingAs->id);
+        $updated = User::find($user->id);
 
-        $this->assertEquals('Lance', $updated->name);
+        $this->assertEquals('test@test.com', $updated->email);
+        $this->assertNotTrue($updated->allow_users_to_add_me);
+        $this->assertNotTrue($updated->receive_push_notifications);
+        $this->assertEquals('a key', $updated->push_notification_key);
     }
 
     public function testUpdatePasswordSuccessful()
@@ -99,6 +107,25 @@ class UserUpdateTest extends TestCase
         $loginResponse->assertStatus(200);
     }
 
+    public function testUpdateFailsInvalidBooleanFields()
+    {
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
+
+        $response = $this->json('PUT', $this->path . '/' . $user->id, [
+            'allow_users_to_add_me' => -1,
+            'receive_push_notifications' => -1,
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'errors' => [
+                'allow_users_to_add_me' => ['The allow users to add me field must be true or false.'],
+                'receive_push_notifications' => ['The receive push notifications field must be true or false.'],
+            ]
+        ]);
+    }
+
     public function testUpdateFailsInvalidStringFields()
     {
         $this->actAsUser();
@@ -106,7 +133,9 @@ class UserUpdateTest extends TestCase
         $response = $this->json('PUT', $this->path . '/' . $this->actingAs->id, [
             'email' => 1,
             'name' => 1,
+            'about_me' => 1,
             'password' => 1,
+            'push_notification_key' => 1,
         ]);
 
         $response->assertStatus(400);
@@ -114,7 +143,9 @@ class UserUpdateTest extends TestCase
             'errors' => [
                 'email' => ['The email must be a string.'],
                 'name' => ['The name must be a string.'],
+                'about_me' => ['The about me must be a string.'],
                 'password' => ['The password must be a string.'],
+                'push_notification_key' => ['The push notification key must be a string.'],
             ]
         ]);
     }
@@ -143,6 +174,7 @@ class UserUpdateTest extends TestCase
             'password' => str_repeat('a', 5),
             'email' => str_repeat('a', 121),
             'name' => str_repeat('a', 121),
+            'push_notification_key' => str_repeat('a', 513),
         ]);
 
         $response->assertStatus(400);
@@ -151,6 +183,7 @@ class UserUpdateTest extends TestCase
                 'password' => ['The password must be at least 6 characters.'],
                 'email' => ['The email may not be greater than 120 characters.'],
                 'name' => ['The name may not be greater than 120 characters.'],
+                'push_notification_key' => ['The push notification key may not be greater than 512 characters.'],
             ]
         ]);
     }

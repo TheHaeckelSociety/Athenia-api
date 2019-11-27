@@ -40,7 +40,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $email the email address of the user
  * @property string $name the full name of the user
  * @property string $password the password of the user
+ * @property bool $allow_users_to_add_me
+ * @property string|null $about_me
  * @property string|null $stripe_customer_key
+ * @property bool $receive_push_notifications
+ * @property string|null $push_notification_key
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
@@ -66,6 +70,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
+ * @method static Builder|User whereAboutMe($value)
+ * @method static Builder|User whereAllowUsersToAddMe($value)
  * @method static Builder|User whereCreatedAt($value)
  * @method static Builder|User whereDeletedAt($value)
  * @method static Builder|User whereEmail($value)
@@ -73,6 +79,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static Builder|User whereMergedToId($value)
  * @method static Builder|User whereName($value)
  * @method static Builder|User wherePassword($value)
+ * @method static Builder|User wherePushNotificationKey($value)
+ * @method static Builder|User whereReceivePushNotifications($value)
  * @method static Builder|User whereStripeCustomerKey($value)
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
@@ -268,6 +276,19 @@ class User extends BaseModelAbstract
                 'password' => [
                     'string',
                     'min:6',
+                ],
+                'push_notification_key' => [
+                    'string',
+                    'max:512'
+                ],
+                'about_me' => [
+                    'string',
+                ],
+                'allow_users_to_add_me' => [
+                    'boolean',
+                ],
+                'receive_push_notifications' => [
+                    'boolean',
                 ],
             ],
         ];
