@@ -218,7 +218,7 @@ class MembershipPlanController extends BaseControllerAbstract
     public function store(Requests\MembershipPlan\StoreRequest $request)
     {
         $model = $this->repository->create($request->json()->all());
-        return response($model, 201)->header('Location', route('v1.membership-plans.show', ['model' => $model]));
+        return response($model, 201)->header('Location', route('v1.membership-plans.show', ['membership_plan' => $model]));
     }
 
     /**
