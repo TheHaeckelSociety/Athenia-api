@@ -4,7 +4,27 @@ To upgrade from previous version of Athenia please check each version number lis
 
 ## 0.21.0
 
-Big bug fix! This adds a new service for dealing with multi byte strings, which is then used to fix a bug in the article iterations socket. There are also some minor bug fixes that have been made.
+Big bug fix! This adds a new service for dealing with multi byte strings, which is then used to fix a bug in the article iterations socket. There are also some minor code cleanup changes that have been made, and `phploc/phploc` has been added to the require dev block of the composer file.
+
+### Article Iteration Changes
+
+Start by copying over the following files.
+
+* code/app/Contracts/Services/StringHelperServiceContract.php
+* code/app/Services/StringHelperService.php
+* code/tests/Feature/Socket/ArticleIterationTest.php
+* code/tests/Integration/Http/Sockets/ArticleIterationTest.php
+* code/tests/Unit/Http/Sockets/ArticleIterationsTest.php
+* code/tests/Unit/Services/StringHelperServiceTest.php
+* code/tests/Unit/Validators/ArticleVersion/SelectedIterationBelongsToArticleValidatorTest.php
+
+Then make sure to register the new service.
+
+### Minor code cleanup 
+
+* code/app/Policies/Wiki/IterationPolicy.php
+* code/tests/Integration/Policies/Wiki/IterationPolicyTest.php
+* code/tests/Unit/Providers/AuthServiceProviderTest.php
 
 ## 0.20.1
 
