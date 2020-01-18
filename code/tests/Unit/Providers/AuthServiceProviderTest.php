@@ -10,7 +10,6 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
-use App\Policies\BasePolicyAbstract;
 use App\Providers\AuthServiceProvider;
 use App\Services\UserAuthenticationService;
 use ReflectionClass;

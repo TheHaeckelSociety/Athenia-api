@@ -13,10 +13,10 @@ use Tests\CustomMockInterface;
 use Tests\TestCase;
 
 /**
- * Class SelectedQuestionBelongsWithinTestAttemptValidatorTest
+ * Class SelectedIterationBelongsToArticleValidatorTest
  * @package Tests\Unit\Validators\Test
  */
-class SelectedQuestionBelongsWithinTestAttemptValidatorTest extends TestCase
+class SelectedIterationBelongsToArticleValidatorTest extends TestCase
 {
     /**
      * @var CustomMockInterface|IterationRepositoryContract

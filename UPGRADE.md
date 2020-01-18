@@ -2,13 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.21.0
+
+Big bug fix! This adds a new service for dealing with multi byte strings, which is then used to fix a bug in the article iterations socket. There are also some minor bug fixes that have been made.
+
 ## 0.20.1
 
 Very simply bug fix! Simply copy over the file `code/app/Http/V1/Controllers/MembershipPlanController.php`.
 
 ## 0.20.0
 
-This version adds a few new fields to the user model that are needed dor sending notifications, and for allowing a user to control their profile more. Start off by copying over the new migration `code/database/migrations/2019_11_27_163845_add_profile_fields_to_user.php`. This will add all needed fields for this upgrade. Then run the ide helpers in order to add these fields to the header of your user model. After that you will also want to copy over the new validation rules `push_notification_key`, `about_me`, `allow_users_to_add_me`, and `receive_push_notifications` within the user model. Then update the `code/tests/Feature/Http/User/UserUpdateTest.php` test in order to take into account the changes made for the new fields. 
+This version adds a few new fields to the user model that are needed for sending notifications, and for allowing a user to control their profile more. Start off by copying over the new migration `code/database/migrations/2019_11_27_163845_add_profile_fields_to_user.php`. This will add all needed fields for this upgrade. Then run the ide helpers in order to add these fields to the header of your user model. After that you will also want to copy over the new validation rules `push_notification_key`, `about_me`, `allow_users_to_add_me`, and `receive_push_notifications` within the user model. Then update the `code/tests/Feature/Http/User/UserUpdateTest.php` test in order to take into account the changes made for the new fields. 
 
 ## 0.19.0 - Cusco Spec
 
@@ -277,7 +281,7 @@ Hooray! That's it for the Cusco update.
 
 ## 0.18.0
 
-New Subscription Function! This build adds a function the subscription repository that allows developers to find all subscriptions of a specific subscriber type that expire after a certain date. To update to this build copy over the following files.
+New Subscription Function! This build adds a function to the subscription repository that allows developers to find all subscriptions of a specific subscriber type that expire after a certain date. To update to this build copy over the following files.
 
 * code/app/Contracts/Repositories/Subscription/SubscriptionRepositoryContract.php
 * code/app/Repositories/Subscription/SubscriptionRepository.php

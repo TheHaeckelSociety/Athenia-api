@@ -9,6 +9,7 @@ use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\IterationRepository;
+use App\Services\StringHelperService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 use Ratchet\ConnectionInterface;
@@ -51,7 +52,8 @@ class ArticleIterationTest extends TestCase
         $this->socket = new ArticleIterations(
             new ArticleRepository(new Article(), $this->getGenericLogMock()),
             new IterationRepository(new Iteration(), $this->getGenericLogMock()),
-            $this->jwtAuth
+            $this->jwtAuth,
+            new StringHelperService(),
         );
         $this->connections = [];
     }

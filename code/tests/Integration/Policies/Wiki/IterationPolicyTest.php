@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tests\Integration\Policies\Wiki;
 
 use App\Models\Role;
-use App\Models\Wiki\Article;
 use App\Policies\Wiki\IterationPolicy;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;

@@ -11,6 +11,7 @@ use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\IterationRepository;
+use App\Services\StringHelperService;
 use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -52,7 +53,12 @@ class ArticleIterationTest extends TestCase
         $this->articleRepository = new ArticleRepository(new Article(), $this->getGenericLogMock());
         $this->iterationRepository = new IterationRepository(new Iteration(), $this->getGenericLogMock());
         $this->jwtAuth = mock(JWTAuth::class);
-        $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository, $this->jwtAuth);
+        $this->socket = new ArticleIterations(
+            $this->articleRepository,
+            $this->iterationRepository,
+            $this->jwtAuth,
+            new StringHelperService(),
+        );
     }
 
     public function testRunAction()
