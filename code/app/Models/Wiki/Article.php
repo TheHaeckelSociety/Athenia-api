@@ -55,6 +55,7 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
      */
     protected $appends = [
         'content',
+        'last_iteration_content',
     ];
 
     /**

@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.22.0
+
+Very simple updat! This simply adds the `last_iteration_content` as an appending field to the article model.
+
 ## 0.21.0
 
 Big bug fix! This adds a new service for dealing with multi byte strings, which is then used to fix a bug in the article iterations socket. There are also some minor code cleanup changes that have been made, and `phploc/phploc` has been added to the require dev block of the composer file.
