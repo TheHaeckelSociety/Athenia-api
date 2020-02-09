@@ -5,6 +5,7 @@ namespace App\Http\Sockets;
 
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
+use App\Contracts\Services\StringHelperServiceContract;
 use App\Exceptions\AuthenticationException;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
@@ -44,17 +45,26 @@ class ArticleIterations extends BaseSocketListener
     private $jwtAuth;
 
     /**
+     * @var StringHelperServiceContract
+     */
+    private $stringHelperService;
+
+    /**
      * ArticleIterations constructor.
      * @param ArticleRepositoryContract $articleRepository
      * @param IterationRepositoryContract $iterationRepository
      * @param JWTAuth $jwtAuth
+     * @param StringHelperServiceContract $stringHelperService
      */
     public function __construct(ArticleRepositoryContract $articleRepository,
-                                IterationRepositoryContract $iterationRepository, JWTAuth $jwtAuth)
+                                IterationRepositoryContract $iterationRepository,
+                                JWTAuth $jwtAuth,
+                                StringHelperServiceContract $stringHelperService)
     {
         $this->articleRepository = $articleRepository;
         $this->iterationRepository = $iterationRepository;
         $this->jwtAuth = $jwtAuth;
+        $this->stringHelperService = $stringHelperService;
     }
 
     /**
@@ -233,7 +243,7 @@ class ArticleIterations extends BaseSocketListener
         if ($startPosition !== null && $length !== null) {
             /** @var Iteration $iteration */
             $this->iterationRepository->create([
-                'content' => substr_replace($article->last_iteration_content, '', $startPosition, $length),
+                'content' => $this->stringHelperService->mbSubstrReplace($article->last_iteration_content, '', $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
 
@@ -260,8 +270,8 @@ class ArticleIterations extends BaseSocketListener
 
             $existingContent = $article->last_iteration_content ?? "";
 
-            $beginningString = substr($existingContent, 0, $startPosition);
-            $endString = substr($existingContent, $startPosition);
+            $beginningString = mb_substr($existingContent, 0, $startPosition);
+            $endString = mb_substr($existingContent, $startPosition);
 
             $this->iterationRepository->create([
                 'content' => $beginningString . $content . $endString,
@@ -291,7 +301,7 @@ class ArticleIterations extends BaseSocketListener
         if ($startPosition !== null && $length !== null && $content) {
 
             $this->iterationRepository->create([
-                'content' => substr_replace($article->last_iteration_content, $content, $startPosition, $length),
+                'content' => $this->stringHelperService->mbSubstrReplace($article->last_iteration_content, $content, $startPosition, $length),
                 'created_by_id' => $user->id,
             ], $article);
 
