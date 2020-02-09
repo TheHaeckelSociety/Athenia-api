@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Models\User;
 
+use App\Models\Subscription\MembershipPlan;
+use App\Models\Subscription\MembershipPlanRate;
+use App\Models\Subscription\Subscription;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User\User;
 use Tests\TestCase;
@@ -124,5 +129,76 @@ class UserTest extends TestCase
         $user = new User();
 
         $this->assertEquals([], $user->getJWTCustomClaims());
+    }
+
+    public function testCurrentSubscription()
+    {
+        $noSubscriptionsUser = new User([
+            'subscriptions' => new Collection([
+            ]),
+        ]);
+
+        $this->assertNull($noSubscriptionsUser->currentSubscription());
+
+        $subscription = new Subscription([
+            'expires_at' => null,
+            'membershipPlanRate' => new MembershipPlanRate([
+                'membershipPlan' => new MembershipPlan([
+                    'duration' => MembershipPlan::DURATION_LIFETIME,
+                ]),
+            ]),
+        ]);
+        $lifetimeSubscriptionUser = new User([
+            'subscriptions' => new Collection([
+                $subscription,
+            ]),
+        ]);
+
+        $this->assertEquals($subscription, $lifetimeSubscriptionUser->currentSubscription());
+
+        $subscription = new Subscription([
+            'expires_at' => (new Carbon())->addMonth(),
+            'membershipPlanRate' => new MembershipPlanRate([
+                'membershipPlan' => new MembershipPlan([
+                    'duration' => MembershipPlan::DURATION_YEAR,
+                ]),
+            ]),
+        ]);
+        $activeSubscriptionUser = new User([
+            'subscriptions' => new Collection([
+                $subscription,
+            ]),
+        ]);
+
+        $this->assertEquals($subscription, $activeSubscriptionUser->currentSubscription());
+
+        $expiredSubscriptionUser = new User([
+            'subscriptions' => new Collection([
+                new Subscription([
+                    'expires_at' => (new Carbon())->subMonth(),
+                    'membershipPlanRate' => new MembershipPlanRate([
+                        'membershipPlan' => new MembershipPlan([
+                            'duration' => MembershipPlan::DURATION_YEAR,
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ]);
+
+        $this->assertNull($expiredSubscriptionUser->currentSubscription());
+
+        $withoutExpirationUser = new User([
+            'subscriptions' => new Collection([
+                new Subscription([
+                    'membershipPlanRate' => new MembershipPlanRate([
+                        'membershipPlan' => new MembershipPlan([
+                            'duration' => MembershipPlan::DURATION_YEAR,
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ]);
+
+        $this->assertNull($withoutExpirationUser->currentSubscription());
     }
 }
