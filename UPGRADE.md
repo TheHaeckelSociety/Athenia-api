@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.23.0
+
+New Function for the HasSubscriptions trait! To run this update simply copy over the file `code/app/Models/Traits/HasSubscriptions.php`, and then add the test `testCurrentSubscription` from `code/tests/Unit/Models/User/UserTest.php`.
+
 ## 0.22.0
 
 Very simple updat! This simply adds the `last_iteration_content` as an appending field to the article model.
