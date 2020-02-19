@@ -195,6 +195,7 @@ class StripeCustomerServiceTest extends TestCase
             ]),
         ]);
 
+        $this->paymentMethodRepository->shouldReceive('delete')->once()->with($paymentMethod);
         $this->cardHelper->shouldReceive('delete')->once()->with('cus_test', 'card_test')->andReturn([
             'id' => 'card',
         ]);
