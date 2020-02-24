@@ -36,6 +36,16 @@ class CreateOrganizations extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        $organizationAdmin = new \App\Models\Role([
+            'name' => 'Organization ADmin',
+        ]);
+        $organizationAdmin->id = \App\Models\Role::ORGANIZATION_ADMIN;
+        $organizationAdmin->save();
+        $organizationManager = new \App\Models\Role([
+            'name' => 'Organization Manager',
+        ]);
+        $organizationManager->id = \App\Models\Role::ORGANIZATION_MANAGER;
+        $organizationManager->save();
     }
 
     /**
