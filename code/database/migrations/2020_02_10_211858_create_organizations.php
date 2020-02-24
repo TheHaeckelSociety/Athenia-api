@@ -14,9 +14,24 @@ class CreateOrganizations extends Migration
     public function up()
     {
         Schema::create('organizations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->string('name', 120);
+
+            $table->softDeletes();
+            $table->timestamps();
+        });
+        Schema::create('organization_managers', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->unsignedInteger('organization_id');
+            $table->foreign('organization_id')->references('id')->on('organizations');
+
+            $table->unsignedInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles');
 
             $table->softDeletes();
             $table->timestamps();
@@ -30,6 +45,7 @@ class CreateOrganizations extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('organization_managers');
         Schema::dropIfExists('organizations');
     }
 }
