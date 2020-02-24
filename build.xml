@@ -4,7 +4,7 @@
     <property name="phpunit" value="${basedir}/code/vendor/bin/phpunit"/>
 
     <target name="deploy"
-            depends="file-permissions,composer-install-no-dev,database-migrate"
+            depends="file-permissions,composer-install-no-dev,database-migrate,restart-queue"
             description="Performs the deploy for a server."/>
 
     <target name="full-build"
@@ -112,6 +112,12 @@
         <exec executable="./artisan" failonerror="true" dir="${basedir}/code">
             <arg value='migrate' />
             <arg value='--force' />
+        </exec>
+    </target>
+
+    <target name="restart-queue">
+        <exec executable="./artisan" failonerror="true" dir="${basedir}/code">
+            <arg value='queue:restart' />
         </exec>
     </target>
 
