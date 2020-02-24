@@ -7,6 +7,7 @@ use App\Contracts\Models\CanBeIndexedContract;
 use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\Asset;
+use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Resource;
 use App\Models\Role;
@@ -54,6 +55,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read Collection|Article[] $createdArticles
  * @property-read Collection|Iteration[] $createdIterations
  * @property-read Collection|Message[] $messages
+ * @property-read Collection|OrganizationManager[] $organizationManagers
  * @property-read Collection|PaymentMethod[] $paymentMethods
  * @property-read Collection|Role[] $roles
  * @property-read Collection|Subscription[] $subscriptions
@@ -63,6 +65,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $created_articles_count
  * @property-read int|null $created_iterations_count
  * @property-read int|null $messages_count
+ * @property-read int|null $organization_managers_count
  * @property-read int|null $payment_methods_count
  * @property-read int|null $roles_count
  * @property-read int|null $subscriptions_count
@@ -150,6 +153,16 @@ class User extends BaseModelAbstract
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class, 'to_id');
+    }
+
+    /**
+     * All organization manager relations this user has
+     *
+     * @return HasMany
+     */
+    public function organizationManagers(): HasMany
+    {
+        return $this->hasMany(OrganizationManager::class);
     }
 
     /**

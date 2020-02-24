@@ -9,6 +9,8 @@ use App\Models\Traits\HasValidationRules;
 use Eloquent;
 use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property-read Collection|OrganizationManager[] $organizationManagers
+ * @property-read int|null $organization_managers_count
  * @method static EloquentJoinBuilder|Organization newModelQuery()
  * @method static EloquentJoinBuilder|Organization newQuery()
  * @method static EloquentJoinBuilder|Organization query()
@@ -32,6 +36,16 @@ use Illuminate\Support\Carbon;
 class Organization extends BaseModelAbstract implements HasValidationRulesContract
 {
     use HasValidationRules;
+
+    /**
+     * All organization managers in this organization
+     *
+     * @return HasMany
+     */
+    public function organizationManagers(): HasMany
+    {
+        return $this->hasMany(OrganizationManager::class);
+    }
 
     /**
      * @param mixed ...$params
