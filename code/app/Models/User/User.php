@@ -7,6 +7,7 @@ use App\Contracts\Models\CanBeIndexedContract;
 use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\Asset;
+use App\Models\Organization\Organization;
 use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Resource;
@@ -217,6 +218,26 @@ class User extends BaseModelAbstract
     {
         $roles = (array)$roles;
         return $this->roles()->whereIn('id', $roles)->exists();
+    }
+
+    /**
+     * Determines whether or not the user can manage the organization.
+     *
+     * @param Organization $organization
+     * @param int|array $role
+     *          If the manager role is passed in then this will return true for both the manager role and admin role.
+     *          The admin role will only check for the admin role.
+     * @return bool
+     */
+    public function canManageOrganization(Organization $organization, $role = Role::ORGANIZATION_MANAGER): bool
+    {
+        $roles = is_array($role) ? $role : [$role];
+        if (!in_array(Role::ORGANIZATION_ADMIN, $roles)) {
+            $roles[] = Role::ORGANIZATION_ADMIN;
+        }
+        return $this->organizationManagers->first(fn (OrganizationManager $organizationManager) =>
+            in_array($organizationManager->role_id, $roles) && $organizationManager->organization_id === $organization->id
+        ) != null;
     }
 
     /**
