@@ -8,6 +8,7 @@ use App\Models\Organization\OrganizationManager;
 use App\Models\Role;
 use App\Models\User\User;
 use App\Policies\Organization\OrganizationManagerPolicy;
+use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 
 /**
@@ -16,6 +17,8 @@ use Tests\TestCase;
  */
 class OrganizationManagerPolicyTest extends TestCase
 {
+    use DatabaseSetupTrait;
+
     public function testAllBlocksWhenNotOrganizationManager()
     {
         $policy = new OrganizationManagerPolicy();

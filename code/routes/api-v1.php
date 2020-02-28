@@ -146,6 +146,15 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
         ]);
 
         /**
+         * Organization Context
+         */
+        Route::resource('organizations', 'OrganizationController', [
+            'except' => [
+                'create', 'edit'
+            ]
+        ]);
+
+        /**
          * Roles Context
          */
         Route::resource('roles', 'RoleController', [

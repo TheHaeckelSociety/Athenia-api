@@ -45,7 +45,7 @@ class RetrieveRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('membership_plan'),
+            $this->route('organization'),
         ];
     }
 }

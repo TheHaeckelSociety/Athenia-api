@@ -60,10 +60,10 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(OrganizationManager::class)->create(['id' => 19]);
+        factory(OrganizationManager::class)->create(['id' => 3452]);
 
         $this->expectException(ModelNotFoundException::class);
-        $this->repository->findOrFail(20);
+        $this->repository->findOrFail(546);
     }
 
     public function testCreateSuccess()
