@@ -103,9 +103,24 @@ class OrganizationOrganizationManagerCreateTest extends TestCase
             'role_id' => Role::ORGANIZATION_MANAGER,
         ];
 
+        $dispatcher = mock(Dispatcher::class);
+        $this->app->bind(Dispatcher::class, function() use ($dispatcher) {
+            return $dispatcher;
+        });
+        $eventDispatched = false;
+        $dispatcher->shouldReceive('dispatch')->with(\Mockery::on(function ($event) use (&$eventDispatched) {
+
+            if ($event instanceof OrganizationManagerCreatedEvent) {
+                $eventDispatched = true;
+            }
+
+            return true;
+        }));
+
         $response = $this->json('POST', $this->route, $properties);
 
         $response->assertStatus(201);
+        $this->assertTrue($eventDispatched);
 
         $response->assertJson([
             'user_id' => $user->id,

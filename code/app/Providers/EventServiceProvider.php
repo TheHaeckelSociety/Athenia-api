@@ -16,6 +16,7 @@ use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Article\ArticleVersionCreatedListener;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
+use App\Listeners\Organization\OrganizationManagerCreatedListener;
 use App\Listeners\User\Contact\ContactCreatedListener;
 use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
@@ -58,7 +59,7 @@ class EventServiceProvider extends ServiceProvider
             MessageSentListener::class,
         ],
         OrganizationManagerCreatedEvent::class => [
-
+            OrganizationManagerCreatedListener::class,
         ],
         PaymentReversedEvent::class => [
 
