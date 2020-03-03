@@ -35,13 +35,12 @@ class SignUpListener
     {
         $user = $event->getUser();
 
-        $this->messageRepository->create([
-            'subject' => 'Welcome to Project Athenia!',
-            'email' => $user->email,
-            'template' => 'sign-up',
-            'data' => [
-                'greeting' => $user->name . ',',
-            ]
-        ], $user);
+        $this->messageRepository->sendEmailToUser(
+            $user,
+            'Welcome to Project Athenia!',
+            'sign-up',
+            [],
+            $user->name . ',',
+        );
     }
 }

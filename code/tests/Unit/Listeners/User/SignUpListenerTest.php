@@ -29,17 +29,13 @@ class SignUpListenerTest extends TestCase
             'email' => 'test@test.com',
         ]);
 
-        $repository->shouldReceive('create')->once()->with(\Mockery::on(function ($data) {
-            $this->assertArrayHasKey('subject', $data);
-            $this->assertArrayHasKey('email', $data);
-            $this->assertArrayHasKey('template', $data);
-            $this->assertEquals('sign-up', $data['template']);
-
-            $this->assertArrayHasKey('data', $data);
-            $this->assertArrayHasKey('greeting', $data['data']);
-
-            return true;
-        }), $user);
+        $repository->shouldReceive('sendEmailToUser')->once()->with(
+            $user,
+            'Welcome to Project Athenia!',
+            'sign-up',
+            [],
+            'Ralph Nadar,',
+        );
 
         /** @var Dispatcher|CustomMockInterface $dispatcher */
         $dispatcher = mock(Dispatcher::class);
