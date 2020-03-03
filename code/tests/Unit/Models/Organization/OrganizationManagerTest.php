@@ -21,6 +21,15 @@ class OrganizationManagerTest extends TestCase
         $this->assertEquals('organization_managers.organization_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testRole()
+    {
+        $message = new OrganizationManager();
+        $relation = $message->role();
+
+        $this->assertEquals('roles.id', $relation->getQualifiedOwnerKeyName());
+        $this->assertEquals('organization_managers.role_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testUser()
     {
         $message = new OrganizationManager();

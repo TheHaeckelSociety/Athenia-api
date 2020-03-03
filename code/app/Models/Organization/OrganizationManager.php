@@ -27,6 +27,7 @@ use Illuminate\Validation\Rule;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read Organization $organization
+ * @property-read Role $role
  * @property-read User $user
  * @method static EloquentJoinBuilder|OrganizationManager newModelQuery()
  * @method static EloquentJoinBuilder|OrganizationManager newQuery()
@@ -52,6 +53,16 @@ class OrganizationManager extends BaseModelAbstract implements HasValidationRule
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    /**
+     * The related organization
+     *
+     * @return BelongsTo
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
