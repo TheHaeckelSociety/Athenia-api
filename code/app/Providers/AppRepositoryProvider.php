@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\AssetRepositoryContract;
+use App\Contracts\Repositories\Organization\OrganizationManagerRepositoryContract;
 use App\Contracts\Repositories\Organization\OrganizationRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
@@ -26,6 +27,7 @@ use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Models\Asset;
 use App\Models\Organization\Organization;
+use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Resource;
@@ -45,6 +47,7 @@ use App\Models\Wiki\Article;
 use App\Models\Wiki\ArticleVersion;
 use App\Models\Wiki\Iteration;
 use App\Repositories\AssetRepository;
+use App\Repositories\Organization\OrganizationManagerRepository;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Payment\PaymentMethodRepository;
 use App\Repositories\Payment\PaymentRepository;
@@ -96,6 +99,7 @@ class AppRepositoryProvider extends ServiceProvider
             MembershipPlanRateRepositoryContract::class,
             MessageRepositoryContract::class,
             OrganizationRepositoryContract::class,
+            OrganizationManagerRepositoryContract::class,
             PasswordTokenRepositoryContract::class,
             PaymentRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
@@ -190,6 +194,9 @@ class AppRepositoryProvider extends ServiceProvider
         });
         $this->app->bind(OrganizationRepositoryContract::class, function () {
             return new OrganizationRepository(new Organization(), $this->app->make('log'));
+        });
+        $this->app->bind(OrganizationManagerRepositoryContract::class, function () {
+            return new OrganizationManagerRepository(new OrganizationManager(), $this->app->make('log'));
         });
         $this->app->bind(PasswordTokenRepositoryContract::class, function() {
             return new PasswordTokenRepository(

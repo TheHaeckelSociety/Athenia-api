@@ -64,7 +64,7 @@ class OrganizationController extends BaseControllerAbstract
     public function store(Requests\Organization\StoreRequest $request)
     {
         $model = $this->repository->create($request->json()->all());
-        return response($model, 201)->header('Location', route('v1.membership-plans.show', ['membership_plan' => $model]));
+        return response($model, 201)->header('Location', route('v1.organizations.show', ['organization' => $model]));
     }
 
     /**

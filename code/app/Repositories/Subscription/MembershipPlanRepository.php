@@ -8,7 +8,7 @@ use App\Contracts\Repositories\Subscription\MembershipPlanRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\MembershipPlan;
 use App\Repositories\BaseRepositoryAbstract;
-use App\Repositories\Traits\CanGetAndUnset;
+use App\Traits\CanGetAndUnset;
 use Psr\Log\LoggerInterface as LogContract;
 
 /**

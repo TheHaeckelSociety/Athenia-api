@@ -7,8 +7,8 @@ use App\Contracts\Repositories\User\ThreadRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\User\Thread;
 use App\Repositories\BaseRepositoryAbstract;
-use App\Repositories\Traits\CanGetAndUnset;
 use App\Repositories\Traits\NotImplemented;
+use App\Traits\CanGetAndUnset;
 use Psr\Log\LoggerInterface as LogContract;
 
 /**

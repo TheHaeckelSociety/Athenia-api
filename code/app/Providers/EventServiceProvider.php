@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
+use App\Events\Organization\OrganizationManagerCreatedEvent;
 use App\Events\Payment\PaymentReversedEvent;
 use App\Events\User\Contact\ContactCreatedEvent;
 use App\Events\User\ForgotPasswordEvent;
@@ -55,6 +56,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MessageSentEvent::class => [
             MessageSentListener::class,
+        ],
+        OrganizationManagerCreatedEvent::class => [
+
         ],
         PaymentReversedEvent::class => [
 

@@ -53,6 +53,15 @@ class Role extends BaseModelAbstract implements HasPolicyContract
     ];
 
     /**
+     * All roles that are related to an organization
+     */
+    const ORGANIZATION_ROLES = [
+        self::ORGANIZATION_ADMIN,
+        self::ORGANIZATION_MANAGER,
+        // Add more organization roles here
+    ];
+
+    /**
      * Has many users
      *
      * @return BelongsToMany

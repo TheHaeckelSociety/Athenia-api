@@ -5,6 +5,7 @@ namespace App\Models\Organization;
 
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\Role;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use Eloquent;
@@ -75,7 +76,7 @@ class OrganizationManager extends BaseModelAbstract implements HasValidationRule
                 'role_id' => [
                     'required',
                     'integer',
-                    Rule::exists('roles', 'id'),
+                    Rule::in(Role::ORGANIZATION_ROLES),
                 ],
                 'email' => [
                     'string',

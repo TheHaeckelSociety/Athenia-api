@@ -153,6 +153,13 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                 'create', 'edit'
             ]
         ]);
+        Route::group(['prefix' => 'organizations/{organization}', 'as' => 'organization.'], function () {
+            Route::resource('organization-managers', 'Organization\OrganizationManagerController', [
+                'except' => [
+                    'create', 'edit', 'show',
+                ]
+            ]);
+        });
 
         /**
          * Roles Context
