@@ -19,7 +19,7 @@
         "pda/pheanstalk": "^4.0",
         "ralouphie/mimey": "^2.1",
         "roave/security-advisories": "dev-master",
-        "tymon/jwt-auth": "1.0.0-rc.5.1"
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",
