@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\Services\TokenGenerationServiceContract;
+use Illuminate\Support\Str;
 
 /**
  * Class TokenGenerationService
@@ -19,6 +20,6 @@ class TokenGenerationService implements TokenGenerationServiceContract
      */
     public function generateToken($length = 40): string
     {
-        return str_random($length);
+        return Str::random($length);
     }
 }
