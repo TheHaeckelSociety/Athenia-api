@@ -2,6 +2,88 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.24.0
+
+Big ole update! This update adds a new organization module along with a bunch of other new updates. To complete this update run the following steps for each group of updates.
+
+### Organization Module
+
+Start by copying over the following paths.
+
+* code/app/Contracts/Repositories/Organization/
+* code/app/Events/Organization/
+* code/app/Http/V1/Controllers/Organization/OrganizationManagerController.php
+* code/app/Http/V1/Controllers/OrganizationController.php
+* code/app/Http/V1/Requests/Organization/
+* code/app/Listeners/Organization/
+* code/app/Models/Organization/
+* code/app/Policies/Organization/
+* code/app/Repositories/Organization/
+* code/database/factories/OrganizationFactory.php 
+* code/database/migrations/2020_02_10_211858_create_organizations.php
+* code/resources/views/mailers/organization-manager-created.blade.php
+* code/tests/Feature/Http/Organization/
+* code/tests/Integration/Policies/Organization/
+* code/tests/Integration/Repositories/Organization/
+* code/tests/Unit/Events/Organization/OrganizationManagerCreatedEventTest.php
+* code/tests/Unit/Listeners/Organization/OrganizationManagerCreatedListenerTest.php
+* code/tests/Unit/Models/Organization/
+
+Then make sure to complete the following more involved steps. 
+
+* code/app/Models/Role.php - Copy over the new organization roles at the top of the class.
+* code/app/Models/User/User.php - Add the `organizationManagers` relation and the function `canManageOrganization`.
+* code/tests/Integration/Models/User/UserTest.php - Add the function `testCanManageOrganization`.
+* code/tests/Unit/Models/User/UserTest.php - Add the function `testOrganizationManagers`.
+
+Then you need to register the new modules in the following files.
+
+* code/app/Providers/AppRepositoryProvider.php - Register the new organization repositories in the Athenia repo section.
+* code/app/Providers/EventServiceProvider.php - Register the new OrganizationManagerCreatedEvent and Listener.
+* code/app/Providers/RouteServiceProvider.php - Register the new Organization models.
+* code/routes/api-v1.php - Register the new organization controllers.
+
+### Minor Improvements
+
+#### Signup Listener
+
+This listener was updated to use a newer storage function. To run this update copy over the following files.
+
+* code/app/Listeners/User/SignUpListener.php
+* code/tests/Unit/Listeners/User/SignUpListenerTest.php
+
+#### CanGetAndUnset Move
+
+This trait was moved out of the Repositories trait into the root. To start off remove the old trait and add the new trait located at `code/app/Traits/CanGetAndUnset.php`. Then update the import in the following classes.
+
+* code/app/Repositories/AssetRepository.php
+* code/app/Repositories/Subscription/MembershipPlanRepository.php
+* code/app/Repositories/User/ThreadRepository.php
+* code/app/Repositories/Vote/BallotRepository.php
+
+#### Laravel helpers removal
+
+The old laravel helpers were removed, so these files should be updated.
+
+* code/app/Services/TokenGenerationService.php
+* code/config/session.php
+
+#### Payment Method Deletion 
+
+A bug was fixed where the stripe customer service was not deleting the payment method.
+
+* code/app/Services/StripeCustomerService.php
+* code/tests/Unit/Services/StripeCustomerServiceTest.php
+
+#### Miscellaneous
+
+* code/database/migrations/2020_03_03_153033_make_users_fields_nullable.php - Some field have been made nullable
+* code/resources/views/base-mailer.blade.php - The greeting field is now checked for a value before it is displayed
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanDeleteTest.php - Code cleanup
+* code/tests/Integration/Models/Subscription/MembershipPlanTest.php - Added database setup trait
+* code/tests/Integration/Policies/Subscription/MembershipPlanPolicyTest.php - Added database setup trait
+* code/tests/Integration/Repositories/Subscription/MembershipPlanRateRepositoryTest.php - Removal of membership plan rate pre test deletion
+
 ## 0.23.1
 
 Bug Fix! Simply copy over this file `code/app/Http/Sockets/ArticleIterations.php`.
@@ -12,7 +94,7 @@ New Function for the HasSubscriptions trait! To run this update simply copy over
 
 ## 0.22.0
 
-Very simple updat! This simply adds the `last_iteration_content` as an appending field to the article model.
+Very simple update! This simply adds the `last_iteration_content` as an appending field to the article model.
 
 ## 0.21.0
 
