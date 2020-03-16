@@ -7,6 +7,7 @@ use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Payment\PurchasedItem;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use App\Validators\Subscription\MembershipPlanRateIsActiveValidator;
@@ -16,8 +17,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Validation\Rule;
 
 /**
@@ -41,9 +43,11 @@ use Illuminate\Validation\Rule;
  * @property-read null|string $formatted_expires_at
  * @property-read MembershipPlanRate $membershipPlanRate
  * @property-read Collection|Payment[] $payments
+ * @property-read Collection|PurchasedItem[] $purchasedItems
  * @property-read PaymentMethod $paymentMethod
  * @property-read User $subscriber
  * @property-read int|null $payments_count
+ * @property-read int|null $purchased_items_count
  * @method static Builder|Subscription newModelQuery()
  * @method static Builder|Subscription newQuery()
  * @method static Builder|Subscription query()
@@ -101,11 +105,11 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     /**
      * The payments that have been made for this subscription
      *
-     * @return HasMany
+     * @return MorphToMany
      */
-    public function payments() : HasMany
+    public function payments(): MorphToMany
     {
-        return $this->hasMany(Payment::class);
+        return $this->morphToMany(Payment::class, 'item', 'purchased_items');
     }
 
     /**
@@ -116,6 +120,16 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * The purchased item instances for this subscription
+     *
+     * @return MorphMany
+     */
+    public function purchasedItems(): MorphMany
+    {
+        return $this->morphMany(PurchasedItem::class, 'item');
     }
 
     /**

@@ -122,6 +122,7 @@ class AppRepositoryProvider extends ServiceProvider
     public function register()
     {
         Relation::morphMap([
+            'subscription' => Subscription::class,
             'user' => User::class,
 
             // Put application relations below

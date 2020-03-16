@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace App\Models\Payment;
 
 use App\Models\BaseModelAbstract;
-use App\Models\Subscription\Subscription;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -24,7 +25,8 @@ use Illuminate\Support\Carbon;
  * @property mixed|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read PaymentMethod $paymentMethod
- * @property-read Subscription[] $subscription
+ * @property-read Collection|PurchasedItem[] $purchasedItems
+ * @property-read int|null $purchased_items_count
  * @method static Builder|Payment newModelQuery()
  * @method static Builder|Payment newQuery()
  * @method static Builder|Payment query()
@@ -60,12 +62,12 @@ class Payment extends BaseModelAbstract
     }
 
     /**
-     * The subscriptions paid for
+     * The items paid for
      *
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function subscription(): BelongsTo
+    public function purchasedItems(): HasMany
     {
-        return $this->belongsTo(Subscription::class);
+        return $this->hasMany(PurchasedItem::class);
     }
 }
