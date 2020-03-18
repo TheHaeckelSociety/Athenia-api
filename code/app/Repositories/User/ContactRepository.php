@@ -28,11 +28,11 @@ class ContactRepository extends BaseRepositoryAbstract implements ContactReposit
     /**
      * @param array $filter
      * @param array $search
+     * @param array $orderBy
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray
      * @param int $pageNumber
-     * @param array $orderBy
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
     public function findAll(array $filter = [], array $search = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
