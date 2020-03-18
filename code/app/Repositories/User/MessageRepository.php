@@ -75,11 +75,11 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
      *
      * @param array $filters
      * @param array $searches
+     * @param array $orderBy
      * @param array $with
      * @param int|null $limit pass null to get all
      * @param array $belongsToArray array of models this should belong to
      * @param int $pageNumber
-     * @param array $orderBy
      * @return LengthAwarePaginator|Collection
      */
     public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
