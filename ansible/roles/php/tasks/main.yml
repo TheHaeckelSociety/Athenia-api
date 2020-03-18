@@ -6,14 +6,15 @@
 - name: Install PHP and its modules
   apt: pkg={{ item }} state=latest
   with_items:
-    - php7.3
-    - php7.3-fpm
-    - php7.3-pgsql
-    - php7.3-curl
-    - php7.3-xml
-    - php7.3-mbstring
-    - php7.3-memcached
-    - php7.3-gd
+    - php7.4
+    - php7.4-fpm
+    - php7.4-pgsql
+    - php7.4-curl
+    - php7.4-xml
+    - php7.4-mbstring
+    - php7.4-memcached
+    - php7.4-gd
+    - php-imagick
   notify:
     - restart nginx
 
