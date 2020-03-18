@@ -101,7 +101,7 @@ class MembershipPlanController extends BaseControllerAbstract
      */
     public function index(Requests\MembershipPlan\IndexRequest $request)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [], (int)$request->input('page', 1));
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Http\V1\Controllers\BaseControllerAbstract;
 use App\Http\V1\Controllers\Traits\HasIndexRequests;
 use App\Http\V1\Requests;
 use App\Models\User\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -35,11 +36,11 @@ class ThreadController extends BaseControllerAbstract
     /**
      * @param Requests\User\Thread\IndexRequest $request
      * @param User $user
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function index(Requests\User\Thread\IndexRequest $request, User $user)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$user], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [$user], (int)$request->input('page', 1));
     }
 
     /**

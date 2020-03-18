@@ -8,10 +8,12 @@ use App\Events\User\Contact\ContactCreatedEvent;
 use App\Http\V1\Controllers\BaseControllerAbstract;
 use App\Http\V1\Controllers\Traits\HasIndexRequests;
 use App\Http\V1\Requests;
+use App\Models\BaseModelAbstract;
 use App\Models\User\Contact;
 use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -46,11 +48,11 @@ class ContactController extends BaseControllerAbstract
     /**
      * @param Requests\User\Contact\IndexRequest $request
      * @param User $user
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function index(Requests\User\Contact\IndexRequest $request, User $user)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$user], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [$user], (int)$request->input('page', 1));
     }
 
     /**
@@ -78,7 +80,8 @@ class ContactController extends BaseControllerAbstract
      * @param Requests\User\Contact\UpdateRequest $request
      * @param User $user
      * @param Contact $contact
-     * @return \App\Models\BaseModelAbstract
+     * @return BaseModelAbstract
+     * @throws \Exception
      */
     public function update(Requests\User\Contact\UpdateRequest $request, User $user, Contact $contact)
     {

@@ -26,16 +26,18 @@ class ContactRepository extends BaseRepositoryAbstract implements ContactReposit
     }
 
     /**
-     * @param array $where
+     * @param array $filter
+     * @param array $search
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray
      * @param int $pageNumber
+     * @param array $orderBy
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function findAll(array $filter = [], array $search = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
+    public function findAll(array $filter = [], array $search = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
     {
-        $query = parent::buildFindAllQuery($filter, $search, $with, []);
+        $query = parent::buildFindAllQuery($filter, $search, $orderBy, $with, []);
 
         /** @var User $user */
         foreach ($belongsToArray as $user) {

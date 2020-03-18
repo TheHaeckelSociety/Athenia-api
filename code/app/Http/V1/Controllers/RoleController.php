@@ -99,6 +99,6 @@ class RoleController extends BaseControllerAbstract
      */
     public function index(Requests\Role\IndexRequest $request)
     {
-        return $this->roleRepository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [], (int)$request->input('page', 1));
+        return $this->roleRepository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [], (int)$request->input('page', 1));
     }
 }

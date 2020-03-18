@@ -21,9 +21,10 @@ trait FindAll
      * @param int $limit
      * @param array $belongsToArray array of models this should belong to
      * @param int|null $page pass in null to get all
+     * @param array $orderBy
      * @return void
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1)
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1)
     {
         throw new NotImplementedException();
     }
