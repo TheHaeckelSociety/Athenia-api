@@ -56,5 +56,6 @@ class SignUpListenerTest extends TestCase
         $event = new SignUpEvent($user);
 
         $listener->handle($event);
+        $this->assertTrue($messageCreatedEventDispatched);
     }
 }
