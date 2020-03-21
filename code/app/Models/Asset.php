@@ -53,7 +53,7 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
      *
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

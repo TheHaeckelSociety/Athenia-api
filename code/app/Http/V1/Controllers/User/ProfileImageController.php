@@ -99,6 +99,8 @@ class ProfileImageController
         $data['file_contents'] = $request->getDecodedContents();
         $data['file_extension'] = $this->mimeTypes->getExtension($request->getFileMimeType());
 
+        $data['user_id'] = $user->id;
+
         $model = $this->repository->create($data, $user);
         return new JsonResponse($model, 201);
     }

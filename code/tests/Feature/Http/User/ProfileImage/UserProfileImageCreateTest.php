@@ -64,8 +64,7 @@ class UserProfileImageCreateTest extends TestCase
 
         /** @var User $updatedUser */
         $updatedUser = User::find($this->user->id);
-        //TODO
-        //$this->assertEquals($profileImage->id, $updatedUser->profile_image_id);
+        $this->assertEquals($profileImage->id, $updatedUser->profile_image_id);
     }
 
     public function testCreateFailsRequiredFieldsMissing()

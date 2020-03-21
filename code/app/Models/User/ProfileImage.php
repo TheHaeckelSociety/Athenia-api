@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $conferences_count
  * @property-read int|null $events_count
  * @property-read User $user
+ * @property int|null $user_id
  * @method static Builder|ProfileImage newModelQuery()
  * @method static Builder|ProfileImage newQuery()
  * @method static Builder|ProfileImage query()
@@ -34,16 +35,16 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProfileImage whereName($value)
  * @method static Builder|ProfileImage whereUpdatedAt($value)
  * @method static Builder|ProfileImage whereUrl($value)
+ * @method static Builder|ProfileImage whereUserId($value)
  * @mixin Eloquent
- * @property int|null $user_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Content[] $contents
- * @property-read int|null $contents_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereUserId($value)
  */
 class ProfileImage extends Asset
 {
     /**
      * @return HasOne
      */
-
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
+    }
 }
