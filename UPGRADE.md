@@ -2,6 +2,30 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.26.0 
+
+This update adds a profile image feature for our users will now be able to make use of. There was also a fix made to the ansible dependencies, so start off by replacing all instances of 7.3 to 7.4 in the file `ansible/roles/php/tasks/main.yml`. Then copy over the following new files.
+
+* code/app/Contracts/Repositories/User/ProfileImageRepositoryContract.php
+* code/app/Http/V1/Controllers/User/ProfileImageController.php
+* code/app/Http/V1/Requests/User/ProfileImage/
+* code/app/Models/User/ProfileImage.php
+* code/app/Policies/User/ProfileImagePolicy.php
+* code/app/Repositories/User/ProfileImageRepository.php
+* code/database/migrations/2020_03_21_194840_add_profile_image_id_to_users.php
+* code/tests/Feature/Http/User/ProfileImage/UserProfileImageCreateTest.php
+* code/tests/Integration/Repositories/User/ProfileImageRepositoryTest.php
+* code/tests/Unit/Models/User/ProfileImageTest.php
+
+Then there are a couple updates that need to be ran for this on existing files.
+
+* code/app/Models/Asset.php - The relation type to user has been changed in the function type signature.
+* code/app/Models/User/User.php - A new attribute was added for the profile image url, and a new relation was added to the profile image.
+* code/app/Providers/AppRepositoryProvider.php - The new repository needs to be registered.
+* code/routes/api-v1.php - The new route needs to be registered.
+* code/tests/Unit/Listeners/User/SignUpListenerTest.php - A bug fix was made from the last update on one of the assertions.
+* code/tests/Unit/Models/User/UserTest.php - The new attribute and relation have new tests.
+
 ## 0.25.0
 
 A very long overdue update. This update brings general ordering to all possible index requests of the API. This means that all findAll function calls have been updated, and all usages of those functions will need to be updated in all related apps. The core has also been updated to php 7.4, and a previously provided function has been removed.
