@@ -25,6 +25,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
@@ -43,6 +44,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $name the full name of the user
  * @property string $password the password of the user
  * @property bool $allow_users_to_add_me
+ * @property int|null $profile_image_id
  * @property string|null $about_me
  * @property string|null $stripe_customer_key
  * @property bool $receive_push_notifications
@@ -50,6 +52,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property-read null|string $profile_image_url
+ * @property-read ProfileImage|null $profileImage
  * @property-read Resource $resource
  * @property-read Collection|Asset[] $assets
  * @property-read Collection|BallotCompletion[] $ballotCompletions
@@ -83,6 +87,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static Builder|User whereMergedToId($value)
  * @method static Builder|User whereName($value)
  * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereProfileImageId($value)
  * @method static Builder|User wherePushNotificationKey($value)
  * @method static Builder|User whereReceivePushNotifications($value)
  * @method static Builder|User whereStripeCustomerKey($value)
@@ -104,6 +109,15 @@ class User extends BaseModelAbstract
     protected $hidden = [
         'deleted_at',
         'password',
+    ];
+
+    /**
+     * The url of the profile image
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image_url',
     ];
 
     /**
@@ -164,6 +178,16 @@ class User extends BaseModelAbstract
     public function organizationManagers(): HasMany
     {
         return $this->hasMany(OrganizationManager::class);
+    }
+
+    /**
+     * The asset that contains the profile image for this user
+     *
+     * @return BelongsTo
+     */
+    public function profileImage() : BelongsTo
+    {
+        return $this->belongsTo(ProfileImage::class);
     }
 
     /**
@@ -238,6 +262,16 @@ class User extends BaseModelAbstract
         return $this->organizationManagers->first(fn (OrganizationManager $organizationManager) =>
             in_array($organizationManager->role_id, $roles) && $organizationManager->organization_id === $organization->id
         ) != null;
+    }
+
+    /**
+     * Get the URL for the profile image
+     *
+     * @return null|string
+     */
+    public function getProfileImageUrlAttribute()
+    {
+        return $this->profileImage ? $this->profileImage->url : null;
     }
 
     /**

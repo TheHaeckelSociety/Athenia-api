@@ -115,6 +115,11 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function() {
                     'store', 'destroy',
                 ],
             ]);
+            Route::resource('profile-images', 'User\ProfileImageController', [
+                'only' => [
+                    'store',
+                ],
+            ]);
             Route::resource('subscriptions', 'User\SubscriptionController', [
                 'only' => [
                     'store', 'update',

@@ -79,7 +79,7 @@ class ReindexResources extends Command
      */
     public function indexData(BaseRepositoryContract $repository)
     {
-        $models = $repository->findAll([], [], [], null);
+        $models = $repository->findAll([], [], [], [],null);
         $progressBar = $this->output->createProgressBar($models->count());
 
         /** @var CanBeIndexedContract $model */

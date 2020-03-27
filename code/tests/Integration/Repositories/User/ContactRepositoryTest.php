@@ -65,7 +65,7 @@ class ContactRepositoryTest extends TestCase
             'initiated_by_id' => $user->id,
         ]);
 
-        $items = $this->repository->findAll([], [], [], 10, [$user]);
+        $items = $this->repository->findAll([], [], [], [], 10, [$user]);
         $this->assertCount(7, $items);
     }
 

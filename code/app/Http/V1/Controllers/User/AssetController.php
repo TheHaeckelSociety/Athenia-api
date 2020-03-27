@@ -51,7 +51,7 @@ class AssetController extends BaseControllerAbstract
      */
     public function index(Requests\User\Asset\IndexRequest $request, User $user)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$user], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [$user], (int)$request->input('page', 1));
     }
 
     /**

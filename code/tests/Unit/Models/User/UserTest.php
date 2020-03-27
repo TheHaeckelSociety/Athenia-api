@@ -6,6 +6,7 @@ namespace Tests\Unit\Models\User;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
+use App\Models\User\ProfileImage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -84,6 +85,16 @@ class UserTest extends TestCase
         $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testProfileImage()
+    {
+        $model = new User();
+
+        $relation = $model->profileImage();
+
+        $this->assertEquals('users.profile_image_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('assets.id', $relation->getQualifiedOwnerKeyName());
+    }
+
     public function testResource()
     {
         $user = new User();
@@ -123,6 +134,17 @@ class UserTest extends TestCase
         $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('thread_user.user_id', $relation->getQualifiedForeignPivotKeyName());
         $this->assertEquals('thread_user.thread_id', $relation->getQualifiedRelatedPivotKeyName());
+    }
+
+    public function testGetProfileImageUrlAttribute()
+    {
+        $user = new User([
+            'profileImage' => new ProfileImage([
+                'url' => 'http://test.test/test.jpg',
+            ]),
+        ]);
+
+        $this->assertEquals('http://test.test/test.jpg', $user->profile_image_url);
     }
 
     public function testGetJWTIdentifier()

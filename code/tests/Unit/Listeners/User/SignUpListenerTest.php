@@ -37,20 +37,6 @@ class SignUpListenerTest extends TestCase
             'Ralph Nadar,',
         );
 
-        /** @var Dispatcher|CustomMockInterface $dispatcher */
-        $dispatcher = mock(Dispatcher::class);
-
-        $messageCreatedEventDispatched = false;
-        $dispatcher->shouldReceive('dispatch')->with(\Mockery::on(function ($event) use (&$messageCreatedEventDispatched) {
-            if ($event instanceof MessageCreatedEvent) {
-                $messageCreatedEventDispatched = true;
-            }
-
-            return true;
-        }));
-
-        Message::setEventDispatcher($dispatcher);
-
         $listener = new SignUpListener($repository);
 
         $event = new SignUpEvent($user);

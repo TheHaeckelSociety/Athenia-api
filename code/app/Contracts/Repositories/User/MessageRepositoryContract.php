@@ -26,17 +26,4 @@ interface MessageRepositoryContract extends BaseRepositoryContract
      * @return Message
      */
     public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = [], $greeting = null): Message;
-
-    /**
-     * Find all
-     *
-     * @param array $filters
-     * @param array $searches
-     * @param array $with
-     * @param int|null $limit pass null to get all
-     * @param array $belongsToArray array of models this should belong to
-     * @param int $pageNumber
-     * @return LengthAwarePaginator|Collection
-     */
-    public function findAllOrderedByOldest(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1);
 }

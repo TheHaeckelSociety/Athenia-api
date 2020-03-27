@@ -2,6 +2,80 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.26.0 
+
+This update adds a profile image feature for our users will now be able to make use of. There was also a fix made to the ansible dependencies, so start off by replacing all instances of 7.3 to 7.4 in the file `ansible/roles/php/tasks/main.yml`. Then copy over the following new files.
+
+* code/app/Contracts/Repositories/User/ProfileImageRepositoryContract.php
+* code/app/Http/V1/Controllers/User/ProfileImageController.php
+* code/app/Http/V1/Requests/User/ProfileImage/
+* code/app/Models/User/ProfileImage.php
+* code/app/Policies/User/ProfileImagePolicy.php
+* code/app/Repositories/User/ProfileImageRepository.php
+* code/database/migrations/2020_03_21_194840_add_profile_image_id_to_users.php
+* code/tests/Feature/Http/User/ProfileImage/UserProfileImageCreateTest.php
+* code/tests/Integration/Repositories/User/ProfileImageRepositoryTest.php
+* code/tests/Unit/Models/User/ProfileImageTest.php
+
+Then there are a couple updates that need to be ran for this on existing files.
+
+* code/app/Models/Asset.php - The relation type to user has been changed in the function type signature.
+* code/app/Models/User/User.php - A new attribute was added for the profile image url, and a new relation was added to the profile image.
+* code/app/Providers/AppRepositoryProvider.php - The new repository needs to be registered.
+* code/routes/api-v1.php - The new route needs to be registered.
+* code/tests/Unit/Listeners/User/SignUpListenerTest.php - A bug fix was made from the last update on one of the assertions.
+* code/tests/Unit/Models/User/UserTest.php - The new attribute and relation have new tests.
+
+## 0.25.0
+
+A very long overdue update. This update brings general ordering to all possible index requests of the API. This means that all findAll function calls have been updated, and all usages of those functions will need to be updated in all related apps. The core has also been updated to php 7.4, and a previously provided function has been removed.
+
+### PHP 7.4
+
+To complete the php update simply copy over the following files, and then run the provision.
+
+* ansible/roles/athenia/templates/api.projectathenia.com.conf.j2  
+* ansible/roles/php/tasks/main.yml
+
+### Ordering
+
+There are a large amount of files that were changed for this. Most of these changes were pretty simply changes to findAll calls, but there are a number of large changes to some files that were made. These are thus broken into two corresponding sections.
+
+#### Big Changes
+
+* code/app/Contracts/Repositories/BaseRepositoryContract.php
+* code/app/Http/V1/Controllers/Traits/HasIndexRequests.php
+* code/app/Repositories/BaseRepositoryAbstract.php
+* code/app/Repositories/Traits/NotImplemented/FindAll.php
+* code/tests/Feature/Http/User/Thread/Message/UserThreadMessageIndexTest.php
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php
+
+#### Small Changes
+
+* code/app/Console/Commands/ReindexResources.php
+* code/app/Http/V1/Controllers/Article/ArticleVersionController.php
+* code/app/Http/V1/Controllers/Article/IterationController.php
+* code/app/Http/V1/Controllers/ArticleController.php
+* code/app/Http/V1/Controllers/MembershipPlanController.php
+* code/app/Http/V1/Controllers/Organization/OrganizationManagerController.php
+* code/app/Http/V1/Controllers/OrganizationController.php
+* code/app/Http/V1/Controllers/ResourceController.php
+* code/app/Http/V1/Controllers/RoleController.php
+* code/app/Http/V1/Controllers/User/AssetController.php
+* code/app/Http/V1/Controllers/User/ContactController.php
+* code/app/Http/V1/Controllers/User/Thread/MessageController.php
+* code/app/Http/V1/Controllers/User/ThreadController.php
+* code/app/Repositories/User/ContactRepository.php
+* code/tests/Integration/Repositories/RoleRepositoryTest.php
+* code/tests/Integration/Repositories/User/ContactRepositoryTest.php
+
+### Message Repository Helper Removal
+
+This is partially an optional change, but if you choose not to do it then you must still update the findAll function in the MessageRepository. Along with the updated files below, any calls to the function `findAllOrderedByOldest` should be replaced with a standard `findAll` utilizing the new ordering functionality to order the `created_at` field ascending.
+
+* code/app/Contracts/Repositories/User/MessageRepositoryContract.php
+* code/app/Repositories/User/MessageRepository.php
+
 ## 0.24.0
 
 Big ole update! This update adds a new organization module along with a bunch of other new updates. To complete this update run the following steps for each group of updates.

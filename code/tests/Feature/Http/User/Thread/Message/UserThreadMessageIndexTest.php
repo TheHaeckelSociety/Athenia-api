@@ -178,24 +178,25 @@ class UserThreadMessageIndexTest extends TestCase
             'thread_id' => $thread->id,
             'created_at' => '2018-11-10 12:00:00',
         ]);
+        $message3 = factory(Message::class)->create([
+            'thread_id' => $thread->id,
+            'created_at' => '2017-10-10 12:00:00',
+        ]);
 
-        // first page
-        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads/' . $thread->id . '/messages');
+        // ascending
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads/' . $thread->id . '/messages?order[created_at]=asc');
         $response->assertStatus(200);
-        $response->assertJson([
-            'total' => 2,
-            'current_page' => 1,
-            'per_page' => 10,
-            'from' => 1,
-            'to' => 2,
-        ])
-            ->assertJsonStructure([
-                'data' => [
-                    '*' =>  array_keys((new Message())->toArray())
-                ]
-            ]);
 
+        $this->assertEquals($message3->id, $response->original[0]->id);
         $this->assertEquals($message1->id, $response->original[1]->id);
+        $this->assertEquals($message2->id, $response->original[2]->id);
+
+        // descending
+        $response = $this->json('GET', $this->path . $this->actingAs->id . '/threads/' . $thread->id . '/messages?order[created_at]=desc');
+        $response->assertStatus(200);
+
         $this->assertEquals($message2->id, $response->original[0]->id);
+        $this->assertEquals($message1->id, $response->original[1]->id);
+        $this->assertEquals($message3->id, $response->original[2]->id);
     }
 }

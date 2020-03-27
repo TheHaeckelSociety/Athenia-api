@@ -16,6 +16,7 @@ use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Repositories\User\ContactRepositoryContract;
 use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
+use App\Contracts\Repositories\User\ProfileImageRepositoryContract;
 use App\Contracts\Repositories\User\ThreadRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotCompletionRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotRepositoryContract;
@@ -38,6 +39,7 @@ use App\Models\Subscription\Subscription;
 use App\Models\User\Contact;
 use App\Models\User\Message;
 use App\Models\User\PasswordToken;
+use App\Models\User\ProfileImage;
 use App\Models\User\Thread;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotCompletion;
@@ -59,6 +61,7 @@ use App\Repositories\Subscription\SubscriptionRepository;
 use App\Repositories\User\ContactRepository;
 use App\Repositories\User\MessageRepository;
 use App\Repositories\User\PasswordTokenRepository;
+use App\Repositories\User\ProfileImageRepository;
 use App\Repositories\User\ThreadRepository;
 use App\Repositories\Vote\BallotCompletionRepository;
 use App\Repositories\Vote\BallotRepository;
@@ -103,6 +106,7 @@ class AppRepositoryProvider extends ServiceProvider
             PasswordTokenRepositoryContract::class,
             PaymentRepositoryContract::class,
             PaymentMethodRepositoryContract::class,
+            ProfileImageRepositoryContract::class,
             ResourceRepositoryContract::class,
             RoleRepositoryContract::class,
             SubscriptionRepositoryContract::class,
@@ -217,6 +221,15 @@ class AppRepositoryProvider extends ServiceProvider
             return new PaymentMethodRepository(
                 new PaymentMethod(),
                 $this->app->make('log'),
+            );
+        });
+        $this->app->bind(ProfileImageRepositoryContract::class, function() {
+            return new ProfileImageRepository(
+                new ProfileImage(),
+                $this->app->make('log'),
+                $this->app->make('filesystem'),
+                $this->app->make('config')->get('app.asset_url'),
+                "profile_images"
             );
         });
         $this->app->bind(ResourceRepositoryContract::class, function() {

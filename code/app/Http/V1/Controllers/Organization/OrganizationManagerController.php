@@ -64,7 +64,7 @@ class OrganizationManagerController extends BaseControllerAbstract
      */
     public function index(Requests\Organization\OrganizationManager\IndexRequest $request, Organization $organization)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$organization], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [$organization], (int)$request->input('page', 1));
     }
 
     /**
