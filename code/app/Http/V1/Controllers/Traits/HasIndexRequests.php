@@ -40,6 +40,17 @@ trait HasIndexRequests
     }
 
     /**
+     * Get the order passed in by the user
+     *
+     * @param BaseRequestAbstract $request
+     * @return array
+     */
+    protected function order(BaseRequestAbstract $request): array
+    {
+        return $request->input('order', []);
+    }
+
+    /**
      * Validate and get the limit for pagination per page
      *
      * @param BaseRequestAbstract $request

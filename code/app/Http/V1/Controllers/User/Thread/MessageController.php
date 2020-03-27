@@ -7,10 +7,12 @@ use App\Contracts\Repositories\User\MessageRepositoryContract;
 use App\Http\V1\Controllers\BaseControllerAbstract;
 use App\Http\V1\Controllers\Traits\HasIndexRequests;
 use App\Http\V1\Requests;
+use App\Models\BaseModelAbstract;
 use App\Models\User\Message;
 use App\Models\User\Thread;
 use App\Models\User\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -39,11 +41,11 @@ class MessageController extends BaseControllerAbstract
      * @param Requests\User\Thread\Message\IndexRequest $request
      * @param User $user
      * @param Thread $thread
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function index(Requests\User\Thread\Message\IndexRequest $request, User $user, Thread $thread)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->limit($request), [$thread], (int)$request->input('page', 1));
+        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [$thread], (int)$request->input('page', 1));
     }
 
     /**
@@ -76,7 +78,8 @@ class MessageController extends BaseControllerAbstract
      * @param User $user
      * @param Thread $thread
      * @param Message $message
-     * @return \App\Models\BaseModelAbstract
+     * @return BaseModelAbstract
+     * @throws \Exception
      */
     public function update(Requests\User\Thread\Message\UpdateRequest $request, User $user, Thread $thread, Message $message)
     {

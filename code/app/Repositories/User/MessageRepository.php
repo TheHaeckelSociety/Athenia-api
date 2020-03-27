@@ -75,40 +75,18 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
      *
      * @param array $filters
      * @param array $searches
+     * @param array $orderBy
      * @param array $with
      * @param int|null $limit pass null to get all
      * @param array $belongsToArray array of models this should belong to
      * @param int $pageNumber
      * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
     {
-        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+        $query = $this->buildFindAllQuery($filters, $searches, $orderBy, $with, $belongsToArray);
 
         $query->orderBy('created_at', 'desc');
-
-        if ($limit) {
-            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
-        }
-        return $query->get();
-    }
-
-    /**
-     * Find all
-     *
-     * @param array $filters
-     * @param array $searches
-     * @param array $with
-     * @param int|null $limit pass null to get all
-     * @param array $belongsToArray array of models this should belong to
-     * @param int $pageNumber
-     * @return LengthAwarePaginator|Collection
-     */
-    public function findAllOrderedByOldest(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
-    {
-        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
-
-        $query->orderBy('created_at', 'asc');
 
         if ($limit) {
             return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);

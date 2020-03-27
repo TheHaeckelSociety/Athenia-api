@@ -28,13 +28,14 @@ interface BaseRepositoryContract
      *
      * @param array $filters
      * @param array $searches
+     * @param array $orderBy This needs to be an array of of field names with each value indicating the needed order
      * @param array $with
      * @param int $limit
      * @param array $belongsToArray array of models this should belong to
      * @param int|null $page pass in null to get all
      * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1);
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1);
 
     /**
      * Save a new instance of this model, and then return the instance
