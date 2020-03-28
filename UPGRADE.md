@@ -2,6 +2,55 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.27.0 
+
+Extendable endpoints! This is another long overdue update. All Athenia endpoints now have their own base controllers where all future implementations should be created. The core has also been upgraded to Laravel 7. To complete this update complete the following steps.
+
+### Routing Upgrade
+
+To start copy over the directory `code/app/Http/Core/`, this file `code/routes/core.php`, and then update the following paths.
+
+* README.md - There was a useful snippet added about how to best define routes.
+* code/app/Http/V1/Middleware/ - All middlewares in this directory should be moved to the root HTTP directory
+* code/app/Http/Kernel.php - Update the paths of middlewares to point to root instead of V1
+* code/app/Http/V1/Controllers/Article/ArticleVersionController.php
+* code/app/Http/V1/Controllers/Article/IterationController.php
+* code/app/Http/V1/Controllers/ArticleController.php
+* code/app/Http/V1/Controllers/AuthenticationController.php
+* code/app/Http/V1/Controllers/ForgotPasswordController.php
+* code/app/Http/V1/Controllers/MembershipPlanController.php
+* code/app/Http/V1/Controllers/Organization/OrganizationManagerController.php
+* code/app/Http/V1/Controllers/OrganizationController.php
+* code/app/Http/V1/Controllers/ResourceController.php
+* code/app/Http/V1/Controllers/RoleController.php
+* code/app/Http/V1/Controllers/StatusController.php
+* code/app/Http/V1/Controllers/User/AssetController.php
+* code/app/Http/V1/Controllers/User/ContactController.php
+* code/app/Http/V1/Controllers/User/PaymentMethodController.php
+* code/app/Http/V1/Controllers/User/ProfileImageController.php
+* code/app/Http/V1/Controllers/User/SubscriptionController.php
+* code/app/Http/V1/Controllers/User/Thread/MessageController.php
+* code/app/Http/V1/Controllers/User/ThreadController.php
+* code/app/Http/V1/Controllers/UserController.php
+* code/routes/api-v1.php - Any routes that are from Athenia should be removed, and every route group should now include the core routes
+* tests/Unit/Http/V1/Middleware/ - All tests in this directory should be moved into the root middleware directory 
+
+Once that is complete you are going to want to copy over all application specific controllers, requests, and middlewares. Then modify any version specific controllers to either simply extend the parents or to have a custom implementation. Then remove the following paths.
+
+* code/app/Http/V1/Controllers/BaseControllerAbstract.php
+* code/app/Http/V1/Controllers/Traits/
+* code/app/Http/V1/Requests/
+
+### Laravel Upgrade
+
+To start this part open up your composer.json, and make sure to update your laravel version, and then check any corresponding dependencies. Then update the following files.
+
+* code/app/Exceptions/Handler.php
+* code/config/cors.php
+* code/config/mail.php
+* code/config/session.php
+* code/tests/Integration/Repositories/User/ProfileImageRepositoryTest.php
+
 ## 0.26.0 
 
 This update adds a profile image feature for our users will now be able to make use of. There was also a fix made to the ansible dependencies, so start off by replacing all instances of 7.3 to 7.4 in the file `ansible/roles/php/tasks/main.yml`. Then copy over the following new files.
