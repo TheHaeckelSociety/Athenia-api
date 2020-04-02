@@ -19,5 +19,15 @@ interface SubscriptionRepositoryContract extends BaseRepositoryContract
      * @param Carbon $expiresAt
      * @return Collection
      */
-    public function findExpiring(Carbon $expiresAt) : Collection;
+    public function findExpiring(Carbon $expiresAt): Collection;
+
+    /**
+     * Finds all subscriptions that expire after the passed in expiration date
+     *  The optional type field will filter out all subscriptions that are not to a specific subscriber type
+     *
+     * @param Carbon $expirationDate
+     * @param string|null $type
+     * @return Collection
+     */
+    public function findExpiresAfter(Carbon $expirationDate, string $type = null): Collection;
 }

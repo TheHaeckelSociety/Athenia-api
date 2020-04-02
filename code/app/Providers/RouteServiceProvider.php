@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Organization\Organization;
+use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
@@ -26,6 +28,8 @@ class RouteServiceProvider extends ServiceProvider
         'article' => Article::class,
         'iteration' => Iteration::class,
         'membership_plan' => MembershipPlan::class,
+        'organization' => Organization::class,
+        'organization_manager' => OrganizationManager::class,
         'payment_method' => PaymentMethod::class,
         'role' => Role::class,
         'subscription' => Subscription::class,

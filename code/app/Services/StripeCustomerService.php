@@ -138,6 +138,8 @@ class StripeCustomerService implements StripeCustomerServiceContract
             throw new InvalidArgumentException('The passed in user does not have a stripe customer key associated with their account.');
         }
 
+        $this->paymentMethodRepository->delete($paymentMethod);
+
         return $this->cardHelper->delete($paymentMethod->owner->stripe_customer_key, $paymentMethod->payment_method_key);
     }
 

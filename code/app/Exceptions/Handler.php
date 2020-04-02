@@ -5,15 +5,18 @@ namespace App\Exceptions;
 
 use App\Exceptions\JWT\TokenMissingException;
 use App\Exceptions\JWT\TokenUserNotFoundException;
-use Exception;
+use Cartalyst\Stripe\Exception\CardErrorException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
@@ -36,16 +39,17 @@ class Handler extends ExceptionHandler
         TokenMismatchException::class,
         ValidationException::class,
         TokenExpiredException::class,
+        CardErrorException::class,
     ];
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param Throwable $exception
+     * @return Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         if ($request->getContentType() == 'json') {
             list($status, $response) = $this->parseException($exception);
@@ -68,10 +72,10 @@ class Handler extends ExceptionHandler
     /**
      * Parse the exception for the status code and the message
      *
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return array
      */
-    protected function parseException(Exception $exception): array
+    protected function parseException(Throwable $exception): array
     {
         $status = 500;
         $response = [

@@ -8,7 +8,7 @@ use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Vote\Ballot;
 use App\Repositories\BaseRepositoryAbstract;
-use App\Repositories\Traits\CanGetAndUnset;
+use App\Traits\CanGetAndUnset;
 use Psr\Log\LoggerInterface as LogContract;
 
 /**

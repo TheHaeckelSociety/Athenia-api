@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Repositories\Traits\NotImplemented;
 
 use App\Exceptions\NotImplementedException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Class FindAll
@@ -14,14 +15,16 @@ trait FindAll
     /**
      * Not Implemented
      *
-     * @param array $filter
-     * @param array $search
+     * @param array $filters
+     * @param array $searches
      * @param array $with
      * @param int $limit
-     * @param array $belongsToArray
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|void
+     * @param array $belongsToArray array of models this should belong to
+     * @param int|null $page pass in null to get all
+     * @param array $orderBy
+     * @return void
      */
-    public function findAll(array $filter = [], array $search = [], array $with = [], int $limit = 10, array $belongsToArray = [])
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1)
     {
         throw new NotImplementedException();
     }

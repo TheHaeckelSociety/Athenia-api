@@ -8,9 +8,12 @@ use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Validation\Rule;
 
 /**
  * Class Article
@@ -20,21 +23,26 @@ use Illuminate\Validation\Rule;
  * @property int $created_by_id
  * @property string $title
  * @property-read null|string $content
- * @property \Carbon\Carbon|null $deleted_at
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \App\Models\User\User $createdBy
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $iterations
- * @method static \Illuminate\Database\Eloquent\Builder|Article newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Article newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Article query()
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereCreatedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property-read null|ArticleVersion $current_version
+ * @property-read null|string $last_iteration_content
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $createdBy
+ * @property-read Collection|Iteration[] $iterations
+ * @property-read Collection|ArticleVersion[] $versions
+ * @property-read int|null $iterations_count
+ * @property-read int|null $versions_count
+ * @method static Builder|Article newModelQuery()
+ * @method static Builder|Article newQuery()
+ * @method static Builder|Article query()
+ * @method static Builder|Article whereCreatedAt($value)
+ * @method static Builder|Article whereCreatedById($value)
+ * @method static Builder|Article whereDeletedAt($value)
+ * @method static Builder|Article whereId($value)
+ * @method static Builder|Article whereTitle($value)
+ * @method static Builder|Article whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Article extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
@@ -47,7 +55,18 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
      */
     protected $appends = [
         'content',
+        'last_iteration_content',
     ];
+
+    /**
+     * All versions related to this article
+     *
+     * @return HasMany
+     */
+    public function versions() : HasMany
+    {
+        return $this->hasMany(ArticleVersion::class)->orderByDesc('created_at')->orderByDesc('id');
+    }
 
     /**
      * The user that originally created this article
@@ -76,8 +95,31 @@ class Article extends BaseModelAbstract implements HasPolicyContract, HasValidat
      */
     public function getContentAttribute() : ?string
     {
+        /** @var ArticleVersion|null $iteration */
+        $version = $this->current_version;
+        return $version && $version->iteration ? $version->iteration->content : null;
+    }
+
+    /**
+     * Gets the content of the article
+     *
+     * @return null|ArticleVersion
+     */
+    public function getCurrentVersionAttribute() : ?ArticleVersion
+    {
+        /** @var ArticleVersion|null $iteration */
+        return $this->versions()->limit(1)->get()->first();
+    }
+
+    /**
+     * Gets the content of the article
+     *
+     * @return null|string
+     */
+    public function getLastIterationContentAttribute() : ?string
+    {
         /** @var Iteration|null $iteration */
-        $iteration = $this->iterations->first();
+        $iteration = $this->iterations()->limit(1)->get()->first();
         return $iteration ? $iteration->content : null;
     }
 

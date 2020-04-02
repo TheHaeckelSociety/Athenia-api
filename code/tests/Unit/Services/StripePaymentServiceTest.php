@@ -161,4 +161,29 @@ class StripePaymentServiceTest extends TestCase
 
         $this->service->reversePayment($payment);
     }
+
+    public function testIssuePartialRefundFailsWithoutStripe()
+    {
+        $payment = new Payment([
+            'paymentMethod' => new PaymentMethod(),
+        ]);
+
+        $this->expectException(NotImplementedException::class);
+
+        $this->service->issuePartialRefund($payment, 5);
+    }
+
+    public function testIssuePartialRefundSuccess()
+    {
+        $payment = new Payment([
+            'paymentMethod' => new PaymentMethod([
+                'payment_method_type' => 'stripe',
+            ]),
+            'transaction_key' => 'test_key',
+        ]);
+
+        $this->refundHandler->shouldReceive('create')->once()->with('test_key', 5);
+
+        $this->service->issuePartialRefund($payment, 5);
+    }
 }

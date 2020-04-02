@@ -26,6 +26,7 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|MembershipPlanRate[] $membershipPlanRates
+ * @property-read int|null $membership_plan_rates_count
  * @method static Builder|MembershipPlan newQuery()
  * @method static Builder|MembershipPlan newModelQuery()
  * @method static Builder|MembershipPlan query()

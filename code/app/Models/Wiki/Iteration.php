@@ -6,7 +6,11 @@ namespace App\Models\Wiki;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Class Iteration
@@ -16,22 +20,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $content
  * @property int $created_by_id
  * @property int $article_id
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Models\Wiki\Article $article
- * @property-read \App\Models\User\User $createdBy
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration query()
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereArticleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereCreatedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Iteration whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Article $article
+ * @property-read User $createdBy
+ * @property-read ArticleVersion $version
+ * @method static Builder|Iteration newModelQuery()
+ * @method static Builder|Iteration newQuery()
+ * @method static Builder|Iteration query()
+ * @method static Builder|Iteration whereArticleId($value)
+ * @method static Builder|Iteration whereContent($value)
+ * @method static Builder|Iteration whereCreatedAt($value)
+ * @method static Builder|Iteration whereCreatedById($value)
+ * @method static Builder|Iteration whereDeletedAt($value)
+ * @method static Builder|Iteration whereId($value)
+ * @method static Builder|Iteration whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Iteration extends BaseModelAbstract implements HasPolicyContract
 {
@@ -46,9 +51,19 @@ class Iteration extends BaseModelAbstract implements HasPolicyContract
     }
 
     /**
+     * The version of this article if there is one
+     *
+     * @return HasOne
+     */
+    public function version(): HasOne
+    {
+        return $this->hasOne(ArticleVersion::class);
+    }
+
+    /**
      * Makes sure everything is by default ordered by the created at date in reverse
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function newQuery()
     {

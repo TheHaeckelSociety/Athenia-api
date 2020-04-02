@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\BaseRepositoryContract;
@@ -63,12 +62,13 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      * Builds the find all query
      *
      * @param array $where
+     * @param array $searches
+     * @param array $orderBy
      * @param array $with
      * @param array $belongsToArray
-     * @param array $searches
      * @return EloquentJoinBuilder
      */
-    protected function buildFindAllQuery(array $where = [], array $searches = [], array $with = [], array $belongsToArray = [])
+    protected function buildFindAllQuery(array $where = [], array $searches = [], array $orderBy = [], array $with = [], array $belongsToArray = [])
     {
         /** @var EloquentJoinBuilder $result */
         $result = $this->model->with($with);
@@ -120,6 +120,10 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
             });
         }
 
+        foreach ($orderBy as $field => $direction) {
+            $result->orderBy($field, $direction);
+        }
+
         return $result;
     }
 
@@ -128,19 +132,21 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      *
      * @param array $filters
      * @param array $searches
+     * @param array $orderBy
      * @param array $with
-     * @param int $limit
+     * @param int|null $limit pass null to get all
      * @param array $belongsToArray array of models this should belong to
-     * @param int $pageNumber
+     * @param int $page
      * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1)
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1)
     {
-        $query = $this->buildFindAllQuery($filters, $searches, $with, $belongsToArray);
+        $query = $this->buildFindAllQuery($filters, $searches, $orderBy, $with, $belongsToArray);
 
         if ($limit) {
-            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
+            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $page);
         }
+
         return $query->get();
     }
 

@@ -6,9 +6,13 @@ namespace App\Providers;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\Services\ArticleVersionCalculationServiceContract;
+use App\Contracts\Services\StringHelperServiceContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Contracts\Services\StripePaymentServiceContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
+use App\Services\ArticleVersionCalculationService;
+use App\Services\StringHelperService;
 use App\Services\StripeCustomerService;
 use App\Services\StripePaymentService;
 use App\Services\TokenGenerationService;
@@ -29,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
+            ArticleVersionCalculationServiceContract::class,
+            StringHelperServiceContract::class,
             StripeCustomerServiceContract::class,
             StripePaymentServiceContract::class,
             TokenGenerationServiceContract::class,
@@ -44,6 +50,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerEnvironmentSpecificProviders();
 
+        $this->app->bind(ArticleVersionCalculationServiceContract::class, function () {
+            return new ArticleVersionCalculationService();
+        });
+        $this->app->bind(StringHelperServiceContract::class, function () {
+            return new StringHelperService();
+        });
         $this->app->bind(StripeCustomerServiceContract::class, function () {
             return new StripeCustomerService(
                 $this->app->make(UserRepositoryContract::class),

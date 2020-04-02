@@ -34,11 +34,25 @@ class MessageRepositoryTest extends TestCase
         $this->repository = new MessageRepository(new Message(), $this->getGenericLogMock());
     }
 
-    public function testFindAllThrowsException()
+    public function testFindAllSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        foreach (Message::all() as $resource) {
+            $resource->delete();
+        }
 
-        $this->repository->findAll();
+        factory(Message::class, 5)->create();
+        $items = $this->repository->findAll();
+        $this->assertCount(5, $items);
+    }
+
+    public function testFindAllEmpty()
+    {
+        foreach (Message::all() as $resource) {
+            $resource->delete();
+        }
+
+        $items = $this->repository->findAll();
+        $this->assertEmpty($items);
     }
 
     public function testCreateSuccess()
@@ -46,8 +60,6 @@ class MessageRepositoryTest extends TestCase
         $user = factory(User::class)->create();
 
         $dispatcher = mock(Dispatcher::class);
-
-        $dispatcher->shouldAllowMockingMethod('fire');
 
         $dispatcher->shouldReceive('until');
         $dispatcher->shouldReceive('dispatch')
@@ -75,12 +87,11 @@ class MessageRepositoryTest extends TestCase
         ], $user);
 
 
-        $this->assertCount(1, Message::all());
         $this->assertEquals('Hello', $message->subject);
         $this->assertEquals('test_template', $message->template);
         $this->assertEquals('test@test.com', $message->email);
         $this->assertEquals(['greeting' => 'hello'], $message->data);
-        $this->assertEquals($user->id, $message->user_id);
+        $this->assertEquals($user->id, $message->to_id);
     }
 
     public function testDeleteThrowsException()
@@ -100,7 +111,6 @@ class MessageRepositoryTest extends TestCase
     public function testUpdateThrowsException()
     {
         $dispatcher = mock(Dispatcher::class);
-        $dispatcher->shouldAllowMockingMethod('dispatch');
         $dispatcher->shouldReceive('until');
         $dispatcher->shouldReceive('dispatch');
         Message::setEventDispatcher($dispatcher);
@@ -150,5 +160,41 @@ class MessageRepositoryTest extends TestCase
         $this->assertEquals($user->email, $result->email);
         $this->assertEquals('no', $result->data['yes']);
         $this->assertNotNull($result->data['greeting']);
+    }
+
+    public function testSendEmailToUserWithGreetingOverride()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $dispatcher = mock(Dispatcher::class);
+
+        $dispatcher->shouldAllowMockingMethod('fire');
+
+        $dispatcher->shouldReceive('until');
+        $dispatcher->shouldReceive('dispatch')
+            ->with(\Mockery::on(function (String $eventName) {
+                return true;
+            }),
+                \Mockery::on(function (Message $message) {
+                    return true;
+                })
+            );
+        $dispatcher->shouldReceive('dispatch')->once()
+            ->with(\Mockery::on(function (MessageCreatedEvent $event) {
+                return true;
+            })
+            );
+
+        Message::setEventDispatcher($dispatcher);
+
+        $result = $this->repository->sendEmailToUser($user, 'A Subject', 'template', ['yes' => 'no'], 'To whom it may concern,');
+
+        $this->assertEquals('A Subject', $result->subject);
+        $this->assertEquals('template', $result->template);
+        $this->assertEquals($user->email, $result->email);
+        $this->assertEquals('no', $result->data['yes']);
+        $this->assertNotNull($result->data['greeting']);
+        $this->assertEquals('To whom it may concern,', $result->data['greeting']);
     }
 }

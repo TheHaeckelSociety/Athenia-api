@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Contracts\ThreadSecurity\ThreadSubjectGateProviderContract;
+use App\Gate\GeneralThreadGate;
 use App\Services\UserAuthenticationService;
+use App\ThreadSecurity\ThreadSubjectGateProvider;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -36,6 +39,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        $this->app->bind(ThreadSubjectGateProviderContract::class, function() {
+            return new ThreadSubjectGateProvider($this->app);
+        });
 
         /** @var AuthManager $auth */
         $auth = $this->app->make('auth');

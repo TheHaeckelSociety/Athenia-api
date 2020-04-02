@@ -16,3 +16,10 @@ $factory->define(\App\Models\Wiki\Iteration::class, function (Faker $faker) {
         'created_by_id' => factory(\App\Models\User\User::class)->create()->id,
     ];
 });
+
+$factory->define(\App\Models\Wiki\ArticleVersion::class, function (Faker $faker) {
+    return [
+        'article_id' => factory(\App\Models\Wiki\Article::class)->create()->id,
+        'iteration_id' => factory(\App\Models\Wiki\Iteration::class)->create()->id,
+    ];
+});

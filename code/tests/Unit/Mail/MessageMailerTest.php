@@ -20,7 +20,7 @@ class MessageMailerTest extends TestCase
             'name' => 'Darlene Dora',
         ]);
         $message = new Message([
-            'user' => $user,
+            'to' => $user,
             'subject' => 'Test Message',
             'email' => 'darlene@test.com',
             'template' => 'base',

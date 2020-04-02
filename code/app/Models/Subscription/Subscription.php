@@ -34,7 +34,7 @@ use Illuminate\Validation\Rule;
  * @property bool $recurring
  * @property int $subscriber_id
  * @property string $subscriber_type
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read null|string $formatted_cost
@@ -43,6 +43,7 @@ use Illuminate\Validation\Rule;
  * @property-read Collection|Payment[] $payments
  * @property-read PaymentMethod $paymentMethod
  * @property-read User $subscriber
+ * @property-read int|null $payments_count
  * @method static Builder|Subscription newModelQuery()
  * @method static Builder|Subscription newQuery()
  * @method static Builder|Subscription query()

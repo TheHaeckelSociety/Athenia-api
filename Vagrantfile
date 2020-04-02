@@ -73,53 +73,53 @@ Vagrant.configure("2") do |config|
     ## api.projectathenia.com ** PRODUCTION **
     ####################################################################################################################
 
-    config.vm.define "prod" do |prod|
+    # config.vm.define "prod" do |prod|
 
-        unless Vagrant.has_plugin?("vagrant-digitalocean")
-          raise 'vagrant-digitalocean is not installed! Run "vagrant plugin install vagrant-digitalocean"'
-        end
+    #     unless Vagrant.has_plugin?("vagrant-digitalocean")
+    #       raise 'vagrant-digitalocean is not installed! Run "vagrant plugin install vagrant-digitalocean"'
+    #     end
 
-        ## Local git-ignored credential file: ./vagrant-credentials.rb
-        ## Should contain (without dashes) (where the provider token is the private Digital Ocean Token)
-        ## --------
-        ## PROVIDER_TOKEN = 'xyz'
-        ## --------
-        load 'vagrant-credentials.rb'
+    #     ## Local git-ignored credential file: ./vagrant-credentials.rb
+    #     ## Should contain (without dashes) (where the provider token is the private Digital Ocean Token)
+    #     ## --------
+    #     ## PROVIDER_TOKEN = 'xyz'
+    #     ## --------
+    #     load 'vagrant-credentials.rb'
 
-        prod.vm.hostname = "api.projectathenia.com"
+    #     prod.vm.hostname = "api.projectathenia.com"
 
-        prod.vm.box = "digital_ocean"
-        prod.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-  	    prod.vm.synced_folder ".", "/vagrant", disabled: "true"
+    #     prod.vm.box = "digital_ocean"
+    #     prod.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+  	 #    prod.vm.synced_folder ".", "/vagrant", disabled: "true"
 
-        prod.vm.provider :digital_ocean do |provider, override|
-            override.ssh.private_key_path = "/Users/brycemeyer/.ssh/id_rsa"
-            override.ssh.username = "vagrant"
-            provider.ssh_key_name = "Bryce"
-            provider.token = PROVIDER_TOKEN
-            provider.image = "ubuntu-16-04-x64"
-            provider.region = "nyc3"
-            provider.size = "s-1vcpu-1gb"
-            provider.backups_enabled = "true"
-        end
+    #     prod.vm.provider :digital_ocean do |provider, override|
+    #         override.ssh.private_key_path = "/Users/brycemeyer/.ssh/id_rsa"
+    #         override.ssh.username = "vagrant"
+    #         provider.ssh_key_name = "Bryce"
+    #         provider.token = PROVIDER_TOKEN
+    #         provider.image = "ubuntu-16-04-x64"
+    #         provider.region = "nyc3"
+    #         provider.size = "s-1vcpu-1gb"
+    #         provider.backups_enabled = "true"
+    #     end
 
-        ## if we're upping this, do the following tasks:
-        if ARGV[0] == 'up'
-            ## add the key
-            prod.vm.provision "file", source: "/Users/brycemeyer/.ssh/id_rsa.pub", destination: "/tmp/id_rsa.pub"
-            ## add the user
-            prod.vm.provision "shell", path: "vagrant-do-provision.sh"
-        end
+    #     ## if we're upping this, do the following tasks:
+    #     if ARGV[0] == 'up'
+    #         ## add the key
+    #         prod.vm.provision "file", source: "/Users/brycemeyer/.ssh/id_rsa.pub", destination: "/tmp/id_rsa.pub"
+    #         ## add the user
+    #         prod.vm.provision "shell", path: "vagrant-do-provision.sh"
+    #     end
 
-        prod.vm.provision "ansible" do |ansible|
-            shared_ansible_config ansible
-            ansible.host_key_checking = false ## override for local
-            ansible.extra_vars = {
-                server_name: prod.vm.hostname,
-                asset_server_name: "assets.projectathenia.com",
-                server_env: "production",
-                notification_email: "dev@projectathenia.com"
-            }
-        end
-    end
+    #     prod.vm.provision "ansible" do |ansible|
+    #         shared_ansible_config ansible
+    #         ansible.host_key_checking = false ## override for local
+    #         ansible.extra_vars = {
+    #             server_name: prod.vm.hostname,
+    #             asset_server_name: "assets.projectathenia.com",
+    #             server_env: "production",
+    #             notification_email: "dev@projectathenia.com"
+    #         }
+    #     end
+    # end
 end

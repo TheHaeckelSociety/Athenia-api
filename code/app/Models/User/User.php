@@ -3,21 +3,34 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Contracts\Models\CanBeIndexedContract;
 use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Models\Asset;
+use App\Models\Organization\Organization;
+use App\Models\Organization\OrganizationManager;
+use App\Models\Payment\PaymentMethod;
+use App\Models\Resource;
 use App\Models\Role;
+use App\Models\Subscription\Subscription;
+use App\Models\Traits\CanBeIndexed;
 use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\BaseModelAbstract;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -26,37 +39,67 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *
  * @package App\Models\User
  * @property int $id
+ * @property int|null $merged_to_id
  * @property string $email the email address of the user
  * @property string $name the full name of the user
  * @property string $password the password of the user
+ * @property bool $allow_users_to_add_me
+ * @property int|null $profile_image_id
+ * @property string|null $about_me
  * @property string|null $stripe_customer_key
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property bool $receive_push_notifications
+ * @property string|null $push_notification_key
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeCustomerKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property-read null|string $profile_image_url
+ * @property-read ProfileImage|null $profileImage
+ * @property-read Resource $resource
+ * @property-read Collection|Asset[] $assets
+ * @property-read Collection|BallotCompletion[] $ballotCompletions
+ * @property-read Collection|Article[] $createdArticles
+ * @property-read Collection|Iteration[] $createdIterations
+ * @property-read Collection|Message[] $messages
+ * @property-read Collection|OrganizationManager[] $organizationManagers
+ * @property-read Collection|PaymentMethod[] $paymentMethods
+ * @property-read Collection|Role[] $roles
+ * @property-read Collection|Subscription[] $subscriptions
+ * @property-read Collection|Thread[] $threads
+ * @property-read int|null $assets_count
+ * @property-read int|null $ballot_completions_count
+ * @property-read int|null $created_articles_count
+ * @property-read int|null $created_iterations_count
+ * @property-read int|null $messages_count
+ * @property-read int|null $organization_managers_count
+ * @property-read int|null $payment_methods_count
+ * @property-read int|null $roles_count
+ * @property-read int|null $subscriptions_count
+ * @property-read int|null $threads_count
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereAboutMe($value)
+ * @method static Builder|User whereAllowUsersToAddMe($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereMergedToId($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereProfileImageId($value)
+ * @method static Builder|User wherePushNotificationKey($value)
+ * @method static Builder|User whereReceivePushNotifications($value)
+ * @method static Builder|User whereStripeCustomerKey($value)
+ * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
 class User extends BaseModelAbstract
-    implements AuthenticatableContract, JWTSubject, HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract
+    implements AuthenticatableContract, JWTSubject,
+            HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract,
+            CanBeIndexedContract
 {
-    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions;
+    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions, CanBeIndexed;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -76,6 +119,16 @@ class User extends BaseModelAbstract
     protected $appends = [
         'profile_image_url',
     ];
+
+    /**
+     * All assets this user has created
+     *
+     * @return HasMany
+     */
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
+    }
 
     /**
      * The ballot completions the user has done
@@ -114,7 +167,27 @@ class User extends BaseModelAbstract
      */
     public function messages(): HasMany
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class, 'to_id');
+    }
+
+    /**
+     * All organization manager relations this user has
+     *
+     * @return HasMany
+     */
+    public function organizationManagers(): HasMany
+    {
+        return $this->hasMany(OrganizationManager::class);
+    }
+
+    /**
+     * The resource object for this user
+     *
+     * @return MorphOne
+     */
+    public function resource() : MorphOne
+    {
+        return $this->morphOne(Resource::class, 'resource');
     }
 
     /**
@@ -152,7 +225,7 @@ class User extends BaseModelAbstract
      *
      * @return BelongsToMany
      */
-    public function threads() : BelongsToMany
+    public function threads(): BelongsToMany
     {
         return $this->belongsToMany(Thread::class);
     }
@@ -182,6 +255,26 @@ class User extends BaseModelAbstract
     }
 
     /**
+     * Determines whether or not the user can manage the organization.
+     *
+     * @param Organization $organization
+     * @param int|array $role
+     *          If the manager role is passed in then this will return true for both the manager role and admin role.
+     *          The admin role will only check for the admin role.
+     * @return bool
+     */
+    public function canManageOrganization(Organization $organization, $role = Role::ORGANIZATION_MANAGER): bool
+    {
+        $roles = is_array($role) ? $role : [$role];
+        if (!in_array(Role::ORGANIZATION_ADMIN, $roles)) {
+            $roles[] = Role::ORGANIZATION_ADMIN;
+        }
+        return $this->organizationManagers->first(fn (OrganizationManager $organizationManager) =>
+            in_array($organizationManager->role_id, $roles) && $organizationManager->organization_id === $organization->id
+        ) != null;
+    }
+
+    /**
      * Get the URL for the profile image
      *
      * @return null|string
@@ -192,31 +285,6 @@ class User extends BaseModelAbstract
     }
 
     /**
-     * Loads the users lifetime subscription if there is one present
-     *
-     * @return Subscription|null
-     */
-    public function lifetimeSubscription() : ?Subscription
-    {
-        return $this->subscriptions->first(function(Subscription $subscription) {
-            return $subscription->isLifetime();
-        });
-    }
-
-    /**
-     * Leads the users current active subscription if there is one
-     *
-     * @return Subscription|null
-     */
-    public function currentSubscription() : ?Subscription
-    {
-        return $this->subscriptions->first(function (Subscription $subscription) {
-            return $subscription->isLifetime() ? true :
-                ($subscription->expires_at ? $subscription->expires_at->greaterThan(Carbon::now()) : false);
-        });
-    }
-
-    /**
      * The name of the morph relation
      *
      * @return string
@@ -224,6 +292,16 @@ class User extends BaseModelAbstract
     public function morphRelationName(): string
     {
         return 'user';
+    }
+
+    /**
+     * Gets the content string to index
+     *
+     * @return string
+     */
+    public function getContentString(): ?string
+    {
+        return $this->name;
     }
 
     /**
@@ -277,10 +355,12 @@ class User extends BaseModelAbstract
                     'string',
                     'min:6',
                 ],
-                // social media attributes
                 'push_notification_key' => [
                     'string',
                     'max:512'
+                ],
+                'about_me' => [
+                    'string',
                 ],
                 'allow_users_to_add_me' => [
                     'boolean',

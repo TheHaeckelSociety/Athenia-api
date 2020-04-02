@@ -5,7 +5,6 @@ namespace App\Policies\Wiki;
 
 use App\Models\Role;
 use App\Models\User\User;
-use App\Models\Wiki\Article;
 use App\Policies\BasePolicyAbstract;
 
 /**
@@ -18,10 +17,9 @@ class IterationPolicy extends BasePolicyAbstract
      * All logged in users can currently see all article iterations right now
      *
      * @param User $user
-     * @param Article $article
      * @return bool
      */
-    public function all(User $user, Article $article)
+    public function all(User $user)
     {
         return $user->hasRole([Role::ARTICLE_EDITOR, Role::ARTICLE_VIEWER]);
     }

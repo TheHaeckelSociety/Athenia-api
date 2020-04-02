@@ -124,4 +124,21 @@ class StripePaymentService implements StripePaymentServiceContract
 
         $this->dispatcher->dispatch(new PaymentReversedEvent($payment));
     }
+
+    /**
+     * Issues a partial refund to the account the
+     *
+     * @param Payment $payment
+     * @param float $amount
+     * @return void
+     */
+    public function issuePartialRefund(Payment $payment, float $amount)
+    {
+        if ($payment->paymentMethod->payment_method_type == 'stripe') {
+
+            $this->refundHandler->create($payment->transaction_key, $amount);
+        } else {
+            throw new NotImplementedException('Only stripe transactions can be refunded right now');
+        }
+    }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Validators\ArticleVersion\SelectedIterationBelongsToArticleValidator;
 use App\Validators\ForgotPassword\TokenIsNotExpiredValidator;
 use App\Validators\ForgotPassword\UserOwnsTokenValidator;
 use App\Validators\NotPresentValidator;
@@ -30,5 +31,6 @@ class AppValidatorProvider extends ServiceProvider
         $validator->extend('not_present', NotPresentValidator::class);
         $validator->extend(MembershipPlanRateIsActiveValidator::KEY, MembershipPlanRateIsActiveValidator::class);
         $validator->extend(PaymentMethodIsOwnedByUserValidator::KEY, PaymentMethodIsOwnedByUserValidator::class);
+        $validator->extend(SelectedIterationBelongsToArticleValidator::KEY, SelectedIterationBelongsToArticleValidator::class);
     }
 }

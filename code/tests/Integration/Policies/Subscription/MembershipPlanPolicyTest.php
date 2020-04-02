@@ -6,6 +6,7 @@ namespace Tests\Integration\Policies\Subscription;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\User\User;
 use App\Policies\Subscription\MembershipPlanPolicy;
+use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 
 /**
@@ -14,6 +15,8 @@ use Tests\TestCase;
  */
 class MembershipPlanPolicyTest extends TestCase
 {
+    use DatabaseSetupTrait;
+
     public function testAll()
     {
         $policy = new MembershipPlanPolicy();

@@ -5,26 +5,31 @@ namespace App\Models;
 
 use App\Contracts\Models\HasPolicyContract;
 use App\Models\User\User;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Role
  *
  * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\User[] $users
- * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Role query()
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property-read Collection|User[] $users
+ * @property-read int|null $users_count
+ * @method static Builder|Role newModelQuery()
+ * @method static Builder|Role newQuery()
+ * @method static Builder|Role query()
+ * @method static Builder|Role whereCreatedAt($value)
+ * @method static Builder|Role whereDeletedAt($value)
+ * @method static Builder|Role whereId($value)
+ * @method static Builder|Role whereName($value)
+ * @method static Builder|Role whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Role extends BaseModelAbstract implements HasPolicyContract
 {
@@ -32,6 +37,8 @@ class Role extends BaseModelAbstract implements HasPolicyContract
     const SUPER_ADMIN = 2;
     const ARTICLE_VIEWER = 3;
     const ARTICLE_EDITOR = 4;
+    const ORGANIZATION_ADMIN = 10;
+    const ORGANIZATION_MANAGER = 11;
     // Add more roles here start with 100 in order to avoid application collision
 
     /**
@@ -43,6 +50,15 @@ class Role extends BaseModelAbstract implements HasPolicyContract
         self::ARTICLE_VIEWER,
         self::ARTICLE_EDITOR,
         // Add application specific roles here too
+    ];
+
+    /**
+     * All roles that are related to an organization
+     */
+    const ORGANIZATION_ROLES = [
+        self::ORGANIZATION_ADMIN,
+        self::ORGANIZATION_MANAGER,
+        // Add more organization roles here
     ];
 
     /**

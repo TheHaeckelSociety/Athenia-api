@@ -6,6 +6,7 @@ namespace Tests\Integration\Models\Subscription;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use Carbon\Carbon;
+use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 
 /**
@@ -14,6 +15,8 @@ use Tests\TestCase;
  */
 class MembershipPlanTest extends TestCase
 {
+    use DatabaseSetupTrait;
+
     public function testCurrentCostAttribute()
     {
         /** @var MembershipPlan $membershipPlan */

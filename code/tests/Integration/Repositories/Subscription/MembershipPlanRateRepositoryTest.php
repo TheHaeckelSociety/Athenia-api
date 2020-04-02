@@ -37,10 +37,6 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        foreach (MembershipPlanRate::all() as $model) {
-            $model->delete();
-        }
-
         factory(MembershipPlanRate::class, 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
@@ -48,10 +44,6 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testFindAllEmpty()
     {
-        foreach (MembershipPlanRate::all() as $model) {
-            $model->delete();
-        }
-
         $items = $this->repository->findAll();
         $this->assertEmpty($items);
     }

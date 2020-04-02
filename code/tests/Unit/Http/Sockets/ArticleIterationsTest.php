@@ -9,6 +9,7 @@ use App\Exceptions\AuthenticationException;
 use App\Http\Sockets\ArticleIterations;
 use App\Models\User\User;
 use App\Models\Wiki\Article;
+use App\Services\StringHelperService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -49,7 +50,12 @@ class ArticleIterationsTest extends TestCase
         $this->articleRepository = mock(ArticleRepositoryContract::class);
         $this->iterationRepository = mock(IterationRepositoryContract::class);
         $this->jwtAuth = mock(JWTAuth::class);
-        $this->socket = new ArticleIterations($this->articleRepository, $this->iterationRepository, $this->jwtAuth);
+        $this->socket = new ArticleIterations(
+            $this->articleRepository,
+            $this->iterationRepository,
+            $this->jwtAuth,
+            new StringHelperService(),
+        );
     }
 
     public function testParseAuthHeaderFailsWithoutTokenInUri()
@@ -205,7 +211,8 @@ class ArticleIterationsTest extends TestCase
 
         $result = $this->socket->validateArticle($conn);
 
-        $this->assertArraySubset(['model' => $article], $result);
+        $this->assertArrayHasKey('model', $result);
+        $this->assertEquals($result['model'], $article);
         $this->assertCount(0, $result['connections']);
     }
 

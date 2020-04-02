@@ -19,7 +19,6 @@ class ArticleTest extends TestCase
         $article = new Article();
         $relation = $article->createdBy();
 
-        $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('users.id', $relation->getQualifiedOwnerKeyName());
         $this->assertEquals('articles.created_by_id', $relation->getQualifiedForeignKeyName());
     }
@@ -29,12 +28,24 @@ class ArticleTest extends TestCase
         $article = new Article();
         $relation = $article->iterations();
 
-        $this->assertInstanceOf(HasMany::class, $relation);
         $this->assertEquals('articles.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('iterations.article_id', $relation->getQualifiedForeignKeyName());
 
-        $this->assertContains('order by', $relation->toSql());
-        $this->assertContains('created_at', $relation->toSql());
-        $this->assertContains('desc', $relation->toSql());
+        $this->assertStringContainsString('order by', $relation->toSql());
+        $this->assertStringContainsString('created_at', $relation->toSql());
+        $this->assertStringContainsString('desc', $relation->toSql());
+    }
+
+    public function testVersions()
+    {
+        $article = new Article();
+        $relation = $article->versions();
+
+        $this->assertEquals('articles.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('article_versions.article_id', $relation->getQualifiedForeignKeyName());
+
+        $this->assertStringContainsString('order by', $relation->toSql());
+        $this->assertStringContainsString('created_at', $relation->toSql());
+        $this->assertStringContainsString('desc', $relation->toSql());
     }
 }

@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 namespace Tests\Feature\Http\MembershipPlan;
 
 use App\Models\Role;

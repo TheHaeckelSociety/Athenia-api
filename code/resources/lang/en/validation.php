@@ -134,5 +134,7 @@ return [
         'The membership plan rate must be active for you to purchase it.',
     \App\Validators\Subscription\PaymentMethodIsOwnedByUserValidator::KEY =>
         'This payment method does not belong to this user.',
+    \App\Validators\ArticleVersion\SelectedIterationBelongsToArticleValidator::KEY =>
+        'The selected iteration id does not seem to be from the related article.',
 
 ];

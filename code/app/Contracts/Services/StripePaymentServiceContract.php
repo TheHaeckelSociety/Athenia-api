@@ -39,4 +39,13 @@ interface StripePaymentServiceContract
      * @return mixed
      */
     public function reversePayment(Payment $payment);
+
+    /**
+     * Issues a partial refund to the account the
+     *
+     * @param Payment $payment
+     * @param float $amount
+     * @return mixed
+     */
+    public function issuePartialRefund(Payment $payment, float $amount);
 }

@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface as LogContract;
  */
 class IterationRepository extends BaseRepositoryAbstract implements IterationRepositoryContract
 {
-    use NotImplemented\Delete, NotImplemented\Update, NotImplemented\FindOrFail;
+    use NotImplemented\Delete, NotImplemented\Update;
 
     /**
      * IterationRepository constructor.

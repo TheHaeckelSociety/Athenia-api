@@ -5,7 +5,7 @@ namespace App\Contracts\Repositories;
 
 use App\Models\BaseModelAbstract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Interface BaseRepositoryContract
@@ -28,13 +28,14 @@ interface BaseRepositoryContract
      *
      * @param array $filters
      * @param array $searches
+     * @param array $orderBy This needs to be an array of of field names with each value indicating the needed order
      * @param array $with
      * @param int|null $limit pass null to get all
      * @param array $belongsToArray array of models this should belong to
-     * @param int $pageNumber
+     * @param int|null $page pass in null to get all
      * @return LengthAwarePaginator|Collection
      */
-    public function findAll(array $filters = [], array $searches = [], array $with = [], $limit = 10, array $belongsToArray = [], int $pageNumber = 1);
+    public function findAll(array $filters = [], array $searches = [], array $orderBy = [], array $with = [], $limit = 10, array $belongsToArray = [], int $page = 1);
 
     /**
      * Save a new instance of this model, and then return the instance

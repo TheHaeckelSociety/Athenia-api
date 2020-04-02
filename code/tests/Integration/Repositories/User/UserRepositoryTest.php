@@ -44,11 +44,39 @@ class UserRepositoryTest extends TestCase
         );
     }
 
-    public function testFindAllThrowsException()
+    public function testFindAllSuccess()
     {
-        $this->expectException(NotImplementedException::class);
+        factory(User::class, 5)->create();
+        $items = $this->repository->findAll();
+        $this->assertCount(5, $items);
+    }
 
-        $this->repository->findAll();
+    public function testFindAllEmpty()
+    {
+        $items = $this->repository->findAll();
+        $this->assertEmpty($items);
+    }
+
+    public function testFindAllOrderedByEmail()
+    {
+        $userT = factory(User::class)->create([
+            'email' => 't@t.weg',
+        ]);
+        $userA = factory(User::class)->create([
+            'email' => 'a@t.weg',
+        ]);
+        $userG = factory(User::class)->create([
+            'email' => 'g@t.weg',
+        ]);
+        $userZ = factory(User::class)->create([
+            'email' => 'z@t.weg',
+        ]);
+        $items = $this->repository->findAll([], [], ['email' => 'asc']);
+        $this->assertCount(4, $items);
+        $this->assertEquals($userA->id, $items[0]->id);
+        $this->assertEquals($userG->id, $items[1]->id);
+        $this->assertEquals($userT->id, $items[2]->id);
+        $this->assertEquals($userZ->id, $items[3]->id);
     }
 
     public function testFindOrFailSuccess()
