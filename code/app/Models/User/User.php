@@ -181,6 +181,16 @@ class User extends BaseModelAbstract
     }
 
     /**
+     * The asset that contains the profile image for this user
+     *
+     * @return BelongsTo
+     */
+    public function profileImage() : BelongsTo
+    {
+        return $this->belongsTo(ProfileImage::class);
+    }
+
+    /**
      * The resource object for this user
      *
      * @return MorphOne
@@ -188,26 +198,6 @@ class User extends BaseModelAbstract
     public function resource() : MorphOne
     {
         return $this->morphOne(Resource::class, 'resource');
-    }
-
-    /**
-     * A user can have many payment methods
-     *
-     * @return HasManyThrough
-     */
-    public function payments(): HasManyThrough
-    {
-        return $this->hasManyThrough(Payment::class, PaymentMethod::class);
-    }
-
-    /**
-     * The asset that contains the profile image for this user
-     *
-     * @return BelongsTo
-     */
-    public function profileImage() : BelongsTo
-    {
-        return $this->belongsTo(ProfileImage::class, 'profile_image_id');
     }
 
     /**
