@@ -5,9 +5,11 @@ namespace App\Http;
 
 use App\Http\Middleware\LogMiddleware;
 use App\Http\Middleware\TrimStrings;
-use App\Http\V1\Middleware\ExpandParsingMiddleware;
-use App\Http\V1\Middleware\Issue404IfPageAfterPaginationMiddleware;
-use App\Http\V1\Middleware\SearchFilterParsingMiddleware;
+use App\Http\Middleware\ExpandParsingMiddleware;
+use App\Http\Middleware\Issue404IfPageAfterPaginationMiddleware;
+use App\Http\Middleware\JWTGetUserFromTokenProtectedRouteMiddleware;
+use App\Http\Middleware\JWTGetUserFromTokenUnprotectedRouteMiddleware;
+use App\Http\Middleware\SearchFilterParsingMiddleware;
 use Fruitcake\Cors\HandleCors;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -16,8 +18,6 @@ use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
-use App\Http\V1\Middleware\JWTGetUserFromTokenProtectedRouteMiddleware;
-use App\Http\V1\Middleware\JWTGetUserFromTokenUnprotectedRouteMiddleware;
 
 /**
  * Class Kernel
