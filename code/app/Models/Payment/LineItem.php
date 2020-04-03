@@ -27,20 +27,20 @@ use Illuminate\Support\Carbon;
  * @property mixed|null $updated_at
  * @property-read Subscription|Model|Eloquent $item
  * @property-read Payment $payment
- * @method static EloquentJoinBuilder|PurchasedItem newModelQuery()
- * @method static EloquentJoinBuilder|PurchasedItem newQuery()
- * @method static EloquentJoinBuilder|PurchasedItem query()
- * @method static Builder|PurchasedItem whereAmount($value)
- * @method static Builder|PurchasedItem whereCreatedAt($value)
- * @method static Builder|PurchasedItem whereDeletedAt($value)
- * @method static Builder|PurchasedItem whereId($value)
- * @method static Builder|PurchasedItem whereItemId($value)
- * @method static Builder|PurchasedItem whereItemType($value)
- * @method static Builder|PurchasedItem wherePaymentId($value)
- * @method static Builder|PurchasedItem whereUpdatedAt($value)
+ * @method static EloquentJoinBuilder|LineItem newModelQuery()
+ * @method static EloquentJoinBuilder|LineItem newQuery()
+ * @method static EloquentJoinBuilder|LineItem query()
+ * @method static Builder|LineItem whereAmount($value)
+ * @method static Builder|LineItem whereCreatedAt($value)
+ * @method static Builder|LineItem whereDeletedAt($value)
+ * @method static Builder|LineItem whereId($value)
+ * @method static Builder|LineItem whereItemId($value)
+ * @method static Builder|LineItem whereItemType($value)
+ * @method static Builder|LineItem wherePaymentId($value)
+ * @method static Builder|LineItem whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class PurchasedItem extends BaseModelAbstract
+class LineItem extends BaseModelAbstract
 {
     /**
      * The item that was purchased

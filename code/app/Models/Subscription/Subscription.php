@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Models\Subscription;
 
+use App\Contracts\Models\HasPaymentsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Payment\Payment;
 use App\Models\Payment\PaymentMethod;
-use App\Models\Payment\PurchasedItem;
+use App\Models\Payment\LineItem;
+use App\Models\Traits\HasPayments;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use App\Validators\Subscription\MembershipPlanRateIsActiveValidator;
@@ -17,9 +19,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Validation\Rule;
 
 /**
@@ -43,7 +43,7 @@ use Illuminate\Validation\Rule;
  * @property-read null|string $formatted_expires_at
  * @property-read MembershipPlanRate $membershipPlanRate
  * @property-read Collection|Payment[] $payments
- * @property-read Collection|PurchasedItem[] $purchasedItems
+ * @property-read Collection|LineItem[] $purchasedItems
  * @property-read PaymentMethod $paymentMethod
  * @property-read User $subscriber
  * @property-read int|null $payments_count
@@ -66,9 +66,9 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Subscription whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Subscription extends BaseModelAbstract implements HasValidationRulesContract
+class Subscription extends BaseModelAbstract implements HasValidationRulesContract, HasPaymentsContract
 {
-    use HasValidationRules;
+    use HasValidationRules, HasPayments;
 
     /**
      * @var array All dates for the subscription
@@ -103,16 +103,6 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     }
 
     /**
-     * The payments that have been made for this subscription
-     *
-     * @return MorphToMany
-     */
-    public function payments(): MorphToMany
-    {
-        return $this->morphToMany(Payment::class, 'item', 'purchased_items');
-    }
-
-    /**
      * The payment method that is used to renew this subscription
      *
      * @return BelongsTo
@@ -123,16 +113,6 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     }
 
     /**
-     * The purchased item instances for this subscription
-     *
-     * @return MorphMany
-     */
-    public function purchasedItems(): MorphMany
-    {
-        return $this->morphMany(PurchasedItem::class, 'item');
-    }
-
-    /**
      * The subscriber this subscription is for
      *
      * @return MorphTo
@@ -140,6 +120,14 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
     public function subscriber(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function morphRelationName(): string
+    {
+        return 'subscription';
     }
 
     /**

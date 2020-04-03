@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property mixed|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read PaymentMethod $paymentMethod
- * @property-read Collection|PurchasedItem[] $purchasedItems
+ * @property-read Collection|LineItem[] $lineItems
  * @property-read int|null $purchased_items_count
  * @method static Builder|Payment newModelQuery()
  * @method static Builder|Payment newQuery()
@@ -52,6 +52,16 @@ class Payment extends BaseModelAbstract
     ];
 
     /**
+     * The items paid for
+     *
+     * @return HasMany
+     */
+    public function lineItems(): HasMany
+    {
+        return $this->hasMany(LineItem::class);
+    }
+
+    /**
      * The payment method that this payment was made with
      *
      * @return BelongsTo
@@ -59,15 +69,5 @@ class Payment extends BaseModelAbstract
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
-    }
-
-    /**
-     * The items paid for
-     *
-     * @return HasMany
-     */
-    public function purchasedItems(): HasMany
-    {
-        return $this->hasMany(PurchasedItem::class);
     }
 }
