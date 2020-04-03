@@ -75,9 +75,11 @@ class ChargeRenewalTest extends TestCase
             return true;
         }), 35.0, \Mockery::on(function(PaymentMethod $paymentMethod) {
             return true;
-        }), 'Subscription renewal for ' . $stripeSubscription->membershipPlanRate->membershipPlan->name, [
-            'subscription_id' => $stripeSubscription->id,
-        ]);
+        }), 'Subscription renewal for ' . $stripeSubscription->membershipPlanRate->membershipPlan->name, [[
+            'item_id' => $stripeSubscription->id,
+            'item_type' => 'subscription',
+            'amount' => 35.0,
+        ]]);
 
         $messageRepository->shouldReceive('sendEmailToUser')->once()->with(
             \Mockery::on(function($user) use($stripeSubscription) {

@@ -103,9 +103,14 @@ class ChargeRenewal extends Command
     public function chargeStripe(Subscription $subscription)
     {
         try {
-            $this->paymentService->createPayment($subscription->subscriber, (float)$subscription->membershipPlanRate->cost, $subscription->paymentMethod,
+            $cost = (float)$subscription->membershipPlanRate->cost;
+            $this->paymentService->createPayment($subscription->subscriber, $cost, $subscription->paymentMethod,
                 'Subscription renewal for ' . $subscription->membershipPlanRate->membershipPlan->name, [
-                'subscription_id' => $subscription->id,
+                [
+                    'item_id' => $subscription->id,
+                    'item_type' => 'subscription',
+                    'amount' => $cost,
+                ]
             ]);
             $this->handleSuccess($subscription);
 
