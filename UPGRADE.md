@@ -2,6 +2,51 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.28.0
+
+Another big update! This update replaces the existing subscription payment relation with a full line item model that should be used to give details on all items in a payment. This update also adds a new utility class for the repository providers that will make all future updates much easier.
+
+### Line Items
+
+The following files will need to be copied over for this update
+
+#### New Files
+
+* code/app/Contracts/Models/HasPaymentsContract.php 
+* code/app/Contracts/Repositories/Payment/LineItemRepositoryContract.php
+* code/app/Models/Payment/LineItem.php 
+* code/app/Models/Traits/HasPayments.php
+* code/app/Repositories/Payment/LineItemRepository.php
+* code/database/migrations/2020_03_16_170217_created_line_items_table.php
+* code/tests/Integration/Repositories/Payment/LineItemRepositoryTest.php
+* code/tests/Unit/Models/Payment/LineItemTest.php
+
+#### Updated Files
+
+* code/app/Console/Commands/ChargeRenewal.php - Interactions with the payment service have been updated
+* code/app/Contracts/Services/StripePaymentServiceContract.php - The charge function had the payment data variable replaced with a required line items array, and the amount removed in favor of counting the total upon processing.
+* code/app/Http/Core/Controllers/User/SubscriptionControllerAbstract.php - Updated for new payment service.
+* code/app/Models/Payment/Payment.php - Subscription relation removed and new line items relation added.
+* code/app/Models/Subscription/Subscription.php - Removed old payments relation, replaced with trait contract setup, and added morph name.
+* code/app/Providers/AppServiceProvider.php - Line item repository now injected into stripe payment service.
+* code/app/Repositories/Payment/PaymentRepository.php - Line item repository now injected, and used to sync payment line items.
+* code/app/Services/StripePaymentService.php - Many changes, best to compare if it has been customized before.
+* code/database/factories/PaymentFactory.php - Line item added.
+* code/tests/Integration/Console/Commands/ChargeRenewalTest.php - Updated for new service functions.
+* code/tests/Integration/Repositories/Payment/PaymentRepositoryTest.php - New tests added to make sure that line items can be synced properly.
+* code/tests/Unit/Models/Payment/PaymentMethodTest.php - Minor code cleanup.
+* code/tests/Unit/Models/Payment/PaymentTest.php - New relations tested properly.
+* code/tests/Unit/Models/Subscription/SubscriptionTest.php - New relations tested properly, and old tests removed
+* code/tests/Unit/Services/StripePaymentServiceTest.php - All func changes have been tested.
+
+#### Application Code Changes
+
+Once these steps have been completed you will then need to make sure that you updated all references to the old charge function should be refactored so that they instead pass in line items into the function. All relations that are currently made to a payment should also be migrated so that they use the line items setup, which can be done in the new migration added. The relations needed for these old connections can simply be implemented by making any related classes implement the contract `HasPaymentsContract` and trait `HasPayments`.
+
+### New Repository Provider
+
+This update is fairly simple, and it will mostly involve deletion. First off copy over the file `code/app/Providers/AtheniaRepositoryProvider.php`. After this you are going to want to go into your current app repository provider, and make it extend this provider, which will force you to implement a number of new functions. Each of these function corresponds to an area in the old provider. Each of these new functions should be filled in with app specific data, and all Athenia sections should be removed.
+
 ## 0.27.0 
 
 Extendable endpoints! This is another long overdue update. All Athenia endpoints now have their own base controllers where all future implementations should be created. The core has also been upgraded to Laravel 7. To complete this update complete the following steps.
