@@ -37,6 +37,10 @@ class CreatedLineItemsTable extends Migration
             $model->save();
             // Add any other needed data migration here
         }
+        Schema::table('payments', function (Blueprint $table) {
+            $table->dropForeign('payments_subscription_id_foreign');
+            $table->dropColumn('subscription_id');
+        });
     }
 
     /**
@@ -46,6 +50,10 @@ class CreatedLineItemsTable extends Migration
      */
     public function down()
     {
+        Schema::table('payments', function (Blueprint $table) {
+            $table->unsignedInteger('subscription_id');
+            $table->foreign('subscription_id')->references('id')->on('subscriptions');
+        });
         Schema::dropIfExists('purchased_items');
     }
 }
