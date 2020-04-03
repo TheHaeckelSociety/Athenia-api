@@ -109,7 +109,7 @@ class StripePaymentServiceTest extends TestCase
             ]],
         ], $paymentMethod)->andReturn($payment);
 
-        $result = $this->service->createPayment($user, 35.00, $paymentMethod, 'A Description', [[
+        $result = $this->service->createPayment($user, $paymentMethod, 'A Description', [[
             'item_id' => 423,
             'item_type' => 'subscription',
             'amount' => 35.00,
@@ -127,18 +127,26 @@ class StripePaymentServiceTest extends TestCase
         ]);
 
         $this->paymentRepository->shouldReceive('create')->once()->with([
-            'amount' => 0.00,
+            'amount' => 0,
             'line_items' => [[
                 'item_id' => 423,
                 'item_type' => 'subscription',
-                'amount' => 0,
+                'amount' => 35,
+            ], [
+                'item_id' => 423,
+                'item_type' => 'discount',
+                'amount' => -35,
             ]]
         ], $paymentMethod)->andReturn($payment);
 
-        $result = $this->service->createPayment($user, 0.00, $paymentMethod, 'A Description', [[
+        $result = $this->service->createPayment($user, $paymentMethod, 'A Description', [[
             'item_id' => 423,
             'item_type' => 'subscription',
-            'amount' => 0,
+            'amount' => 35,
+        ], [
+            'item_id' => 423,
+            'item_type' => 'discount',
+            'amount' => -35,
         ]]);
 
         $this->assertEquals($result, $payment);

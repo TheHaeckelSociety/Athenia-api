@@ -73,7 +73,7 @@ class ChargeRenewalTest extends TestCase
         $paymentService->shouldReceive('createPayment')->once()->with(\Mockery::on(function ($user) use ($stripeSubscription) {
             $this->assertEquals($user->id, $stripeSubscription->subscriber_id);
             return true;
-        }), 35.0, \Mockery::on(function(PaymentMethod $paymentMethod) {
+        }), \Mockery::on(function(PaymentMethod $paymentMethod) {
             return true;
         }), 'Subscription renewal for ' . $stripeSubscription->membershipPlanRate->membershipPlan->name, [[
             'item_id' => $stripeSubscription->id,

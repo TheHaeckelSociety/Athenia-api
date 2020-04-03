@@ -94,14 +94,17 @@ class StripePaymentService implements StripePaymentServiceContract
 
     /**
      * @param User $user
-     * @param float $amount
      * @param PaymentMethod $paymentMethod
      * @param string $description
      * @param array $lineItems
      * @return BaseModelAbstract|Payment
      */
-    public function createPayment(User $user, float $amount, PaymentMethod $paymentMethod, string $description, array $lineItems) : Payment
+    public function createPayment(User $user, PaymentMethod $paymentMethod, string $description, array $lineItems) : Payment
     {
+        $amount = 0;
+        foreach ($lineItems as $lineItem) {
+            $amount+= $lineItem['amount'];
+        }
         $paymentData = [
             'amount' => $amount,
             'line_items' => $lineItems,
