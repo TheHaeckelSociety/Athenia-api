@@ -229,6 +229,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             return new PaymentRepository(
                 new Payment(),
                 $this->app->make('log'),
+                $this->app->make(LineItemRepositoryContract::class),
             );
         });
         $this->app->bind(PaymentMethodRepositoryContract::class, function() {
