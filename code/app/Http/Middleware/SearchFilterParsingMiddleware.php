@@ -24,7 +24,6 @@ class SearchFilterParsingMiddleware
     public function handle($request, Closure $next)
     {
         $filter = [];
-        $search = [];
 
         if ($filters = $request->query('filter')) {
             if (is_array($filters)) {
@@ -37,11 +36,23 @@ class SearchFilterParsingMiddleware
             $request->query->set('cleaned_filter', $filter);
         }
 
+        if ($search = $request->query('search')) {
+            if (is_array($search)) {
+                foreach ($search as $key => $searchTermContainer) {
 
-        if ($searches = $request->query('search')) {
-            if (is_array($searches)) {
-                foreach ($searches as $key => $value) {
-                    $search = $this->processQueryEntry($search, $key, $value);
+                    if (is_array($searchTermContainer)) {
+
+                        if (!isset($refine[$key])) {
+                            $refine[$key] = [];
+                        }
+
+                        foreach ($searchTermContainer as $individualSearch) {
+                            $refine[$key] = $this->createSearchTerm($key, $individualSearch, $refine[$key]);
+                        }
+                    } else {
+
+                        $refine = $this->createSearchTerm($key, $searchTermContainer, $refine);
+                    }
                 }
             }
         }
