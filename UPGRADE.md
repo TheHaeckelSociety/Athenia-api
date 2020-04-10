@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.29.0
+
+A simple one! This update adds some more advanced functionality to the search middleware, and also cleans up the migration. All migration from before Cusco have been removed, and consolidated into the cusco migration, which should not affect existing applications at all. The file `code/app/Http/Middleware/SearchFilterParsingMiddleware.php` has also been updated to allow for more complex searching with multiple values per field. That's it!
+
 ## 0.28.0
 
 Another big update! This update replaces the existing subscription payment relation with a full line item model that should be used to give details on all items in a payment. This update also adds a new utility class for the repository providers that will make all future updates much easier.
