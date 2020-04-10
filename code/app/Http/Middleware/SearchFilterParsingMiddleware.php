@@ -23,18 +23,20 @@ class SearchFilterParsingMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $filter = [];
+        $cleanedFilter = [];
 
         if ($filters = $request->query('filter')) {
             if (is_array($filters)) {
                 foreach ($filters as $key => $value) {
-                    $filter = $this->processQueryEntry($filter, $key, $value);
+                    $cleanedFilter = $this->processQueryEntry($cleanedFilter, $key, $value);
                 }
             }
         }
-        if ($filter) {
-            $request->query->set('cleaned_filter', $filter);
+        if ($cleanedFilter) {
+            $request->query->set('cleaned_filter', $cleanedFilter);
         }
+
+        $cleanedSearch = [];
 
         if ($search = $request->query('search')) {
             if (is_array($search)) {
@@ -42,23 +44,23 @@ class SearchFilterParsingMiddleware
 
                     if (is_array($searchTermContainer)) {
 
-                        if (!isset($refine[$key])) {
-                            $refine[$key] = [];
+                        if (!isset($cleanedSearch[$key])) {
+                            $cleanedSearch[$key] = [];
                         }
 
                         foreach ($searchTermContainer as $individualSearch) {
-                            $refine[$key] = $this->createSearchTerm($key, $individualSearch, $refine[$key]);
+                            $cleanedSearch[$key] = $this->processQueryEntry($cleanedSearch[$key], $key, $individualSearch, );
                         }
                     } else {
 
-                        $refine = $this->createSearchTerm($key, $searchTermContainer, $refine);
+                        $cleanedSearch = $this->processQueryEntry($cleanedSearch, $key, $searchTermContainer);
                     }
                 }
             }
         }
 
-        if ($search) {
-            $request->query->set('cleaned_search', $search);
+        if ($cleanedSearch) {
+            $request->query->set('cleaned_search', $cleanedSearch);
         }
 
         return $next($request);
