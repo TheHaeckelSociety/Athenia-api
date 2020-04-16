@@ -2,6 +2,35 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.30.0
+
+This update adds various different improvements and changes to the core. Most of these improvements relate to testing, but there are some general app improvements too.
+
+### App Improvements
+
+* code/app/Models/User/User.php - A new function has been added that will allow you to easily remove a single role from a user.
+* code/app/Repositories/User/UserRepository.php - The roles are now being synced within the create and update functions.
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php - There is a new update test that makes sure the roles are synced properly.
+
+### Testing Improvements - HTTP
+
+The tests located in `code/tests/Integration/Http/V1/Middleware` have been moved to reflect recent changes to HTTP structure. The old tests can be removed, and then the contents of the directory `code/tests/Integration/Http/Middleware` should then be copied over. Then the test `code/tests/Unit/Http/Core/Requests/BaseAssetUploadRequestAbstractTest.php` was added to help test the decoding of files upon upload.
+
+## Testing Improvements - IsLongTest contract
+
+A new contract has been added that will allow you to flag tests as taking longer than expected in order to suppress warnings. To complete this update copy over the following files.
+
+* code/tests/IsLongTest.php
+* code/tests/TestTimesListener.php
+
+You can then simply add the new contract to any tests that you expect to take longer than normal.
+
+## Testing Improvements - General
+
+* code/tests/Integration/Policies/User/UserPolicyTest.php - The update tests have been greatly improved.
+* code/tests/Integration/Repositories/User/MessageRepositoryTest.php - Fixed Function name
+* code/tests/Unit/Listeners/User/{ForgotPasswordlListenerTest.php => ForgotPasswordListenerTest.php} - Fixed file name
+
 ## 0.29.0
 
 A simple one! This update adds some more advanced functionality to the search middleware, and also cleans up the migration. All migration from before Cusco have been removed, and consolidated into the cusco migration, which should not affect existing applications at all. The file `code/app/Http/Middleware/SearchFilterParsingMiddleware.php` has also been updated to allow for more complex searching with multiple values per field. That's it!
