@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Repositories\User;
 
 use App\Exceptions\NotImplementedException;
+use App\Models\Role;
 use App\Models\User\User;
 use App\Repositories\User\UserRepository;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -121,6 +122,19 @@ class UserRepositoryTest extends TestCase
         $updated = User::find($model->id);
         $this->assertEquals('bump@butts.com', $updated->email);
         $this->assertTrue($this->hasher->check('Something secure', $updated->password));
+    }
+
+    public function testUpdateSyncsRoles()
+    {
+        $model = factory(User::class)->create();
+
+        $this->assertCount(0, $model->roles);
+
+        $this->repository->update($model, ['roles' => [Role::SUPER_ADMIN]]);
+
+        $updated = User::find($model->id);
+        $this->assertCount(1, $updated->roles);
+        $this->assertEquals(Role::SUPER_ADMIN, $updated->roles[0]->id);
     }
 
     public function testDeleteThrowsException()
