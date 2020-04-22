@@ -2,6 +2,16 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.31.0
+
+This is a miscellaneous update. A major bug was found where the sign up event was not triggered, which is now being triggered in the Auth controller.
+
+* code/app/Http/Core/Controllers/AuthenticationControllerAbstract.php - The sign up event is now being triggered
+* code/app/Http/Core/Requests/BaseAssetUploadRequestAbstract.php - A bug fix was made to how the decoding works
+* code/app/Http/Middleware/SearchFilterParsingMiddleware.php - Fixed a bug with how the cleaned searches where being stored
+* code/tests/Feature/Http/Authentication/SignUpTest.php - Made sure to properly test the sign up event triggering
+* code/tests/Unit/Http/Core/Requests/BaseAssetUploadRequestAbstractTest.php - Removed a no longer relevant test
+
 ## 0.30.0
 
 This update adds various different improvements and changes to the core. Most of these improvements relate to testing, but there are some general app improvements too.
