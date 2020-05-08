@@ -128,6 +128,23 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
     }
 
     /**
+     * Finishes a find all query for you. All custom queries should be sandwiched between the above build function and a return of this.
+     *
+     * @param EloquentJoinBuilder $query
+     * @param int $limit
+     * @param int $page
+     * @return LengthAwarePaginator|Collection
+     */
+    protected function finalizeFindAllQuery(EloquentJoinBuilder $query, $limit = 10, int $page = 1)
+    {
+        if ($limit) {
+            return $query->paginate($limit, ['*'], 'page', $page);
+        }
+
+        return $query->get();
+    }
+
+    /**
      * Find all
      *
      * @param array $filters
@@ -143,11 +160,7 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
     {
         $query = $this->buildFindAllQuery($filters, $searches, $orderBy, $with, $belongsToArray);
 
-        if ($limit) {
-            return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $page);
-        }
-
-        return $query->get();
+        return $this->finalizeFindAllQuery($query, $limit, $page);
     }
 
     /**
