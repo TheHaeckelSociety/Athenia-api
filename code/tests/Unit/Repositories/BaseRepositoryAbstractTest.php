@@ -5,6 +5,7 @@ namespace Tests\Unit\Repositories;
 
 use App\Models\User\User;
 use App\Repositories\BaseRepositoryAbstract;
+use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
 use Tests\TestCase;
 
 /**
@@ -46,7 +47,7 @@ class BaseRepositoryAbstractTest extends TestCase
         $withArgs = ['with' => 'args'];
         $limitArg = 22;
 
-        $mockModel = mock(User::class)
+        $mockModel = mock(EloquentJoinBuilder::class)
             ->shouldAllowMockingMethod('with')
             ->shouldAllowMockingMethod('where')
             ->shouldAllowMockingMethod('whereJoin')
@@ -62,7 +63,7 @@ class BaseRepositoryAbstractTest extends TestCase
 
     public function testFindAllDefaultParameters()
     {
-        $mockModel = mock(User::class)
+        $mockModel = mock(EloquentJoinBuilder::class)
             ->shouldAllowMockingMethod('with')
             ->shouldAllowMockingMethod('appends')
             ->shouldAllowMockingMethod('paginate');

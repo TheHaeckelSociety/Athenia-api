@@ -2,6 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.32.0
+
+Another groups of miscellaneous updates! There are a number of improvements that have been made to the organization setup as well as some testing improvements.
+
+* code/app/Contracts/Models/BelongsToOrganizationContract.php - New file that can simply be copied over.
+* code/app/Models/Traits/BelongsToOrganization.php - New file that can simply be copied over.
+* code/app/Models/Organization/OrganizationManager.php - This model has been updated to make use of the new conctract and trait.
+* code/app/Policies/BaseBelongsToOrganizationPolicyAbstract.php - New base policy that makes it easier to create policies for models that belong to Organizations.
+* code/app/Repositories/BaseRepositoryAbstract.php - New helper functions that make it simpler to finalize a findAll query when you have a custom findAll query.
+* code/tests/Unit/Repositories/BaseRepositoryAbstractTest.php - New test!
+
 ## 0.31.0
 
 This is a miscellaneous update. A major bug was found where the sign up event was not triggered, which is now being triggered in the Auth controller.
