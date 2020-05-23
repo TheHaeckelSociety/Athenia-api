@@ -29,6 +29,9 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
      */
     private $repository;
 
+    /**
+     * @var MimeTypes
+     */
     private $mimeTypes;
 
     /**
@@ -68,7 +71,10 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
         $data['file_contents'] = $request->getDecodedContents();
         $data['file_extension'] = $this->mimeTypes->getExtension($request->getFileMimeType());
 
-        $model = $this->repository->create($data, $user);
+        $data['owner_id'] = $user->id;
+        $data['owner_type'] = 'user';
+
+        $model = $this->repository->create($data);
         return new JsonResponse($model, 201);
     }
 
