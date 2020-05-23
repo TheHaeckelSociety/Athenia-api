@@ -54,7 +54,20 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
      */
     public function index(Requests\User\Asset\IndexRequest $request, User $user)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [$user], (int)$request->input('page', 1));
+        $filter = $this->filter($request);
+
+        $filter[] = [
+            'owner_id',
+            '=',
+            $user->id,
+        ];
+        $filter[] = [
+            'owner_type',
+            '=',
+            'user',
+        ];
+
+        return $this->repository->findAll($filter, $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [], (int)$request->input('page', 1));
     }
 
     /**
