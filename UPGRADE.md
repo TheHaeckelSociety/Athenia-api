@@ -2,6 +2,36 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.33.0
+
+Asset is now a morph relation! There are also a handful of other changes that were made, which generally improve the code.
+
+### Subscription Renewals
+
+* code/app/Console/Commands/ChargeRenewal.php - The charging is now skipped if the user will still have an active subscription after it expires.
+
+### Payment Service Improvement
+
+* code/app/Services/StripePaymentService.php - The user id is now linked to a payment.
+* code/tests/Unit/Services/StripePaymentServiceTest.php - Test was changed to reflect the changes.
+
+### Asset Ownership Change
+
+* code/app/Http/Core/Controllers/User/AssetControllerAbstract.php - Updated to for new relation.
+* code/app/Http/Core/Controllers/User/ProfileImageControllerAbstract.php - Updated to for new relation.
+* code/app/Models/Asset.php - Relation to user was changed to owner.
+* code/app/Models/User/User.php - Asset relation type changed.
+* code/app/Policies/AssetPolicy.php - user references were changed in favor of the owner relation.
+* code/database/migrations/2020_05_23_155031_turn_asset_user_relation_into_morph_relation.php - Changed the relation fields.
+* code/tests/Feature/Http/User/Asset/UserAssetCreateTest.php - Made test pass with new fields.
+* code/tests/Feature/Http/User/Asset/UserAssetDeleteTest.php - Made test pass with new fields.
+* code/tests/Feature/Http/User/Asset/UserAssetIndexTest.php - Made test pass with new fields.
+* code/tests/Feature/Http/User/Asset/UserAssetUpdateTest.php - Made test pass with new fields.
+* code/tests/Integration/Policies/AssetPolicyTest.php - Made test pass with new fields.
+* code/tests/Integration/Repositories/AssetRepositoryTest.php - Made test pass with new fields.
+* code/tests/Unit/Models/AssetTest.php - Changed user test to owner test.
+* code/tests/Unit/Models/User/UserTest.php - Updated assets test to reflect new relation type.
+
 ## 0.32.0
 
 Another groups of miscellaneous updates! There are a number of improvements that have been made to the organization setup as well as some testing improvements.
