@@ -9,7 +9,6 @@ use App\Models\User\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
@@ -18,14 +17,15 @@ use Illuminate\Validation\Rule;
  *
  * @package App\Models
  * @property int $id
- * @property int|null $user_id
+ * @property int|null $owner_id
+ * @property string|null $owner_type
  * @property string $url
  * @property string|null $name
  * @property string|null $caption
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
+ * @property-read User $owner
  * @method static Builder|Asset newModelQuery()
  * @method static Builder|Asset newQuery()
  * @method static Builder|Asset query()
@@ -53,9 +53,9 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
      *
      * @return BelongsTo
      */
-    public function user()
+    public function owner()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
     /**
