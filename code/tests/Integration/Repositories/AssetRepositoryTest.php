@@ -64,10 +64,13 @@ class AssetRepositoryTest extends TestCase
         /** @var Asset $asset */
         $asset = $this->repository->create([
             'url' => 'a url',
-        ], $user);
+            'owner_id' => $user->id,
+            'owner_type' => 'user',
+        ]);
 
         $this->assertEquals('a url', $asset->url);
-        $this->assertEquals($asset->user_id, $user->id);
+        $this->assertEquals($asset->owner_id, $user->id);
+        $this->assertEquals($asset->owner_type, 'user');
     }
 
     public function testUpdateSuccess()
