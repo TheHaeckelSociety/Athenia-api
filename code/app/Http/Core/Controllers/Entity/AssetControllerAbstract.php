@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Controllers\User;
+namespace App\Http\Core\Controllers\Entity;
 
+use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\AssetRepositoryContract;
 use App\Http\Core\Controllers\BaseControllerAbstract;
 use App\Http\Core\Controllers\Traits\HasIndexRequests;
@@ -18,7 +19,7 @@ use Mimey\MimeTypes;
 
 /**
  * Class AssetControllerAbstract
- * @package App\Http\Core\Controllers\User
+ * @package App\Http\Core\Controllers\Entity
  */
 abstract class AssetControllerAbstract extends BaseControllerAbstract
 {
@@ -48,23 +49,23 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
     /**
      * Gets all assets for a user
      *
-     * @param Requests\User\Asset\IndexRequest $request
-     * @param User $user
+     * @param Requests\Entity\Asset\IndexRequest $request
+     * @param IsAnEntity $entity
      * @return LengthAwarePaginator
      */
-    public function index(Requests\User\Asset\IndexRequest $request, User $user)
+    public function index(Requests\Entity\Asset\IndexRequest $request, IsAnEntity $entity)
     {
         $filter = $this->filter($request);
 
         $filter[] = [
             'owner_id',
             '=',
-            $user->id,
+            $entity->id,
         ];
         $filter[] = [
             'owner_type',
             '=',
-            'user',
+            $entity->morphRelationName(),
         ];
 
         return $this->repository->findAll($filter, $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [], (int)$request->input('page', 1));
@@ -73,11 +74,11 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
     /**
      * Creates the new asset for us
      *
-     * @param Requests\User\Asset\StoreRequest $request
+     * @param Requests\Entity\Asset\StoreRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function store(Requests\User\Asset\StoreRequest $request, User $user)
+    public function store(Requests\Entity\Asset\StoreRequest $request, User $user)
     {
         $data = $request->json()->all();
 
@@ -94,12 +95,12 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
     /**
      * Updates an asset properly
      *
-     * @param Requests\User\Asset\UpdateRequest $request
+     * @param Requests\Entity\Asset\UpdateRequest $request
      * @param User $user
      * @param Asset $asset
      * @return BaseModelAbstract
      */
-    public function update(Requests\User\Asset\UpdateRequest $request, User $user, Asset $asset)
+    public function update(Requests\Entity\Asset\UpdateRequest $request, User $user, Asset $asset)
     {
         return $this->repository->update($asset, $request->json()->all());
     }
@@ -107,12 +108,12 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
     /**
      * Deletes an asset from the server
      *
-     * @param Requests\User\Asset\DeleteRequest $request
+     * @param Requests\Entity\Asset\DeleteRequest $request
      * @param User $user
      * @param Asset $asset
      * @return ResponseFactory|Response
      */
-    public function destroy(Requests\User\Asset\DeleteRequest $request, User $user, Asset $asset)
+    public function destroy(Requests\Entity\Asset\DeleteRequest $request, User $user, Asset $asset)
     {
         $this->repository->delete($asset);
         return response(null, 204);

@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\Subscription;
+namespace App\Http\Core\Requests\Entity\Subscription;
 
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
 use App\Models\Subscription\Subscription;
 use App\Policies\Subscription\SubscriptionPolicy;
 
 /**
- * Class UpdateRequest
- * @package App\Http\Core\Requests\User\Subscription
+ * Class StoreRequest
+ * @package App\Http\Core\Requests\Entity\Subscription
  */
-class UpdateRequest extends BaseAuthenticatedRequestAbstract
+class StoreRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoExpands;
+    use HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -23,7 +24,7 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return SubscriptionPolicy::ACTION_UPDATE;
+        return SubscriptionPolicy::ACTION_CREATE;
     }
 
     /**
@@ -44,8 +45,7 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
-            $this->route('subscription'),
+            $this->getEntity(),
         ];
     }
 
@@ -57,6 +57,6 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
      */
     public function rules(Subscription $subscription) : array
     {
-        return $subscription->getValidationRules(Subscription::VALIDATION_RULES_UPDATE);
+        return $subscription->getValidationRules(Subscription::VALIDATION_RULES_CREATE);
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policies\Subscription;
 
+use App\Contracts\Models\IsAnEntity;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
 use App\Policies\BasePolicyAbstract;

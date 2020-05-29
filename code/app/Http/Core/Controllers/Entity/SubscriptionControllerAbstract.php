@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Controllers\User;
+namespace App\Http\Core\Controllers\Entity;
 
+use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Services\StripePaymentServiceContract;
 use App\Http\Core\Controllers\BaseControllerAbstract;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
  * Class SubscriptionControllerAbstract
- * @package App\Http\Core\Controllers\User
+ * @package App\Http\Core\Controllers\Entity
  */
 abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
 {
@@ -94,21 +95,21 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
      *      ),
      * )
      *
-     * @param Requests\User\Subscription\StoreRequest $request
-     * @param User $user
+     * @param Requests\Entity\Subscription\StoreRequest $request
+     * @param IsAnEntity $entity
      * @return JsonResponse
      */
-    public function store(Requests\User\Subscription\StoreRequest $request, User $user)
+    public function store(Requests\Entity\Subscription\StoreRequest $request, IsAnEntity $entity)
     {
         $data = $request->json()->all();
 
-        $data['subscriber_id'] = $user->id;
-        $data['subscriber_type'] = 'user';
+        $data['subscriber_id'] = $entity->id;
+        $data['subscriber_type'] = $entity->morphRelationName();
         /** @var Subscription $model */
         $model = $this->repository->create($data);
 
         try {
-            $this->stripeChargeService->createPayment($user, $model->paymentMethod,
+            $this->stripeChargeService->createPayment($entity, $model->paymentMethod,
                 'Subscription Payment for ' . $model->membershipPlanRate->membershipPlan->name, [
                 [
                     'item_id' => $model->id,
@@ -188,12 +189,12 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
      *      ),
      * )
      *
-     * @param Requests\User\Subscription\UpdateRequest $request
+     * @param Requests\Entity\Subscription\UpdateRequest $request
      * @param User $user
      * @param Subscription $subscription
      * @return Subscription|BaseModelAbstract
      */
-    public function update(Requests\User\Subscription\UpdateRequest $request, User $user, Subscription $subscription)
+    public function update(Requests\Entity\Subscription\UpdateRequest $request, User $user, Subscription $subscription)
     {
         $data = $request->json()->all();
 

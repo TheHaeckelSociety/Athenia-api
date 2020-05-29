@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\Asset;
+namespace App\Http\Core\Requests\Entity\Asset;
 
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
 use App\Http\Core\Requests\Traits\HasNoRules;
 use App\Models\Asset;
@@ -11,11 +12,11 @@ use App\Policies\AssetPolicy;
 
 /**
  * Class IndexRequest
- * @package App\Http\Core\Requests\User\Asset
+ * @package App\Http\Core\Requests\Entity\Asset
  */
 class IndexRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoExpands;
+    use HasNoRules, HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -45,7 +46,7 @@ class IndexRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
+            $this->getEntity(),
         ];
     }
 }

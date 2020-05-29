@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Controllers\User;
+namespace App\Http\Core\Controllers\Entity;
 
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * Class PaymentMethodControllerAbstract
- * @package App\Http\Core\Controllers\User
+ * @package App\Http\Core\Controllers\Entity
  */
 abstract class PaymentMethodControllerAbstract extends BaseControllerAbstract
 {
@@ -94,11 +94,11 @@ abstract class PaymentMethodControllerAbstract extends BaseControllerAbstract
      *      ),
      * )
      *
-     * @param Requests\User\PaymentMethod\StoreRequest $request
+     * @param Requests\Entity\PaymentMethod\StoreRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function store(Requests\User\PaymentMethod\StoreRequest $request, User $user)
+    public function store(Requests\Entity\PaymentMethod\StoreRequest $request, User $user)
     {
         $data = $request->json()->all();
 
@@ -162,12 +162,12 @@ abstract class PaymentMethodControllerAbstract extends BaseControllerAbstract
      *      ),
      * )
      *
-     * @param Requests\User\PaymentMethod\DeleteRequest $request
+     * @param Requests\Entity\PaymentMethod\DeleteRequest $request
      * @param User $user
      * @param PaymentMethod $paymentMethod
      * @return null
      */
-    public function destroy(Requests\User\PaymentMethod\DeleteRequest $request, User $user, PaymentMethod $paymentMethod)
+    public function destroy(Requests\Entity\PaymentMethod\DeleteRequest $request, User $user, PaymentMethod $paymentMethod)
     {
         $this->repository->delete($paymentMethod);
         return response(null, 204);

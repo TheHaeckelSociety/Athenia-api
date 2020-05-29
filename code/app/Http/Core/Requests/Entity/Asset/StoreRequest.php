@@ -1,18 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\ProfileImage;
+namespace App\Http\Core\Requests\Entity\Asset;
 
 use App\Http\Core\Requests\BaseAssetUploadRequestAbstract;
-use App\Models\User\ProfileImage;
-use App\Policies\User\ProfileImagePolicy;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
+use App\Http\Core\Requests\Traits\HasNoExpands;
+use App\Models\Asset;
+use App\Policies\AssetPolicy;
 
 /**
  * Class StoreRequest
- * @package App\Http\Core\Requests\User\ProfileImage
+ * @package App\Http\Core\Requests\Entity\Asset
  */
 class StoreRequest extends BaseAssetUploadRequestAbstract
 {
+    use HasNoExpands, IsEntityRequestTrait;
+
     /**
      * Get the policy action for the guard
      *
@@ -20,7 +24,7 @@ class StoreRequest extends BaseAssetUploadRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return ProfileImagePolicy::ACTION_CREATE;
+        return AssetPolicy::ACTION_CREATE;
     }
 
     /**
@@ -30,7 +34,7 @@ class StoreRequest extends BaseAssetUploadRequestAbstract
      */
     protected function getPolicyModel(): string
     {
-        return ProfileImage::class;
+        return Asset::class;
     }
 
     /**
@@ -40,15 +44,17 @@ class StoreRequest extends BaseAssetUploadRequestAbstract
      */
     protected function getPolicyParameters(): array
     {
-        return [$this->route('user')];
+        return [
+            $this->getEntity(),
+        ];
     }
 
     /**
-     * @param ProfileImage $profileImage
+     * @param Asset $model
      * @return array
      */
-    public function rules(ProfileImage $profileImage): array
+    public function rules(Asset $model)
     {
-        return $profileImage->getValidationRules(ProfileImage::VALIDATION_RULES_CREATE);
+        return $model->getValidationRules(Asset::VALIDATION_RULES_CREATE);
     }
 }

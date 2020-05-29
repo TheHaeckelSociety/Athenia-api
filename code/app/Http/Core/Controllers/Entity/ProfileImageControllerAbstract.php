@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Controllers\User;
+namespace App\Http\Core\Controllers\Entity;
 
+use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\User\ProfileImageRepositoryContract;
 use App\Http\Core\Controllers\BaseControllerAbstract;
 use App\Http\Core\Requests;
@@ -12,7 +13,7 @@ use Mimey\MimeTypes;
 
 /**
  * Class ProfileImageControllerAbstract
- * @package App\Http\Core\Controllers\User
+ * @package App\Http\Core\Controllers\Entity
  */
 abstract class ProfileImageControllerAbstract extends BaseControllerAbstract
 {
@@ -89,21 +90,21 @@ abstract class ProfileImageControllerAbstract extends BaseControllerAbstract
      *      ),
      * )
      *
-     * @param Requests\User\ProfileImage\StoreRequest $request
-     * @param User $user
+     * @param Requests\Entity\ProfileImage\StoreRequest $request
+     * @param IsAnEntity $entity
      * @return JsonResponse
      */
-    public function store(Requests\User\ProfileImage\StoreRequest $request, User $user)
+    public function store(Requests\Entity\ProfileImage\StoreRequest $request, IsAnEntity $entity)
     {
         $data = [];
 
         $data['file_contents'] = $request->getDecodedContents();
         $data['file_extension'] = $this->mimeTypes->getExtension($request->getFileMimeType());
 
-        $data['owner_id'] = $user->id;
-        $data['owner_type'] = 'user';
+        $data['owner_id'] = $entity->id;
+        $data['owner_type'] = $entity->morphRelationName();
 
-        $model = $this->repository->create($data, $user);
+        $model = $this->repository->create($data, $entity);
         return new JsonResponse($model, 201);
     }
 }

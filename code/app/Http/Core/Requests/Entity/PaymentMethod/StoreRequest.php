@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\PaymentMethod;
+namespace App\Http\Core\Requests\Entity\PaymentMethod;
 
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
-use App\Http\Core\Requests\Traits\HasNoRules;
 use App\Models\Payment\PaymentMethod;
 use App\Policies\Payment\PaymentMethodPolicy;
 
 /**
- * Class DeleteRequest
- * @package App\Http\Core\Requests\User\PaymentMethod
+ * Class StoreRequest
+ * @package App\Http\Core\Requests\Entity\PaymentMethod
  */
-class DeleteRequest extends BaseAuthenticatedRequestAbstract
+class StoreRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoExpands;
+    use HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -24,7 +24,7 @@ class DeleteRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return PaymentMethodPolicy::ACTION_DELETE;
+        return PaymentMethodPolicy::ACTION_CREATE;
     }
 
     /**
@@ -45,8 +45,18 @@ class DeleteRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
-            $this->route('payment_method')
+            $this->getEntity(),
         ];
+    }
+
+    /**
+     * Get validation rules for the create request
+     *
+     * @param PaymentMethod $paymentMethod
+     * @return array
+     */
+    public function rules(PaymentMethod $paymentMethod) : array
+    {
+        return $paymentMethod->getValidationRules(PaymentMethod::VALIDATION_RULES_CREATE);
     }
 }

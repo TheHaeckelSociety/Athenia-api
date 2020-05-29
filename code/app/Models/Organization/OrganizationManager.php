@@ -79,7 +79,7 @@ class OrganizationManager extends BaseModelAbstract implements HasValidationRule
                 'role_id' => [
                     'required',
                     'integer',
-                    Rule::in(Role::ORGANIZATION_ROLES),
+                    Rule::in(Role::ENTITY_ROLES),
                 ],
                 'email' => [
                     'string',

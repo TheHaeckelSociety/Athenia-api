@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\Subscription;
+namespace App\Http\Core\Requests\Entity\Asset;
 
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
-use App\Models\Subscription\Subscription;
-use App\Policies\Subscription\SubscriptionPolicy;
+use App\Models\Asset;
+use App\Policies\AssetPolicy;
 
 /**
- * Class StoreRequest
- * @package App\Http\Core\Requests\User\Subscription
+ * Class UpdateRequest
+ * @package App\Http\Core\Requests\Entity\Asset
  */
-class StoreRequest extends BaseAuthenticatedRequestAbstract
+class UpdateRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoExpands;
+    use HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -23,7 +24,7 @@ class StoreRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return SubscriptionPolicy::ACTION_CREATE;
+        return AssetPolicy::ACTION_UPDATE;
     }
 
     /**
@@ -33,7 +34,7 @@ class StoreRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyModel(): string
     {
-        return Subscription::class;
+        return Asset::class;
     }
 
     /**
@@ -44,18 +45,19 @@ class StoreRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
+            $this->getEntity(),
+            $this->route('asset'),
         ];
     }
 
     /**
-     * Get validation rules for the create request
+     * The rules for this request
      *
-     * @param Subscription $subscription
+     * @param Asset $model
      * @return array
      */
-    public function rules(Subscription $subscription) : array
+    public function rules(Asset $model)
     {
-        return $subscription->getValidationRules(Subscription::VALIDATION_RULES_CREATE);
+        return $model->getValidationRules(Asset::VALIDATION_RULES_UPDATE);
     }
 }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace App\Models\Organization;
 
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Contracts\Models\IsAnEntity;
 use App\Models\BaseModelAbstract;
 use App\Models\Traits\HasValidationRules;
+use App\Models\User\User;
 use Eloquent;
 use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Organization whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Organization extends BaseModelAbstract implements HasValidationRulesContract
+class Organization extends BaseModelAbstract implements HasValidationRulesContract, IsAnEntity
 {
     use HasValidationRules;
 
@@ -45,6 +47,22 @@ class Organization extends BaseModelAbstract implements HasValidationRulesContra
     public function organizationManagers(): HasMany
     {
         return $this->hasMany(OrganizationManager::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function morphRelationName(): string
+    {
+        return 'organization';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function canUserManageEntity(User $user, int $role = null): bool
+    {
+        return $user->canManageOrganization($this, $role);
     }
 
     /**

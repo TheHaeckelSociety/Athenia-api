@@ -1,20 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\Asset;
+namespace App\Http\Core\Requests\Entity\Asset;
 
-use App\Http\Core\Requests\BaseAssetUploadRequestAbstract;
+use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
+use App\Http\Core\Requests\Traits\HasNoRules;
 use App\Models\Asset;
 use App\Policies\AssetPolicy;
 
 /**
- * Class StoreRequest
- * @package App\Http\Core\Requests\User\Asset
+ * Class DeleteRequest
+ * @package App\Http\Core\Requests\Entity\Asset
  */
-class StoreRequest extends BaseAssetUploadRequestAbstract
+class DeleteRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoExpands;
+    use HasNoRules, HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -23,7 +25,7 @@ class StoreRequest extends BaseAssetUploadRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return AssetPolicy::ACTION_CREATE;
+        return AssetPolicy::ACTION_DELETE;
     }
 
     /**
@@ -44,16 +46,8 @@ class StoreRequest extends BaseAssetUploadRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
+            $this->getEntity(),
+            $this->route('asset'),
         ];
-    }
-
-    /**
-     * @param Asset $model
-     * @return array
-     */
-    public function rules(Asset $model)
-    {
-        return $model->getValidationRules(Asset::VALIDATION_RULES_CREATE);
     }
 }

@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Core\Requests\User\Asset;
+namespace App\Http\Core\Requests\Entity\Subscription;
 
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
+use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
-use App\Models\Asset;
-use App\Policies\AssetPolicy;
+use App\Models\Subscription\Subscription;
+use App\Policies\Subscription\SubscriptionPolicy;
 
 /**
  * Class UpdateRequest
- * @package App\Http\Core\Requests\User\Asset
+ * @package App\Http\Core\Requests\Entity\Subscription
  */
 class UpdateRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoExpands;
+    use HasNoExpands, IsEntityRequestTrait;
 
     /**
      * Get the policy action for the guard
@@ -23,7 +24,7 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyAction(): string
     {
-        return AssetPolicy::ACTION_UPDATE;
+        return SubscriptionPolicy::ACTION_UPDATE;
     }
 
     /**
@@ -33,7 +34,7 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
      */
     protected function getPolicyModel(): string
     {
-        return Asset::class;
+        return Subscription::class;
     }
 
     /**
@@ -44,19 +45,19 @@ class UpdateRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('user'),
-            $this->route('asset'),
+            $this->getEntity(),
+            $this->route('subscription'),
         ];
     }
 
     /**
-     * The rules for this request
+     * Get validation rules for the create request
      *
-     * @param Asset $model
+     * @param Subscription $subscription
      * @return array
      */
-    public function rules(Asset $model)
+    public function rules(Subscription $subscription) : array
     {
-        return $model->getValidationRules(Asset::VALIDATION_RULES_UPDATE);
+        return $subscription->getValidationRules(Subscription::VALIDATION_RULES_UPDATE);
     }
 }
