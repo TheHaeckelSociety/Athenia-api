@@ -38,6 +38,8 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Asset whereUrl($value)
  * @method static Builder|Asset whereUserId($value)
  * @mixin Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Asset whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Asset whereOwnerType($value)
  */
 class Asset extends BaseModelAbstract implements HasValidationRulesContract
 {
