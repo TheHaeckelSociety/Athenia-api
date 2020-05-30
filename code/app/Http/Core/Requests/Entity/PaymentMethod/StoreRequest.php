@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Core\Requests\Entity\PaymentMethod;
 
+use App\Contracts\Http\HasEntityInRequestContract;
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
@@ -13,7 +14,7 @@ use App\Policies\Payment\PaymentMethodPolicy;
  * Class StoreRequest
  * @package App\Http\Core\Requests\Entity\PaymentMethod
  */
-class StoreRequest extends BaseAuthenticatedRequestAbstract
+class StoreRequest extends BaseAuthenticatedRequestAbstract implements HasEntityInRequestContract
 {
     use HasNoExpands, IsEntityRequestTrait;
 

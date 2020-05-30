@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Core\Requests\Entity\ProfileImage;
 
+use App\Contracts\Http\HasEntityInRequestContract;
 use App\Http\Core\Requests\BaseAssetUploadRequestAbstract;
 use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Models\User\ProfileImage;
@@ -12,7 +13,7 @@ use App\Policies\User\ProfileImagePolicy;
  * Class StoreRequest
  * @package App\Http\Core\Requests\Entity\ProfileImage
  */
-class StoreRequest extends BaseAssetUploadRequestAbstract
+class StoreRequest extends BaseAssetUploadRequestAbstract implements HasEntityInRequestContract
 {
     use IsEntityRequestTrait;
 

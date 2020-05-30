@@ -8,7 +8,7 @@ use App\Validators\ForgotPassword\TokenIsNotExpiredValidator;
 use App\Validators\ForgotPassword\UserOwnsTokenValidator;
 use App\Validators\NotPresentValidator;
 use App\Validators\Subscription\MembershipPlanRateIsActiveValidator;
-use App\Validators\Subscription\PaymentMethodIsOwnedByUserValidator;
+use App\Validators\Subscription\PaymentMethodIsOwnedByEntityValidator;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,7 +30,7 @@ class AppValidatorProvider extends ServiceProvider
         $validator->extend('user_owns_token', UserOwnsTokenValidator::class);
         $validator->extend('not_present', NotPresentValidator::class);
         $validator->extend(MembershipPlanRateIsActiveValidator::KEY, MembershipPlanRateIsActiveValidator::class);
-        $validator->extend(PaymentMethodIsOwnedByUserValidator::KEY, PaymentMethodIsOwnedByUserValidator::class);
+        $validator->extend(PaymentMethodIsOwnedByEntityValidator::KEY, PaymentMethodIsOwnedByEntityValidator::class);
         $validator->extend(SelectedIterationBelongsToArticleValidator::KEY, SelectedIterationBelongsToArticleValidator::class);
     }
 }

@@ -3,23 +3,26 @@ declare(strict_types=1);
 
 namespace App\Validators\Subscription;
 
+use App\Contracts\Http\HasEntityInRequestContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Models\Payment\PaymentMethod;
-use App\Models\User\User;
 use App\Validators\BaseValidatorAbstract;
+use App\Validators\Traits\HasEntityInRequestTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 /**
- * Class PaymentMethodIsOwnedByUserValidator
+ * Class PaymentMethodIsOwnedByEntityValidator
  * @package App\Validators\Subscription
  */
-class PaymentMethodIsOwnedByUserValidator extends BaseValidatorAbstract
+class PaymentMethodIsOwnedByEntityValidator extends BaseValidatorAbstract implements HasEntityInRequestContract
 {
+    use HasEntityInRequestTrait;
+
     /**
      * The key this is registered at
      */
-    const KEY = 'payment_method_is_owned_by_user';
+    const KEY = 'payment_method_is_owned_by_entity';
 
     /**
      * @var PaymentMethodRepositoryContract
@@ -34,6 +37,7 @@ class PaymentMethodIsOwnedByUserValidator extends BaseValidatorAbstract
     /**
      * PaymentMethodIsOwnedByUser constructor.
      * @param PaymentMethodRepositoryContract $paymentMethodRepository
+     * @param Request $request
      */
     public function __construct(PaymentMethodRepositoryContract $paymentMethodRepository, Request $request)
     {
@@ -58,10 +62,9 @@ class PaymentMethodIsOwnedByUserValidator extends BaseValidatorAbstract
             /** @var PaymentMethod $paymentMethod */
             $paymentMethod = $this->paymentMethodRepository->findOrFail($value);
 
-            /** @var User $user */
-            $user = $this->request->route('user');
+            $entity = $this->getEntity();
 
-            return $user->id == $paymentMethod->owner_id && $paymentMethod->owner_type == 'user';
+            return $entity->id == $paymentMethod->owner_id && $paymentMethod->owner_type == $entity->morphRelationName();
 
         } catch (\Exception $e) {
             return false;

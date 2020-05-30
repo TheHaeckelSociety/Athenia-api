@@ -6,7 +6,7 @@ namespace Tests\Unit\Validators\Subscription;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Models\Payment\PaymentMethod;
 use App\Models\User\User;
-use App\Validators\Subscription\PaymentMethodIsOwnedByUserValidator;
+use App\Validators\Subscription\PaymentMethodIsOwnedByEntityValidator;
 use Cartalyst\Stripe\Exception\NotFoundException;
 use Illuminate\Http\Request;
 use Tests\TestCase;
@@ -21,7 +21,7 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
     {
         $repository = mock(PaymentMethodRepositoryContract::class);
         $request = mock(Request::class);
-        $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
+        $validator = new PaymentMethodIsOwnedByEntityValidator($repository, $request);
 
         $repository->shouldReceive('findOrFail')->andThrow(new NotFoundException());
 
@@ -32,7 +32,7 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
     {
         $repository = mock(PaymentMethodRepositoryContract::class);
         $request = mock(Request::class);
-        $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
+        $validator = new PaymentMethodIsOwnedByEntityValidator($repository, $request);
 
         $paymentMethod = new PaymentMethod([
             'owner_id' => 3242,
@@ -50,7 +50,7 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
     {
         $repository = mock(PaymentMethodRepositoryContract::class);
         $request = mock(Request::class);
-        $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
+        $validator = new PaymentMethodIsOwnedByEntityValidator($repository, $request);
 
         $paymentMethod = new PaymentMethod([
             'owner_id' => 3242,
@@ -68,7 +68,7 @@ class PaymentMethodIsOwnedByUserValidatorTest extends TestCase
     {
         $repository = mock(PaymentMethodRepositoryContract::class);
         $request = mock(Request::class);
-        $validator = new PaymentMethodIsOwnedByUserValidator($repository, $request);
+        $validator = new PaymentMethodIsOwnedByEntityValidator($repository, $request);
 
         $paymentMethod = new PaymentMethod([
             'owner_id' => 3242,

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Core\Requests\Entity\PaymentMethod;
 
+use App\Contracts\Http\HasEntityInRequestContract;
 use App\Http\Core\Requests\BaseAuthenticatedRequestAbstract;
 use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
@@ -14,7 +15,7 @@ use App\Policies\Payment\PaymentMethodPolicy;
  * Class DeleteRequest
  * @package App\Http\Core\Requests\Entity\PaymentMethod
  */
-class DeleteRequest extends BaseAuthenticatedRequestAbstract
+class DeleteRequest extends BaseAuthenticatedRequestAbstract implements HasEntityInRequestContract
 {
     use HasNoRules, HasNoExpands, IsEntityRequestTrait;
 

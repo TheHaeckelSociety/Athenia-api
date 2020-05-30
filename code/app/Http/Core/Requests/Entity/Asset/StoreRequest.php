@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Core\Requests\Entity\Asset;
 
+use App\Contracts\Http\HasEntityInRequestContract;
 use App\Http\Core\Requests\BaseAssetUploadRequestAbstract;
 use App\Http\Core\Requests\Entity\Traits\IsEntityRequestTrait;
 use App\Http\Core\Requests\Traits\HasNoExpands;
@@ -13,7 +14,7 @@ use App\Policies\AssetPolicy;
  * Class StoreRequest
  * @package App\Http\Core\Requests\Entity\Asset
  */
-class StoreRequest extends BaseAssetUploadRequestAbstract
+class StoreRequest extends BaseAssetUploadRequestAbstract implements HasEntityInRequestContract
 {
     use HasNoExpands, IsEntityRequestTrait;
 
