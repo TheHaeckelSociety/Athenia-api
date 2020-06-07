@@ -21,7 +21,7 @@ trait HasEntityInRequestTrait
      */
     public function getEntity(): IsAnEntity
     {
-        $entityKey = $this->request->route()->parameterNames[0];
+        $entityKey = $this->request->route()->parameterNames()[0];
 
         return $this->request->route($entityKey);
     }
