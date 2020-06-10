@@ -138,7 +138,7 @@ class StripePaymentService implements StripePaymentServiceContract
         $this->lineItemRepository->create([
             'amount' => -$payment->amount,
             'item_type' => 'refund',
-        ]);
+        ], $payment);
         $this->paymentRepository->update($payment, [
             'refunded_at' => Carbon::now(),
             'amount' => 0,
@@ -163,7 +163,7 @@ class StripePaymentService implements StripePaymentServiceContract
             $this->lineItemRepository->create([
                 'amount' => -$amount,
                 'item_type' => 'refund',
-            ]);
+            ], $payment);
             $this->paymentRepository->update($payment, [
                 'amount' => $payment->amount - $amount,
             ]);

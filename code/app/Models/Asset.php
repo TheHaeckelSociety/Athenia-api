@@ -61,6 +61,20 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
     }
 
     /**
+     * All mime types that can be uploaded to the server for this asset
+     *
+     * @return array
+     */
+    protected function getAvailableMimeTypes(): array
+    {
+        return [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+        ];
+    }
+
+    /**
      * Build the model validation rules
      * @param array $params
      * @return array
@@ -85,11 +99,7 @@ class Asset extends BaseModelAbstract implements HasValidationRulesContract
 
                 // Set in the request object, and not set from the user request
                 'mime_type' => [
-                    Rule::in([
-                        'image/jpeg',
-                        'image/png',
-                        'image/gif',
-                    ]),
+                    Rule::in($this->getAvailableMimeTypes()),
                 ],
             ],
             self::VALIDATION_RULES_CREATE => [
