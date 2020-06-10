@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.34.0
+
+Minor Update! This update fixes a bug in the payment service, and adds some extended functionality to the Asset model. To complete his update copy over the following files.
+
+* code/app/Services/StripePaymentService.php - Now syncs line items to the payment properly
+* code/app/Models/Asset.php - Easy overriding has been added for declaring available upload types
+
 ## 0.33.0
 
 Asset is now a morph relation! There are also a handful of other changes that were made, which generally improve the code.
@@ -17,8 +24,8 @@ Asset is now a morph relation! There are also a handful of other changes that we
 
 ### Asset Ownership Change
 
-* code/app/Http/Core/Controllers/User/AssetControllerAbstract.php - Updated to for new relation.
-* code/app/Http/Core/Controllers/User/ProfileImageControllerAbstract.php - Updated to for new relation.
+* code/app/Http/Core/Controllers/User/AssetControllerAbstract.php - Updated for new relation.
+* code/app/Http/Core/Controllers/User/ProfileImageControllerAbstract.php - Updated for new relation.
 * code/app/Models/Asset.php - Relation to user was changed to owner.
 * code/app/Models/User/User.php - Asset relation type changed.
 * code/app/Policies/AssetPolicy.php - user references were changed in favor of the owner relation.
