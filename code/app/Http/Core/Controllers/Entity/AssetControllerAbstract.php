@@ -75,18 +75,18 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
      * Creates the new asset for us
      *
      * @param Requests\Entity\Asset\StoreRequest $request
-     * @param User $user
+     * @param IsAnEntity $entity
      * @return JsonResponse
      */
-    public function store(Requests\Entity\Asset\StoreRequest $request, User $user)
+    public function store(Requests\Entity\Asset\StoreRequest $request, IsAnEntity $entity)
     {
         $data = $request->json()->all();
 
         $data['file_contents'] = $request->getDecodedContents();
         $data['file_extension'] = $this->mimeTypes->getExtension($request->getFileMimeType());
 
-        $data['owner_id'] = $user->id;
-        $data['owner_type'] = 'user';
+        $data['owner_id'] = $entity->id;
+        $data['owner_type'] = $entity->morphRelationName();
 
         $model = $this->repository->create($data);
         return new JsonResponse($model, 201);
@@ -96,11 +96,11 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
      * Updates an asset properly
      *
      * @param Requests\Entity\Asset\UpdateRequest $request
-     * @param User $user
+     * @param IsAnEntity $entity
      * @param Asset $asset
      * @return BaseModelAbstract
      */
-    public function update(Requests\Entity\Asset\UpdateRequest $request, User $user, Asset $asset)
+    public function update(Requests\Entity\Asset\UpdateRequest $request, IsAnEntity $entity, Asset $asset)
     {
         return $this->repository->update($asset, $request->json()->all());
     }
@@ -109,11 +109,11 @@ abstract class AssetControllerAbstract extends BaseControllerAbstract
      * Deletes an asset from the server
      *
      * @param Requests\Entity\Asset\DeleteRequest $request
-     * @param User $user
+     * @param IsAnEntity $entity
      * @param Asset $asset
      * @return ResponseFactory|Response
      */
-    public function destroy(Requests\Entity\Asset\DeleteRequest $request, User $user, Asset $asset)
+    public function destroy(Requests\Entity\Asset\DeleteRequest $request, IsAnEntity $entity, Asset $asset)
     {
         $this->repository->delete($asset);
         return response(null, 204);

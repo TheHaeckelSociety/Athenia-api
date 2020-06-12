@@ -8,6 +8,7 @@ use App\Contracts\Models\HasValidationRulesContract;
 use App\Contracts\Models\IsAnEntity;
 use App\Models\Asset;
 use App\Models\BaseModelAbstract;
+use App\Models\Role;
 use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\HasValidationRules;
@@ -102,7 +103,7 @@ class Organization extends BaseModelAbstract
     /**
      * @inheritDoc
      */
-    public function canUserManageEntity(User $user, int $role = null): bool
+    public function canUserManageEntity(User $user, int $role = Role::MANAGER): bool
     {
         return $user->canManageOrganization($this, $role);
     }
