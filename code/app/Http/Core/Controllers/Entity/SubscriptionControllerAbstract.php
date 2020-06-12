@@ -190,11 +190,11 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
      * )
      *
      * @param Requests\Entity\Subscription\UpdateRequest $request
-     * @param User $user
+     * @param IsAnEntity $entity
      * @param Subscription $subscription
      * @return Subscription|BaseModelAbstract
      */
-    public function update(Requests\Entity\Subscription\UpdateRequest $request, User $user, Subscription $subscription)
+    public function update(Requests\Entity\Subscription\UpdateRequest $request, IsAnEntity $entity, Subscription $subscription)
     {
         $data = $request->json()->all();
 
