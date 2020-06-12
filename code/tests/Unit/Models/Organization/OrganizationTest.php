@@ -35,7 +35,7 @@ class OrganizationTest extends TestCase
         $user = new Organization();
         $relation = $user->paymentMethods();
 
-        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('organizations.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('payment_methods.owner_id', $relation->getQualifiedForeignKeyName());
     }
 
@@ -54,7 +54,7 @@ class OrganizationTest extends TestCase
         $user = new Organization();
         $relation = $user->subscriptions();
 
-        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('organizations.id', $relation->getQualifiedParentKeyName());
         $this->assertEquals('subscriptions.subscriber_id', $relation->getQualifiedForeignKeyName());
     }
 }
