@@ -41,7 +41,7 @@ class AssetPolicy extends BasePolicyAbstract
      */
     public function update(User $loggedInUser, IsAnEntity $entity, Asset $asset)
     {
-        return $asset->owner_type == $entity->morphRelationName() && $asset->owner_id == $loggedInUser->id
+        return $asset->owner_type == $entity->morphRelationName() && $asset->owner_id == $entity->id
             && $entity->canUserManageEntity($loggedInUser);
     }
 
@@ -53,7 +53,7 @@ class AssetPolicy extends BasePolicyAbstract
      */
     public function delete(User $loggedInUser, IsAnEntity $entity, Asset $asset)
     {
-        return $asset->owner_type == $entity->morphRelationName() && $asset->owner_id == $loggedInUser->id
+        return $asset->owner_type == $entity->morphRelationName() && $asset->owner_id == $entity->id
             && $entity->canUserManageEntity($loggedInUser);
     }
 }
