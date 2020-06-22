@@ -11,7 +11,7 @@ use App\Models\User\User;
  * @package App\Contracts\Models
  * @property int $id
  */
-interface IsAnEntity extends CanBeMorphedTo
+interface IsAnEntity extends CanBeMorphedTo, HasPaymentMethodsContract
 {
     /**
      * Tells us whether or not the logged in user can manage this entity
