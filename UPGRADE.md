@@ -2,6 +2,119 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.35.0
+
+Entities! This is another massive update which adds a new entity type that will allow large shared groups of functionality to be applied to a model. This update is very large, so it will thus be broken up into multiple steps for implementation. This update will allow you to declare parts of your app as being related to an entity, which will then allow that bit of functionality to be owned by whatever is marked as an entity.
+
+### Contracts - New files to copy over
+
+* code/app/Contracts/Http/HasEntityInRequestContract.php
+* code/app/Contracts/Models/CanBeManagedByEntity.php
+* code/app/Contracts/Models/IsAnEntity.php
+
+### Contracts - Existing Files
+
+* code/app/Contracts/Services/StripePaymentServiceContract.php - User parameters removed in favor of new IsAnEntity model contract
+
+### HTTP - Paths to remove
+
+* code/app/Http/Core/Controllers/User/AssetControllerAbstract.php
+* code/app/Http/Core/Controllers/User/PaymentMethodControllerAbstract.php
+* code/app/Http/Core/Controllers/User/ProfileImageControllerAbstract.php
+* code/app/Http/Core/Controllers/User/SubscriptionControllerAbstract.php
+* code/app/Http/Core/Requests/User/Asset/
+* code/app/Http/Core/Requests/User/PaymentMethod/
+* code/app/Http/Core/Requests/User/ProfileImage/
+* code/app/Http/Core/Requests/User/Subscription/
+* code/app/Http/V1/Controllers/User/AssetController.php
+* code/app/Http/V1/Controllers/User/PaymentMethodController.php
+* code/app/Http/V1/Controllers/User/ProfileImageController.php
+* code/app/Http/V1/Controllers/User/SubscriptionController.php
+
+### HTTP - New Paths
+
+* code/app/Http/Core/Controllers/Entity/
+* code/app/Http/Core/Requests/Entity/Asset/
+* code/app/Http/Core/Requests/Entity/Traits/IsEntityRequestTrait.php
+* code/app/Http/V1/Controllers/Entity/
+
+### Validator Changes
+
+* code/app/Validators/Subscription/PaymentMethodIsOwnedByUserValidator.php - This validator can be removed.
+* code/app/Validators/Subscription/PaymentMethodIsOwnedByEntityValidator.php - This validator replaces the last validator.
+* code/app/Validators/Traits/HasEntityInRequestTrait.php - New trait that makes it easy to deal with route when it is related to an entity.
+
+### Models - All updates of existing files
+
+* code/app/Models/Role.php - A few role constants were renamed. Probably a good idea to run a refactor for ORGANIZATION_ADMIN -> ADMINISTRATOR, ORGANIZATION_MANAGER -> MANAGER, and ORGANIZATION_ROLES -> ENTITY_ROLES.
+* code/app/Models/Asset.php - Ran ide helpers for comment block
+* code/app/Models/Organization/Organization.php - Now marked as entity, which has cascaded a lot of changes. It is best to copy over the entire file, and compare changes.
+* code/app/Models/Organization/OrganizationManager.php - Renamed Role references. Should already be fixed if the roles were refactored.
+* code/app/Models/Payment/Payment.php - Ran ide helpers for comment block
+* code/app/Models/Subscription/Subscription.php - Ran ide helpers & updated validator class name
+* code/app/Models/User/ProfileImage.php - Ran ide helpers & ran organization relation
+* code/app/Models/User/User.php - Ran ide helpers, added canUserManageEntity function, and refactored role names.
+
+### Policies
+
+* code/app/Policies/AssetPolicy.php - Updated to use new IsAnEntity model contract.
+* code/app/Policies/BaseBelongsToOrganizationPolicyAbstract.php - Role constant refactor. This should automatically be completed with the previous refactor.
+* code/app/Policies/Organization/OrganizationManagerPolicy.php - Role constant refactor. This should automatically be completed with the previous refactor.
+* code/app/Policies/Organization/OrganizationPolicy.php - Role constant refactor. This should automatically be completed with the previous refactor.
+* code/app/Policies/Payment/PaymentMethodPolicy.php - Updated to use new IsAnEntity model contract.
+* code/app/Policies/Subscription/SubscriptionPolicy.php - Updated to use new IsAnEntity model contract.
+* code/app/Policies/User/ProfileImagePolicy.php - Updated to use new IsAnEntity model contract.
+
+### Miscellaneous App Changes
+
+* code/app/Providers/AppValidatorProvider.php - Make sure to remove the old validator registration, and add the new payment method validator.
+* code/app/Services/StripePaymentService.php - Replaced User model references with IsAnEntity contract.
+
+### Database File Changes
+
+* code/database/factories/OrganizationFactory.php - Role refactor change.
+* code/database/migrations/2020_02_10_211858_create_organizations.php - Role refactor change.
+* code/database/migrations/2020_05_29_211444_add_profile_image_to_organizations.php - New Migration.
+
+### Resource File Changes
+
+* code/resources/lang/en/validation.php - Changed validator language.
+
+### Route File Changes
+
+* code/routes/core.php - Added reference to entity routes.
+* code/routes/entity-routes.php - New route file that holds all entity routes.
+
+### Feature Tests
+
+* code/tests/Feature/Http/Organization/Asset/ - New Test Group.
+* code/tests/Feature/Http/Organization/OrganizationDeleteTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationUpdateTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationViewTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationManager/OrganizationOrganizationManagerCreateTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationManager/OrganizationOrganizationManagerDeleteTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationManager/OrganizationOrganizationManagerIndexTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/OrganizationManager/OrganizationOrganizationManagerUpdateTest.php - Role Refactor.
+* code/tests/Feature/Http/Organization/PaymentMethod/ - New Test Group.
+* code/tests/Feature/Http/Organization/ProfileImage/ - New Test Group.
+* code/tests/Feature/Http/Organization/Subscription/ - New Test Group.
+
+### Integration Tests
+
+All of these tests have changes from the refactor, and should not need changes.
+
+* code/tests/Integration/Models/User/UserTest.php
+* code/tests/Integration/Policies/Organization/OrganizationManagerPolicyTest.php
+* code/tests/Integration/Policies/Organization/OrganizationPolicyTest.php
+* code/tests/Integration/Repositories/Organization/OrganizationManagerRepositoryTest.php
+
+### Unit Tests
+
+* code/tests/Unit/Models/Organization/OrganizationTest.php - Added new tests for all new relations added. It will be best to copy over and then run a compare.
+* code/tests/Unit/Models/User/ProfileImageTest.php - Test added organization relation
+* code/tests/Unit/Validators/Subscription/PaymentMethodIsOwnedByUserValidatorTest.php - Removed.
+* code/tests/Unit/Validators/Subscription/PaymentMethodIsOwnedByEntityValidatorTest.php - Added to replace the previously replaced validator.
+
 ## 0.34.0
 
 Minor Update! This update fixes a bug in the payment service, and adds some extended functionality to the Asset model. To complete his update copy over the following files.
