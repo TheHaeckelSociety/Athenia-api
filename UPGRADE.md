@@ -34,8 +34,7 @@ Entities! This is another massive update which adds a new entity type that will 
 ### HTTP - New Paths
 
 * code/app/Http/Core/Controllers/Entity/
-* code/app/Http/Core/Requests/Entity/Asset/
-* code/app/Http/Core/Requests/Entity/Traits/IsEntityRequestTrait.php
+* code/app/Http/Core/Requests/Entity/
 * code/app/Http/V1/Controllers/Entity/
 
 ### Validator Changes
@@ -52,8 +51,8 @@ Entities! This is another massive update which adds a new entity type that will 
 * code/app/Models/Organization/OrganizationManager.php - Renamed Role references. Should already be fixed if the roles were refactored.
 * code/app/Models/Payment/Payment.php - Ran ide helpers for comment block
 * code/app/Models/Subscription/Subscription.php - Ran ide helpers & updated validator class name
-* code/app/Models/User/ProfileImage.php - Ran ide helpers & ran organization relation
-* code/app/Models/User/User.php - Ran ide helpers, added canUserManageEntity function, and refactored role names.
+* code/app/Models/User/ProfileImage.php - Ran ide helpers & added organization relation
+* code/app/Models/User/User.php - Ran ide helpers, added canUserManageEntity function, IsAnEntity Contract, and refactored role names.
 
 ### Policies
 
@@ -111,7 +110,7 @@ All of these tests have changes from the refactor, and should not need changes.
 ### Unit Tests
 
 * code/tests/Unit/Models/Organization/OrganizationTest.php - Added new tests for all new relations added. It will be best to copy over and then run a compare.
-* code/tests/Unit/Models/User/ProfileImageTest.php - Test added organization relation
+* code/tests/Unit/Models/User/ProfileImageTest.php - Added organization relation test
 * code/tests/Unit/Validators/Subscription/PaymentMethodIsOwnedByUserValidatorTest.php - Removed.
 * code/tests/Unit/Validators/Subscription/PaymentMethodIsOwnedByEntityValidatorTest.php - Added to replace the previously replaced validator.
 
