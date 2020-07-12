@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.35.1
+
+Simple little bug fix update! The organization creation was previously not assigning the logged in user to be able to administrate the organization, so that has now been resolved. Simply copy over the file `code/app/Http/Core/Controllers/OrganizationControllerAbstract.php` to complete this update.
+
 ## 0.35.0
 
 Entities! This is another massive update which adds a new entity type that will allow large shared groups of functionality to be applied to a model. This update is very large, so it will thus be broken up into multiple steps for implementation. This update will allow you to declare parts of your app as being related to an entity, which will then allow that bit of functionality to be owned by whatever is marked as an entity.
