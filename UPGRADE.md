@@ -2,6 +2,19 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.36.0
+
+New membership plan rate admin endpoint! To finish this update copy over the following paths.
+
+* code/app/Http/Core/Controllers/MembershipPlan/MembershipPlanRateControllerAbstract.php
+* code/app/Http/Core/Requests/MembershipPlan/MembershipPlanRate/IndexRequest.php
+* code/app/Http/V1/Controllers/MembershipPlan/MembershipPlanRateController.php
+* code/app/Policies/Subscription/MembershipPlanRatePolicy.php
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanRate/MembershipPlanMembershipPlanRateIndexTest.php
+* code/tests/Integration/Policies/Subscription/MembershipPlanRatePolicyTest.php
+
+Then copy over the core routes file.
+
 ## 0.35.1
 
 Simple little bug fix update! The organization creation was previously not assigning the logged in user to be able to administrate the organization, so that has now been resolved. Simply copy over the file `code/app/Http/Core/Controllers/OrganizationControllerAbstract.php` to complete this update.
