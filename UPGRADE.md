@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.37.0
+
+Nice and simple one! This version simply allows for users to load the `organizationManagers` relation on the me request. To complete this update simply copy over the line 48 of the file `code/app/Http/Core/Requests/User/MeRequest.php`.
+
 ## 0.36.0
 
 New membership plan rate admin endpoint! To finish this update copy over the following paths.
