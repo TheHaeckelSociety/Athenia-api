@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.38.0
+
+Another simple one! This update adds some new helpers that allow for some location queries to be done very easily.
+
+* code/app/Contracts/Repositories/HasLocationRepositoryContract.php
+* code/app/Repositories/Traits/HasLocationTrait.php
+
 ## 0.37.0
 
 Nice and simple one! This version simply allows for users to load the `organizationManagers` relation on the me request. To complete this update simply copy over the line 48 of the file `code/app/Http/Core/Requests/User/MeRequest.php`.
