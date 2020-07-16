@@ -31,6 +31,8 @@ trait HasLocationTrait
         $query->orderByRaw($distanceFormula);
 
         $query->groupBy($this->model->getTable() . '.id');
+        
+        return $query;
     }
 
     /**
