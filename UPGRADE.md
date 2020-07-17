@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.39.0
+
+Another nice and simple one! This version simply allows for users to load the `organizationManagers.organization` relation on the me request. To complete this update simply copy over the line 49 of the file `code/app/Http/Core/Requests/User/MeRequest.php`.
+
 ## 0.38.0
 
 Another simple one! This update adds some new helpers that allow for some location queries to be done very easily.
