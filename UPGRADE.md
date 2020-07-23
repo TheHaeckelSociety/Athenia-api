@@ -2,6 +2,25 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.40.0 
+
+This update separates the name field into a first name and last name field. If your app already has a first name and last name, then this update can almost certainly be skipped.
+
+* code/app/Http/Core/Requests/Authentication/SignUpRequest.php - The rules have been updated to allow for the first and last name
+* code/app/Listeners/User/ForgotPasswordListener.php - This was updated to use the first and last name fields
+* code/app/Listeners/User/SignUpListener.php - This was updated to use the first and last name fields
+* code/app/Mail/MessageMailer.php - This was updated to use the first and last name fields
+* code/app/Models/User/User.php - Updated the getContentString for the new name fields and the validation rules have been updated for the first and last name fields
+* code/database/factories/UserFactory.php - Updated for the new fields
+* code/database/migrations/2020_07_23_164053_separate_name_into_first_last.php - New Migration
+* code/tests/Feature/Http/Authentication/SignUpTest.php - Updated for first and last name fields, you probably want to leave a test for the name in if you have application in productions
+* code/tests/Feature/Http/User/UserUpdateTest.php - Updated for first and last name fields, you probably want to leave a test for the name in if you have application in productions
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php - Updated for name field changes
+* code/tests/Unit/Listeners/User/SignUpListenerTest.php - Updated for first and last name fields
+* code/tests/Unit/Mail/MessageMailerTest.php - Updated for first and last name fields
+
+After this make sure to update the user and authentication controller to transform the `name` field to `first_name`.
+
 ## 0.39.0
 
 Another nice and simple one! This version simply allows for users to load the `organizationManagers.organization` relation on the me request. To complete this update simply copy over the line 49 of the file `code/app/Http/Core/Requests/User/MeRequest.php`.

@@ -101,13 +101,13 @@ class UserRepositoryTest extends TestCase
     {
         $user = $this->repository->create([
             'email' => 'test@test.com',
-            'name' => 'Kelly Ann Conway',
+            'first_name' => 'Kelly Ann Conway',
             'password' => 'Something secure',
         ]);
 
         $this->assertEquals(1, User::count());
         $this->assertEquals('test@test.com', $user->email);
-        $this->assertEquals('Kelly Ann Conway', $user->name);
+        $this->assertEquals('Kelly Ann Conway', $user->first_name);
         $this->assertTrue($this->hasher->check('Something secure', $user->password));
     }
 

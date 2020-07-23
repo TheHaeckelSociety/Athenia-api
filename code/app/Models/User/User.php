@@ -313,7 +313,7 @@ class User extends BaseModelAbstract
      */
     public function getContentString(): ?string
     {
-        return $this->name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -359,7 +359,11 @@ class User extends BaseModelAbstract
                     'email',
                     $emailUnique,
                 ],
-                'name' => [
+                'first_name' => [
+                    'string',
+                    'max:120',
+                ],
+                'last_name' => [
                     'string',
                     'max:120',
                 ],

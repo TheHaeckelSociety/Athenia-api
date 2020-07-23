@@ -25,7 +25,8 @@ class SignUpRequest extends BaseUnauthenticatedRequest
     {
         return [
             'email' => 'required|string|max:120|email|unique:users,email',
-            'name' => 'required|string|max:120',
+            'first_name' => 'required|string|max:120',
+            'last_name' => 'string|max:120',
             'password' => 'required|string|min:6|max:256',
         ];
     }

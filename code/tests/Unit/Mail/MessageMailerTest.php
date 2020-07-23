@@ -17,7 +17,7 @@ class MessageMailerTest extends TestCase
     public function testBuild()
     {
         $user = new User([
-            'name' => 'Darlene Dora',
+            'first_name' => 'Darlene Dora',
         ]);
         $message = new Message([
             'to' => $user,

@@ -25,7 +25,7 @@ class SignUpListenerTest extends TestCase
         $repository = mock(MessageRepositoryContract::class);
 
         $user = new User([
-            'name' => 'Ralph Nadar',
+            'first_name' => 'Ralph Nadar',
             'email' => 'test@test.com',
         ]);
 

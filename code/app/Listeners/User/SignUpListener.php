@@ -40,7 +40,7 @@ class SignUpListener
             'Welcome to Project Athenia!',
             'sign-up',
             [],
-            $user->name . ',',
+            $user->first_name . ',',
         );
     }
 }

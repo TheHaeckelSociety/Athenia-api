@@ -132,7 +132,8 @@ class UserUpdateTest extends TestCase
 
         $response = $this->json('PUT', $this->path . '/' . $this->actingAs->id, [
             'email' => 1,
-            'name' => 1,
+            'first_name' => 1,
+            'last_name' => 1,
             'about_me' => 1,
             'password' => 1,
             'push_notification_key' => 1,
@@ -142,7 +143,8 @@ class UserUpdateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'email' => ['The email must be a string.'],
-                'name' => ['The name must be a string.'],
+                'first_name' => ['The first name must be a string.'],
+                'last_name' => ['The last name must be a string.'],
                 'about_me' => ['The about me must be a string.'],
                 'password' => ['The password must be a string.'],
                 'push_notification_key' => ['The push notification key must be a string.'],
@@ -173,7 +175,8 @@ class UserUpdateTest extends TestCase
         $response = $this->json('PUT', $this->path . '/' . $this->actingAs->id, [
             'password' => str_repeat('a', 5),
             'email' => str_repeat('a', 121),
-            'name' => str_repeat('a', 121),
+            'first_name' => str_repeat('a', 121),
+            'last_name' => str_repeat('a', 121),
             'push_notification_key' => str_repeat('a', 513),
         ]);
 
@@ -182,7 +185,8 @@ class UserUpdateTest extends TestCase
             'errors' => [
                 'password' => ['The password must be at least 6 characters.'],
                 'email' => ['The email may not be greater than 120 characters.'],
-                'name' => ['The name may not be greater than 120 characters.'],
+                'first_name' => ['The first name may not be greater than 120 characters.'],
+                'last_name' => ['The last name may not be greater than 120 characters.'],
                 'push_notification_key' => ['The push notification key may not be greater than 512 characters.'],
             ]
         ]);

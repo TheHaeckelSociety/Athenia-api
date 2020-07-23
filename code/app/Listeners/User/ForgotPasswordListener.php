@@ -40,7 +40,7 @@ class ForgotPasswordListener
             'template' => 'forgot-password',
             'email' => $passwordToken->user->email,
             'data' => [
-                'greeting' => 'Hello ' . $passwordToken->user->name . ',',
+                'greeting' => 'Hello ' . $passwordToken->user->first_name . ',',
                 'token' => $passwordToken->token,
             ],
         ], $passwordToken->user);

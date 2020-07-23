@@ -6,7 +6,8 @@ use Illuminate\Support\Str;
 $factory->define(App\Models\User\User::class, function (Faker $faker) {
     return [
         'email' => $faker->unique()->safeEmail,
-        'name' => $faker->name,
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
     ];
 });

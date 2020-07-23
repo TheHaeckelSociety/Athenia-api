@@ -45,7 +45,7 @@ class SignUpTest extends TestCase
 
         $properties = [
             'email' => 'guy@smiley.com',
-            'name' => 'Steve',
+            'first_name' => 'Steve',
             'password' => 'complex!'
         ];
 
@@ -74,7 +74,7 @@ class SignUpTest extends TestCase
 
         $this->assertEquals($properties, [
             'email' => $model->email,
-            'name' => $model->name,
+            'first_name' => $model->first_name,
         ]);
 
         $this->assertTrue(Hash::check($password, $model->password));
@@ -88,7 +88,7 @@ class SignUpTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'email' => ['The email field is required.'],
-                'name' => ['The name field is required.'],
+                'first_name' => ['The first name field is required.'],
                 'password' => ['The password field is required.'],
             ]
         ]);
@@ -98,13 +98,13 @@ class SignUpTest extends TestCase
     {
         $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => 1,
-            'name' => 1,
+            'first_name' => 1,
             'password' => 1,
         ]);
 
         $response->assertJson(['errors' => [
             'email' => ['The email must be a string.'],
-            'name' => ['The name must be a string.'],
+            'first_name' => ['The first name must be a string.'],
             'password' => ['The password must be a string.'],
         ]]);
 
@@ -127,12 +127,12 @@ class SignUpTest extends TestCase
     {
         $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => str_repeat('a', 121),
-            'name' => str_repeat('a', 121),
+            'first_name' => str_repeat('a', 121),
             'password' => str_repeat('a', 257),
         ]);
         $response->assertJson(['errors' => [
             'email' => ['The email may not be greater than 120 characters.'],
-            'name' => ['The name may not be greater than 120 characters.'],
+            'first_name' => ['The first name may not be greater than 120 characters.'],
             'password' => ['The password may not be greater than 256 characters.'],
         ]]);
 
