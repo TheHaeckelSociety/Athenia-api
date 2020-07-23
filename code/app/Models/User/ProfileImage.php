@@ -17,32 +17,31 @@ use Illuminate\Support\Carbon;
 /**
  * Class ProfileImage
  *
- * @package App\Models\User
  * @property int $id
- * @property string $url
- * @property string|null $caption
- * @property string|null $name
  * @property int|null $owner_id
+ * @property string|null $name
+ * @property string|null $caption
+ * @property string $url
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property mixed|null $created_at
+ * @property mixed|null $updated_at
  * @property string|null $owner_type
- * @property Carbon|null $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read User|Organization|Model|Eloquent $owner
- * @property-read int|null $conferences_count
- * @property-read int|null $events_count
- * @method static Builder|ProfileImage newModelQuery()
- * @method static Builder|ProfileImage newQuery()
- * @method static Builder|ProfileImage query()
- * @method static Builder|ProfileImage whereCaption($value)
- * @method static Builder|ProfileImage whereCreatedAt($value)
- * @method static Builder|ProfileImage whereDeletedAt($value)
- * @method static Builder|ProfileImage whereId($value)
- * @method static Builder|ProfileImage whereName($value)
- * @method static Builder|ProfileImage whereOwnerId($value)
- * @method static Builder|ProfileImage whereOwnerType($value)
- * @method static Builder|ProfileImage whereUpdatedAt($value)
- * @method static Builder|ProfileImage whereUrl($value)
- * @mixin Eloquent
+ * @property-read \App\Models\Organization\Organization|null $organization
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
+ * @property-read \App\Models\User\User|null $user
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\ProfileImage newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\ProfileImage newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\ProfileImage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereCaption($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereOwnerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\ProfileImage whereUrl($value)
+ * @mixin \Eloquent
  */
 class ProfileImage extends Asset
 {

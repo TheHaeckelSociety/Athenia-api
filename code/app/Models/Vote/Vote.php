@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Vote
  *
- * @package App\Models\Vote
  * @property int $id
  * @property int $ballot_subject_id
  * @property int $ballot_completion_id

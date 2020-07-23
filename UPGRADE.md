@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.40.1
+
+Very simple update. For this one simply run `php artisan ide-helper:models --smart-reset` to update the model comment blocks for the future.
+
 ## 0.40.0 
 
 This update separates the name field into a first name and last name field. If your app already has a first name and last name, then this update can almost certainly be skipped.
