@@ -56,8 +56,8 @@ class IndexRequest extends BaseAuthenticatedRequestAbstract implements HasEntity
     public function allowedExpands(): array
     {
         return [
-            'membershipPlan',
-            'membershipPlan.membershipPlanRate',
+            'membershipPlanRate',
+            'membershipPlanRate.membershipPlan',
         ];
     }
 }
