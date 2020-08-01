@@ -50,11 +50,11 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
     /**
      * Gets all assets for a user
      *
-     * @param Requests\Entity\Asset\IndexRequest $request
+     * @param Requests\Entity\Subscription\IndexRequest $request
      * @param IsAnEntity $entity
      * @return LengthAwarePaginator
      */
-    public function index(Requests\Entity\Asset\IndexRequest $request, IsAnEntity $entity)
+    public function index(Requests\Entity\Subscription\IndexRequest $request, IsAnEntity $entity)
     {
         $filter = $this->filter($request);
 
