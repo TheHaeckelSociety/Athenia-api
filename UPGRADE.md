@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.41.1
+
+Quick little bug fix! There was an error with the order of paramters for the index call in a couple controllers. To make this update, copy over the index function of the following files.
+
+* code/app/Http/Core/Controllers/Entity/AssetControllerAbstract.php
+* code/app/Http/Core/Controllers/Entity/SubscriptionControllerAbstract.php
+
 ## 0.41.0
 
 New entity endpoint! There is now aa subscription index endpoint on any entity. To complete this update copy over the following files.

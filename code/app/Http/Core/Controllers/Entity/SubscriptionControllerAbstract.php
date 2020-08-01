@@ -69,7 +69,7 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
             $entity->morphRelationName(),
         ];
 
-        return $this->repository->findAll($filter, $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [], (int)$request->input('page', 1));
+        return $this->repository->findAll($filter, $this->search($request),  $this->order($request), $this->expand($request), $this->limit($request), [], (int)$request->input('page', 1));
     }
 
     /**
