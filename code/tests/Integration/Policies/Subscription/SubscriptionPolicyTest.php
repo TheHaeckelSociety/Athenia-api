@@ -17,6 +17,17 @@ class SubscriptionPolicyTest extends TestCase
 {
     use DatabaseSetupTrait;
 
+    public function testAll()
+    {
+        $policy = new SubscriptionPolicy();
+
+        $user1 = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $this->assertFalse($policy->all($user1, $user2));
+        $this->assertTrue($policy->all($user1, $user1));
+    }
+
     public function testCreate()
     {
         $policy = new SubscriptionPolicy();

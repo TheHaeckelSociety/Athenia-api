@@ -2,6 +2,18 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.41.0
+
+New entity endpoint! There is now aa subscription index endpoint on any entity. To complete this update copy over the following files.
+
+* code/app/Http/Core/Controllers/Entity/SubscriptionControllerAbstract.php - A new index function has been added, and the class now uses the HasIndexRequests trait.
+* code/app/Http/Core/Requests/Entity/Subscription/IndexRequest.php - New Request
+* code/app/Policies/Subscription/SubscriptionPolicy.php - Added the all function
+* code/routes/entity-routes.php - Registered the subscription index route
+* code/tests/Feature/Http/Organization/Subscription/OrganizationSubscriptionIndexTest.php - New Test
+* code/tests/Feature/Http/User/Subscription/UserSubscriptionIndexTest.php - New Test
+* code/tests/Integration/Policies/Subscription/SubscriptionPolicyTest.php - All function now being tested
+
 ## 0.40.1
 
 Very simple update. For this one simply run `php artisan ide-helper:models --smart-reset` to update the model comment blocks for the future.

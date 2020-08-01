@@ -20,6 +20,6 @@ Route::resource('profile-images', 'Entity\ProfileImageController', [
 ]);
 Route::resource('subscriptions', 'Entity\SubscriptionController', [
     'only' => [
-        'store', 'update',
+        'index', 'store', 'update',
     ],
 ]);

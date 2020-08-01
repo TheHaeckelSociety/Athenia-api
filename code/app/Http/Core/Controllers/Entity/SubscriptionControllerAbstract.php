@@ -7,11 +7,13 @@ use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Services\StripePaymentServiceContract;
 use App\Http\Core\Controllers\BaseControllerAbstract;
+use App\Http\Core\Controllers\Traits\HasIndexRequests;
 use App\Http\Core\Requests;
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
@@ -21,6 +23,8 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
  */
 abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
 {
+    use HasIndexRequests;
+
     /**
      * @var SubscriptionRepositoryContract
      */
@@ -41,6 +45,31 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
     {
         $this->repository = $repository;
         $this->stripeChargeService = $stripePaymentService;
+    }
+
+    /**
+     * Gets all assets for a user
+     *
+     * @param Requests\Entity\Asset\IndexRequest $request
+     * @param IsAnEntity $entity
+     * @return LengthAwarePaginator
+     */
+    public function index(Requests\Entity\Asset\IndexRequest $request, IsAnEntity $entity)
+    {
+        $filter = $this->filter($request);
+
+        $filter[] = [
+            'subscriber_id',
+            '=',
+            $entity->id,
+        ];
+        $filter[] = [
+            'subscriber_type',
+            '=',
+            $entity->morphRelationName(),
+        ];
+
+        return $this->repository->findAll($filter, $this->search($request), $this->expand($request), $this->order($request), $this->limit($request), [], (int)$request->input('page', 1));
     }
 
     /**

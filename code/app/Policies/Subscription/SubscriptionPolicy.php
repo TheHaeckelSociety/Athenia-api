@@ -16,6 +16,18 @@ use App\Policies\BasePolicyAbstract;
 class SubscriptionPolicy extends BasePolicyAbstract
 {
     /**
+     * Only available for super admins and admins of the entity
+     *
+     * @param User $loggedInUser
+     * @param IsAnEntity $entity
+     * @return bool
+     */
+    public function all(User $loggedInUser, IsAnEntity $entity)
+    {
+        return $entity->canUserManageEntity($loggedInUser, Role::ADMINISTRATOR);
+    }
+
+    /**
      * Only Available for super admins
      *
      * @param User $loggedInUser
