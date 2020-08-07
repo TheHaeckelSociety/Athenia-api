@@ -3,14 +3,13 @@ declare(strict_types=1);
 
 namespace App\Models\Organization;
 
-use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Contracts\Models\IsAnEntity;
 use App\Models\Asset;
 use App\Models\BaseModelAbstract;
 use App\Models\Role;
 use App\Models\Traits\HasPaymentMethods;
-use App\Models\Traits\HasSubscriptions;
+use App\Models\Traits\IsEntity;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\ProfileImage;
 use App\Models\User\User;
@@ -39,6 +38,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $organization_managers_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
  * @property-read int|null $payment_methods_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
+ * @property-read int|null $payments_count
  * @property-read \App\Models\User\ProfileImage|null $profileImage
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
@@ -54,9 +55,9 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 class Organization extends BaseModelAbstract
-    implements HasValidationRulesContract, IsAnEntity, HasPaymentMethodsContract
+    implements HasValidationRulesContract, IsAnEntity
 {
-    use HasValidationRules, HasSubscriptions, HasPaymentMethods;
+    use HasValidationRules, IsEntity, HasPaymentMethods;
 
     /**
      * All assets this user has created

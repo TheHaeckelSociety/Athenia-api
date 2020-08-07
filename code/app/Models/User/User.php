@@ -4,28 +4,22 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Contracts\Models\CanBeIndexedContract;
-use App\Contracts\Models\HasPaymentMethodsContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Contracts\Models\IsAnEntity;
 use App\Models\Asset;
 use App\Models\Organization\Organization;
 use App\Models\Organization\OrganizationManager;
-use App\Models\Payment\PaymentMethod;
 use App\Models\Resource;
 use App\Models\Role;
-use App\Models\Subscription\Subscription;
 use App\Models\Traits\CanBeIndexed;
 use App\Models\Traits\HasPaymentMethods;
-use App\Models\Traits\HasSubscriptions;
+use App\Models\Traits\IsEntity;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
-use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -69,6 +63,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $organization_managers_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
  * @property-read int|null $payment_methods_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
+ * @property-read int|null $payments_count
  * @property-read \App\Models\User\ProfileImage|null $profileImage
  * @property-read \App\Models\Resource|null $resource
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
@@ -99,10 +95,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends BaseModelAbstract
     implements AuthenticatableContract, JWTSubject,
-            HasPolicyContract, HasValidationRulesContract, HasPaymentMethodsContract,
+            HasPolicyContract, HasValidationRulesContract,
             CanBeIndexedContract, IsAnEntity
 {
-    use Authenticatable, HasValidationRules, HasPaymentMethods, HasSubscriptions, CanBeIndexed;
+    use Authenticatable, HasValidationRules, HasPaymentMethods, IsEntity, CanBeIndexed;
 
     /**
      * The attributes excluded from the model's JSON form.

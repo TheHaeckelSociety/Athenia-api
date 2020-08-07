@@ -5,13 +5,14 @@ namespace App\Contracts\Models;
 
 use App\Models\Role;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Interface CanHaveMultipleOwnerTypes
  * @package App\Contracts\Models
  * @property int $id
  */
-interface IsAnEntity extends CanBeMorphedTo, HasPaymentMethodsContract
+interface IsAnEntity extends CanBeMorphedTo
 {
     /**
      * Tells us whether or not the logged in user can manage this entity
@@ -21,4 +22,18 @@ interface IsAnEntity extends CanBeMorphedTo, HasPaymentMethodsContract
      * @return bool
      */
     public function canUserManageEntity(User $user, int $role = Role::MANAGER): bool;
+
+    /**
+     * This is for the relation for the payment methods
+     *
+     * @return MorphMany
+     */
+    public function paymentMethods(): MorphMany;
+
+    /**
+     * All payments this entity has made
+     *
+     * @return MorphMany
+     */
+    public function payments(): MorphMany;
 }

@@ -30,6 +30,15 @@ class OrganizationTest extends TestCase
         $this->assertEquals('organization_managers.organization_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testPayments()
+    {
+        $user = new Organization();
+        $relation = $user->payments();
+
+        $this->assertEquals('organizations.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('payments.owner_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testPaymentMethods()
     {
         $user = new Organization();

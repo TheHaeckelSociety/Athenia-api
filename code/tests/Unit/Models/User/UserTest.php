@@ -76,6 +76,15 @@ class UserTest extends TestCase
         $this->assertEquals('organization_managers.user_id', $relation->getQualifiedForeignKeyName());
     }
 
+    public function testPayments()
+    {
+        $user = new User();
+        $relation = $user->payments();
+
+        $this->assertEquals('users.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('payments.owner_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testPaymentMethods()
     {
         $user = new User();

@@ -12,13 +12,4 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 trait HasPaymentMethods
 {
-    /**
-     * All payment methods owned by this model
-     *
-     * @return MorphMany
-     */
-    public function paymentMethods(): MorphMany
-    {
-        return $this->morphMany(PaymentMethod::class, 'owner');
-    }
 }
