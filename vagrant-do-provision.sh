@@ -8,4 +8,6 @@ cat /tmp/key.pub >> /home/vagrant/.ssh/authorized_keys
 chgrp -R vagrant /home/vagrant/.ssh
 chown -R vagrant /home/vagrant/.ssh
 
+sudo apt-get update
+
 sudo apt-get install python -y

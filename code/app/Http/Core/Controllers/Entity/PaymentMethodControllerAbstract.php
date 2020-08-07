@@ -10,7 +10,6 @@ use App\Http\Core\Controllers\BaseControllerAbstract;
 use App\Http\Core\Controllers\Traits\HasIndexRequests;
 use App\Http\Core\Requests;
 use App\Models\Payment\PaymentMethod;
-use App\Models\User\User;
 use Illuminate\Http\JsonResponse;
 
 /**
