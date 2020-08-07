@@ -108,7 +108,8 @@ class StripePaymentService implements StripePaymentServiceContract
         $paymentData = [
             'amount' => $amount,
             'line_items' => $lineItems,
-            'user_id' => $entity->id,
+            'owner_id' => $entity->id,
+            'owner_type' => $entity->morphRelationName(),
         ];
 
         if ($amount > 0) {

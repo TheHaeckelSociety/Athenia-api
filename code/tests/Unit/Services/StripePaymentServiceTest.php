@@ -102,7 +102,8 @@ class StripePaymentServiceTest extends TestCase
 
         $this->paymentRepository->shouldReceive('create')->once()->with([
             'amount' => 35.00,
-            'user_id' => 436,
+            'owner_id' => 436,
+            'owner_type' => 'user',
             'transaction_key' => 'tx_wegio',
             'line_items' => [[
                 'item_id' => 423,
@@ -131,7 +132,8 @@ class StripePaymentServiceTest extends TestCase
 
         $this->paymentRepository->shouldReceive('create')->once()->with([
             'amount' => 0,
-            'user_id' => 436,
+            'owner_id' => 436,
+            'owner_type' => 'user',
             'line_items' => [[
                 'item_id' => 423,
                 'item_type' => 'subscription',

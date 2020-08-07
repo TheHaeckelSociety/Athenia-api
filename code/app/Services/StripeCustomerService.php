@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Contracts\Models\HasPaymentMethodsContract;
+use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
@@ -61,14 +61,14 @@ class StripeCustomerService implements StripeCustomerServiceContract
     /**
      * Creates a new stripe customer for a user
      *
-     * @param HasPaymentMethodsContract $hasPaymentMethod
+     * @param IsAnEntity $entity
      * @return mixed
      */
-    public function createCustomer(HasPaymentMethodsContract $hasPaymentMethod)
+    public function createCustomer(IsAnEntity $entity)
     {
-        if ($hasPaymentMethod->morphRelationName() == 'user') {
-            /** @var User $hasPaymentMethod */
-            $email = $hasPaymentMethod->email;
+        if ($entity->morphRelationName() == 'user') {
+            /** @var User $entity */
+            $email = $entity->email;
             $repository = $this->userRepository;
             // Add more possible payment method owners here
         } else {
@@ -78,11 +78,11 @@ class StripeCustomerService implements StripeCustomerServiceContract
             'email' => $email,
         ]);
 
-        $repository->update($hasPaymentMethod, [
+        $repository->update($entity, [
             'stripe_customer_key' => $data['id'],
         ]);
 
-        $hasPaymentMethod->stripe_customer_key = $data['id'];
+        $entity->stripe_customer_key = $data['id'];
 
         return $data;
     }
@@ -90,39 +90,39 @@ class StripeCustomerService implements StripeCustomerServiceContract
     /**
      * Retrieves a customer from stripe
      *
-     * @param HasPaymentMethodsContract $hasPaymentMethod
+     * @param IsAnEntity $entity
      * @return mixed
      */
-    public function retrieveCustomer(HasPaymentMethodsContract $hasPaymentMethod)
+    public function retrieveCustomer(IsAnEntity $entity)
     {
-        if (!$hasPaymentMethod->stripe_customer_key) {
+        if (!$entity->stripe_customer_key) {
             throw new InvalidArgumentException('The passed in user does not have a stripe customer key associated with their account.');
         }
 
-        return $this->customerHelper->find($hasPaymentMethod->stripe_customer_key);
+        return $this->customerHelper->find($entity->stripe_customer_key);
     }
 
     /**
      * Creates a new payment method
      *
-     * @param BaseModelAbstract|HasPaymentMethodsContract $hasPaymentMethod
+     * @param BaseModelAbstract|IsAnEntity $entity
      * @param array $paymentData
      * @return mixed
      */
-    public function createPaymentMethod(HasPaymentMethodsContract $hasPaymentMethod, $paymentData): PaymentMethod
+    public function createPaymentMethod(IsAnEntity $entity, $paymentData): PaymentMethod
     {
-        if (!$hasPaymentMethod->stripe_customer_key) {
-            $this->createCustomer($hasPaymentMethod);
+        if (!$entity->stripe_customer_key) {
+            $this->createCustomer($entity);
         }
 
-        $data = $this->cardHelper->create($hasPaymentMethod->stripe_customer_key, $paymentData);
+        $data = $this->cardHelper->create($entity->stripe_customer_key, $paymentData);
 
         return $this->paymentMethodRepository->create([
             'payment_method_key' => $data['id'],
             'payment_method_type' => 'stripe',
             'identifier' => $data['last4'],
-            'owner_id' => $hasPaymentMethod->id,
-            'owner_type' => $hasPaymentMethod->morphRelationName(),
+            'owner_id' => $entity->id,
+            'owner_type' => $entity->morphRelationName(),
         ]);
     }
 
