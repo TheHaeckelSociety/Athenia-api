@@ -4,14 +4,9 @@ declare(strict_types=1);
 namespace App\Models\Payment;
 
 use App\Models\BaseModelAbstract;
-use App\Models\Subscription\Subscription;
 use Eloquent;
-use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Carbon;
 
 /**
  * Class PurchasedItem
