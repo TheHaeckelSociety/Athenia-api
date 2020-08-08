@@ -2,6 +2,39 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.42.0
+
+New endpoint, payment onwer relationship, and further entity improvements!
+
+* code/app/Contracts/Models/HasPaymentMethodsContract.php - This contract has been removed.
+* code/app/Contracts/Models/IsAnEntity.php - Folded HasPaymentMethodsContract functions into this contract.
+* code/app/Contracts/Services/StripeCustomerServiceContract.php - Changed references of HasPaymentMethodsContract to IsAnEntity.
+* code/app/Http/Core/Controllers/Entity/PaymentControllerAbstract.php - New controller.
+* code/app/Http/Core/Controllers/Entity/PaymentMethodControllerAbstract.php - Cleaned up imports.
+* code/app/Http/Core/Requests/Entity/Payment/IndexRequest.php - New request.
+* code/app/Http/V1/Controllers/Entity/PaymentController.php - New controller.
+* code/app/Models/Organization/Organization.php - Removed HasSubscriptions and HasPaymentMethods trait and added IsEntity trait.
+* code/app/Models/Payment/LineItem.php - Cleaned up imports.
+* code/app/Models/Payment/Payment.php - Added owner relation.
+* code/app/Models/Payment/PaymentMethod.php - Import Cleanup.
+* code/app/Models/Traits/HasPaymentMethods.php - Removed.
+* code/app/Models/Traits/HasSubscriptions.php - Removed.
+* code/app/Models/Traits/IsEntity.php - New trait.
+* code/app/Models/User/User.php - Removed HasSubscriptions and HasPaymentMethods trait and added IsEntity trait.
+* code/app/Policies/Payment/PaymentPolicy.php - new Policy
+* code/app/Services/StripeCustomerService.php - Replaced HasPaymentMethodsContract with IsEntity contract.
+* code/app/Services/StripePaymentService.php - Updated payment creation to use owner fields.
+* code/database/migrations/2020_08_07_172918_add_owner_to_payments.php - New migration.
+* code/routes/entity-routes.php - Add payment route
+* code/tests/Feature/Http/Organization/Payment/OrganizationPaymentIndexTest.php - New Test
+* code/tests/Feature/Http/User/Payment/UserPaymentIndexTest.php - New Test
+* code/tests/Integration/Policies/Payment/PaymentPolicyTest.php - New Test
+* code/tests/Unit/Models/Organization/OrganizationTest.php - Added test for payments relation.
+* code/tests/Unit/Models/Payment/PaymentTest.php - Add test for owner relationship
+* code/tests/Unit/Models/User/UserTest.php - Added test for payments relation.
+* code/tests/Unit/Services/StripePaymentServiceTest.php - Updated test for owner relation
+* vagrant-do-provision.sh - Added step for most recent distro of ubuntu
+
 ## 0.41.1
 
 Quick little bug fix! There was an error with the order of paramters for the index call in a couple controllers. To make this update, copy over the index function of the following files.

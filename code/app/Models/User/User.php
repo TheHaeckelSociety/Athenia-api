@@ -12,7 +12,6 @@ use App\Models\Organization\OrganizationManager;
 use App\Models\Resource;
 use App\Models\Role;
 use App\Models\Traits\CanBeIndexed;
-use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\IsEntity;
 use App\Models\Traits\HasValidationRules;
 use App\Models\Vote\BallotCompletion;
@@ -98,7 +97,7 @@ class User extends BaseModelAbstract
             HasPolicyContract, HasValidationRulesContract,
             CanBeIndexedContract, IsAnEntity
 {
-    use Authenticatable, HasValidationRules, HasPaymentMethods, IsEntity, CanBeIndexed;
+    use Authenticatable, HasValidationRules, IsEntity, CanBeIndexed;
 
     /**
      * The attributes excluded from the model's JSON form.

@@ -8,19 +8,13 @@ use App\Contracts\Models\IsAnEntity;
 use App\Models\Asset;
 use App\Models\BaseModelAbstract;
 use App\Models\Role;
-use App\Models\Traits\HasPaymentMethods;
 use App\Models\Traits\IsEntity;
 use App\Models\Traits\HasValidationRules;
 use App\Models\User\ProfileImage;
 use App\Models\User\User;
-use Eloquent;
-use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Carbon;
 
 /**
  * Class Organization
@@ -57,7 +51,7 @@ use Illuminate\Support\Carbon;
 class Organization extends BaseModelAbstract
     implements HasValidationRulesContract, IsAnEntity
 {
-    use HasValidationRules, IsEntity, HasPaymentMethods;
+    use HasValidationRules, IsEntity;
 
     /**
      * All assets this user has created
