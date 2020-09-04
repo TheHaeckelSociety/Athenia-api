@@ -2,9 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.42.1
+
+Minor little bug fix. To complete this update simply copy over the file `code/app/Repositories/BaseRepositoryAbstract.php` to fix a bug when querying for null values.
+
 ## 0.42.0
 
-New endpoint, payment onwer relationship, and further entity improvements!
+New endpoint, payment owner relationship, and further entity improvements!
 
 * code/app/Contracts/Models/HasPaymentMethodsContract.php - This contract has been removed.
 * code/app/Contracts/Models/IsAnEntity.php - Folded HasPaymentMethodsContract functions into this contract.
