@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.42.2 
+
+Another quick little one! The not null api querying has been properly implemented. To complete this update simply copy over `code/app/Http/Middleware/SearchFilterParsingMiddleware.php`.
+
 ## 0.42.1
 
 Minor little bug fix. To complete this update simply copy over the file `code/app/Repositories/BaseRepositoryAbstract.php` to fix a bug when querying for null values.
