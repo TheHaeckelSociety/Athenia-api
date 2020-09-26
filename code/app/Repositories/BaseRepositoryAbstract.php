@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Contracts\Models\CanBeMorphedTo;
 use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface as LogContract;
@@ -105,13 +107,7 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
 
         foreach ($where as $key => $query) {
             if (is_array($query)) {
-                if ($query[1] == 'IS NULL') {
-                    $result->whereNull($query[0]);
-                } else if ($query[1] == 'IS NOT NULL') {
-                    $result->whereNotNull($query[0]);
-                } else {
-                    $result->whereJoin(...$query);
-                }
+                $result->whereJoin(...$query);
             } else {
                 $result->whereJoin($key, '=', $query);
             }
@@ -257,12 +253,14 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
      * Syncs all child data with full models
      *
      * @param BaseRepositoryContract $childRepository
-     * @param BaseModelAbstract $parentModel
+     * @param BaseModelAbstract|CanBeMorphedTo $parentModel
      * @param array $childrenData
      * @param Collection|null $existingChildren
+     * @param string|null $morphRelationship
      */
     protected function syncChildModels(BaseRepositoryContract $childRepository, BaseModelAbstract $parentModel,
-                                       array $childrenData, Collection $existingChildren = null)
+                                       array $childrenData, Collection $existingChildren = null,
+                                       string $morphRelationship = null)
     {
         if ($existingChildren) {
             $newChildrenIds = collect($childrenData)->pluck('id');
@@ -282,7 +280,13 @@ abstract class BaseRepositoryAbstract implements BaseRepositoryContract
             if ($existingModel) {
                 $childRepository->update($existingModel, $childrenDatum);
             } else {
-                $childRepository->create($childrenDatum, $parentModel);
+                if ($morphRelationship) {
+                    $childrenDatum[$morphRelationship . '_id'] = $parentModel->id;
+                    $childrenDatum[$morphRelationship . '_type'] = $parentModel->morphRelationName();
+                    $childRepository->create($childrenDatum);
+                } else {
+                    $childRepository->create($childrenDatum, $parentModel);
+                }
             }
         }
     }
