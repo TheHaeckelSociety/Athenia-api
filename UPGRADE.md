@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.43.0
+
+A quick little one that adds some expands to the organization endpoint, and makes it easy to sync morph relations within repositories.
+
+* code/app/Http/Core/Requests/Organization/RetrieveRequest.php - Removed the no expands trait, and added expands related to entities
+* code/app/Repositories/BaseRepositoryAbstract.php - Updated the sync child models function to have a morph relationship parameter, and also to use the new parameter to properly save related models. 
+
 ## 0.42.2 
 
 Another quick little one! The not null api querying has been properly implemented. To complete this update simply copy over `code/app/Http/Middleware/SearchFilterParsingMiddleware.php`.
