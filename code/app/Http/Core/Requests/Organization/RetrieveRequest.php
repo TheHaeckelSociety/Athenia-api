@@ -15,7 +15,7 @@ use App\Policies\Organization\OrganizationPolicy;
  */
 class RetrieveRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoExpands;
+    use HasNoRules;
 
     /**
      * Get the policy action for the guard
@@ -46,6 +46,22 @@ class RetrieveRequest extends BaseAuthenticatedRequestAbstract
     {
         return [
             $this->route('organization'),
+        ];
+    }
+
+    /**
+     * All allowed expands for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'paymentMethods',
+            'subscriptions',
+            'subscriptions.membershipPlanRate',
+            'subscriptions.membershipPlanRate.membershipPlan',
+            'subscriptions.paymentMethod',
         ];
     }
 }
