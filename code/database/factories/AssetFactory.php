@@ -1,9 +1,27 @@
 <?php
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\Models\Asset::class, function (Faker $faker) {
-    return [
-        'url' => $faker->url,
-    ];
-});
+use App\Models\Asset;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * Class UserFactory
+ * @package Database\Factories
+ */
+class AssetFactory extends Factory
+{
+    /**
+     * @var string The related model
+     */
+    protected $model = Asset::class;
+
+    /**
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'url' => $this->faker->url,
+        ];
+    }
+}
