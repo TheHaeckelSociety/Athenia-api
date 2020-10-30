@@ -39,7 +39,7 @@ class UserMeTest extends TestCase
         $this->actingAs($myCurrentUser);
 
         $response = $this->json('GET', '/v1/users/me');
-        $response->assertExactJson($myCurrentUser->toArray());
+        $response->assertSimilarJson($myCurrentUser->toArray());
         $response->assertStatus(200);
     }
 

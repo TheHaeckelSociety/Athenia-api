@@ -49,7 +49,7 @@ class MembershipPlanViewTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         $response = $this->json('GET', '/v1/membership-plans/1')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);
@@ -59,7 +59,7 @@ class MembershipPlanViewTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         $response = $this->json('GET', '/v1/membership-plans/a')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.'
             ]);
         $response->assertStatus(404);

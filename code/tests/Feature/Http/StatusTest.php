@@ -28,7 +28,7 @@ class StatusTest extends TestCase
         $response = $this->get('/v1/status');
 
         $response->assertStatus(200);
-        $response->assertExactJson([
+        $response->assertSimilarJson([
             'status' => 'ok',
         ]);
     }

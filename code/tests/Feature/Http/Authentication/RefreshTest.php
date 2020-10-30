@@ -82,7 +82,7 @@ class RefreshTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertExactJson([
+        $response->assertSimilarJson([
             'message' => 'Token has expired and can no longer be refreshed'
         ]);
     }

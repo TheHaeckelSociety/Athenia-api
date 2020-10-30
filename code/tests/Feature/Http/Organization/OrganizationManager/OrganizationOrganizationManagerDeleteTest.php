@@ -96,7 +96,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
 
         $this->setupRoute(23, 'a');
         $response = $this->json('DELETE', $this->route)
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.',
             ]);
         $response->assertStatus(404);
@@ -108,7 +108,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
 
         $this->setupRoute(23, '435');
         $response = $this->json('DELETE', $this->route)
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);

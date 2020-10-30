@@ -84,7 +84,7 @@ class OrganizationDeleteTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('DELETE', $this->route . 'a')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.',
             ]);
         $response->assertStatus(404);
@@ -95,7 +95,7 @@ class OrganizationDeleteTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('DELETE', $this->route . '1')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);

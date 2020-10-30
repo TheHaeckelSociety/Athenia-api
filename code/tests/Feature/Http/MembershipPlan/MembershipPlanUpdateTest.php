@@ -73,7 +73,7 @@ class MembershipPlanUpdateTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('PATCH', static::BASE_ROUTE . '5')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);
@@ -84,7 +84,7 @@ class MembershipPlanUpdateTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('PATCH', static::BASE_ROUTE . '/b')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.',
             ]);
         $response->assertStatus(404);

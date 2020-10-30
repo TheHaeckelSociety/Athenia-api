@@ -66,7 +66,7 @@ class OrganizationViewTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         $response = $this->json('GET', '/v1/organizations/1')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);
@@ -76,7 +76,7 @@ class OrganizationViewTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         $response = $this->json('GET', '/v1/organizations/a')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.'
             ]);
         $response->assertStatus(404);

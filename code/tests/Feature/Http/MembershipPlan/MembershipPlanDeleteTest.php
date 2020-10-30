@@ -59,7 +59,7 @@ class MembershipPlanDeleteTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('DELETE', '/v1/membership-plans/a')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   => 'This path was not found.',
             ]);
         $response->assertStatus(404);
@@ -70,7 +70,7 @@ class MembershipPlanDeleteTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         $response = $this->json('DELETE', '/v1/membership-plans/1')
-            ->assertExactJson([
+            ->assertSimilarJson([
                 'message'   =>  'This item was not found.'
             ]);
         $response->assertStatus(404);
