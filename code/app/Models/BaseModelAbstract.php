@@ -16,18 +16,6 @@ abstract class BaseModelAbstract extends Model
     use EloquentJoin;
 
     /**
-     * The default fields that are guarded in all models
-     *
-     * @var array
-     */
-    protected $guarded = [
-        'id',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
-    /**
      * The deleted at field is by default hidden
      *
      * @var array
