@@ -34,6 +34,13 @@ abstract class BaseModelAbstract extends Model
     ];
 
     /**
+     * All models can be mass assigned within our app by default
+     *
+     * @var string[]
+     */
+    protected $guarded = [];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
