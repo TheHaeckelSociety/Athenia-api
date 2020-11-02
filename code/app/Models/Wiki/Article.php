@@ -24,24 +24,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property-read \App\Models\User\User $createdBy
+ * @property-read User $createdBy
  * @property-read null|string $content
- * @property-read null|\ArticleVersion $current_version
+ * @property-read null|\App\Models\Wiki\ArticleVersion $current_version
  * @property-read null|string $last_iteration_content
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $iterations
+ * @property-read Collection|\App\Models\Wiki\Iteration[] $iterations
  * @property-read int|null $iterations_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\ArticleVersion[] $versions
+ * @property-read Collection|\App\Models\Wiki\ArticleVersion[] $versions
  * @property-read int|null $versions_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Article newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Article newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Article query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereCreatedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Article whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Article newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Article newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Article query()
+ * @method static Builder|Article whereCreatedAt($value)
+ * @method static Builder|Article whereCreatedById($value)
+ * @method static Builder|Article whereDeletedAt($value)
+ * @method static Builder|Article whereId($value)
+ * @method static Builder|Article whereTitle($value)
+ * @method static Builder|Article whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Article extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
