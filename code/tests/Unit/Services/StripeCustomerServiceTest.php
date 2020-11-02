@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
+use App\Contracts\Repositories\Organization\OrganizationRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
+use App\Models\Organization\Organization;
+use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Role;
 use App\Models\User\User;
 use App\Services\StripeCustomerService;
 use Cartalyst\Stripe\Api\Cards;
@@ -23,6 +27,11 @@ class StripeCustomerServiceTest extends TestCase
      * @var UserRepositoryContract|CustomMockInterface
      */
     private $userRepository;
+
+    /**
+     * @var OrganizationRepositoryContract|CustomMockInterface
+     */
+    private $organizationRepository;
 
     /**
      * @var PaymentMethodRepositoryContract|CustomMockInterface
@@ -48,25 +57,103 @@ class StripeCustomerServiceTest extends TestCase
     {
         parent::setUp();
         $this->userRepository = mock(UserRepositoryContract::class);
+        $this->organizationRepository = mock(OrganizationRepositoryContract::class);
         $this->paymentMethodRepository = mock(PaymentMethodRepositoryContract::class);
         $this->customerHelper = mock(Customers::class);
         $this->cardHelper = mock(Cards::class);
         $this->service = new StripeCustomerService(
             $this->userRepository,
+            $this->organizationRepository,
             $this->paymentMethodRepository,
             $this->customerHelper,
             $this->cardHelper
         );
     }
 
-    public function testCreateCustomer()
+    public function testCreateCustomerWithUser()
     {
         $user = new User([
+            'first_name' => 'John',
+            'last_name' => 'Stewart',
             'email' => 'test@test.com',
         ]);
+        $user->id = 234;
 
         $this->customerHelper->shouldReceive('create')->once()->with([
+            'name' => 'John Stewart',
             'email' => 'test@test.com',
+            'description' => 'User ID - 234',
+        ])->andReturn([
+            'id' => 'cus_test',
+            'sources' => []
+        ]);
+
+        $this->userRepository->shouldReceive('update')->once()->with($user, ['stripe_customer_key' => 'cus_test']);
+
+        $result = $this->service->createCustomer($user);
+
+        $this->assertEquals($result, [
+            'id' => 'cus_test',
+            'sources' => []
+        ]);
+        $this->assertEquals('cus_test', $user->stripe_customer_key);
+    }
+
+    public function testCreateCustomerWithOrganizationWithoutManagers()
+    {
+        $user = new Organization([
+            'name' => 'An Organization',
+            'email' => 'test@test.com',
+            'organizationManagers' => collect([])
+        ]);
+        $user->id = 234;
+
+        $this->customerHelper->shouldReceive('create')->once()->with([
+            'name' => 'An Organization',
+            'email' => null,
+            'description' => 'Organization ID - 234',
+        ])->andReturn([
+            'id' => 'cus_test',
+            'sources' => []
+        ]);
+
+        $this->userRepository->shouldReceive('update')->once()->with($user, ['stripe_customer_key' => 'cus_test']);
+
+        $result = $this->service->createCustomer($user);
+
+        $this->assertEquals($result, [
+            'id' => 'cus_test',
+            'sources' => []
+        ]);
+        $this->assertEquals('cus_test', $user->stripe_customer_key);
+    }
+
+    public function testCreateCustomerWithOrganizationWithManagers()
+    {
+        $user = new Organization([
+            'name' => 'An Organization',
+            'email' => 'test@test.com',
+            'organizationManagers' => collect([
+                new OrganizationManager([
+                    'role_id' => Role::MANAGER,
+                    'user' => new User([
+                        'email' => 'anemail@test.com',
+                    ]),
+                ]),
+                new OrganizationManager([
+                    'role_id' => Role::ADMINISTRATOR,
+                    'user' => new User([
+                        'email' => 'theemail@test.com',
+                    ]),
+                ]),
+            ])
+        ]);
+        $user->id = 234;
+
+        $this->customerHelper->shouldReceive('create')->once()->with([
+            'name' => 'An Organization',
+            'email' => 'theemail@test.com',
+            'description' => 'Organization ID - 234',
         ])->andReturn([
             'id' => 'cus_test',
             'sources' => []
@@ -114,12 +201,16 @@ class StripeCustomerServiceTest extends TestCase
     public function testCreatePaymentMethodWithoutExistingStripeCustomer()
     {
         $user = new User([
+            'first_name' => 'John',
+            'last_name' => 'Stewart',
             'email' => 'test@test.com',
         ]);
         $user->id = 324;
 
         $this->customerHelper->shouldReceive('create')->once()->with([
+            'name' => 'John Stewart',
             'email' => 'test@test.com',
+            'description' => 'User ID - 324',
         ])->andReturn([
             'id' => 'cus_test',
             'sources' => []
