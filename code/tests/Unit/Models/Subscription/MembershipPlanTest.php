@@ -13,6 +13,17 @@ use Tests\TestCase;
  */
 class MembershipPlanTest extends TestCase
 {
+    public function testFeatures()
+    {
+        $role = new MembershipPlan();
+        $relation = $role->features();
+
+        $this->assertEquals('feature_membership_plan', $relation->getTable());
+        $this->assertEquals('feature_membership_plan.membership_plan_id', $relation->getQualifiedForeignPivotKeyName());
+        $this->assertEquals('feature_membership_plan.feature_id', $relation->getQualifiedRelatedPivotKeyName());
+        $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
+    }
+
     public function testMembershipPlanRates()
     {
         $user = new MembershipPlan();

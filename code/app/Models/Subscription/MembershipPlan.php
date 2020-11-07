@@ -6,10 +6,12 @@ namespace App\Models\Subscription;
 use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\Feature;
 use App\Models\Traits\HasValidationRules;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\Rule;
 
@@ -22,19 +24,21 @@ use Illuminate\Validation\Rule;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
+ * @property-read int|null $features_count
  * @property-read null|float $current_cost
  * @property-read null|float $current_rate_id
- * @property-read Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
  * @property-read int|null $membership_plan_rates_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan query()
- * @method static Builder|MembershipPlan whereCreatedAt($value)
- * @method static Builder|MembershipPlan whereDeletedAt($value)
- * @method static Builder|MembershipPlan whereDuration($value)
- * @method static Builder|MembershipPlan whereId($value)
- * @method static Builder|MembershipPlan whereName($value)
- * @method static Builder|MembershipPlan whereUpdatedAt($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
@@ -74,6 +78,14 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
         'current_cost',
         'current_rate_id',
     ];
+
+    /**
+     * @return BelongsToMany
+     */
+    public function features(): BelongsToMany
+    {
+        return $this->belongsToMany(Feature::class);
+    }
 
     /**
      * All membership plan rates that have
