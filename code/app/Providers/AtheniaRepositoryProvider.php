@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Repositories\AssetRepositoryContract;
+use App\Contracts\Repositories\FeatureRepositoryContract;
 use App\Contracts\Repositories\Organization\OrganizationManagerRepositoryContract;
 use App\Contracts\Repositories\Organization\OrganizationRepositoryContract;
 use App\Contracts\Repositories\Payment\LineItemRepositoryContract;
@@ -28,6 +29,7 @@ use App\Contracts\Repositories\Wiki\ArticleVersionRepositoryContract;
 use App\Contracts\Repositories\Wiki\IterationRepositoryContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Models\Asset;
+use App\Models\Feature;
 use App\Models\Organization\Organization;
 use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\LineItem;
@@ -51,6 +53,7 @@ use App\Models\Wiki\Article;
 use App\Models\Wiki\ArticleVersion;
 use App\Models\Wiki\Iteration;
 use App\Repositories\AssetRepository;
+use App\Repositories\FeatureRepository;
 use App\Repositories\Organization\OrganizationManagerRepository;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Payment\LineItemRepository;
@@ -100,6 +103,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             BallotCompletionRepositoryContract::class,
             ContactRepositoryContract::class,
             BallotSubjectRepositoryContract::class,
+            FeatureRepositoryContract::class,
             IterationRepositoryContract::class,
             LineItemRepositoryContract::class,
             MembershipPlanRepositoryContract::class,
@@ -185,6 +189,9 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
                 new Contact(),
                 $this->app->make('log'),
             );
+        });
+        $this->app->bind(FeatureRepositoryContract::class, function() {
+            return new FeatureRepository(new Feature(), $this->app->make('log'));
         });
         $this->app->bind(IterationRepositoryContract::class, function() {
             return new IterationRepository(new Iteration(), $this->app->make('log'));
