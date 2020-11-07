@@ -35,26 +35,26 @@ use App\Models\BaseModelAbstract;
  * @property-read \App\Models\User\User|null $from
  * @property-read \App\Models\User\Thread|null $thread
  * @property-read \App\Models\User\User|null $to
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Message newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Message newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Message query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereAction($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereFromId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereScheduledAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereSeenAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereSentAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereSubject($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereTemplate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereThreadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereToId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereVia($value)
- * @mixin \Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Message newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Message newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Message query()
+ * @method static Builder|Message whereAction($value)
+ * @method static Builder|Message whereCreatedAt($value)
+ * @method static Builder|Message whereData($value)
+ * @method static Builder|Message whereDeletedAt($value)
+ * @method static Builder|Message whereEmail($value)
+ * @method static Builder|Message whereFromId($value)
+ * @method static Builder|Message whereId($value)
+ * @method static Builder|Message whereScheduledAt($value)
+ * @method static Builder|Message whereSeenAt($value)
+ * @method static Builder|Message whereSentAt($value)
+ * @method static Builder|Message whereSubject($value)
+ * @method static Builder|Message whereTemplate($value)
+ * @method static Builder|Message whereThreadId($value)
+ * @method static Builder|Message whereToId($value)
+ * @method static Builder|Message whereUpdatedAt($value)
+ * @method static Builder|Message whereVia($value)
+ * @mixin Eloquent
  */
 class Message extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {

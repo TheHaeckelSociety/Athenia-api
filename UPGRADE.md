@@ -2,6 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.44.0
+
+Added organization stripe processing capabilities. To start, update the following files.
+
+* code/database/migrations/2020_11_02_140242_add_stripe_customer_key_to_organizations.php - New migration for adding the customer key to the organization.
+* code/app/Services/StripeCustomerService.php - PHP 7.4 syntax updates, organization repository has now been injected, and the create customer function has been updated to work with the organization model.
+* code/app/Providers/AppServiceProvider.php - The StripeCustomerService creation has been updated for injecting the organization repository.
+* code/tests/Unit/Services/StripeCustomerServiceTest.php - Updated tests for new organization functionality.
+
+Then make sure to run the ide helpers in order to update comment blocks on all models.
+
 ## 0.43.0
 
 A quick little one that adds some expands to the organization endpoint, and makes it easy to sync morph relations within repositories.

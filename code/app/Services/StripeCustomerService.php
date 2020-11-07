@@ -4,12 +4,16 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\Models\IsAnEntity;
+use App\Contracts\Repositories\Organization\OrganizationRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Exceptions\NotImplementedException;
 use App\Models\BaseModelAbstract;
+use App\Models\Organization\Organization;
+use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
+use App\Models\Role;
 use App\Models\User\User;
 use Cartalyst\Stripe\Api\Cards;
 use Cartalyst\Stripe\Api\Customers;
@@ -24,35 +28,43 @@ class StripeCustomerService implements StripeCustomerServiceContract
     /**
      * @var UserRepositoryContract
      */
-    private $userRepository;
+    private UserRepositoryContract $userRepository;
+
+    /**
+     * @var OrganizationRepositoryContract
+     */
+    private OrganizationRepositoryContract $organizationRepository;
 
     /**
      * @var PaymentMethodRepositoryContract
      */
-    private $paymentMethodRepository;
+    private PaymentMethodRepositoryContract $paymentMethodRepository;
 
     /**
      * @var Customers
      */
-    private $customerHelper;
+    private Customers $customerHelper;
 
     /**
      * @var Cards
      */
-    private $cardHelper;
+    private Cards $cardHelper;
 
     /**
      * StripeCustomerService constructor.
      * @param UserRepositoryContract $userRepository
+     * @param OrganizationRepositoryContract $organizationRepository
      * @param PaymentMethodRepositoryContract $paymentMethodRepository
      * @param Customers $customerHelper
      * @param Cards $cardHelper
      */
     public function __construct(UserRepositoryContract $userRepository,
+                                OrganizationRepositoryContract $organizationRepository,
                                 PaymentMethodRepositoryContract $paymentMethodRepository,
                                 Customers $customerHelper, Cards $cardHelper)
     {
         $this->userRepository = $userRepository;
+        $this->organizationRepository = $organizationRepository;
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->customerHelper = $customerHelper;
         $this->cardHelper = $cardHelper;
@@ -68,15 +80,31 @@ class StripeCustomerService implements StripeCustomerServiceContract
     {
         if ($entity->morphRelationName() == 'user') {
             /** @var User $entity */
-            $email = $entity->email;
+            $customerData = [
+                'email' => $entity->email,
+                'name' => $entity->first_name . ' ' . $entity->last_name,
+                'description' => 'User ID - ' . $entity->id,
+            ];
+            $repository = $this->userRepository;
+        } else if ($entity->morphRelationName() == 'organization') {
+            /** @var Organization $entity */
+
+            /** @var OrganizationManager|null $organizationAdmin */
+            $organizationAdmin = $entity->organizationManagers->filter(function (OrganizationManager $manager ) {
+                return $manager->role_id == Role::ADMINISTRATOR;
+            })->first();
+
+            $customerData = [
+                'email' => $organizationAdmin ? $organizationAdmin->user->email : null,
+                'name' => $entity->name,
+                'description' => 'Organization ID - ' . $entity->id,
+            ];
             $repository = $this->userRepository;
             // Add more possible payment method owners here
         } else {
             throw new NotImplementedException('Please make sure to setup your other payment method owners before interacting with stripe');
         }
-        $data = $this->customerHelper->create([
-            'email' => $email,
-        ]);
+        $data = $this->customerHelper->create($customerData);
 
         $repository->update($entity, [
             'stripe_customer_key' => $data['id'],

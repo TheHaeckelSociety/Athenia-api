@@ -18,23 +18,23 @@ use Illuminate\Support\Carbon;
  * @property int $membership_plan_id
  * @property float $cost
  * @property bool $active
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\Subscription\MembershipPlan $membershipPlan
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
+ * @property-read Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlanRate newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlanRate newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlanRate query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereMembershipPlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlanRate whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlanRate newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlanRate newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlanRate query()
+ * @method static Builder|MembershipPlanRate whereActive($value)
+ * @method static Builder|MembershipPlanRate whereCost($value)
+ * @method static Builder|MembershipPlanRate whereCreatedAt($value)
+ * @method static Builder|MembershipPlanRate whereDeletedAt($value)
+ * @method static Builder|MembershipPlanRate whereId($value)
+ * @method static Builder|MembershipPlanRate whereMembershipPlanId($value)
+ * @method static Builder|MembershipPlanRate whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class MembershipPlanRate extends BaseModelAbstract
 {

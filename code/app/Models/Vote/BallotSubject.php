@@ -22,26 +22,26 @@ use Illuminate\Support\Carbon;
  * @property string $subject_type
  * @property int $votes_cast
  * @property int $vote_count
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\Vote\Ballot $ballot
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $subject
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\Vote[] $votes
+ * @property-read Collection|\App\Models\Vote\Vote[] $votes
  * @property-read int|null $votes_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereBallotId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereSubjectId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereSubjectType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereVoteCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereVotesCast($value)
- * @mixin \Eloquent
+ * @method static EloquentJoinBuilder|BallotSubject newModelQuery()
+ * @method static EloquentJoinBuilder|BallotSubject newQuery()
+ * @method static EloquentJoinBuilder|BallotSubject query()
+ * @method static Builder|BallotSubject whereBallotId($value)
+ * @method static Builder|BallotSubject whereCreatedAt($value)
+ * @method static Builder|BallotSubject whereDeletedAt($value)
+ * @method static Builder|BallotSubject whereId($value)
+ * @method static Builder|BallotSubject whereSubjectId($value)
+ * @method static Builder|BallotSubject whereSubjectType($value)
+ * @method static Builder|BallotSubject whereUpdatedAt($value)
+ * @method static Builder|BallotSubject whereVoteCount($value)
+ * @method static Builder|BallotSubject whereVotesCast($value)
+ * @mixin Eloquent
  */
 class BallotSubject extends BaseModelAbstract
 {
