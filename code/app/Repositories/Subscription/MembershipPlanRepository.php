@@ -69,6 +69,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
     {
         $cost = $this->getAndUnset($data, 'current_cost');
+        $features = $this->getAndUnset($data, 'features', null);
 
         if ($cost && $cost != $model->current_cost) {
 
@@ -82,6 +83,10 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
                 'cost' => $cost,
                 'active' => true,
             ], $model);
+        }
+
+        if ($features) {
+            $model->features()->sync($features);
         }
 
         return parent::update($model, $data, $forcedValues);

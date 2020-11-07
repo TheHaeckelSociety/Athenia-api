@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Repositories\Subscription;
 
+use App\Models\Feature;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
@@ -108,11 +109,10 @@ class MembershipPlanRepositoryTest extends TestCase
         $model = factory(MembershipPlan::class)->create([
             'name' => 'a plan'
         ]);
-        $this->repository->update($model, [
+        $updated = $this->repository->update($model, [
             'name' => 'the same plan',
         ]);
 
-        $updated = MembershipPlan::find($model->id);
         $this->assertEquals('the same plan', $updated->name);
     }
 
@@ -125,12 +125,23 @@ class MembershipPlanRepositoryTest extends TestCase
             'cost' => 1.99,
             'membership_plan_id' => $model->id,
         ]);
-        $this->repository->update($model, [
+        $updated = $this->repository->update($model, [
             'current_cost' => 3.99,
         ]);
 
-        $updated = MembershipPlan::find($model->id);
         $this->assertEquals(3.99, $updated->current_cost);
+    }
+
+    public function testUpdateSuccessWithFeatures()
+    {
+        $model = factory(MembershipPlan::class)->create();
+        $model->features()->sync(factory(Feature::class, 2)->create()->pluck('id'));
+
+        $updated = $this->repository->update($model, [
+            'features' => factory(Feature::class, 3)->create(),
+        ]);
+
+        $this->assertCount(3, $updated->features);
     }
 
     public function testDeleteSuccess()
