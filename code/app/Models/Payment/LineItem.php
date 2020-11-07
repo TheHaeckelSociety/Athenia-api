@@ -21,18 +21,18 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property mixed|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $item
  * @property-read \App\Models\Payment\Payment $payment
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|LineItem newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|LineItem newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|LineItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereItemId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereItemType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem wherePaymentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LineItem whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\LineItem newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\LineItem newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\LineItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereItemType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\LineItem whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LineItem extends BaseModelAbstract
 {

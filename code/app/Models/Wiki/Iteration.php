@@ -23,19 +23,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property mixed|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Wiki\Article $article
- * @property-read User $createdBy
+ * @property-read \App\Models\User\User $createdBy
  * @property-read \App\Models\Wiki\ArticleVersion|null $version
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Iteration newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Iteration newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Iteration query()
- * @method static Builder|Iteration whereArticleId($value)
- * @method static Builder|Iteration whereContent($value)
- * @method static Builder|Iteration whereCreatedAt($value)
- * @method static Builder|Iteration whereCreatedById($value)
- * @method static Builder|Iteration whereDeletedAt($value)
- * @method static Builder|Iteration whereId($value)
- * @method static Builder|Iteration whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Iteration newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Iteration newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Wiki\Iteration query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereArticleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereCreatedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wiki\Iteration whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Iteration extends BaseModelAbstract implements HasPolicyContract
 {

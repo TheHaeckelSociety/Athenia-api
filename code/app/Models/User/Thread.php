@@ -22,25 +22,25 @@ use Illuminate\Validation\Rule;
  * @property string|null $topic
  * @property int|null $subject_id
  * @property string|null $subject_type
- * @property Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read null|string $last_message
- * @property-read Collection|\App\Models\User\Message[] $messages
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
  * @property-read int|null $messages_count
- * @property-read Collection|\App\Models\User\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\User[] $users
  * @property-read int|null $users_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Thread newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Thread newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Thread query()
- * @method static Builder|Thread whereCreatedAt($value)
- * @method static Builder|Thread whereDeletedAt($value)
- * @method static Builder|Thread whereId($value)
- * @method static Builder|Thread whereSubjectId($value)
- * @method static Builder|Thread whereSubjectType($value)
- * @method static Builder|Thread whereTopic($value)
- * @method static Builder|Thread whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Thread newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Thread newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\Thread query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereSubjectType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereTopic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Thread whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Thread extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
 {
