@@ -40,7 +40,7 @@ class AssetRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Asset::class, 5)->create();
+        Asset::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -75,7 +75,7 @@ class AssetRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $asset = factory(Asset::class)->create();
+        $asset = Asset::factory()->create();
 
         $this->repository->update($asset, [
             'url' => 'a new url',
@@ -86,7 +86,7 @@ class AssetRepositoryTest extends TestCase
 
     public function testDeleteFails()
     {
-        $asset = factory(Asset::class)->create();
+        $asset = Asset::factory()->create();
 
         $this->repository->delete($asset);
 

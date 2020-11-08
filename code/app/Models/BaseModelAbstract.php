@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Fico7489\Laravel\EloquentJoin\Traits\EloquentJoin;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 abstract class BaseModelAbstract extends Model
 {
-    use EloquentJoin;
+    use EloquentJoin, HasFactory;
 
     /**
      * The deleted at field is by default hidden
