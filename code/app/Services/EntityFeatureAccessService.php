@@ -36,6 +36,15 @@ class EntityFeatureAccessService implements EntityFeatureAccessServiceContract
      */
     public function canAccess(IsAnEntity $entity, int $featureId): bool
     {
-        return false;
+        $subscription = $entity->currentSubscription();
+
+        if ($subscription) {
+            $membershipPlan = $subscription->membershipPlanRate->membershipPlan;
+        } else {
+            $membershipPlan = $this->membershipPlanRepository->findDefaultMembershipPlanForEntity(
+                $entity->morphRelationName()
+            );
+        }
+        return $membershipPlan ? $membershipPlan->features->pluck('id')->contains($featureId) : false;
     }
 }
