@@ -2,6 +2,40 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.45.0
+
+Features feature! This update adds a data typed named Feature, which can be connected to membership plans, and then used in conjuction with a new EntityFeatureAccessService that can allow the blocking of features based on subscription level.
+
+* code/app/Contracts/Models/IsAnEntity.php
+* code/app/Contracts/Repositories/FeatureRepositoryContract.php
+* code/app/Contracts/Repositories/Subscription/MembershipPlanRepositoryContract.php
+* code/app/Contracts/Services/EntityFeatureAccessServiceContract.php
+* code/app/Http/Core/Controllers/FeatureControllerAbstract.php
+* code/app/Http/Core/Requests/Feature/
+* code/app/Http/Core/Requests/Organization/RetrieveRequest.php
+* code/app/Http/Core/Requests/User/MeRequest.php
+* code/app/Http/V1/Controllers/FeatureController.php
+* code/app/Models/Feature.php
+* code/app/Models/Subscription/MembershipPlan.php
+* code/app/Policies/FeaturePolicy.php
+* code/app/Providers/AtheniaRepositoryProvider.php
+* code/app/Providers/RouteServiceProvider.php
+* code/app/Repositories/FeatureRepository.php
+* code/app/Repositories/Subscription/MembershipPlanRepository.php
+* code/app/Services/EntityFeatureAccessService.php
+* code/database/factories/FeatureFactory.php
+* code/database/migrations/2020_11_04_175859_add_features_table.php
+* code/routes/core.php
+* code/tests/Feature/Http/Feature/
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanCreateTest.php
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanUpdateTest.php
+* code/tests/Integration/Policies/FeaturePolicyTest.php
+* code/tests/Integration/Repositories/FeatureRepositoryTest.php
+* code/tests/Integration/Repositories/Subscription/MembershipPlanRepositoryTest.php
+* code/tests/Unit/Models/FeatureTest.php
+* code/tests/Unit/Models/Subscription/MembershipPlanTest.php
+* code/tests/Unit/Services/EntityFeatureAccessServiceTest.php
+
 ## 0.44.0
 
 Added organization stripe processing capabilities. To start, update the following files.
