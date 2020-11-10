@@ -147,6 +147,7 @@ class MembershipPlanUpdateTest extends TestCase
 
         $data = [
             'name' => 5,
+            'description' => 5435,
         ];
 
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
@@ -156,6 +157,28 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name must be a string.'],
+                'description' => ['The description must be a string.'],
+            ]
+        ]);
+    }
+
+    public function testCreateFailsInvalidBooleanFields()
+    {
+        $membershipPlan = factory(MembershipPlan::class)->create();
+
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'default' => 'hello',
+        ];
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'default' => ['The default field must be true or false.'],
             ]
         ]);
     }
@@ -177,6 +200,29 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name may not be greater than 120 characters.'],
+            ]
+        ]);
+    }
+
+    public function testPatchFailsProtectedFieldsPresent()
+    {
+        $membershipPlan = factory(MembershipPlan::class)->create();
+
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'entity_type' => 'hi',
+            'duration' => 'hi',
+        ];
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'entity_type' => ['The entity type field is not allowed or can not be set for this request.'],
+                'duration' => ['The duration field is not allowed or can not be set for this request.'],
             ]
         ]);
     }

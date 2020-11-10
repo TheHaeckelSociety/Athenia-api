@@ -185,6 +185,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
             ],
             self::VALIDATION_RULES_UPDATE => [
                 self::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'entity_type',
                     'duration',
                 ],
             ],

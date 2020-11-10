@@ -48,8 +48,10 @@ class MembershipPlanCreateTest extends TestCase
         
         $properties = [
             'name' => 'Hellow',
+            'entity_type' => 'user',
             'duration' => MembershipPlan::DURATION_LIFETIME,
             'current_cost' => 60.00,
+            'default' => true,
         ];
 
         $response = $this->json('POST', $this->route, $properties);
@@ -70,6 +72,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name field is required.'],
+                'entity_type' => ['The entity type field is required.'],
                 'current_cost' => ['The current cost field is required.'],
                 'duration' => ['The duration field is required.'],
             ]
@@ -114,6 +117,8 @@ class MembershipPlanCreateTest extends TestCase
 
         $data = [
             'name' => 5435,
+            'entity_type' => 5435,
+            'description' => 5435,
             'duration' => 5,
         ];
 
@@ -124,7 +129,28 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name must be a string.'],
+                'entity_type' => ['The entity type must be a string.'],
+                'description' => ['The description must be a string.'],
                 'duration' => ['The duration must be a string.'],
+            ]
+        ]);
+    }
+
+    public function testCreateFailsInvalidBooleanFields()
+    {
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'default' => 'hello',
+        ];
+
+        $response = $this->json('POST', $this->route, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'default' => ['The default field must be true or false.'],
             ]
         ]);
     }
@@ -154,6 +180,7 @@ class MembershipPlanCreateTest extends TestCase
 
         $data = [
             'duration' => 'hi',
+            'entity_type' => 'hi',
         ];
 
         $response = $this->json('POST', $this->route, $data);
@@ -163,6 +190,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'duration' => ['The selected duration is invalid.'],
+                'entity_type' => ['The selected entity type is invalid.'],
             ]
         ]);
     }
