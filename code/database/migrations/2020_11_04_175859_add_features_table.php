@@ -29,6 +29,7 @@ class AddFeaturesTable extends Migration
             $table->primary(['feature_id', 'membership_plan_id']);
         });
         Schema::table('membership_plans', function (Blueprint $table) {
+            $table->text('description')->nullable();
             $table->string('entity_type')->default('user');
             $table->boolean('default')->default(false);
         });
@@ -42,6 +43,7 @@ class AddFeaturesTable extends Migration
     public function down()
     {
         Schema::table('membership_plans', function (Blueprint $table) {
+            $table->dropColumn('description');
             $table->dropColumn('entity_type');
             $table->dropColumn('default');
         });

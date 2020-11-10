@@ -24,6 +24,7 @@ use Illuminate\Validation\Rule;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property string|null $description
  * @property string $entity_type
  * @property bool $default
  * @property-read Collection|Feature[] $features
@@ -38,6 +39,7 @@ use Illuminate\Validation\Rule;
  * @method static Builder|MembershipPlan whereCreatedAt($value)
  * @method static Builder|MembershipPlan whereDefault($value)
  * @method static Builder|MembershipPlan whereDeletedAt($value)
+ * @method static Builder|MembershipPlan whereDescription($value)
  * @method static Builder|MembershipPlan whereDuration($value)
  * @method static Builder|MembershipPlan whereEntityType($value)
  * @method static Builder|MembershipPlan whereId($value)
