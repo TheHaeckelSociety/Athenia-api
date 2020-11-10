@@ -148,6 +148,18 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                     'max:120',
                 ],
 
+                'entity_type' => [
+                    'string',
+                    Rule::in([
+                        'user',
+                        'organization',
+                    ]),
+                ],
+
+                'description' => [
+                    'string',
+                ],
+
                 'current_cost' => [
                     'numeric',
                     'min:0.00',
@@ -158,10 +170,15 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                     'string',
                     Rule::in(MembershipPlan::AvailableDurations),
                 ],
+
+                'default' => [
+                    'boolean',
+                ],
             ],
             self::VALIDATION_RULES_CREATE => [
                 self::VALIDATION_PREPEND_REQUIRED => [
                     'name',
+                    'entity_type',
                     'current_cost',
                     'duration',
                 ],

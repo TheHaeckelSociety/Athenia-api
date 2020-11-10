@@ -152,4 +152,27 @@ class MembershipPlanRepositoryTest extends TestCase
 
         $this->assertNull(MembershipPlan::find($model->id));
     }
+
+    public function testFindDefaultMembershipPlanForEntity()
+    {
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 0,
+        ]);
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 0,
+        ]);
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('organization'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 1,
+        ]);
+        $this->assertNotNull($this->repository->findDefaultMembershipPlanForEntity('user'));
+    }
 }

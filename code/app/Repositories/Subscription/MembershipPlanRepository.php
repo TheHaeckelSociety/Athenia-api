@@ -9,6 +9,7 @@ use App\Models\BaseModelAbstract;
 use App\Models\Subscription\MembershipPlan;
 use App\Repositories\BaseRepositoryAbstract;
 use App\Traits\CanGetAndUnset;
+use Illuminate\Database\Eloquent\Model;
 use Psr\Log\LoggerInterface as LogContract;
 
 /**
@@ -22,7 +23,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     /**
      * @var MembershipPlanRateRepositoryContract
      */
-    private $membershipPlanRateRepository;
+    private MembershipPlanRateRepositoryContract $membershipPlanRateRepository;
 
     /**
      * MembershipPlanRepository constructor.
@@ -90,5 +91,19 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
         }
 
         return parent::update($model, $data, $forcedValues);
+    }
+
+    /**
+     * Finds the default membership plan that will be applied to an entity if the entity is not subscribed
+     *
+     * @param string $entityType
+     * @return MembershipPlan|Model|null
+     */
+    public function findDefaultMembershipPlanForEntity(string $entityType): ?MembershipPlan
+    {
+        return $this->model->newQuery()
+            ->where('entity_type', '=', $entityType)
+            ->where('default', '=', 1)
+            ->first();
     }
 }
