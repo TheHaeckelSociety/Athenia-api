@@ -28,6 +28,10 @@ class AddFeaturesTable extends Migration
             $table->foreign('membership_plan_id')->references('id')->on('membership_plans');
             $table->primary(['feature_id', 'membership_plan_id']);
         });
+        Schema::table('membership_plans', function (Blueprint $table) {
+            $table->string('entity_type')->default('user');
+            $table->boolean('default')->default(false);
+        });
     }
 
     /**
@@ -37,6 +41,10 @@ class AddFeaturesTable extends Migration
      */
     public function down()
     {
+        Schema::table('membership_plans', function (Blueprint $table) {
+            $table->dropColumn('entity_type');
+            $table->dropColumn('default');
+        });
         Schema::dropIfExists('feature_membership_plan');
         Schema::dropIfExists('features');
     }
