@@ -1,6 +1,6 @@
 # Athenia App Upgrade Guide
 
-To upgrade from previous version of Athenia please check each version number listed below step by step.
+To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
 ## 0.45.0
 
