@@ -174,6 +174,15 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                 'default' => [
                     'boolean',
                 ],
+
+                'features' => [
+                    'array',
+                ],
+
+                'features.*' => [
+                    'numeric',
+                    Rule::exists('features', 'id'),
+                ],
             ],
             self::VALIDATION_RULES_CREATE => [
                 self::VALIDATION_PREPEND_REQUIRED => [

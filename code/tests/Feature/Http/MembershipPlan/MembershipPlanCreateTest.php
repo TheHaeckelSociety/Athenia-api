@@ -79,11 +79,31 @@ class MembershipPlanCreateTest extends TestCase
         ]);
     }
 
+    public function testCreateFailsInvalidArrayFields()
+    {
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'features' => 'hi',
+        ];
+
+        $response = $this->json('POST', $this->route, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'features' => ['The features must be an array.'],
+            ]
+        ]);
+    }
+
     public function testCreateFailsInvalidNumericFields()
     {
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('POST', $this->route, [
-            'current_cost' => 'hi'
+            'current_cost' => 'hi',
+            'features' => ['hi'],
         ]);
 
         $response->assertStatus(400);
@@ -91,6 +111,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be a number.'],
+                'features.0' => ['The features.0 must be a number.'],
             ]
         ]);
     }
@@ -151,6 +172,22 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'default' => ['The default field must be true or false.'],
+            ]
+        ]);
+    }
+
+    public function testCreateFailsInvalidModelFields()
+    {
+        $this->actAs(Role::SUPER_ADMIN);
+        $response = $this->json('POST', $this->route, [
+            'features' => [1425]
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'features.0' => ['The selected features.0 is invalid.'],
             ]
         ]);
     }

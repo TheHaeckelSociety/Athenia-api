@@ -104,6 +104,20 @@ class MembershipPlanRepositoryTest extends TestCase
         $this->assertEquals(10.12, $membershipPlan->current_cost);
     }
 
+    public function testCreateSuccessWithFeatures()
+    {
+        /** @var MembershipPlan $membershipPlan */
+        $membershipPlan = $this->repository->create([
+            'duration' => MembershipPlan::DURATION_YEAR,
+            'name' => 'a plan',
+            'features' => factory(Feature::class, 3)->create()->pluck('id'),
+        ]);
+
+        $this->assertEquals(MembershipPlan::DURATION_YEAR, $membershipPlan->duration);
+        $this->assertEquals('a plan', $membershipPlan->name);
+        $this->assertCount(3, $membershipPlan->features);
+    }
+
     public function testUpdateSuccess()
     {
         $model = factory(MembershipPlan::class)->create([

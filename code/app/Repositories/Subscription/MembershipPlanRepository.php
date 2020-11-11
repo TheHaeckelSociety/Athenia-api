@@ -49,6 +49,9 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
     {
         $cost = $this->getAndUnset($data, 'current_cost');
+        $features = $this->getAndUnset($data, 'features', []);
+
+        /** @var MembershipPlan $model */
         $model = parent::create($data, $relatedModel, $forcedValues);
 
         if ($cost) {
@@ -57,6 +60,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
                 'active' => true,
             ], $model);
         }
+        $model->features()->sync($features);
 
         return $model;
     }
