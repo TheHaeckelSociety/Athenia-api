@@ -6,35 +6,35 @@ To upgrade from previous version of Athenia please check each version number lis
 
 Features feature! This update adds a data typed named Feature, which can be connected to membership plans, and then used in conjuction with a new EntityFeatureAccessService that can allow the blocking of features based on subscription level.
 
-* code/app/Contracts/Models/IsAnEntity.php
-* code/app/Contracts/Repositories/FeatureRepositoryContract.php
-* code/app/Contracts/Repositories/Subscription/MembershipPlanRepositoryContract.php
-* code/app/Contracts/Services/EntityFeatureAccessServiceContract.php
-* code/app/Http/Core/Controllers/FeatureControllerAbstract.php
-* code/app/Http/Core/Requests/Feature/
-* code/app/Http/Core/Requests/Organization/RetrieveRequest.php
-* code/app/Http/Core/Requests/User/MeRequest.php
-* code/app/Http/V1/Controllers/FeatureController.php
-* code/app/Models/Feature.php
-* code/app/Models/Subscription/MembershipPlan.php
-* code/app/Policies/FeaturePolicy.php
-* code/app/Providers/AtheniaRepositoryProvider.php
-* code/app/Providers/RouteServiceProvider.php
-* code/app/Repositories/FeatureRepository.php
-* code/app/Repositories/Subscription/MembershipPlanRepository.php
-* code/app/Services/EntityFeatureAccessService.php
-* code/database/factories/FeatureFactory.php
-* code/database/migrations/2020_11_04_175859_add_features_table.php
-* code/routes/core.php
-* code/tests/Feature/Http/Feature/
-* code/tests/Feature/Http/MembershipPlan/MembershipPlanCreateTest.php
-* code/tests/Feature/Http/MembershipPlan/MembershipPlanUpdateTest.php
-* code/tests/Integration/Policies/FeaturePolicyTest.php
-* code/tests/Integration/Repositories/FeatureRepositoryTest.php
-* code/tests/Integration/Repositories/Subscription/MembershipPlanRepositoryTest.php
-* code/tests/Unit/Models/FeatureTest.php
-* code/tests/Unit/Models/Subscription/MembershipPlanTest.php
-* code/tests/Unit/Services/EntityFeatureAccessServiceTest.php
+* code/app/Contracts/Models/IsAnEntity.php - The `subscriptions` and `currentSubscription` functions have been added
+* code/app/Contracts/Repositories/FeatureRepositoryContract.php - New Contract!
+* code/app/Contracts/Repositories/Subscription/MembershipPlanRepositoryContract.php - `findDefaultMembershipPlanForEntity` function added
+* code/app/Contracts/Services/EntityFeatureAccessServiceContract.php - New Contract!
+* code/app/Http/Core/Controllers/FeatureControllerAbstract.php - New controller!
+* code/app/Http/Core/Requests/Feature/ - New requests group!
+* code/app/Http/Core/Requests/Organization/RetrieveRequest.php - Added ability to expand features.
+* code/app/Http/Core/Requests/User/MeRequest.php - Added ability to expand features.
+* code/app/Http/V1/Controllers/FeatureController.php - New controller!
+* code/app/Models/Feature.php - New Model!
+* code/app/Models/Subscription/MembershipPlan.php - Added new `features` relationship, and updated rules for new fields.
+* code/app/Policies/FeaturePolicy.php - New Policy!
+* code/app/Providers/AtheniaRepositoryProvider.php - Registered new feature repository.
+* code/app/Providers/RouteServiceProvider.php - Added feature route name
+* code/app/Repositories/FeatureRepository.php - New Repository!
+* code/app/Repositories/Subscription/MembershipPlanRepository.php - Added `findDefaultMembershipPlanForEntity` and made sure to sync features to membership plan on create and update.
+* code/app/Services/EntityFeatureAccessService.php - New Service!
+* code/database/factories/FeatureFactory.php - New factory!
+* code/database/migrations/2020_11_04_175859_add_features_table.php - New migration!
+* code/routes/core.php - Registered features routes
+* code/tests/Feature/Http/Feature/ - New test group.
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanCreateTest.php - Updated Test for new fields that were added
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanUpdateTest.php - Updated test for new fields that were added
+* code/tests/Integration/Policies/FeaturePolicyTest.php - New test
+* code/tests/Integration/Repositories/FeatureRepositoryTest.php - New Test
+* code/tests/Integration/Repositories/Subscription/MembershipPlanRepositoryTest.php - Added test for new function, and features syncing
+* code/tests/Unit/Models/FeatureTest.php - New test
+* code/tests/Unit/Models/Subscription/MembershipPlanTest.php - Added test of features relationship
+* code/tests/Unit/Services/EntityFeatureAccessServiceTest.php - New test
 
 ## 0.44.0
 
