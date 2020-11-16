@@ -1,9 +1,27 @@
 <?php
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\Models\Feature::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-    ];
-});
+use App\Models\Feature;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * Class AssetFactory
+ * @package Database\Factories
+ */
+class FeatureFactory extends Factory
+{
+    /**
+     * @var string The related model
+     */
+    protected $model = Feature::class;
+
+    /**
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->name,
+        ];
+    }
+}

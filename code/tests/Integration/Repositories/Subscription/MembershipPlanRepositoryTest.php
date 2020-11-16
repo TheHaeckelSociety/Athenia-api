@@ -47,7 +47,7 @@ class MembershipPlanRepositoryTest extends TestCase
             $model->delete();
         }
 
-        factory(MembershipPlan::class, 5)->create();
+        MembershipPlan::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -64,7 +64,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -72,7 +72,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(MembershipPlan::class)->create(['id' => 19]);
+        MembershipPlan::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -110,7 +110,7 @@ class MembershipPlanRepositoryTest extends TestCase
         $membershipPlan = $this->repository->create([
             'duration' => MembershipPlan::DURATION_YEAR,
             'name' => 'a plan',
-            'features' => factory(Feature::class, 3)->create()->pluck('id'),
+            'features' => Feature::factory()->count(3)->create()->pluck('id'),
         ]);
 
         $this->assertEquals(MembershipPlan::DURATION_YEAR, $membershipPlan->duration);
@@ -120,7 +120,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(MembershipPlan::class)->create([
+        $model = MembershipPlan::factory()->create([
             'name' => 'a plan'
         ]);
         $updated = $this->repository->update($model, [
@@ -132,10 +132,10 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testUpdateSuccessWithCost()
     {
-        $model = factory(MembershipPlan::class)->create([
+        $model = MembershipPlan::factory()->create([
             'name' => 'a plan'
         ]);
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'cost' => 1.99,
             'membership_plan_id' => $model->id,
         ]);
@@ -148,11 +148,11 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testUpdateSuccessWithFeatures()
     {
-        $model = factory(MembershipPlan::class)->create();
-        $model->features()->sync(factory(Feature::class, 2)->create()->pluck('id'));
+        $model = MembershipPlan::factory()->create();
+        $model->features()->sync(Feature::factory()->count(2)->create()->pluck('id'));
 
         $updated = $this->repository->update($model, [
-            'features' => factory(Feature::class, 3)->create(),
+            'features' => Feature::factory()->count(3)->create()->pluck('id'),
         ]);
 
         $this->assertCount(3, $updated->features);
@@ -160,7 +160,7 @@ class MembershipPlanRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
 
         $this->repository->delete($model);
 
@@ -171,19 +171,19 @@ class MembershipPlanRepositoryTest extends TestCase
     {
         $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
 
-        factory(MembershipPlan::class)->create([
+        MembershipPlan::factory()->create([
             'entity_type' => 'user',
             'default' => 0,
         ]);
         $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
 
-        factory(MembershipPlan::class)->create([
+        MembershipPlan::factory()->create([
             'entity_type' => 'user',
             'default' => 0,
         ]);
         $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('organization'));
 
-        factory(MembershipPlan::class)->create([
+        MembershipPlan::factory()->create([
             'entity_type' => 'user',
             'default' => 1,
         ]);

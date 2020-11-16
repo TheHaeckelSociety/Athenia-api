@@ -5,7 +5,7 @@ use App\Models\Asset;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Class UserFactory
+ * Class AssetFactory
  * @package Database\Factories
  */
 class AssetFactory extends Factory

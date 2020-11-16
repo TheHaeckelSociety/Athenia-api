@@ -19,7 +19,7 @@ class ContactPolicyTest extends TestCase
 
     public function testAllPasses()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $policy = new ContactPolicy();
 
@@ -28,8 +28,8 @@ class ContactPolicyTest extends TestCase
 
     public function testAllFails()
     {
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $policy = new ContactPolicy();
 
@@ -38,7 +38,7 @@ class ContactPolicyTest extends TestCase
 
     public function testCreatePasses()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $policy = new ContactPolicy();
 
@@ -47,8 +47,8 @@ class ContactPolicyTest extends TestCase
 
     public function testCreateFails()
     {
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $policy = new ContactPolicy();
 
@@ -57,16 +57,16 @@ class ContactPolicyTest extends TestCase
 
     public function testUpdatePasses()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $policy = new ContactPolicy();
 
-        $initiatedContact = factory(Contact::class)->create([
+        $initiatedContact = Contact::factory()->create([
             'initiated_by_id' => $user->id,
         ]);
         $this->assertTrue($policy->update($user, $user, $initiatedContact));
 
-        $requestedContact = factory(Contact::class)->create([
+        $requestedContact = Contact::factory()->create([
             'requested_id' => $user->id,
         ]);
         $this->assertTrue($policy->update($user, $user, $requestedContact));
@@ -74,9 +74,9 @@ class ContactPolicyTest extends TestCase
 
     public function testUpdateFails()
     {
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $contact = factory(Contact::class)->create([
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $contact = Contact::factory()->create([
             'initiated_by_id' => $user2->id,
         ]);
 
@@ -88,16 +88,16 @@ class ContactPolicyTest extends TestCase
 
     public function testDeletePasses()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $policy = new ContactPolicy();
 
-        $initiatedContact = factory(Contact::class)->create([
+        $initiatedContact = Contact::factory()->create([
             'initiated_by_id' => $user->id,
         ]);
         $this->assertTrue($policy->update($user, $user, $initiatedContact));
 
-        $requestedContact = factory(Contact::class)->create([
+        $requestedContact = Contact::factory()->create([
             'requested_id' => $user->id,
         ]);
         $this->assertTrue($policy->delete($user, $user, $requestedContact));
@@ -105,9 +105,9 @@ class ContactPolicyTest extends TestCase
 
     public function testDeleteFails()
     {
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $contact = factory(Contact::class)->create([
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $contact = Contact::factory()->create([
             'initiated_by_id' => $user2->id,
         ]);
 
