@@ -103,13 +103,37 @@ class MembershipPlanUpdateTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testPatchFailsInvalidArrayFields()
+    {
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'features' => 'hi',
+        ];
+
+        $membershipPlan = factory(MembershipPlan::class)->create([
+            'name' => 'Test Gift Pack',
+        ]);
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'features' => ['The features must be an array.'],
+            ]
+        ]);
+    }
+
     public function testPatchFailsInvalidNumericFields()
     {
         $membershipPlan = factory(MembershipPlan::class)->create();
 
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
-            'current_cost' => 'hi'
+            'current_cost' => 'hi',
+            'features' => ['hi'],
         ]);
 
         $response->assertStatus(400);
@@ -117,6 +141,7 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be a number.'],
+                'features.0' => ['The features.0 must be a number.'],
             ]
         ]);
     }
@@ -147,6 +172,7 @@ class MembershipPlanUpdateTest extends TestCase
 
         $data = [
             'name' => 5,
+            'description' => 5435,
         ];
 
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
@@ -156,6 +182,47 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name must be a string.'],
+                'description' => ['The description must be a string.'],
+            ]
+        ]);
+    }
+
+    public function testPatchFailsInvalidBooleanFields()
+    {
+        $membershipPlan = factory(MembershipPlan::class)->create();
+
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'default' => 'hello',
+        ];
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'default' => ['The default field must be true or false.'],
+            ]
+        ]);
+    }
+
+    public function testPatchFailsInvalidModelFields()
+    {
+        $membershipPlan = factory(MembershipPlan::class)->create();
+
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
+            'features' => [1425]
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'features.0' => ['The selected features.0 is invalid.'],
             ]
         ]);
     }
@@ -177,6 +244,29 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'name' => ['The name may not be greater than 120 characters.'],
+            ]
+        ]);
+    }
+
+    public function testPatchFailsProtectedFieldsPresent()
+    {
+        $membershipPlan = factory(MembershipPlan::class)->create();
+
+        $this->actAs(Role::SUPER_ADMIN);
+
+        $data = [
+            'entity_type' => 'hi',
+            'duration' => 'hi',
+        ];
+
+        $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, $data);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message'   => 'Sorry, something went wrong.',
+            'errors'    =>  [
+                'entity_type' => ['The entity type field is not allowed or can not be set for this request.'],
+                'duration' => ['The duration field is not allowed or can not be set for this request.'],
             ]
         ]);
     }

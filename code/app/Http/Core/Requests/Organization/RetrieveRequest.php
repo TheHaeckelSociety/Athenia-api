@@ -61,6 +61,7 @@ class RetrieveRequest extends BaseAuthenticatedRequestAbstract
             'subscriptions',
             'subscriptions.membershipPlanRate',
             'subscriptions.membershipPlanRate.membershipPlan',
+            'subscriptions.membershipPlanRate.membershipPlan.features',
             'subscriptions.paymentMethod',
         ];
     }

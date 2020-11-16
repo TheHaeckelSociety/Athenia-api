@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Repositories\Subscription;
 
+use App\Models\Feature;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Repositories\Subscription\MembershipPlanRateRepository;
@@ -103,16 +104,29 @@ class MembershipPlanRepositoryTest extends TestCase
         $this->assertEquals(10.12, $membershipPlan->current_cost);
     }
 
+    public function testCreateSuccessWithFeatures()
+    {
+        /** @var MembershipPlan $membershipPlan */
+        $membershipPlan = $this->repository->create([
+            'duration' => MembershipPlan::DURATION_YEAR,
+            'name' => 'a plan',
+            'features' => factory(Feature::class, 3)->create()->pluck('id'),
+        ]);
+
+        $this->assertEquals(MembershipPlan::DURATION_YEAR, $membershipPlan->duration);
+        $this->assertEquals('a plan', $membershipPlan->name);
+        $this->assertCount(3, $membershipPlan->features);
+    }
+
     public function testUpdateSuccess()
     {
         $model = factory(MembershipPlan::class)->create([
             'name' => 'a plan'
         ]);
-        $this->repository->update($model, [
+        $updated = $this->repository->update($model, [
             'name' => 'the same plan',
         ]);
 
-        $updated = MembershipPlan::find($model->id);
         $this->assertEquals('the same plan', $updated->name);
     }
 
@@ -125,12 +139,23 @@ class MembershipPlanRepositoryTest extends TestCase
             'cost' => 1.99,
             'membership_plan_id' => $model->id,
         ]);
-        $this->repository->update($model, [
+        $updated = $this->repository->update($model, [
             'current_cost' => 3.99,
         ]);
 
-        $updated = MembershipPlan::find($model->id);
         $this->assertEquals(3.99, $updated->current_cost);
+    }
+
+    public function testUpdateSuccessWithFeatures()
+    {
+        $model = factory(MembershipPlan::class)->create();
+        $model->features()->sync(factory(Feature::class, 2)->create()->pluck('id'));
+
+        $updated = $this->repository->update($model, [
+            'features' => factory(Feature::class, 3)->create(),
+        ]);
+
+        $this->assertCount(3, $updated->features);
     }
 
     public function testDeleteSuccess()
@@ -140,5 +165,28 @@ class MembershipPlanRepositoryTest extends TestCase
         $this->repository->delete($model);
 
         $this->assertNull(MembershipPlan::find($model->id));
+    }
+
+    public function testFindDefaultMembershipPlanForEntity()
+    {
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 0,
+        ]);
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('user'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 0,
+        ]);
+        $this->assertNull($this->repository->findDefaultMembershipPlanForEntity('organization'));
+
+        factory(MembershipPlan::class)->create([
+            'entity_type' => 'user',
+            'default' => 1,
+        ]);
+        $this->assertNotNull($this->repository->findDefaultMembershipPlanForEntity('user'));
     }
 }

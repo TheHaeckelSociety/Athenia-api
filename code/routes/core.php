@@ -62,6 +62,12 @@ Route::group(['middleware' => 'jwt.auth.protected'], function() {
         ]);
     });
 
+    Route::resource('features', 'FeatureController', [
+        'only' => [
+            'index', 'show',
+        ]
+    ]);
+
     /**
      * Resource Context
      */

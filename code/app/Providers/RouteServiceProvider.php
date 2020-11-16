@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Feature;
 use App\Models\Organization\Organization;
 use App\Models\Organization\OrganizationManager;
 use App\Models\Payment\PaymentMethod;
@@ -26,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     private $modelPlaceHolders = [
         'article' => Article::class,
+        'feature' => Feature::class,
         'iteration' => Iteration::class,
         'membership_plan' => MembershipPlan::class,
         'organization' => Organization::class,

@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Contracts\Models;
 
 use App\Models\Role;
+use App\Models\Subscription\Subscription;
 use App\Models\User\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -36,4 +38,20 @@ interface IsAnEntity extends CanBeMorphedTo
      * @return MorphMany
      */
     public function payments(): MorphMany;
+
+
+    /**
+     * All Subscriptions this subscriber has signed up to
+     *
+     * @return MorphMany
+     */
+    public function subscriptions(): MorphMany;
+
+    /**
+     * Leads the users current active subscription if there is one
+     *
+     * @param Carbon|null $expiresAfter
+     * @return Subscription|null
+     */
+    public function currentSubscription(?Carbon $expiresAfter = null) : ?Subscription;
 }

@@ -9,6 +9,7 @@ use App\Models\BaseModelAbstract;
 use App\Models\Subscription\MembershipPlan;
 use App\Repositories\BaseRepositoryAbstract;
 use App\Traits\CanGetAndUnset;
+use Illuminate\Database\Eloquent\Model;
 use Psr\Log\LoggerInterface as LogContract;
 
 /**
@@ -22,7 +23,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     /**
      * @var MembershipPlanRateRepositoryContract
      */
-    private $membershipPlanRateRepository;
+    private MembershipPlanRateRepositoryContract $membershipPlanRateRepository;
 
     /**
      * MembershipPlanRepository constructor.
@@ -48,6 +49,9 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
     {
         $cost = $this->getAndUnset($data, 'current_cost');
+        $features = $this->getAndUnset($data, 'features', []);
+
+        /** @var MembershipPlan $model */
         $model = parent::create($data, $relatedModel, $forcedValues);
 
         if ($cost) {
@@ -56,6 +60,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
                 'active' => true,
             ], $model);
         }
+        $model->features()->sync($features);
 
         return $model;
     }
@@ -69,6 +74,7 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
     public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
     {
         $cost = $this->getAndUnset($data, 'current_cost');
+        $features = $this->getAndUnset($data, 'features', null);
 
         if ($cost && $cost != $model->current_cost) {
 
@@ -84,6 +90,24 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
             ], $model);
         }
 
+        if ($features) {
+            $model->features()->sync($features);
+        }
+
         return parent::update($model, $data, $forcedValues);
+    }
+
+    /**
+     * Finds the default membership plan that will be applied to an entity if the entity is not subscribed
+     *
+     * @param string $entityType
+     * @return MembershipPlan|Model|null
+     */
+    public function findDefaultMembershipPlanForEntity(string $entityType): ?MembershipPlan
+    {
+        return $this->model->newQuery()
+            ->where('entity_type', '=', $entityType)
+            ->where('default', '=', 1)
+            ->first();
     }
 }
