@@ -32,6 +32,8 @@ use App\Models\BaseModelAbstract;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $reply_to_email
+ * @property string|null $reply_to_name
  * @property-read \App\Models\User\User|null $from
  * @property-read \App\Models\User\Thread|null $thread
  * @property-read \App\Models\User\User|null $to
@@ -45,6 +47,8 @@ use App\Models\BaseModelAbstract;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereFromId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereReplyToEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereReplyToName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereScheduledAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereSeenAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Message whereSentAt($value)

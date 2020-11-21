@@ -2,6 +2,15 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.46.0
+
+Nice and easy one! This simply adds a reply to ability to the messaging setup. To complete this update simply run through the following files.
+
+* code/app/Mail/MessageMailer.php - Added reply to appending to mail builder
+* code/app/Models/User/Message.php - Ran IDE helpers
+* code/database/migrations/2020_11_21_144300_add_reply_to_to_messages.php
+* code/tests/Unit/Mail/MessageMailerTest.php - Added checking for reply to fields onto message mailer building
+
 ## 0.45.0
 
 Features feature! This update adds a data typed named Feature, which can be connected to membership plans, and then used in conjuction with a new EntityFeatureAccessService that can allow the blocking of features based on subscription level.
