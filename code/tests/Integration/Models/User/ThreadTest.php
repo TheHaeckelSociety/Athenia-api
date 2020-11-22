@@ -25,12 +25,12 @@ class ThreadTest extends TestCase
         $messageDispatcher->shouldReceive('until');
 
         /** @var Thread $thread */
-        $thread = factory(Thread::class)->create();
-        factory(Message::class)->create([
+        $thread = Thread::factory()->create();
+        Message::factory()->create([
             'created_at' => '2018-10-10 12:00:00',
             'thread_id' => $thread->id,
         ]);
-        $newMessage = factory(Message::class)->create([
+        $newMessage = Message::factory()->create([
             'created_at' => '2018-10-11 12:00:00',
             'thread_id' => $thread->id,
         ]);

@@ -58,7 +58,7 @@ class UserTest extends TestCase
 
         $this->assertFalse($user->canManageOrganization($organization));
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::MANAGER,
@@ -68,7 +68,7 @@ class UserTest extends TestCase
         $this->assertFalse($user->canManageOrganization($organization, Role::ADMINISTRATOR));
         $this->assertTrue($user->canManageOrganization($organization, Role::MANAGER));
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::ADMINISTRATOR,

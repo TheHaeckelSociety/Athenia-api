@@ -60,7 +60,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
     public function testCreateSuccessful()
     {
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -97,7 +97,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
     public function testCreateFailsRequiredFieldsNotPresent()
     {
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -117,7 +117,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
     public function testCreateFailsInvalidStringFields()
     {
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -139,7 +139,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
     public function testCreateFailsStringsTooLong()
     {
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,

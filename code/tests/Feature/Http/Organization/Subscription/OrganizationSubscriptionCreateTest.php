@@ -64,7 +64,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -106,7 +106,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -145,7 +145,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -166,7 +166,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -188,7 +188,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -210,7 +210,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -234,7 +234,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -258,7 +258,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -284,7 +284,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,

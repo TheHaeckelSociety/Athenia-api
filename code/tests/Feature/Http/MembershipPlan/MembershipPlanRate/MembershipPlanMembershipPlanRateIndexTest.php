@@ -43,7 +43,7 @@ class MembershipPlanMembershipPlanRateIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
         $this->setupRoute($model->id);
         $response = $this->json('GET', $this->route);
         $response->assertStatus(403);
@@ -53,7 +53,7 @@ class MembershipPlanMembershipPlanRateIndexTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(MembershipPlan::class)->create();
+            $model = MembershipPlan::factory()->create();
             $this->setupRoute($model->id);
             $response = $this->json('GET', $this->route);
 
@@ -64,7 +64,7 @@ class MembershipPlanMembershipPlanRateIndexTest extends TestCase
     public function testGetPaginationEmpty()
     {
         $this->actAs(Role::SUPER_ADMIN);
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
         $this->setupRoute($model->id);
         $response = $this->json('GET', $this->route);
 
@@ -78,7 +78,7 @@ class MembershipPlanMembershipPlanRateIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::SUPER_ADMIN);
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
         $this->setupRoute($model->id);
         factory(MembershipPlanRate::class, 15)->create([
             'membership_plan_id' => $model->id,

@@ -59,7 +59,7 @@ class OrganizationAssetCreateTest extends TestCase
     public function testCreateSuccessful()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
@@ -85,7 +85,7 @@ class OrganizationAssetCreateTest extends TestCase
     public function testCreateFailsRequiredFieldsMissing()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
@@ -104,7 +104,7 @@ class OrganizationAssetCreateTest extends TestCase
     public function testCreateFailsInvalidStringField()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
@@ -129,7 +129,7 @@ class OrganizationAssetCreateTest extends TestCase
     public function testCreateFailsInvalidFileType()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,

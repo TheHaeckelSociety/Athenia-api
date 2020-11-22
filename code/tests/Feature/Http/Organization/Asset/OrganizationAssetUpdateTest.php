@@ -66,7 +66,7 @@ class OrganizationAssetUpdateTest extends TestCase
     public function testDifferentOrganizationThanAssetBlocked()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
@@ -80,7 +80,7 @@ class OrganizationAssetUpdateTest extends TestCase
     public function testUpdateSuccessful()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
@@ -103,7 +103,7 @@ class OrganizationAssetUpdateTest extends TestCase
     public function testFailsNotPresentFieldsPresent()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
@@ -127,7 +127,7 @@ class OrganizationAssetUpdateTest extends TestCase
     public function testFailsInvalidStringFields()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,

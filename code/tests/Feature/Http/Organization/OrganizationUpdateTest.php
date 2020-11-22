@@ -53,7 +53,7 @@ class OrganizationUpdateTest extends TestCase
         $organization = factory(Organization::class)->create([
             'name' => 'Test Organiz',
         ]);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
             'organization_id' => $organization->id,

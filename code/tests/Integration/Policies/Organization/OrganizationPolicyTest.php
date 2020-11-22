@@ -48,7 +48,7 @@ class OrganizationPolicyTest extends TestCase
         $organization = factory(Organization::class)->create();
         $user = factory(User::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::MANAGER,
@@ -72,7 +72,7 @@ class OrganizationPolicyTest extends TestCase
         $organization = factory(Organization::class)->create();
         $user = factory(User::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::MANAGER,
@@ -96,7 +96,7 @@ class OrganizationPolicyTest extends TestCase
         $organization = factory(Organization::class)->create();
         $user = factory(User::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::MANAGER,
@@ -111,7 +111,7 @@ class OrganizationPolicyTest extends TestCase
         $organization = factory(Organization::class)->create();
         $user = factory(User::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
             'role_id' => Role::ADMINISTRATOR,

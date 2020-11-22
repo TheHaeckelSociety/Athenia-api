@@ -52,7 +52,7 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(OrganizationManager::class)->create();
+        $model = OrganizationManager::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -60,7 +60,7 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(OrganizationManager::class)->create(['id' => 3452]);
+        OrganizationManager::factory()->create(['id' => 3452]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(546);
@@ -83,7 +83,7 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
         ]);
         $this->repository->update($model, [
@@ -97,7 +97,7 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(OrganizationManager::class)->create();
+        $model = OrganizationManager::factory()->create();
 
         $this->repository->delete($model);
 

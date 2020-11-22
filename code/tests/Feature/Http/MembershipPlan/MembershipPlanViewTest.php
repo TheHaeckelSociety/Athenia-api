@@ -26,7 +26,7 @@ class MembershipPlanViewTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
         $response = $this->json('GET', '/v1/membership-plans/' . $model->id);
         $response->assertStatus(403);
     }
@@ -35,7 +35,7 @@ class MembershipPlanViewTest extends TestCase
     {
         $this->actAs(Role::APP_USER);
         /** @var MembershipPlan $model */
-        $model = factory(MembershipPlan::class)->create([
+        $model = MembershipPlan::factory()->create([
             'id'    =>  1,
         ]);
 

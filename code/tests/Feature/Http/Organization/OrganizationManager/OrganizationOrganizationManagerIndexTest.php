@@ -65,7 +65,7 @@ class OrganizationOrganizationManagerIndexTest extends TestCase
     {
         $this->actAs(Role::MANAGER);
         $organization = factory(Organization::class)->create();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,

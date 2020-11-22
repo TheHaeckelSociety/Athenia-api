@@ -29,7 +29,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id);
         $response->assertStatus(403);
     }
@@ -38,7 +38,7 @@ class MembershipPlanUpdateTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $membershipPlan = factory(MembershipPlan::class)->create();
+            $membershipPlan = MembershipPlan::factory()->create();
             $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id);
             $response->assertStatus(403);
         }
@@ -49,7 +49,7 @@ class MembershipPlanUpdateTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
 
         /** @var MembershipPlan $membershipPlan */
-        $membershipPlan = factory(MembershipPlan::class)->create([
+        $membershipPlan = MembershipPlan::factory()->create([
             'name' => 'Test Memberhip Plan',
         ]);
 
@@ -94,7 +94,7 @@ class MembershipPlanUpdateTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
 
-        $membershipPlan = factory(MembershipPlan::class)->create([
+        $membershipPlan = MembershipPlan::factory()->create([
             'name' => 'Test Gift Pack',
         ]);
 
@@ -111,7 +111,7 @@ class MembershipPlanUpdateTest extends TestCase
             'features' => 'hi',
         ];
 
-        $membershipPlan = factory(MembershipPlan::class)->create([
+        $membershipPlan = MembershipPlan::factory()->create([
             'name' => 'Test Gift Pack',
         ]);
 
@@ -128,7 +128,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsInvalidNumericFields()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
@@ -148,7 +148,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsInvalidNumericMinimums()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
@@ -166,7 +166,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsInvalidStringFields()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 
@@ -189,7 +189,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsInvalidBooleanFields()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 
@@ -210,7 +210,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsInvalidModelFields()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 
@@ -229,7 +229,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsTooLongFields()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 
@@ -250,7 +250,7 @@ class MembershipPlanUpdateTest extends TestCase
 
     public function testPatchFailsProtectedFieldsPresent()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 

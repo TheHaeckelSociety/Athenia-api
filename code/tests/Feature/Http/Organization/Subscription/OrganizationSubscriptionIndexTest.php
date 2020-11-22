@@ -63,7 +63,7 @@ class OrganizationSubscriptionIndexTest extends TestCase
         $this->actAsUser();
         $organization = factory(Organization::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $organization->id,
         ]);
@@ -82,7 +82,7 @@ class OrganizationSubscriptionIndexTest extends TestCase
         $this->actAsUser();
         $organization = factory(Organization::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $organization->id,
         ]);

@@ -43,7 +43,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(OrganizationManager::class)->create();
+        $model = OrganizationManager::factory()->create();
         $this->setupRoute($model->organization_id, $model->id);
         $response = $this->json('DELETE', $this->route);
         $response->assertStatus(403);
@@ -53,7 +53,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(OrganizationManager::class)->create();
+            $model = OrganizationManager::factory()->create();
             $this->setupRoute($model->organization_id, $model->id);
             $response = $this->json('DELETE', $this->route);
             $response->assertStatus(403);
@@ -64,7 +64,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
     {
         $this->actAs(Role::MANAGER);
 
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
         ]);
@@ -78,7 +78,7 @@ class OrganizationOrganizationManagerDeleteTest extends TestCase
     {
         $this->actAs(Role::ADMINISTRATOR);
 
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
         ]);

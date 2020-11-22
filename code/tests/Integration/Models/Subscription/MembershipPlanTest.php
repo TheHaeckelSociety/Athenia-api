@@ -20,7 +20,7 @@ class MembershipPlanTest extends TestCase
     public function testCurrentCostAttribute()
     {
         /** @var MembershipPlan $membershipPlan */
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         factory(MembershipPlanRate::class)->create([
             'membership_plan_id' => $membershipPlan->id,
@@ -47,7 +47,7 @@ class MembershipPlanTest extends TestCase
     public function testCurrentRateIdAttribute()
     {
         /** @var MembershipPlan $membershipPlan */
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
 
         factory(MembershipPlanRate::class)->create([
             'membership_plan_id' => $membershipPlan->id,

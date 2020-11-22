@@ -50,7 +50,7 @@ class OrganizationViewTest extends TestCase
         $model = factory(Organization::class)->create([
             'id'    =>  1,
         ]);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,
             'organization_id' => $model->id,

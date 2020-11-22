@@ -51,7 +51,7 @@ class OrganizationDeleteTest extends TestCase
 
         $model = factory(Organization::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
             'organization_id' => $model->id,
@@ -67,7 +67,7 @@ class OrganizationDeleteTest extends TestCase
 
         $model = factory(Organization::class)->create();
 
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $model->id,

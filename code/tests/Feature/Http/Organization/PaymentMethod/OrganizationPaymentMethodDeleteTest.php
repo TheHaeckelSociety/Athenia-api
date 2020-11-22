@@ -58,7 +58,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,
@@ -74,7 +74,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
         $paymentMethod = factory(PaymentMethod::class)->create();
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -93,7 +93,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,

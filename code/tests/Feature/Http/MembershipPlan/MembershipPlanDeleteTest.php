@@ -27,7 +27,7 @@ class MembershipPlanDeleteTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
         $response = $this->json('DELETE', '/v1/membership-plans/' . $model->id);
         $response->assertStatus(403);
     }
@@ -36,7 +36,7 @@ class MembershipPlanDeleteTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(MembershipPlan::class)->create();
+            $model = MembershipPlan::factory()->create();
             $response = $this->json('DELETE', '/v1/membership-plans/' . $model->id);
             $response->assertStatus(403);
         }
@@ -46,7 +46,7 @@ class MembershipPlanDeleteTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
 
-        $model = factory(MembershipPlan::class)->create();
+        $model = MembershipPlan::factory()->create();
 
         $response = $this->json('DELETE', '/v1/membership-plans/' . $model->id);
 

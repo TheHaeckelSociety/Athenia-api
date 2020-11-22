@@ -66,7 +66,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testDifferentUserThanSubscriptionBlocked()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -80,7 +80,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testWrongRoleBlocked()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -97,7 +97,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testUpdateSuccessful()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -119,7 +119,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testFailsNotPresentFieldsPresent()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -143,7 +143,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testCreateFailsInvalidBooleanField()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -169,7 +169,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testCreateFailsInvalidIntegerFields()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -193,7 +193,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testCreateFailsInvalidModelFields()
     {
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
@@ -218,7 +218,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     {
         $paymentMethod = factory(PaymentMethod::class)->create();
         $this->actAs(Role::APP_USER);
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,

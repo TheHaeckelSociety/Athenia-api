@@ -66,7 +66,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $membershipPlan = factory(MembershipPlan::class)->create();
+        $membershipPlan = MembershipPlan::factory()->create();
         /** @var MembershipPlanRate $membershipPlanRate */
         $membershipPlanRate = $this->repository->create([
             'cost' => 10.12,

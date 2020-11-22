@@ -51,7 +51,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(OrganizationManager::class)->create();
+        $model = OrganizationManager::factory()->create();
         $this->setupRoute($model->organization_id, $model->id);
         $response = $this->json('PUT', $this->route);
         $response->assertStatus(403);
@@ -61,7 +61,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(OrganizationManager::class)->create();
+            $model = OrganizationManager::factory()->create();
             $this->setupRoute($model->organization_id, $model->id);
             $response = $this->json('PUT', $this->route);
 
@@ -73,12 +73,12 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     {
         $this->actAs(Role::MANAGER);
         $organization = factory(Organization::class)->create();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,
         ]);
-        $model = factory(OrganizationManager::class)->create();
+        $model = OrganizationManager::factory()->create();
         $this->setupRoute($model->organization_id, $model->id);
         $response = $this->json('PUT', $this->route);
         $response->assertStatus(403);
@@ -88,12 +88,12 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     {
         $this->actAs(Role::ADMINISTRATOR);
         $organization = factory(Organization::class)->create();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
         ]);
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'role_id' => Role::MANAGER,
         ]);
@@ -116,7 +116,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     public function testUpdateFailsMissingRequiredFields()
     {
         $this->actAs(Role::ADMINISTRATOR);
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
         ]);
@@ -136,7 +136,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     public function testUpdateFailsInvalidNumericalFields()
     {
         $this->actAs(Role::ADMINISTRATOR);
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
         ]);
@@ -160,7 +160,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     public function testUpdateFailsInvalidRoleId()
     {
         $this->actAs(Role::ADMINISTRATOR);
-        $model = factory(OrganizationManager::class)->create([
+        $model = OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
         ]);
