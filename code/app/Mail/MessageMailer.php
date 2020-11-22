@@ -44,10 +44,16 @@ class MessageMailer extends Mailable implements ShouldQueue
         if ($this->message->to->last_name) {
             $name.= ' ' . $this->message->to->last_name;
         }
-        return $this->subject($this->message->subject)
+        $message = $this->subject($this->message->subject)
             ->to($this->message->email, $name)
             ->from('thehaeckelsociety@gmail.com', 'Project Athenia')
             ->bcc('thehaeckelsociety@gmail.com', 'Project Athenia')
             ->view('mailers.' . $this->message->template, $this->message->data);
+
+        if ($this->message->reply_to_email) {
+            $message->replyTo($this->message->reply_to_email, $this->message->reply_to_name);
+        }
+
+        return $message;
     }
 }

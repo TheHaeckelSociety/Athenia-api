@@ -23,6 +23,7 @@ class MessageMailerTest extends TestCase
             'to' => $user,
             'subject' => 'Test Message',
             'email' => 'darlene@test.com',
+            'reply_to_email' => 'john@test.com',
             'template' => 'base',
             'data' => [
                 'greeting' => 'Hello Darlene!',
@@ -36,6 +37,7 @@ class MessageMailerTest extends TestCase
         $this->assertEquals([['name' => 'Darlene Dora', 'address' => 'darlene@test.com']], $builtMailer->to);
         $this->assertEquals([['name' => 'Project Athenia', 'address' => 'thehaeckelsociety@gmail.com']], $builtMailer->from);
         $this->assertEquals([['name' => 'Project Athenia', 'address' => 'thehaeckelsociety@gmail.com']], $builtMailer->bcc);
+        $this->assertEquals([['name' => null, 'address' => 'john@test.com']], $builtMailer->replyTo);
 
         $this->assertEquals('Test Message', $builtMailer->subject);
         $this->assertEquals('mailers.base', $builtMailer->view);
