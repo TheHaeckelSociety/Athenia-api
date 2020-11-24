@@ -2,6 +2,15 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.47.0
+
+Another easy one! This one simply adds a couple new variables to the payment method model that contain a couple informative pieces of information. To complete this update, make the following changes.
+
+* code/app/Models/Payment/PaymentMethod.php - Added new fields to validation rules, and ran ide helpers
+* code/database/migrations/2020_11_24_214601_add_default_and_vendor_type_to_payment_methods.php - New Migration
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodCreateTest.php - Added tests for new string and boolean fields
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodCreateTest.php - Added tests for new string and boolean fields
+
 ## 0.46.0
 
 Nice and easy one! This simply adds a reply to ability to the messaging setup. To complete this update simply run through the following files.

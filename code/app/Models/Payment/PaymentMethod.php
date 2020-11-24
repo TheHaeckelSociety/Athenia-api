@@ -10,6 +10,7 @@ use App\Models\Traits\HasValidationRules;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Validation\Rule;
 
 /**
  * Class PaymentMethod
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool $default
+ * @property string|null $brand
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
@@ -31,7 +34,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod newQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereBrand($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDefault($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereIdentifier($value)
@@ -88,6 +93,12 @@ class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContr
                 'token' => [
                     'string',
                     'max:120',
+                ],
+                'default' => [
+                    'boolean',
+                ],
+                'brand' => [
+                    'string',
                 ],
             ],
             static::VALIDATION_RULES_CREATE => [
