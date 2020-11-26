@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.48.0
+
+One more simple little one! This one allows the expansion of a membership plans features off of it's endpoints.
+
+* code/app/Http/Core/Requests/MembershipPlan/IndexRequest.php - Added expands
+* code/app/Http/Core/Requests/MembershipPlan/RetrieveRequest.php - Added expands
+
 ## 0.47.0
 
 Another easy one! This one simply adds a couple new variables to the payment method model that contain a couple informative pieces of information. To complete this update, make the following changes.

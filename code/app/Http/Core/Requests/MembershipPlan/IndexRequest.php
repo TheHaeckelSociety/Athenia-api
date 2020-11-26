@@ -16,7 +16,7 @@ use App\Policies\Subscription\MembershipPlanPolicy;
  */
 class IndexRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoPolicyParameters, HasNoExpands;
+    use HasNoRules, HasNoPolicyParameters;
 
     /**
      * Get the policy action for the guard
@@ -36,5 +36,17 @@ class IndexRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyModel(): string
     {
         return MembershipPlan::class;
+    }
+
+    /**
+     * All expands that are allowed for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'features',
+        ];
     }
 }

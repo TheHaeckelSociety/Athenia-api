@@ -15,7 +15,7 @@ use App\Policies\Subscription\MembershipPlanPolicy;
  */
 class RetrieveRequest extends BaseAuthenticatedRequestAbstract
 {
-    use HasNoRules, HasNoExpands;
+    use HasNoRules;
 
     /**
      * Get the policy action for the guard
@@ -46,6 +46,18 @@ class RetrieveRequest extends BaseAuthenticatedRequestAbstract
     {
         return [
             $this->route('membership_plan'),
+        ];
+    }
+
+    /**
+     * All expands that are allowed for this request
+     *
+     * @return array
+     */
+    public function allowedExpands(): array
+    {
+        return [
+            'features',
         ];
     }
 }
