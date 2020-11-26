@@ -149,6 +149,7 @@ class StripeCustomerService implements StripeCustomerServiceContract
             'payment_method_key' => $data['id'],
             'payment_method_type' => 'stripe',
             'identifier' => $data['last4'],
+            'brand' => $data['brand'],
             'owner_id' => $entity->id,
             'owner_type' => $entity->morphRelationName(),
         ]);
