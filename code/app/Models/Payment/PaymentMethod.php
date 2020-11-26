@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Models\Payment;
 
 use App\Contracts\Models\HasValidationRulesContract;
+use App\Contracts\Models\IsAnEntity;
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
 use App\Models\Traits\HasValidationRules;
@@ -26,7 +27,7 @@ use Illuminate\Validation\Rule;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property bool $default
  * @property string|null $brand
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent|IsAnEntity $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
@@ -96,9 +97,6 @@ class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContr
                 ],
                 'default' => [
                     'boolean',
-                ],
-                'brand' => [
-                    'string',
                 ],
             ],
             static::VALIDATION_RULES_CREATE => [

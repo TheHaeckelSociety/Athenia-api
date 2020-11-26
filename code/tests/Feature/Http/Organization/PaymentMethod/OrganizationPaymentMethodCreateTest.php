@@ -133,7 +133,6 @@ class OrganizationPaymentMethodCreateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'token' => ['The token must be a string.'],
-                'brand' => ['The brand must be a string.'],
             ]
         ]);
     }
