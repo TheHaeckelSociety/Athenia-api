@@ -107,6 +107,19 @@ abstract class PaymentMethodControllerAbstract extends BaseControllerAbstract
     }
 
     /**
+     * @param Requests\Entity\PaymentMethod\UpdateRequest $request
+     * @param IsAnEntity $entity
+     * @param PaymentMethod $paymentMethod
+     * @return \App\Models\BaseModelAbstract
+     */
+    public function update(Requests\Entity\PaymentMethod\UpdateRequest $request, IsAnEntity $entity, PaymentMethod $paymentMethod)
+    {
+        $data = $request->json()->all();
+
+        return $this->repository->update($paymentMethod, $data);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @SWG\Delete(

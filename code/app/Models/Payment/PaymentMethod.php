@@ -104,6 +104,11 @@ class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContr
                     'token',
                 ],
             ],
+            static::VALIDATION_RULES_UPDATE => [
+                static::VALIDATION_PREPEND_NOT_PRESENT => [
+                    'token',
+                ],
+            ],
         ];
     }
 

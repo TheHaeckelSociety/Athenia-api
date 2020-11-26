@@ -14,7 +14,7 @@ Route::resource('payments', 'Entity\PaymentController', [
 ]);
 Route::resource('payment-methods', 'Entity\PaymentMethodController', [
     'only' => [
-        'store', 'destroy',
+        'store', 'destroy', 'update',
     ],
 ]);
 Route::resource('profile-images', 'Entity\ProfileImageController', [

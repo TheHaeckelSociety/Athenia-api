@@ -28,6 +28,22 @@ class PaymentMethodPolicyTest extends TestCase
         $this->assertTrue($policy->create($me, $me));
     }
 
+    public function testUpdate()
+    {
+        $policy = new PaymentMethodPolicy();
+
+        $me = factory(User::class)->create();
+        $other = factory(User::class)->create();
+
+        $paymentMethod = factory(PaymentMethod::class)->create([
+            'owner_id' => $me->id,
+        ]);
+
+        $this->assertFalse($policy->update($me, $other, $paymentMethod));
+        $this->assertFalse($policy->update($other, $other, $paymentMethod));
+        $this->assertTrue($policy->update($me, $me, $paymentMethod));
+    }
+
     public function testDelete()
     {
         $policy = new PaymentMethodPolicy();
