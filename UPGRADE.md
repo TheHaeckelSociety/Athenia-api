@@ -2,6 +2,32 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.49.0
+
+Default Payment Method management! This one will allow an entity to have a default payment method, and thus adds an end point to manage this as well as a listener structure to remove the default flag on any other payment method.
+
+* code/app/Contracts/Models/IsAnEntity.php - Added payment methods property to header for auto complete
+* code/app/Events/Payment/DefaultPaymentMethodSetEvent.php - New Event
+* code/app/Http/Core/Controllers/Entity/PaymentMethodControllerAbstract.php - Added update function
+* code/app/Http/Core/Requests/Entity/PaymentMethod/UpdateRequest.php - New Request
+* code/app/Listeners/Payment/DefaultPaymentMethodSetListener.php - New Listener
+* code/app/Models/Payment/PaymentMethod.php - Updated validation rules
+* code/app/Observers/Payment/PaymentMethodObserver.php - New observer
+* code/app/Policies/Payment/PaymentMethodPolicy.php - Added update function
+* code/app/Providers/AtheniaRepositoryProvider.php - Added organization to the array of morph maps
+* code/app/Providers/EventServiceProvider.php - Registered new default payment method set event/listener, and registered payment method observer.
+* code/app/Services/StripeCustomerService.php - Made sure to set brand when payment method is created
+* code/routes/entity-routes.php - Added update function to payment methods route
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodCreateTest.php - Removed brand tests
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodUpdateTest.php - New Test
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodCreateTest.php - Removed brand tests
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodUpdateTest.php - New Test
+* code/tests/Integration/Policies/Payment/PaymentMethodPolicyTest.php - Tested update function
+* code/tests/Unit/Events/Payment/DefaultPaymentMethodSetEventTest.php - New Test
+* code/tests/Unit/Listeners/Payment/DefaultPaymentMethodSetListenerTest.php  - New Test
+* code/tests/Unit/Observers/Payment/PaymentMethodObserverTest.php - New Test
+* code/tests/Unit/Services/StripeCustomerServiceTest.php - Updated test ofr brand being set
+
 ## 0.48.0
 
 One more simple little one! This one allows the expansion of a membership plans features off of it's endpoints.
