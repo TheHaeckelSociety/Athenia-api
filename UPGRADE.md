@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.50.0
+
+Nice little one! This update simply adds a new field to the features model. In order to complete this update simply copy over the migration `code/database/migrations/2020_11_29_123208_add_description_to_features.php`.
+
 ## 0.49.0
 
 Default Payment Method management! This one will allow an entity to have a default payment method, and thus adds an end point to manage this as well as a listener structure to remove the default flag on any other payment method.

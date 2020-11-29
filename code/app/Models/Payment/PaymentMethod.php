@@ -27,7 +27,7 @@ use Illuminate\Validation\Rule;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property bool $default
  * @property string|null $brand
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent|IsAnEntity $owner
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
