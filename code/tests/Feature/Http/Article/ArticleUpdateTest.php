@@ -32,7 +32,7 @@ class ArticleUpdateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         $response = $this->json('PUT', $this->path . '/' . $article->id);
 
         $response->assertStatus(403);
@@ -43,7 +43,7 @@ class ArticleUpdateTest extends TestCase
         foreach ($this->rolesWithoutAdmins([Role::ARTICLE_EDITOR]) as $role) {
             $this->actAs($role);
 
-            $article = factory(Article::class)->create([
+            $article = Article::factory()->create([
                 'created_by_id' => $this->actingAs->id,
             ]);
             $response = $this->json('PUT', $this->path . '/' . $article->id);
@@ -65,7 +65,7 @@ class ArticleUpdateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'title' => 'A title',
             'created_by_id' => $this->actingAs->id,
         ]);
@@ -89,7 +89,7 @@ class ArticleUpdateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
         
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         $response = $this->json('PUT', $this->path . '/' . $article->id);
 
         $response->assertStatus(403);
@@ -99,7 +99,7 @@ class ArticleUpdateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
 
@@ -120,7 +120,7 @@ class ArticleUpdateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
 

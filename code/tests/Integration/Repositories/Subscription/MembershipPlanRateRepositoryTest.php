@@ -37,7 +37,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(MembershipPlanRate::class, 5)->create();
+        MembershipPlanRate::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -50,7 +50,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(MembershipPlanRate::class)->create();
+        $model = MembershipPlanRate::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -58,7 +58,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(MembershipPlanRate::class)->create(['id' => 19]);
+        MembershipPlanRate::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -79,7 +79,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(MembershipPlanRate::class)->create([
+        $model = MembershipPlanRate::factory()->create([
             'active' => 1,
         ]);
         $this->repository->update($model, [
@@ -93,7 +93,7 @@ class MembershipPlanRateRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(MembershipPlanRate::class)->create();
+        $model = MembershipPlanRate::factory()->create();
 
         $this->repository->delete($model);
 

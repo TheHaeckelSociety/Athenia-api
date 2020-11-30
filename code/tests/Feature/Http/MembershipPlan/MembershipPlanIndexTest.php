@@ -45,7 +45,7 @@ class MembershipPlanIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::APP_USER);
-        factory(MembershipPlan::class, 15)->create();
+        MembershipPlan::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', '/v1/membership-plans');

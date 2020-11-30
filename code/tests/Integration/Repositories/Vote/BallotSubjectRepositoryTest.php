@@ -38,7 +38,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(BallotSubject::class, 5)->create();
+        BallotSubject::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -51,7 +51,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(BallotSubject::class)->create();
+        $model = BallotSubject::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -59,7 +59,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(BallotSubject::class)->create(['id' => 19]);
+        BallotSubject::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -68,10 +68,10 @@ class BallotSubjectRepositoryTest extends TestCase
     public function testCreateSuccess()
     {
         /** @var Ballot $ballot */
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
 
         /** @var Iteration $iteration */
-        $iteration = factory(Iteration::class)->create();
+        $iteration = Iteration::factory()->create();
 
         /** @var BallotSubject $ballotSubject */
         $ballotSubject = $this->repository->create([
@@ -85,7 +85,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(BallotSubject::class)->create([
+        $model = BallotSubject::factory()->create([
             'votes_cast' => 1,
         ]);
         $this->repository->update($model, [
@@ -99,7 +99,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(BallotSubject::class)->create();
+        $model = BallotSubject::factory()->create();
 
         $this->repository->delete($model);
 

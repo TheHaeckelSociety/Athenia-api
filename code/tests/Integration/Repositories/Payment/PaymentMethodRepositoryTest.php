@@ -37,7 +37,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(PaymentMethod::class, 5)->create();
+        PaymentMethod::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -50,7 +50,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(PaymentMethod::class)->create();
+        $model = PaymentMethod::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -58,7 +58,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(PaymentMethod::class)->create(['id' => 2]);
+        PaymentMethod::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -66,7 +66,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->repository->create([
@@ -81,7 +81,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(PaymentMethod::class)->create([
+        $model = PaymentMethod::factory()->create([
             'payment_method_key' => 'test_key'
         ]);
         $this->repository->update($model, [
@@ -95,7 +95,7 @@ class PaymentMethodRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(PaymentMethod::class)->create();
+        $model = PaymentMethod::factory()->create();
 
         $this->repository->delete($model);
 
