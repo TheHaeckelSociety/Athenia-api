@@ -125,6 +125,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
 
         $response = $this->json('POST', $this->path, [
             'token' => 1,
+            'brand' => 1,
         ]);
 
         $response->assertStatus(400);
@@ -132,6 +133,28 @@ class OrganizationPaymentMethodCreateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'token' => ['The token must be a string.'],
+            ]
+        ]);
+    }
+
+    public function testCreateFailsInvalidBooleanFields()
+    {
+        $this->actAsUser();
+        factory(OrganizationManager::class)->create([
+            'user_id' => $this->actingAs->id,
+            'organization_id' => $this->organization->id,
+            'role_id' => Role::ADMINISTRATOR,
+        ]);
+
+        $response = $this->json('POST', $this->path, [
+            'default' => 'hello',
+        ]);
+
+        $response->assertStatus(400);
+
+        $response->assertJson([
+            'errors' => [
+                'default' => ['The default field must be true or false.'],
             ]
         ]);
     }

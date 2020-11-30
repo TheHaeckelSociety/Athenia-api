@@ -28,6 +28,21 @@ class PaymentMethodPolicy extends BasePolicyAbstract
     }
 
     /**
+     * Any logged in entity can update their own payment method
+     *
+     * @param User $loggedInUser
+     * @param IsAnEntity $entity
+     * @param PaymentMethod $paymentMethod
+     * @return bool
+     */
+    public function update(User $loggedInUser, IsAnEntity $entity, PaymentMethod $paymentMethod)
+    {
+        return $entity->canUserManageEntity($loggedInUser, Role::ADMINISTRATOR)
+            && $paymentMethod->owner_type == $entity->morphRelationName()
+            && $paymentMethod->owner_id == $entity->id;
+    }
+
+    /**
      * Any logged in users can delete their own payment method
      *
      * @param User $loggedInUser

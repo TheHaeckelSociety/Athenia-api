@@ -2,6 +2,52 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.50.0
+
+Nice little one! This update simply adds a new field to the features model. In order to complete this update simply copy over the migration `code/database/migrations/2020_11_29_123208_add_description_to_features.php`.
+
+## 0.49.0
+
+Default Payment Method management! This one will allow an entity to have a default payment method, and thus adds an end point to manage this as well as a listener structure to remove the default flag on any other payment method.
+
+* code/app/Contracts/Models/IsAnEntity.php - Added payment methods property to header for auto complete
+* code/app/Events/Payment/DefaultPaymentMethodSetEvent.php - New Event
+* code/app/Http/Core/Controllers/Entity/PaymentMethodControllerAbstract.php - Added update function
+* code/app/Http/Core/Requests/Entity/PaymentMethod/UpdateRequest.php - New Request
+* code/app/Listeners/Payment/DefaultPaymentMethodSetListener.php - New Listener
+* code/app/Models/Payment/PaymentMethod.php - Updated validation rules
+* code/app/Observers/Payment/PaymentMethodObserver.php - New observer
+* code/app/Policies/Payment/PaymentMethodPolicy.php - Added update function
+* code/app/Providers/AtheniaRepositoryProvider.php - Added organization to the array of morph maps
+* code/app/Providers/EventServiceProvider.php - Registered new default payment method set event/listener, and registered payment method observer.
+* code/app/Services/StripeCustomerService.php - Made sure to set brand when payment method is created
+* code/routes/entity-routes.php - Added update function to payment methods route
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodCreateTest.php - Removed brand tests
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodUpdateTest.php - New Test
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodCreateTest.php - Removed brand tests
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodUpdateTest.php - New Test
+* code/tests/Integration/Policies/Payment/PaymentMethodPolicyTest.php - Tested update function
+* code/tests/Unit/Events/Payment/DefaultPaymentMethodSetEventTest.php - New Test
+* code/tests/Unit/Listeners/Payment/DefaultPaymentMethodSetListenerTest.php  - New Test
+* code/tests/Unit/Observers/Payment/PaymentMethodObserverTest.php - New Test
+* code/tests/Unit/Services/StripeCustomerServiceTest.php - Updated test ofr brand being set
+
+## 0.48.0
+
+One more simple little one! This one allows the expansion of a membership plans features off of it's endpoints.
+
+* code/app/Http/Core/Requests/MembershipPlan/IndexRequest.php - Added expands
+* code/app/Http/Core/Requests/MembershipPlan/RetrieveRequest.php - Added expands
+
+## 0.47.0
+
+Another easy one! This one simply adds a couple new variables to the payment method model that contain a couple informative pieces of information. To complete this update, make the following changes.
+
+* code/app/Models/Payment/PaymentMethod.php - Added new fields to validation rules, and ran ide helpers
+* code/database/migrations/2020_11_24_214601_add_default_and_vendor_type_to_payment_methods.php - New Migration
+* code/tests/Feature/Http/Organization/PaymentMethod/OrganizationPaymentMethodCreateTest.php - Added tests for new string and boolean fields
+* code/tests/Feature/Http/User/PaymentMethod/UserPaymentMethodCreateTest.php - Added tests for new string and boolean fields
+
 ## 0.46.0
 
 Nice and easy one! This simply adds a reply to ability to the messaging setup. To complete this update simply run through the following files.

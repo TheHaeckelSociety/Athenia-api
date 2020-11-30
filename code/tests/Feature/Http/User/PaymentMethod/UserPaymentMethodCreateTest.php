@@ -108,6 +108,7 @@ class UserPaymentMethodCreateTest extends TestCase
 
         $response = $this->json('POST', $this->path, [
             'token' => 1,
+            'brand' => 1,
         ]);
 
         $response->assertStatus(400);
@@ -115,6 +116,23 @@ class UserPaymentMethodCreateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'token' => ['The token must be a string.'],
+            ]
+        ]);
+    }
+
+    public function testCreateFailsInvalidBooleanFields()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('POST', $this->path, [
+            'default' => 'hello',
+        ]);
+
+        $response->assertStatus(400);
+
+        $response->assertJson([
+            'errors' => [
+                'default' => ['The default field must be true or false.'],
             ]
         ]);
     }

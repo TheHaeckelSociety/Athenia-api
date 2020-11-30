@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace App\Contracts\Models;
 
+use App\Models\Payment\PaymentMethod;
 use App\Models\Role;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 /**
  * Interface CanHaveMultipleOwnerTypes
  * @package App\Contracts\Models
  * @property int $id
+ * @property PaymentMethod[]|Collection $paymentMethods
  */
 interface IsAnEntity extends CanBeMorphedTo
 {

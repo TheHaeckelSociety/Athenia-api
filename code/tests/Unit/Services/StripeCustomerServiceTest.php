@@ -223,12 +223,14 @@ class StripeCustomerServiceTest extends TestCase
         ])->andReturn([
             'id' => 'card_id',
             'last4' => '1234',
+            'brand' => 'Visa',
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
+            'brand' => 'Visa',
             'owner_id' => 324,
             'owner_type' => 'user',
         ])->andReturn(new PaymentMethod());
@@ -251,12 +253,14 @@ class StripeCustomerServiceTest extends TestCase
         ])->andReturn([
             'id' => 'card_id',
             'last4' => '1234',
+            'brand' => 'Visa',
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
             'payment_method_key' => 'card_id',
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
+            'brand' => 'Visa',
             'owner_id' => 324,
             'owner_type' => 'user',
         ])->andReturn(new PaymentMethod());

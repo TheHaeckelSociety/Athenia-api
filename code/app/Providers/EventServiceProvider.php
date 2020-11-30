@@ -7,6 +7,7 @@ use App\Events\Article\ArticleVersionCreatedEvent;
 use App\Events\Message\MessageCreatedEvent;
 use App\Events\Message\MessageSentEvent;
 use App\Events\Organization\OrganizationManagerCreatedEvent;
+use App\Events\Payment\DefaultPaymentMethodSetEvent;
 use App\Events\Payment\PaymentReversedEvent;
 use App\Events\User\Contact\ContactCreatedEvent;
 use App\Events\User\ForgotPasswordEvent;
@@ -17,6 +18,7 @@ use App\Listeners\Article\ArticleVersionCreatedListener;
 use App\Listeners\Message\MessageCreatedListener;
 use App\Listeners\Message\MessageSentListener;
 use App\Listeners\Organization\OrganizationManagerCreatedListener;
+use App\Listeners\Payment\DefaultPaymentMethodSetListener;
 use App\Listeners\User\Contact\ContactCreatedListener;
 use App\Listeners\User\ForgotPasswordListener;
 use App\Listeners\User\SignUpListener;
@@ -27,8 +29,10 @@ use App\Listeners\User\UserMerge\UserMessagesMergeListener;
 use App\Listeners\User\UserMerge\UserPropertiesMergeListener;
 use App\Listeners\User\UserMerge\UserSubscriptionsMergeListener;
 use App\Listeners\Vote\VoteCreatedListener;
+use App\Models\Payment\PaymentMethod;
 use App\Models\User\User;
 use App\Observers\IndexableModelObserver;
+use App\Observers\Payment\PaymentMethodObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -48,6 +52,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ContactCreatedEvent::class => [
             ContactCreatedListener::class,
+        ],
+        DefaultPaymentMethodSetEvent::class => [
+            DefaultPaymentMethodSetListener::class,
         ],
         ForgotPasswordEvent::class => [
             ForgotPasswordListener::class,
@@ -93,5 +100,6 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         User::observe(IndexableModelObserver::class);
+        PaymentMethod::observe(PaymentMethodObserver::class);
     }
 }

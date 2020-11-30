@@ -139,6 +139,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
     public final function register()
     {
         Relation::morphMap(array_merge([
+            'organization' => Organization::class,
             'subscription' => Subscription::class,
             'user' => User::class,
         ], $this->appMorphMaps()));
