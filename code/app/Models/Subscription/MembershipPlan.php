@@ -59,7 +59,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     /**
      * @var string the enum value for the duration field when the plan only lasts a month
      */
-    const DURATION_MONTHLY = 'monthly';
+    const DURATION_MONTHLY = 'month';
 
     /**
      * @var string the enum value for the duration field when the plan lasts forever
