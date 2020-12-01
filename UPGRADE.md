@@ -2,6 +2,15 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.51.0
+
+Nice little one! This simply adds expiration dates to payment methods, and changed the monthly duration key to month.
+
+* code/app/Models/Payment/PaymentMethod.php - Changed the const Monthly to Month to be in line with the year key
+* code/app/Services/StripeCustomerService.php - Stored expiration date properly
+* code/database/migrations/2020_12_01_225116_add_expiration_to_payment_methods.php - New Migration
+* code/tests/Unit/Services/StripeCustomerServiceTest.php - Updated test for expiration being set now
+
 ## 0.50.0
 
 Nice little one! This update simply adds a new field to the features model. In order to complete this update simply copy over the migration `code/database/migrations/2020_11_29_123208_add_description_to_features.php`.

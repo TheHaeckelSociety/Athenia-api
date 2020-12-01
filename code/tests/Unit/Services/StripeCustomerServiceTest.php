@@ -224,6 +224,8 @@ class StripeCustomerServiceTest extends TestCase
             'id' => 'card_id',
             'last4' => '1234',
             'brand' => 'Visa',
+            'exp_month' => 8,
+            'exp_year' => 2032,
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
@@ -231,6 +233,8 @@ class StripeCustomerServiceTest extends TestCase
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
             'brand' => 'Visa',
+            'exp_month' => '08',
+            'exp_year' => '2032',
             'owner_id' => 324,
             'owner_type' => 'user',
         ])->andReturn(new PaymentMethod());
@@ -254,6 +258,8 @@ class StripeCustomerServiceTest extends TestCase
             'id' => 'card_id',
             'last4' => '1234',
             'brand' => 'Visa',
+            'exp_month' => 10,
+            'exp_year' => 2032,
         ]);
 
         $this->paymentMethodRepository->shouldReceive('create')->once()->with([
@@ -261,6 +267,8 @@ class StripeCustomerServiceTest extends TestCase
             'payment_method_type' => 'stripe',
             'identifier' => '1234',
             'brand' => 'Visa',
+            'exp_month' => '10',
+            'exp_year' => '2032',
             'owner_id' => 324,
             'owner_type' => 'user',
         ])->andReturn(new PaymentMethod());
