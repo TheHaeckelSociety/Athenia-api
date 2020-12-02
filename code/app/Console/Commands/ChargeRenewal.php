@@ -166,6 +166,7 @@ class ChargeRenewal extends Command
         $updatedSubscription = $this->subscriptionRepository->update($subscription, [
             'last_renewed_at' => Carbon::now(),
             'expires_at' => Carbon::now()->addYear(),
+            'is_trial' => false,
         ]);
         $this->sendSubscriberEmail($subscription, $this->appName . ' Membership Successfully Renewed', 'membership-renewed', [
             'membership_name' => $updatedSubscription->membershipPlanRate->membershipPlan->name,

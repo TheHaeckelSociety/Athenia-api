@@ -23,7 +23,7 @@ class SubscriptionRepository extends BaseRepositoryAbstract implements Subscript
     /**
      * @var MembershipPlanRateRepositoryContract
      */
-    private $membershipPlanRateRepository;
+    private MembershipPlanRateRepositoryContract $membershipPlanRateRepository;
 
     /**
      * SubscriptionRepository constructor.
@@ -53,13 +53,18 @@ class SubscriptionRepository extends BaseRepositoryAbstract implements Subscript
         $data['subscribed_at'] = Carbon::now();
         $data['last_renewed_at'] = Carbon::now();
 
-        switch ($membershipPlanRate->membershipPlan->duration) {
-            case MembershipPlan::DURATION_MONTH:
-                $data['expires_at'] = Carbon::now()->addMonth();
-                break;
-            case MembershipPlan::DURATION_YEAR:
-                $data['expires_at'] = Carbon::now()->addYear();
-                break;
+        if (isset($data['is_trial']) && $data['is_trial'] && $membershipPlanRate->membershipPlan->trial_period) {
+            $data['expires_at'] = Carbon::now()->addDays($membershipPlanRate->membershipPlan->trial_period);
+        } else {
+            $data['is_trial'] = false;
+            switch ($membershipPlanRate->membershipPlan->duration) {
+                case MembershipPlan::DURATION_MONTH:
+                    $data['expires_at'] = Carbon::now()->addMonth();
+                    break;
+                case MembershipPlan::DURATION_YEAR:
+                    $data['expires_at'] = Carbon::now()->addYear();
+                    break;
+            }
         }
 
         return parent::create($data, $relatedModel, $forcedValues);

@@ -178,6 +178,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                 ],
 
                 'trial_period' => [
+                    'nullable',
                     'integer',
                     'min:0',
                 ],

@@ -16,6 +16,9 @@ class AddTrialPeriodToMembershipPlans extends Migration
         Schema::table('membership_plans', function (Blueprint $table) {
             $table->integer('trial_period')->nullable();
         });
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->boolean('is_trial')->default(false);
+        });
     }
 
     /**
@@ -27,6 +30,9 @@ class AddTrialPeriodToMembershipPlans extends Migration
     {
         Schema::table('membership_plans', function (Blueprint $table) {
             $table->dropColumn('trial_period');
+        });
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->dropColumn('is_trial');
         });
     }
 }

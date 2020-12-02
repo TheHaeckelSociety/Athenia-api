@@ -30,6 +30,11 @@ interface HasValidationRulesContract
     const VALIDATION_PREPEND_REQUIRED = 'prepend-required';
 
     /**
+     * @var string the modifier of making something required
+     */
+    const VALIDATION_PREPEND_REQUIRED_UNLESS = 'prepend-required_unless:';
+
+    /**
      * @var string this field should not exist
      */
     const VALIDATION_PREPEND_NOT_PRESENT = 'prepend-not_present';
