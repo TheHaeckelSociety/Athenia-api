@@ -21,34 +21,24 @@ use Illuminate\Validation\Rule;
  *
  * @property int $id
  * @property string $name
- * @property int $visible
- * @property int $active
  * @property string $duration
- * @property int $order
- * @property string|null $legacy_paypal_key
- * @property string|null $stripe_product_key
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property int $only_for_conference
- * @property string $type
  * @property string|null $description
  * @property string $entity_type
- * @property int $default
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DiscountCode[] $discountCodes
- * @property-read int|null $discount_codes_count
+ * @property bool $default
+ * @property int|null $trial_period
+ * @property-read \App\Models\Subscription\MembershipPlanRate|null $currentRate
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
  * @property-read int|null $features_count
  * @property-read null|float $current_cost
  * @property-read null|float $current_rate_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
  * @property-read int|null $membership_plan_rates_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Questionnaire\Question[] $questions
- * @property-read int|null $questions_count
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDefault($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDeletedAt($value)
@@ -56,14 +46,9 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereEntityType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereLegacyPaypalKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOnlyForConference($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereStripeProductKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereTrialPeriod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereVisible($value)
  * @mixin \Eloquent
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
@@ -78,7 +63,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     /**
      * @var string the enum value for the duration field when the plan only lasts a month
      */
-    const DURATION_MONTHLY = 'month';
+    const DURATION_MONTH = 'month';
 
     /**
      * @var string the enum value for the duration field when the plan lasts forever
@@ -89,7 +74,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      * The available duration types for a membership plan
      */
     const AvailableDurations = [
-        MembershipPlan::DURATION_MONTHLY,
+        MembershipPlan::DURATION_MONTH,
         MembershipPlan::DURATION_YEAR,
         MembershipPlan::DURATION_LIFETIME,
     ];
@@ -190,6 +175,11 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                 'duration' => [
                     'string',
                     Rule::in(MembershipPlan::AvailableDurations),
+                ],
+
+                'trial_period' => [
+                    'integer',
+                    'min:0',
                 ],
 
                 'default' => [

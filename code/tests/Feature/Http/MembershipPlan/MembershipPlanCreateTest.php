@@ -103,6 +103,7 @@ class MembershipPlanCreateTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('POST', $this->route, [
             'current_cost' => 'hi',
+            'trial_period' => 'hi',
             'features' => ['hi'],
         ]);
 
@@ -111,6 +112,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be a number.'],
+                'trial_period' => ['The trial period must be an integer.'],
                 'features.0' => ['The features.0 must be a number.'],
             ]
         ]);
@@ -120,7 +122,8 @@ class MembershipPlanCreateTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('POST', $this->route, [
-            'current_cost' => -1
+            'current_cost' => -1,
+            'trial_period' => -1,
         ]);
 
         $response->assertStatus(400);
@@ -128,6 +131,7 @@ class MembershipPlanCreateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be at least 0.00.'],
+                'trial_period' => ['The trial period must be at least 0.'],
             ]
         ]);
     }

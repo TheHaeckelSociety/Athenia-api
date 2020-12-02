@@ -54,7 +54,7 @@ class SubscriptionRepository extends BaseRepositoryAbstract implements Subscript
         $data['last_renewed_at'] = Carbon::now();
 
         switch ($membershipPlanRate->membershipPlan->duration) {
-            case MembershipPlan::DURATION_MONTHLY:
+            case MembershipPlan::DURATION_MONTH:
                 $data['expires_at'] = Carbon::now()->addMonth();
                 break;
             case MembershipPlan::DURATION_YEAR:
