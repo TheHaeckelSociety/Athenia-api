@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Models\Subscription;
 
 use App\Models\Subscription\MembershipPlan;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
@@ -13,6 +14,15 @@ use Tests\TestCase;
  */
 class MembershipPlanTest extends TestCase
 {
+    public function testCurrentRate()
+    {
+        $user = new MembershipPlan();
+        $relation = $user->currentRate();
+
+        $this->assertEquals('membership_plans.id', $relation->getQualifiedParentKeyName());
+        $this->assertEquals('membership_plan_rates.membership_plan_id', $relation->getQualifiedForeignKeyName());
+    }
+
     public function testFeatures()
     {
         $role = new MembershipPlan();

@@ -6,13 +6,14 @@ namespace App\Models\Subscription;
 use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\DiscountCode;
 use App\Models\Feature;
+use App\Models\Questionnaire\Question;
 use App\Models\Traits\HasValidationRules;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Validation\Rule;
 
 /**
@@ -20,22 +21,34 @@ use Illuminate\Validation\Rule;
  *
  * @property int $id
  * @property string $name
+ * @property int $visible
+ * @property int $active
  * @property string $duration
+ * @property int $order
+ * @property string|null $legacy_paypal_key
+ * @property string|null $stripe_product_key
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property int $only_for_conference
+ * @property string $type
  * @property string|null $description
  * @property string $entity_type
- * @property bool $default
+ * @property int $default
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DiscountCode[] $discountCodes
+ * @property-read int|null $discount_codes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
  * @property-read int|null $features_count
  * @property-read null|float $current_cost
  * @property-read null|float $current_rate_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
  * @property-read int|null $membership_plan_rates_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Questionnaire\Question[] $questions
+ * @property-read int|null $questions_count
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDefault($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDeletedAt($value)
@@ -43,8 +56,14 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereEntityType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereLegacyPaypalKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOnlyForConference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereStripeProductKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereVisible($value)
  * @mixin \Eloquent
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract
@@ -86,6 +105,18 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     ];
 
     /**
+     * The current rate for this membership plan
+     *
+     * @return HasOne
+     */
+    public function currentRate(): HasOne
+    {
+        return $this->hasOne(MembershipPlanRate::class)
+            ->where('active', true)
+            ->orderBy('created_at', 'DESC');
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function features(): BelongsToMany
@@ -110,12 +141,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      */
     public function getCurrentCostAttribute()
     {
-        /** @var MembershipPlanRate $currentRate */
-        $currentRate = $this->membershipPlanRates()
-            ->where('active', true)
-            ->orderBy('created_at', 'DESC')->first();
-
-        return $currentRate ? $currentRate->cost : null;
+        return $this->currentRate ? $this->currentRate->cost : null;
     }
 
     /**
@@ -125,12 +151,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      */
     public function getCurrentRateIdAttribute()
     {
-        /** @var MembershipPlanRate $currentRate */
-        $currentRate = $this->membershipPlanRates()
-            ->where('active', true)
-            ->orderBy('created_at', 'DESC')->first();
-
-        return $currentRate ? $currentRate->id : null;
+        return $this->currentRate ? $this->currentRate->id : null;
     }
 
     /**
