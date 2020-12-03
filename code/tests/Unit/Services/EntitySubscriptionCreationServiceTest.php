@@ -122,7 +122,7 @@ class EntitySubscriptionCreationServiceTest extends TestCase
             'expires_at' => Carbon::now()->addMonth(),
             'membershipPlanRate' => new MembershipPlanRate([
                 'membershipPlan' => new MembershipPlan([
-                    'duration' => MembershipPlan::DURATION_MONTHLY
+                    'duration' => MembershipPlan::DURATION_MONTH
                 ]),
             ]),
         ]);
@@ -170,7 +170,7 @@ class EntitySubscriptionCreationServiceTest extends TestCase
             'expires_at' => Carbon::now()->addMonth(),
             'membershipPlanRate' => new MembershipPlanRate([
                 'membershipPlan' => new MembershipPlan([
-                    'duration' => MembershipPlan::DURATION_MONTHLY
+                    'duration' => MembershipPlan::DURATION_MONTH
                 ]),
             ]),
         ]);

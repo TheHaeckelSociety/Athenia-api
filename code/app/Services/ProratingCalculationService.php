@@ -46,6 +46,10 @@ class ProratingCalculationService implements ProratingCalculationServiceContract
             return 0;
         }
 
+        if ($currentSubscription->is_trial) {
+            return $newCost;
+        }
+
         if ($newMembershipPlan->duration == MembershipPlan::DURATION_LIFETIME) {
             $oldLength = Carbon::now()->diffInDays($currentSubscription->subscribed_at, true);
             return $oldLength <= 90 ?

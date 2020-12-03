@@ -193,10 +193,10 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
             ],
             self::VALIDATION_RULES_CREATE => [
                 self::VALIDATION_PREPEND_REQUIRED_UNLESS . 'is_trial,true' => [
-                    'membership_plan_rate_id',
+                    'payment_method_id',
                 ],
                 self::VALIDATION_PREPEND_REQUIRED => [
-                    'payment_method_id',
+                    'membership_plan_rate_id',
                 ],
                 self::VALIDATION_PREPEND_NOT_PRESENT => [
                     'cancel',
@@ -205,6 +205,7 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
             self::VALIDATION_RULES_UPDATE => [
                 self::VALIDATION_PREPEND_NOT_PRESENT => [
                     'membership_plan_rate_id',
+                    'is_trial',
                 ],
             ],
         ];
