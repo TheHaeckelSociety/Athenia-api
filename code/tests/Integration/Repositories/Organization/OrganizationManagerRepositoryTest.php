@@ -39,7 +39,7 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(OrganizationManager::class, 5)->create();
+        OrganizationManager::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -68,8 +68,8 @@ class OrganizationManagerRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
         /** @var OrganizationManager $model */
         $model = $this->repository->create([
             'user_id' => $user->id,

@@ -68,7 +68,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function actAsUser($data = [])
     {
-        $this->actingAs = factory(User::class)->create($data);
+        $this->actingAs = User::factory()->create($data);
         $this->actingAs($this->actingAs);
     }
 

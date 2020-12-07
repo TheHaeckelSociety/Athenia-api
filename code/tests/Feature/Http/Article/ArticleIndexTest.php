@@ -65,7 +65,7 @@ class ArticleIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::ARTICLE_VIEWER);
-        factory(Article::class, 15)->create();
+        Article::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', $this->path);

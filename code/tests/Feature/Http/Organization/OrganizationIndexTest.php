@@ -56,7 +56,7 @@ class OrganizationIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::SUPER_ADMIN);
-        factory(Organization::class, 15)->create();
+        Organization::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', '/v1/organizations');

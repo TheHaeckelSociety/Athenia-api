@@ -153,7 +153,7 @@ class SignUpTest extends TestCase
 
     public function testWebsiteSignUpFailsEmailInUse()
     {
-        factory(User::class)->create(['email' => 'test@test.com']);
+        User::factory()->create(['email' => 'test@test.com']);
 
         $response = $this->json('POST', '/v1/auth/sign-up', [
             'email' => 'test@test.com'

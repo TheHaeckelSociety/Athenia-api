@@ -37,7 +37,7 @@ class LogoutTest extends TestCase
             }
         });
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
         $response = $this->json('POST', '/v1/auth/logout', [], ['Authorization' => 'Bearer ' . $token]);
         $this->app['env'] = 'testing'; // @todo resolve

@@ -89,7 +89,7 @@ class ForgotPasswordTest extends TestCase
 
     public function testSuccess()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'test@test.com'
         ]);
 

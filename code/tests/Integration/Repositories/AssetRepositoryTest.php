@@ -60,7 +60,7 @@ class AssetRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         /** @var Asset $asset */
         $asset = $this->repository->create([
             'url' => 'a url',

@@ -35,7 +35,7 @@ class OrganizationProfileImageCreateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
         $this->path.= $this->organization->id . '/profile-images';
 
         Storage::fake('public');

@@ -26,7 +26,7 @@ class Issue404IfPageAfterPaginationTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_VIEWER);
 
-        factory(Article::class, 3)->create();
+        Article::factory()->count(3)->create();
 
         // first page test 200
         $response = $this->json('GET', '/v1/articles?page=1&limit=2');

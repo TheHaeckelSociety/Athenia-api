@@ -21,7 +21,7 @@ trait RolesTesting
     protected function getUserOfRole($roleId)
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         return $user->addRole($roleId);
     }
 

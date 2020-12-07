@@ -34,7 +34,7 @@ class UserProfileImageCreateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->path.= $this->user->id . '/profile-images';
 
         Storage::fake('public');

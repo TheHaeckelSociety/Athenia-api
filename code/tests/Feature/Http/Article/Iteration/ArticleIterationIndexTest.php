@@ -40,7 +40,7 @@ class ArticleIterationIndexTest extends TestCase
 
     public function testNotLoggedUserBlocked()
     {
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         $response = $this->json('GET', $this->path . $article->id . '/iterations');
 
         $response->assertStatus(403);
@@ -51,7 +51,7 @@ class ArticleIterationIndexTest extends TestCase
         foreach ($this->rolesWithoutAdmins([Role::ARTICLE_VIEWER, Role::ARTICLE_EDITOR]) as $role) {
             $this->actAs($role);
 
-            $article = factory(Article::class)->create();
+            $article = Article::factory()->create();
             $response = $this->json('GET', $this->path . $article->id . '/iterations');
 
             $response->assertStatus(403);
@@ -62,7 +62,7 @@ class ArticleIterationIndexTest extends TestCase
     {
         foreach ([Role::ARTICLE_VIEWER, Role::ARTICLE_EDITOR] as $role) {
             $this->actAs($role);
-            $article = factory(Article::class)->create();
+            $article = Article::factory()->create();
             $response = $this->json('GET', $this->path . $article->id . '/iterations');
 
             $response->assertStatus(200);
@@ -76,12 +76,12 @@ class ArticleIterationIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::ARTICLE_VIEWER);
-        $article = factory(Article::class)->create();
-        factory(Iteration::class, 15)->create([
+        $article = Article::factory()->create();
+        Iteration::factory()->count(15)->create([
             'article_id' => $article->id,
         ]);
 
-        factory(Iteration::class, 7)->create();
+        Iteration::factory()->count(7)->create();
 
         // first page
         $response = $this->json('GET', $this->path . $article->id . '/iterations');

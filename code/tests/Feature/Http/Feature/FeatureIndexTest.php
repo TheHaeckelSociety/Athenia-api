@@ -56,7 +56,7 @@ class FeatureIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::SUPER_ADMIN);
-        factory(Feature::class, 15)->create();
+        Feature::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', '/v1/features');
