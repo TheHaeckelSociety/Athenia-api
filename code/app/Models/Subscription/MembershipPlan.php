@@ -6,13 +6,14 @@ namespace App\Models\Subscription;
 use App\Contracts\Models\HasPolicyContract;
 use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\DiscountCode;
 use App\Models\Feature;
+use App\Models\Questionnaire\Question;
 use App\Models\Traits\HasValidationRules;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Validation\Rule;
 
 /**
@@ -27,6 +28,8 @@ use Illuminate\Validation\Rule;
  * @property string|null $description
  * @property string $entity_type
  * @property bool $default
+ * @property int|null $trial_period
+ * @property-read \App\Models\Subscription\MembershipPlanRate|null $currentRate
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
  * @property-read int|null $features_count
  * @property-read null|float $current_cost
@@ -44,6 +47,7 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereEntityType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereTrialPeriod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereUpdatedAt($value)
  * @mixin \Eloquent
  */
@@ -59,7 +63,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
     /**
      * @var string the enum value for the duration field when the plan only lasts a month
      */
-    const DURATION_MONTHLY = 'monthly';
+    const DURATION_MONTH = 'month';
 
     /**
      * @var string the enum value for the duration field when the plan lasts forever
@@ -70,7 +74,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      * The available duration types for a membership plan
      */
     const AvailableDurations = [
-        MembershipPlan::DURATION_MONTHLY,
+        MembershipPlan::DURATION_MONTH,
         MembershipPlan::DURATION_YEAR,
         MembershipPlan::DURATION_LIFETIME,
     ];
@@ -84,6 +88,18 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
         'current_cost',
         'current_rate_id',
     ];
+
+    /**
+     * The current rate for this membership plan
+     *
+     * @return HasOne
+     */
+    public function currentRate(): HasOne
+    {
+        return $this->hasOne(MembershipPlanRate::class)
+            ->where('active', true)
+            ->orderBy('created_at', 'DESC');
+    }
 
     /**
      * @return BelongsToMany
@@ -110,12 +126,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      */
     public function getCurrentCostAttribute()
     {
-        /** @var MembershipPlanRate $currentRate */
-        $currentRate = $this->membershipPlanRates()
-            ->where('active', true)
-            ->orderBy('created_at', 'DESC')->first();
-
-        return $currentRate ? $currentRate->cost : null;
+        return $this->currentRate ? $this->currentRate->cost : null;
     }
 
     /**
@@ -125,12 +136,7 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
      */
     public function getCurrentRateIdAttribute()
     {
-        /** @var MembershipPlanRate $currentRate */
-        $currentRate = $this->membershipPlanRates()
-            ->where('active', true)
-            ->orderBy('created_at', 'DESC')->first();
-
-        return $currentRate ? $currentRate->id : null;
+        return $this->currentRate ? $this->currentRate->id : null;
     }
 
     /**
@@ -169,6 +175,12 @@ class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, Has
                 'duration' => [
                     'string',
                     Rule::in(MembershipPlan::AvailableDurations),
+                ],
+
+                'trial_period' => [
+                    'nullable',
+                    'integer',
+                    'min:0',
                 ],
 
                 'default' => [

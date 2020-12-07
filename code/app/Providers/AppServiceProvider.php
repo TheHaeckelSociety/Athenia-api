@@ -7,13 +7,18 @@ use App\Contracts\Repositories\Organization\OrganizationRepositoryContract;
 use App\Contracts\Repositories\Payment\LineItemRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentMethodRepositoryContract;
 use App\Contracts\Repositories\Payment\PaymentRepositoryContract;
+use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Contracts\Services\ArticleVersionCalculationServiceContract;
+use App\Contracts\Services\EntitySubscriptionCreationServiceContract;
+use App\Contracts\Services\ProratingCalculationServiceContract;
 use App\Contracts\Services\StringHelperServiceContract;
 use App\Contracts\Services\StripeCustomerServiceContract;
 use App\Contracts\Services\StripePaymentServiceContract;
 use App\Contracts\Services\TokenGenerationServiceContract;
 use App\Services\ArticleVersionCalculationService;
+use App\Services\EntitySubscriptionCreationService;
+use App\Services\ProratingCalculationService;
 use App\Services\StringHelperService;
 use App\Services\StripeCustomerService;
 use App\Services\StripePaymentService;
@@ -36,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
     {
         return [
             ArticleVersionCalculationServiceContract::class,
+            EntitySubscriptionCreationServiceContract::class,
+            ProratingCalculationServiceContract::class,
             StringHelperServiceContract::class,
             StripeCustomerServiceContract::class,
             StripePaymentServiceContract::class,
@@ -54,6 +61,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ArticleVersionCalculationServiceContract::class, function () {
             return new ArticleVersionCalculationService();
+        });
+        $this->app->bind(EntitySubscriptionCreationServiceContract::class, function () {
+            return new EntitySubscriptionCreationService(
+                $this->app->make(ProratingCalculationServiceContract::class),
+                $this->app->make(SubscriptionRepositoryContract::class),
+                $this->app->make(StripePaymentServiceContract::class),
+            );
+        });
+        $this->app->bind(ProratingCalculationServiceContract::class, function () {
+            return new ProratingCalculationService();
         });
         $this->app->bind(StringHelperServiceContract::class, function () {
             return new StringHelperService();

@@ -149,6 +149,8 @@ class StripeCustomerService implements StripeCustomerServiceContract
             'payment_method_key' => $data['id'],
             'payment_method_type' => 'stripe',
             'identifier' => $data['last4'],
+            'exp_month' => ($data['exp_month'] < 10 ? '0' : '') . $data['exp_month'],
+            'exp_year' => '' . $data['exp_year'],
             'brand' => $data['brand'],
             'owner_id' => $entity->id,
             'owner_type' => $entity->morphRelationName(),

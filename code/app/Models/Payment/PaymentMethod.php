@@ -27,6 +27,8 @@ use Illuminate\Validation\Rule;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property bool $default
  * @property string|null $brand
+ * @property string|null $exp_month
+ * @property string|null $exp_year
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
@@ -39,6 +41,8 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDefault($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereExpMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereExpYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereIdentifier($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereOwnerId($value)

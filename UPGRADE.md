@@ -2,6 +2,43 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.52.0
+
+Another big one, but a very useful one. This update adds both trial periods and prorated upgrades to subscriptions.
+
+* code/app/Console/Commands/ChargeRenewal.php - Updated to make sure the trial variable is set to false when a subscription is renewed.
+* code/app/Contracts/Models/HasValidationRulesContract.php - Added `VALIDATION_PREPEND_REQUIRED_UNLESS` rule helper
+* code/app/Contracts/Services/EntitySubscriptionCreationServiceContract.php - New Contract
+* code/app/Contracts/Services/ProratingCalculationServiceContract.php - New Contract
+* code/app/Http/Core/Controllers/Entity/SubscriptionControllerAbstract.php - Create function has been completely reworked to work with entity subscription service.
+* code/app/Models/Subscription/MembershipPlan.php - Changed month duration const name, added current rate relation, updated current rate attribute functions to use new relations, and added trial period to rules
+* code/app/Models/Subscription/Subscription.php - Updated validation rules for trials
+* code/app/Providers/AppServiceProvider.php - Registered new services
+* code/app/Repositories/Subscription/MembershipPlanRepository.php - Made sure to unset relations when updating the current rate
+* code/app/Repositories/Subscription/SubscriptionRepository.php - Updated for php 7.4 syntax, and updated crate function to work with trial period.
+* code/app/Services/EntitySubscriptionCreationService.php - New Service
+* code/app/Services/ProratingCalculationService.php - New Service
+* code/database/migrations/2020_12_02_221955_add_trial_period_to_membership_plans.php - New Migration
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanCreateTest.php - Update for new fields
+* code/tests/Feature/Http/MembershipPlan/MembershipPlanUpdateTest.php - Update for new fields
+* code/tests/Feature/Http/Organization/Subscription/OrganizationSubscriptionCreateTest.php - Update for new fields
+* code/tests/Feature/Http/Organization/Subscription/OrganizationSubscriptionUpdateTest.php - Update for new fields
+* code/tests/Feature/Http/User/Subscription/UserSubscriptionCreateTest.php - Update for new fields
+* code/tests/Feature/Http/User/Subscription/UserSubscriptionUpdateTest.php - Update for new fields
+* code/tests/Integration/Repositories/Subscription/SubscriptionRepositoryTest.php - Completely reworked the create tests to account for trials, and work better for old system
+* code/tests/Unit/Models/Subscription/MembershipPlanTest.php - Added test for current rate relation
+* code/tests/Unit/Services/EntitySubscriptionCreationServiceTest.php - New Test
+* code/tests/Unit/Services/ProratingCalculationServiceTest.php - New Test
+
+## 0.51.0
+
+Nice little one! This simply adds expiration dates to payment methods, and changed the monthly duration key to month.
+
+* code/app/Models/Payment/PaymentMethod.php - Changed the const Monthly to Month to be in line with the year key
+* code/app/Services/StripeCustomerService.php - Stored expiration date properly
+* code/database/migrations/2020_12_01_225116_add_expiration_to_payment_methods.php - New Migration
+* code/tests/Unit/Services/StripeCustomerServiceTest.php - Updated test for expiration being set now
+
 ## 0.50.0
 
 Nice little one! This update simply adds a new field to the features model. In order to complete this update simply copy over the migration `code/database/migrations/2020_11_29_123208_add_description_to_features.php`.

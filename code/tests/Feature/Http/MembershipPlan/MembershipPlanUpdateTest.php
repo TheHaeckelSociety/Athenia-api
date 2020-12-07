@@ -133,6 +133,7 @@ class MembershipPlanUpdateTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
             'current_cost' => 'hi',
+            'trial_period' => 'hi',
             'features' => ['hi'],
         ]);
 
@@ -141,6 +142,7 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be a number.'],
+                'trial_period' => ['The trial period must be an integer.'],
                 'features.0' => ['The features.0 must be a number.'],
             ]
         ]);
@@ -152,7 +154,8 @@ class MembershipPlanUpdateTest extends TestCase
 
         $this->actAs(Role::SUPER_ADMIN);
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id, [
-            'current_cost' => -1
+            'current_cost' => -1,
+            'trial_period' => -1,
         ]);
 
         $response->assertStatus(400);
@@ -160,6 +163,7 @@ class MembershipPlanUpdateTest extends TestCase
             'message'   => 'Sorry, something went wrong.',
             'errors'    =>  [
                 'current_cost' => ['The current cost must be at least 0.00.'],
+                'trial_period' => ['The trial period must be at least 0.'],
             ]
         ]);
     }

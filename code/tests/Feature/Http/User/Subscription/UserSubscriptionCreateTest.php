@@ -124,7 +124,7 @@ class UserSubscriptionCreateTest extends TestCase
         $response->assertJson([
             'errors' => [
                 'membership_plan_rate_id' => ['The membership plan rate id field is required.'],
-                'payment_method_id' => ['The payment method id field is required.'],
+                'payment_method_id' => ['The payment method id field is required unless is trial is in true.'],
             ],
         ]);
     }
@@ -151,12 +151,14 @@ class UserSubscriptionCreateTest extends TestCase
 
         $response = $this->json('POST', $this->path, [
             'recurring' => 'hello',
+            'is_trial' => 'hello',
         ]);
 
         $response->assertStatus(400);
         $response->assertJson([
             'errors' => [
                 'recurring' => ['The recurring field must be true or false.'],
+                'is_trial' => ['The is trial field must be true or false.'],
             ],
         ]);
     }

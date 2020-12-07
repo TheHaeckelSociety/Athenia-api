@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Repositories\Subscription;
 
 use App\Models\Payment\PaymentMethod;
+use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
@@ -72,9 +73,13 @@ class SubscriptionRepositoryTest extends TestCase
         $this->repository->findOrFail(20);
     }
 
-    public function testCreateSuccess()
+    public function testCreateSuccessWithLifeTimeMembership()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create();
+        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+            'membership_plan_id' => factory(MembershipPlan::class)->create([
+                'duration' => MembershipPlan::DURATION_LIFETIME,
+            ])->id,
+        ]);
         $paymentMethod = factory(PaymentMethod::class)->create();
         $user = factory(User::class)->create();
 
@@ -89,6 +94,110 @@ class SubscriptionRepositoryTest extends TestCase
         $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
         $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
         $this->assertEquals($user->id, $subscription->subscriber_id);
+        $this->assertNull($subscription->expires_at);
+    }
+
+    public function testCreateSuccessWithYearlyMembership()
+    {
+        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+            'membership_plan_id' => factory(MembershipPlan::class)->create([
+                'duration' => MembershipPlan::DURATION_YEAR,
+            ])->id,
+        ]);
+        $paymentMethod = factory(PaymentMethod::class)->create();
+        $user = factory(User::class)->create();
+
+        Carbon::setTestNow('2018-02-12 00:00:00');
+
+        /** @var Subscription $subscription */
+        $subscription = $this->repository->create([
+            'payment_method_id' => $paymentMethod->id,
+            'membership_plan_rate_id' => $membershipPlanRate->id,
+            'subscriber_id' => $user->id,
+            'subscriber_type' => 'user',
+        ]);
+
+        $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
+        $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
+        $this->assertEquals($user->id, $subscription->subscriber_id);
+        $this->assertEquals('2019-02-12 00:00:00', $subscription->expires_at->toDateTimeString());
+    }
+
+    public function testCreateSuccessWithMonthlyMembership()
+    {
+        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+            'membership_plan_id' => factory(MembershipPlan::class)->create([
+                'duration' => MembershipPlan::DURATION_MONTH,
+            ])->id,
+        ]);
+        $paymentMethod = factory(PaymentMethod::class)->create();
+        $user = factory(User::class)->create();
+
+        Carbon::setTestNow('2018-02-12 00:00:00');
+
+        /** @var Subscription $subscription */
+        $subscription = $this->repository->create([
+            'payment_method_id' => $paymentMethod->id,
+            'membership_plan_rate_id' => $membershipPlanRate->id,
+            'subscriber_id' => $user->id,
+            'subscriber_type' => 'user',
+        ]);
+
+        $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
+        $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
+        $this->assertEquals($user->id, $subscription->subscriber_id);
+        $this->assertEquals('2018-03-12 00:00:00', $subscription->expires_at->toDateTimeString());
+    }
+
+    public function testCreateSuccessWhenAttemptingATrialWithoutATrialPeriod()
+    {
+        $membershipPlanRate = factory(MembershipPlanRate::class)->create();
+        $paymentMethod = factory(PaymentMethod::class)->create();
+        $user = factory(User::class)->create();
+
+        Carbon::setTestNow('2018-02-12 00:00:00');
+
+        /** @var Subscription $subscription */
+        $subscription = $this->repository->create([
+            'payment_method_id' => $paymentMethod->id,
+            'membership_plan_rate_id' => $membershipPlanRate->id,
+            'subscriber_id' => $user->id,
+            'subscriber_type' => 'user',
+            'is_trial' => true,
+        ]);
+
+        $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
+        $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
+        $this->assertEquals($user->id, $subscription->subscriber_id);
+        $this->assertFalse($subscription->is_trial);
+    }
+
+    public function testCreateSuccessWithTrialPeriod()
+    {
+        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+            'membership_plan_id' => factory(MembershipPlan::class)->create([
+                'trial_period' => 14,
+            ])->id,
+        ]);
+        $paymentMethod = factory(PaymentMethod::class)->create();
+        $user = factory(User::class)->create();
+
+        Carbon::setTestNow('2018-02-12 00:00:00');
+
+        /** @var Subscription $subscription */
+        $subscription = $this->repository->create([
+            'payment_method_id' => $paymentMethod->id,
+            'membership_plan_rate_id' => $membershipPlanRate->id,
+            'subscriber_id' => $user->id,
+            'subscriber_type' => 'user',
+            'is_trial' => true,
+        ]);
+
+        $this->assertEquals($paymentMethod->id, $subscription->payment_method_id);
+        $this->assertEquals($membershipPlanRate->id, $subscription->membership_plan_rate_id);
+        $this->assertEquals($user->id, $subscription->subscriber_id);
+        $this->assertTrue($subscription->is_trial);
+        $this->assertEquals('2018-02-26 00:00:00', $subscription->expires_at->toDateTimeString());
     }
 
     public function testUpdateSuccess()

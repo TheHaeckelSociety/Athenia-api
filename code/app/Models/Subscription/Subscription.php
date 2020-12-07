@@ -32,12 +32,13 @@ use Illuminate\Validation\Rule;
  * @property string $subscriber_type
  * @property mixed|null $last_renewed_at
  * @property mixed|null $subscribed_at
- * @property mixed|null $expires_at
+ * @property Carbon|null $expires_at
  * @property mixed|null $canceled_at
  * @property bool $recurring
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $is_trial
  * @property-read null|string $formatted_cost
  * @property-read null|string $formatted_expires_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\LineItem[] $lineItems
@@ -55,6 +56,7 @@ use Illuminate\Validation\Rule;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereExpiresAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereIsTrial($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereLastRenewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription whereMembershipPlanRateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\Subscription wherePaymentMethodId($value)
@@ -182,14 +184,19 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
                     Rule::exists('payment_methods', 'id'),
                     PaymentMethodIsOwnedByEntityValidator::KEY,
                 ],
+                'is_trial' => [
+                    'boolean',
+                ],
                 'recurring' => [
                     'boolean',
                 ],
             ],
             self::VALIDATION_RULES_CREATE => [
+                self::VALIDATION_PREPEND_REQUIRED_UNLESS . 'is_trial,true' => [
+                    'payment_method_id',
+                ],
                 self::VALIDATION_PREPEND_REQUIRED => [
                     'membership_plan_rate_id',
-                    'payment_method_id',
                 ],
                 self::VALIDATION_PREPEND_NOT_PRESENT => [
                     'cancel',
@@ -198,6 +205,7 @@ class Subscription extends BaseModelAbstract implements HasValidationRulesContra
             self::VALIDATION_RULES_UPDATE => [
                 self::VALIDATION_PREPEND_NOT_PRESENT => [
                     'membership_plan_rate_id',
+                    'is_trial',
                 ],
             ],
         ];

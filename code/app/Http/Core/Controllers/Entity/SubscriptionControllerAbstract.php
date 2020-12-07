@@ -5,17 +5,15 @@ namespace App\Http\Core\Controllers\Entity;
 
 use App\Contracts\Models\IsAnEntity;
 use App\Contracts\Repositories\Subscription\SubscriptionRepositoryContract;
-use App\Contracts\Services\StripePaymentServiceContract;
+use App\Contracts\Services\EntitySubscriptionCreationServiceContract;
 use App\Http\Core\Controllers\BaseControllerAbstract;
 use App\Http\Core\Controllers\Traits\HasIndexRequests;
 use App\Http\Core\Requests;
 use App\Models\BaseModelAbstract;
 use App\Models\Subscription\Subscription;
-use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
  * Class SubscriptionControllerAbstract
@@ -31,20 +29,20 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
     private $repository;
 
     /**
-     * @var StripePaymentServiceContract
+     * @var EntitySubscriptionCreationServiceContract
      */
-    private $stripeChargeService;
+    private EntitySubscriptionCreationServiceContract $entitySubscriptionCreationService;
 
     /**
      * SubscriptionController constructor.
      * @param SubscriptionRepositoryContract $repository
-     * @param StripePaymentServiceContract $stripePaymentService
+     * @param EntitySubscriptionCreationServiceContract $entitySubscriptionCreationService
      */
     public function __construct(SubscriptionRepositoryContract $repository,
-                                StripePaymentServiceContract $stripePaymentService)
+                                EntitySubscriptionCreationServiceContract $entitySubscriptionCreationService)
     {
         $this->repository = $repository;
-        $this->stripeChargeService = $stripePaymentService;
+        $this->entitySubscriptionCreationService = $entitySubscriptionCreationService;
     }
 
     /**
@@ -130,27 +128,7 @@ abstract class SubscriptionControllerAbstract extends BaseControllerAbstract
      */
     public function store(Requests\Entity\Subscription\StoreRequest $request, IsAnEntity $entity)
     {
-        $data = $request->json()->all();
-
-        $data['subscriber_id'] = $entity->id;
-        $data['subscriber_type'] = $entity->morphRelationName();
-        /** @var Subscription $model */
-        $model = $this->repository->create($data);
-
-        try {
-            $this->stripeChargeService->createPayment($entity, $model->paymentMethod,
-                'Subscription Payment for ' . $model->membershipPlanRate->membershipPlan->name, [
-                [
-                    'item_id' => $model->id,
-                    'item_type' => 'subscription',
-                    'amount' => (float)$model->membershipPlanRate->cost,
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            $this->repository->delete($model);
-            throw new ServiceUnavailableHttpException(5, 'Unable to accept payments right now');
-        }
+        $model = $this->entitySubscriptionCreationService->createSubscription($entity, $request->json()->all());
         return new JsonResponse($model, 201);
     }
 

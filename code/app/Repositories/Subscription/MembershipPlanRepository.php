@@ -88,6 +88,8 @@ class MembershipPlanRepository extends BaseRepositoryAbstract implements Members
                 'cost' => $cost,
                 'active' => true,
             ], $model);
+
+            $model->unsetRelations();
         }
 
         if ($features) {

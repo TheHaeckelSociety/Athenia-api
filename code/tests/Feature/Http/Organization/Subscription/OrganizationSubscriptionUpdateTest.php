@@ -130,17 +130,19 @@ class OrganizationSubscriptionUpdateTest extends TestCase
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
             'membership_plan_rate_id' => 32,
+            'is_trial' => false,
         ]);
 
         $response->assertStatus(400);
         $response->assertJson([
             'errors' => [
                 'membership_plan_rate_id' => ['The membership plan rate id field is not allowed or can not be set for this request.'],
+                'is_trial' => ['The is trial field is not allowed or can not be set for this request.'],
             ],
         ]);
     }
 
-    public function testCreateFailsInvalidBooleanField()
+    public function testUpdateFailsInvalidBooleanField()
     {
         $this->actAs(Role::APP_USER);
         OrganizationManager::factory()->create([
@@ -166,7 +168,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
         ]);
     }
 
-    public function testCreateFailsInvalidIntegerFields()
+    public function testUpdateFailsInvalidIntegerFields()
     {
         $this->actAs(Role::APP_USER);
         OrganizationManager::factory()->create([
@@ -190,7 +192,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
         ]);
     }
 
-    public function testCreateFailsInvalidModelFields()
+    public function testUpdateFailsInvalidModelFields()
     {
         $this->actAs(Role::APP_USER);
         OrganizationManager::factory()->create([
@@ -214,7 +216,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
         ]);
     }
 
-    public function testCreateFailsPaymentMethodNotOwnedByUser()
+    public function testUpdateFailsPaymentMethodNotOwnedByUser()
     {
         $paymentMethod = factory(PaymentMethod::class)->create();
         $this->actAs(Role::APP_USER);
