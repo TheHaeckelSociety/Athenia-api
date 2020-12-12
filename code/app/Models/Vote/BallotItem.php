@@ -29,21 +29,21 @@ use Illuminate\Support\Carbon;
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $subject
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\Vote[] $votes
  * @property-read int|null $votes_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotSubject query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereBallotId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereSubjectId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereSubjectType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereVoteCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotSubject whereVotesCast($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereBallotId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereSubjectType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVoteCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVotesCast($value)
  * @mixin \Eloquent
  */
-class BallotSubject extends BaseModelAbstract
+class BallotItem extends BaseModelAbstract
 {
     /**
      * The ballot this is apart of

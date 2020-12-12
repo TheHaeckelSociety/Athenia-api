@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property mixed|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
  * @property-read int|null $ballot_completions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotSubject[] $ballotSubjects
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotItem[] $ballotSubjects
  * @property-read int|null $ballot_subjects_count
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Ballot newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Ballot newQuery()
@@ -59,6 +59,6 @@ class Ballot extends BaseModelAbstract
      */
     public function ballotSubjects(): HasMany
     {
-        return $this->hasMany(BallotSubject::class);
+        return $this->hasMany(BallotItem::class);
     }
 }
