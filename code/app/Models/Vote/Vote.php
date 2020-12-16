@@ -11,24 +11,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Vote
  *
  * @property int $id
- * @property int $ballot_subject_id
+ * @property int $ballot_item_option_id
  * @property int $ballot_completion_id
  * @property int $result
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\Vote\BallotCompletion $ballotCompletion
- * @property-read \App\Models\Vote\BallotItem $ballotSubject
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereBallotCompletionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereBallotSubjectId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereResult($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\Vote whereUpdatedAt($value)
+ * @property-read \App\Models\Vote\BallotItemOption $ballotItemOption
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Vote newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Vote newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Vote query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereBallotCompletionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereBallotItemOptionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereResult($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Vote whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Vote extends BaseModelAbstract
@@ -55,8 +55,8 @@ class Vote extends BaseModelAbstract
      *
      * @return BelongsTo
      */
-    public function ballotSubject(): BelongsTo
+    public function ballotItemOption(): BelongsTo
     {
-        return $this->belongsTo(BallotItem::class);
+        return $this->belongsTo(BallotItemOption::class);
     }
 }

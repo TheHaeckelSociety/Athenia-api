@@ -16,15 +16,15 @@ use App\Models\BaseModelAbstract;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\User\User $user
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\PasswordToken newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\PasswordToken newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\PasswordToken query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\PasswordToken whereUserId($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PasswordToken newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PasswordToken newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PasswordToken query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordToken whereUserId($value)
  * @mixin \Eloquent
  */
 class PasswordToken extends BaseModelAbstract

@@ -21,12 +21,12 @@ class VoteTest extends TestCase
         $this->assertEquals('votes.ballot_completion_id', $relation->getQualifiedForeignKeyName());
     }
 
-    public function testBallotSubject()
+    public function testBallotItemOption()
     {
         $model = new Vote();
-        $relation = $model->ballotSubject();
+        $relation = $model->ballotItemOption();
 
-        $this->assertEquals('ballot_subjects.id', $relation->getQualifiedOwnerKeyName());
-        $this->assertEquals('votes.ballot_subject_id', $relation->getQualifiedForeignKeyName());
+        $this->assertEquals('ballot_item_options.id', $relation->getQualifiedOwnerKeyName());
+        $this->assertEquals('votes.ballot_item_option_id', $relation->getQualifiedForeignKeyName());
     }
 }

@@ -26,20 +26,20 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read int|null $line_items_count
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
  * @property-read \App\Models\Payment\PaymentMethod $paymentMethod
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\Payment newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\Payment newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\Payment query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereOwnerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereOwnerType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment wherePaymentMethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereRefundedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereTransactionKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\Payment whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Payment newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Payment newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Payment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereOwnerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereRefundedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTransactionKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Payment extends BaseModelAbstract
 {
