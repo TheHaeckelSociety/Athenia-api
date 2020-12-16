@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Listeners\Vote;
 
-use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Events\Vote\VoteCreatedEvent;
 
 /**
@@ -13,15 +13,15 @@ use App\Events\Vote\VoteCreatedEvent;
 class VoteCreatedListener
 {
     /**
-     * @var BallotSubjectRepositoryContract
+     * @var BallotItemRepositoryContract
      */
     private $ballotSubjectRepository;
 
     /**
      * VoteCreatedListener constructor.
-     * @param BallotSubjectRepositoryContract $ballotSubjectRepository
+     * @param BallotItemRepositoryContract $ballotSubjectRepository
      */
-    public function __construct(BallotSubjectRepositoryContract $ballotSubjectRepository)
+    public function __construct(BallotItemRepositoryContract $ballotSubjectRepository)
     {
         $this->ballotSubjectRepository = $ballotSubjectRepository;
     }

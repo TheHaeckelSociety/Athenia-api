@@ -6,22 +6,22 @@ namespace Tests\Integration\Repositories\Vote;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotItem;
 use App\Models\Wiki\Iteration;
-use App\Repositories\Vote\BallotSubjectRepository;
+use App\Repositories\Vote\BallotItemRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
 
 /**
- * Class BallotSubjectRepositoryTest
+ * Class BallotItemRepositoryTest
  * @package Tests\Integration\Repositories\Vote
  */
-class BallotSubjectRepositoryTest extends TestCase
+class BallotItemRepositoryTest extends TestCase
 {
     use DatabaseSetupTrait, MocksApplicationLog;
 
     /**
-     * @var BallotSubjectRepository
+     * @var BallotItemRepository
      */
     protected $repository;
 
@@ -30,7 +30,7 @@ class BallotSubjectRepositoryTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
 
-        $this->repository = new BallotSubjectRepository(
+        $this->repository = new BallotItemRepository(
             new BallotItem(),
             $this->getGenericLogMock()
         );

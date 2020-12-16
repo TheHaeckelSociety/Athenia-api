@@ -7,7 +7,7 @@ use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotItem;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Vote\BallotRepository;
-use App\Repositories\Vote\BallotSubjectRepository;
+use App\Repositories\Vote\BallotItemRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -34,7 +34,7 @@ class BallotRepositoryTest extends TestCase
         $this->repository = new BallotRepository(
             new Ballot(),
             $this->getGenericLogMock(),
-            new BallotSubjectRepository(
+            new BallotItemRepository(
                 new BallotItem(),
                 $this->getGenericLogMock(),
             ),

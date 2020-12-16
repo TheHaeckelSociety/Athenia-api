@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Repositories\Vote;
 
 use App\Contracts\Repositories\Vote\BallotRepositoryContract;
-use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Vote\Ballot;
 use App\Repositories\BaseRepositoryAbstract;
@@ -20,7 +20,7 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
     use CanGetAndUnset;
 
     /**
-     * @var BallotSubjectRepositoryContract
+     * @var BallotItemRepositoryContract
      */
     private $ballotSubjectRepository;
 
@@ -28,10 +28,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      * BallotRepository constructor.
      * @param Ballot $model
      * @param LogContract $log
-     * @param BallotSubjectRepositoryContract $ballotSubjectRepository
+     * @param BallotItemRepositoryContract $ballotSubjectRepository
      */
     public function __construct(Ballot $model, LogContract $log,
-                                BallotSubjectRepositoryContract $ballotSubjectRepository)
+                                BallotItemRepositoryContract $ballotSubjectRepository)
     {
         parent::__construct($model, $log);
         $this->ballotSubjectRepository = $ballotSubjectRepository;
@@ -67,7 +67,7 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
     {
         $ballotSubjects = $this->getAndUnset($data, 'ballot_subjects', null);
 
-        if ($ballotSubjects) {
+        if ($ballotSubjects !== null) {
             $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotSubjects, $model->ballotSubjects);
         }
 

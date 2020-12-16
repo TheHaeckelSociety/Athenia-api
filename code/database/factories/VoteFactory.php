@@ -10,6 +10,11 @@ $factory->define(App\Models\Vote\Ballot::class, function (Faker $faker) {
 $factory->define(App\Models\Vote\BallotItem::class, function (Faker $faker) {
     return [
         'ballot_id' => factory(\App\Models\Vote\Ballot::class)->create()->id,
+    ];
+});
+$factory->define(App\Models\Vote\BallotItemOption::class, function (Faker $faker) {
+    return [
+        'ballot_item_id' => factory(\App\Models\Vote\BallotItem::class)->create()->id,
         'subject_id' => factory(\App\Models\Wiki\Iteration::class)->create()->id,
         'subject_type' => 'iteration',
     ];

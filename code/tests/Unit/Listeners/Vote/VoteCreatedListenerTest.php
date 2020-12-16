@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Listeners\Vote;
 
-use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Vote\VoteCreatedListener;
 use App\Models\Vote\BallotItem;
@@ -29,8 +29,8 @@ class VoteCreatedListenerTest extends TestCase
 
         $event = new VoteCreatedEvent($vote);
 
-        /** @var BallotSubjectRepositoryContract|CustomMockInterface $repository */
-        $repository = mock(BallotSubjectRepositoryContract::class);
+        /** @var BallotItemRepositoryContract|CustomMockInterface $repository */
+        $repository = mock(BallotItemRepositoryContract::class);
 
         $repository->shouldReceive('update')->once()->with($vote->ballotSubject, [
             'vote_count' => 36,
