@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property mixed|null $updated_at
  * @property int|null $profile_image_id
  * @property string|null $stripe_customer_key
- * @property-read \Illuminate\Database\Eloquent\Collection|Asset[] $assets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Asset[] $assets
  * @property-read int|null $assets_count
  * @property-read null|string $profile_image_url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Organization\OrganizationManager[] $organizationManagers
@@ -35,19 +35,19 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read int|null $payment_methods_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
- * @property-read ProfileImage|null $profileImage
+ * @property-read \App\Models\User\ProfileImage|null $profileImage
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Organization newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Organization newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Organization query()
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereProfileImageId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereStripeCustomerKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Organization whereUpdatedAt($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Organization\Organization newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Organization\Organization newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Organization\Organization query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereProfileImageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereStripeCustomerKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Organization\Organization whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Organization extends BaseModelAbstract

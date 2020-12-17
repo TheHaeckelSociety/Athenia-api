@@ -18,18 +18,18 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
- * @property Carbon|null $deleted_at
- * @property-read Collection|User[] $users
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\User[] $users
  * @property-read int|null $users_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Role newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Role newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Role query()
- * @method static Builder|Role whereCreatedAt($value)
- * @method static Builder|Role whereDeletedAt($value)
- * @method static Builder|Role whereId($value)
- * @method static Builder|Role whereName($value)
- * @method static Builder|Role whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Role newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Role newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Role query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Role extends BaseModelAbstract implements HasPolicyContract
 {

@@ -5,6 +5,7 @@ namespace Tests\Integration\Repositories\Vote;
 
 use App\Models\Vote\BallotCompletion;
 use App\Models\Vote\BallotItem;
+use App\Models\Vote\BallotItemOption;
 use App\Models\Vote\Vote;
 use App\Repositories\Vote\VoteRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -70,17 +71,17 @@ class VoteRepositoryTest extends TestCase
         /** @var BallotCompletion $ballotCompletion */
         $ballotCompletion = factory(BallotCompletion::class)->create();
 
-        /** @var BallotItem $ballotSubject */
-        $ballotSubject = factory(BallotItem::class)->create();
+        /** @var BallotItemOption $ballotItemOption */
+        $ballotItemOption = factory(BallotItemOption::class)->create();
 
         /** @var Vote $vote */
         $vote = $this->repository->create([
-            'ballot_subject_id' => $ballotSubject->id,
+            'ballot_item_option_id' => $ballotItemOption->id,
             'result' => 1,
         ], $ballotCompletion);
 
         $this->assertEquals(1, $vote->result);
-        $this->assertEquals($ballotSubject->id, $vote->ballot_subject_id);
+        $this->assertEquals($ballotItemOption->id, $vote->ballot_item_option_id);
         $this->assertEquals($ballotCompletion->id, $vote->ballot_completion_id);
     }
 

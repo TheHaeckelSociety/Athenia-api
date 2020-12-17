@@ -15,17 +15,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property string|null $description
- * @property-read \Illuminate\Database\Eloquent\Collection|MembershipPlan[] $membershipPlans
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlan[] $membershipPlans
  * @property-read int|null $membership_plans_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Feature newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Feature newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|Feature query()
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feature whereUpdatedAt($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Feature newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Feature newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Feature query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Feature extends BaseModelAbstract

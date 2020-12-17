@@ -47,49 +47,49 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $push_notification_key
  * @property int|null $profile_image_id
  * @property string|null $last_name
- * @property-read \Illuminate\Database\Eloquent\Collection|Asset[] $assets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Asset[] $assets
  * @property-read int|null $assets_count
- * @property-read \Illuminate\Database\Eloquent\Collection|BallotCompletion[] $ballotCompletions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotCompletion[] $ballotCompletions
  * @property-read int|null $ballot_completions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Article[] $createdArticles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Article[] $createdArticles
  * @property-read int|null $created_articles_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Iteration[] $createdIterations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Wiki\Iteration[] $createdIterations
  * @property-read int|null $created_iterations_count
  * @property-read null|string $profile_image_url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Message[] $messages
  * @property-read int|null $messages_count
- * @property-read \Illuminate\Database\Eloquent\Collection|OrganizationManager[] $organizationManagers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Organization\OrganizationManager[] $organizationManagers
  * @property-read int|null $organization_managers_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\PaymentMethod[] $paymentMethods
  * @property-read int|null $payment_methods_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
  * @property-read \App\Models\User\ProfileImage|null $profileImage
- * @property-read Resource|null $resource
- * @property-read \Illuminate\Database\Eloquent\Collection|Role[] $roles
+ * @property-read \App\Models\Resource|null $resource
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Thread[] $threads
  * @property-read int|null $threads_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|User newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|User newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAboutMe($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAllowUsersToAddMe($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMergedToId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereProfileImageId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePushNotificationKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereReceivePushNotifications($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeCustomerKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\User newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\User newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\User\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereAboutMe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereAllowUsersToAddMe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereMergedToId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereProfileImageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User wherePushNotificationKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereReceivePushNotifications($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereStripeCustomerKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class User extends BaseModelAbstract

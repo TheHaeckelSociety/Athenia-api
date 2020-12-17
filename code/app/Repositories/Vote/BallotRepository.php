@@ -47,10 +47,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      */
     public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
     {
-        $ballotSubjects = $this->getAndUnset($data, 'ballot_subjects', []);
+        $ballotItems = $this->getAndUnset($data, 'ballot_items', []);
         $model = parent::create($data, $relatedModel, $forcedValues);
 
-        $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotSubjects);
+        $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotItems);
 
         return $model;
     }
@@ -65,10 +65,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      */
     public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
     {
-        $ballotSubjects = $this->getAndUnset($data, 'ballot_subjects', null);
+        $ballotItems = $this->getAndUnset($data, 'ballot_items', null);
 
-        if ($ballotSubjects !== null) {
-            $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotSubjects, $model->ballotSubjects);
+        if ($ballotItems !== null) {
+            $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotItems, $model->ballotItems);
         }
 
         return parent::update($model, $data, $forcedValues);

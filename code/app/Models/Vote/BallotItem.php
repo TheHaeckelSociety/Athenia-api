@@ -22,17 +22,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read \App\Models\Vote\Ballot $ballot
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotItemOption[] $ballotItemOptions
  * @property-read int|null $ballot_item_options_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItem newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItem newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereBallotId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereVoteCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BallotItem whereVotesCast($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\BallotItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereBallotId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVoteCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVotesCast($value)
+ * @mixin \Eloquent
  */
 class BallotItem extends BaseModelAbstract
 {

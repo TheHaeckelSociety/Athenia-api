@@ -28,6 +28,6 @@ $factory->define(App\Models\Vote\BallotCompletion::class, function (Faker $faker
 $factory->define(App\Models\Vote\Vote::class, function (Faker $faker) {
     return [
         'ballot_completion_id' => factory(\App\Models\Vote\BallotCompletion::class)->create()->id,
-        'ballot_subject_id' => factory(\App\Models\Vote\BallotItem::class)->create()->id,
+        'ballot_item_option_id' => factory(\App\Models\Vote\BallotItemOption::class)->create()->id,
     ];
 });

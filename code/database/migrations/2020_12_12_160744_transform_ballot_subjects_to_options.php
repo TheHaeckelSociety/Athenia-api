@@ -38,6 +38,7 @@ class TransformBallotSubjectsToOptions extends Migration
         Schema::table('ballot_items', function(Blueprint $table) {
             $table->dropColumn('subject_id');
             $table->dropColumn('subject_type');
+            $table->dropColumn('vote_count');
         });
         Schema::table('votes', function (Blueprint $table) {
             $table->dropForeign('votes_ballot_subject_id_foreign');

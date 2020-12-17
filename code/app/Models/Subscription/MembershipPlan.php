@@ -30,25 +30,25 @@ use Illuminate\Validation\Rule;
  * @property bool $default
  * @property int|null $trial_period
  * @property-read \App\Models\Subscription\MembershipPlanRate|null $currentRate
- * @property-read \Illuminate\Database\Eloquent\Collection|Feature[] $features
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
  * @property-read int|null $features_count
  * @property-read null|float $current_cost
  * @property-read null|float $current_rate_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\MembershipPlanRate[] $membershipPlanRates
  * @property-read int|null $membership_plan_rates_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|MembershipPlan query()
- * @method static Builder|MembershipPlan whereCreatedAt($value)
- * @method static Builder|MembershipPlan whereDefault($value)
- * @method static Builder|MembershipPlan whereDeletedAt($value)
- * @method static Builder|MembershipPlan whereDescription($value)
- * @method static Builder|MembershipPlan whereDuration($value)
- * @method static Builder|MembershipPlan whereEntityType($value)
- * @method static Builder|MembershipPlan whereId($value)
- * @method static Builder|MembershipPlan whereName($value)
- * @method static Builder|MembershipPlan whereTrialPeriod($value)
- * @method static Builder|MembershipPlan whereUpdatedAt($value)
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Subscription\MembershipPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereEntityType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereTrialPeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription\MembershipPlan whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class MembershipPlan extends BaseModelAbstract implements HasPolicyContract, HasValidationRulesContract

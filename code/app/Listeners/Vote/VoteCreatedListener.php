@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Listeners\Vote;
 
+use App\Contracts\Repositories\Vote\BallotItemOptionRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Events\Vote\VoteCreatedEvent;
 
@@ -15,15 +16,23 @@ class VoteCreatedListener
     /**
      * @var BallotItemRepositoryContract
      */
-    private $ballotSubjectRepository;
+    private BallotItemRepositoryContract $ballotItemRepository;
+
+    /**
+     * @var BallotItemOptionRepositoryContract
+     */
+    private BallotItemOptionRepositoryContract $ballotItemOptionRepository;
 
     /**
      * VoteCreatedListener constructor.
-     * @param BallotItemRepositoryContract $ballotSubjectRepository
+     * @param BallotItemRepositoryContract $ballotItemRepository
+     * @param BallotItemOptionRepositoryContract $ballotItemOptionRepository
      */
-    public function __construct(BallotItemRepositoryContract $ballotSubjectRepository)
+    public function __construct(BallotItemRepositoryContract $ballotItemRepository,
+                                BallotItemOptionRepositoryContract $ballotItemOptionRepository)
     {
-        $this->ballotSubjectRepository = $ballotSubjectRepository;
+        $this->ballotItemRepository = $ballotItemRepository;
+        $this->ballotItemOptionRepository = $ballotItemOptionRepository;
     }
 
     /**
@@ -35,9 +44,12 @@ class VoteCreatedListener
     {
         $vote = $event->getVote();
 
-        $this->ballotSubjectRepository->update($vote->ballotSubject, [
-            'vote_count' => $vote->ballotSubject->vote_count + $vote->result,
-            'votes_cast' => $vote->ballotSubject->votes_cast + 1,
+        $this->ballotItemRepository->update($vote->ballotItemOption->ballotItem, [
+            'votes_cast' => $vote->ballotItemOption->ballotItem->votes_cast + 1,
+        ]);
+
+        $this->ballotItemOptionRepository->update($vote->ballotItemOption, [
+            'vote_count' => $vote->ballotItemOption->vote_count + $vote->result
         ]);
     }
 }

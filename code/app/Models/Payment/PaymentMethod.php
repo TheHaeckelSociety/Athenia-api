@@ -32,25 +32,25 @@ use Illuminate\Validation\Rule;
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\Payment[] $payments
  * @property-read int|null $payments_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Subscription[] $subscriptions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PaymentMethod newModelQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PaymentMethod newQuery()
- * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|PaymentMethod query()
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereBrand($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereDefault($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereExpMonth($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereExpYear($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereIdentifier($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereOwnerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereOwnerType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod wherePaymentMethodKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod wherePaymentMethodType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereUpdatedAt($value)
- * @mixin Eloquent
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod newModelQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod newQuery()
+ * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Payment\PaymentMethod query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereBrand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereExpMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereExpYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereIdentifier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereOwnerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod wherePaymentMethodKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod wherePaymentMethodType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\PaymentMethod whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class PaymentMethod extends BaseModelAbstract implements HasValidationRulesContract
 {
