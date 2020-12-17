@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read \App\Models\Vote\BallotItem $ballotItem
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $subject
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\Vote[] $votes
- * @property-read int|null $votes_count
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItemOption newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItemOption newQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|BallotItemOption query()
