@@ -11,6 +11,8 @@ use App\Models\Role;
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\Subscription;
 use App\Models\User\User;
+use App\Models\Vote\Ballot;
+use App\Models\Vote\BallotCompletion;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\Iteration;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -27,6 +29,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     private $modelPlaceHolders = [
         'article' => Article::class,
+        'ballot' => Ballot::class,
+        'ballot_completion' => BallotCompletion::class,
         'feature' => Feature::class,
         'iteration' => Iteration::class,
         'membership_plan' => MembershipPlan::class,

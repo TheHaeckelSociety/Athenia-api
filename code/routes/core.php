@@ -62,6 +62,19 @@ Route::group(['middleware' => 'jwt.auth.protected'], function() {
         ]);
     });
 
+    Route::resource('ballots', 'BallotController', [
+        'only' => [
+            'show',
+        ]
+    ]);
+    Route::group(['prefix' => 'ballots/{ballot}', 'as' => 'ballot.'], function () {
+        Route::resource('ballot-completions', 'Ballot\BallotCompletionController', [
+            'only' => [
+                'store',
+            ],
+        ]);
+    });
+
     Route::resource('features', 'FeatureController', [
         'only' => [
             'index', 'show',
@@ -90,6 +103,12 @@ Route::group(['middleware' => 'jwt.auth.protected'], function() {
     ]);
     Route::group(['prefix' => 'users/{user}', 'as' => 'user.'], function () {
         require 'entity-routes.php';
+
+        Route::resource('ballot-completions', 'User\BallotCompletionController', [
+            'only' => [
+                'index',
+            ],
+        ]);
 
         Route::resource('contacts', 'User\ContactController', [
             'only' => [

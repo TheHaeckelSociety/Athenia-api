@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace App\Models\Vote;
 
+use App\Contracts\Models\HasValidationRulesContract;
 use App\Models\BaseModelAbstract;
+use App\Models\Traits\HasValidationRules;
 use App\Models\User\User;
 use Eloquent;
-use Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 /**
  * Class BallotCompletion
@@ -37,8 +36,10 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotCompletion whereUserId($value)
  * @mixin \Eloquent
  */
-class BallotCompletion extends BaseModelAbstract
+class BallotCompletion extends BaseModelAbstract implements HasValidationRulesContract
 {
+    use HasValidationRules;
+
     /**
      * The ballot that was completed
      *
@@ -67,5 +68,33 @@ class BallotCompletion extends BaseModelAbstract
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    /**
+     * Build the model validation rules
+     * @param array $params
+     * @return array
+     */
+    public function buildModelValidationRules(...$params): array
+    {
+        return [
+            static::VALIDATION_RULES_BASE => [
+                'votes' => [
+                    'array',
+                ],
+                'votes.*' => [
+                    'array',
+                ],
+                'votes.*.result' => [
+                    'required',
+                    'number',
+                ],
+                'votes.*.ballot_item_option_id' => [
+                    'required',
+                    'number',
+                    Rule::exists('ballot_item_options', 'id'),
+                ],
+            ]
+        ];
     }
 }
