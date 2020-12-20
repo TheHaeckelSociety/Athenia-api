@@ -5,9 +5,11 @@ namespace Tests\Integration\Repositories\Vote;
 
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotItem;
+use App\Models\Vote\BallotItemOption;
 use App\Models\Wiki\Iteration;
+use App\Repositories\Vote\BallotItemOptionRepository;
 use App\Repositories\Vote\BallotRepository;
-use App\Repositories\Vote\BallotSubjectRepository;
+use App\Repositories\Vote\BallotItemRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -34,9 +36,13 @@ class BallotRepositoryTest extends TestCase
         $this->repository = new BallotRepository(
             new Ballot(),
             $this->getGenericLogMock(),
-            new BallotSubjectRepository(
+            new BallotItemRepository(
                 new BallotItem(),
                 $this->getGenericLogMock(),
+                new BallotItemOptionRepository(
+                    new BallotItemOption(),
+                    $this->getGenericLogMock(),
+                ),
             ),
         );
     }
@@ -75,16 +81,20 @@ class BallotRepositoryTest extends TestCase
         /** @var Ballot $ballot */
         $ballot = $this->repository->create([
             'type' => Ballot::TYPE_SINGLE_OPTION,
-            'ballot_subjects' => [
+            'ballot_items' => [
                 [
-                    'subject_id' => factory(Iteration::class)->create()->id,
-                    'subject_type' => 'iteration',
-                ],
+                    'ballot_item_options' => [
+                        [
+                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_type' => 'iteration',
+                        ],
+                    ]
+                ]
             ],
         ]);
 
         $this->assertEquals($ballot->type, Ballot::TYPE_SINGLE_OPTION);
-        $this->assertCount(1, $ballot->ballotSubjects);
+        $this->assertCount(1, $ballot->ballotItems);
     }
 
     public function testUpdateSuccess()
@@ -95,22 +105,30 @@ class BallotRepositoryTest extends TestCase
         ]);
 
         $this->repository->update($model, [
-            'ballot_subjects' => [
+            'ballot_items' => [
                 [
                     'id' => $subjects[1]->id,
-                    'subject_id' => factory(Iteration::class)->create()->id,
-                    'subject_type' => 'iteration',
+                    'ballot_item_options' => [
+                        [
+                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_type' => 'iteration',
+                        ]
+                    ]
                 ],
                 [
-                    'subject_id' => factory(Iteration::class)->create()->id,
-                    'subject_type' => 'iteration',
+                    'ballot_item_options' => [
+                        [
+                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_type' => 'iteration',
+                        ]
+                    ]
                 ],
             ],
         ]);
 
         /** @var Ballot $updated */
         $updated = Ballot::find($model->id);
-        $this->assertCount(2, $updated->ballotSubjects);
+        $this->assertCount(2, $updated->ballotItems);
     }
 
     public function testDeleteSuccess()

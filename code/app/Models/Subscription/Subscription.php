@@ -32,7 +32,7 @@ use Illuminate\Validation\Rule;
  * @property string $subscriber_type
  * @property mixed|null $last_renewed_at
  * @property mixed|null $subscribed_at
- * @property Carbon|null $expires_at
+ * @property mixed|null $expires_at
  * @property mixed|null $canceled_at
  * @property bool $recurring
  * @property \Illuminate\Support\Carbon|null $deleted_at

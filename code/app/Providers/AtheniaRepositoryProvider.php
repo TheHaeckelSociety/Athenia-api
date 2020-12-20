@@ -21,8 +21,9 @@ use App\Contracts\Repositories\User\PasswordTokenRepositoryContract;
 use App\Contracts\Repositories\User\ProfileImageRepositoryContract;
 use App\Contracts\Repositories\User\ThreadRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotCompletionRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemOptionRepositoryContract;
 use App\Contracts\Repositories\Vote\BallotRepositoryContract;
-use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Contracts\Repositories\Vote\VoteRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleRepositoryContract;
 use App\Contracts\Repositories\Wiki\ArticleVersionRepositoryContract;
@@ -48,6 +49,7 @@ use App\Models\User\Thread;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotCompletion;
 use App\Models\Vote\BallotItem;
+use App\Models\Vote\BallotItemOption;
 use App\Models\Vote\Vote;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\ArticleVersion;
@@ -70,8 +72,9 @@ use App\Repositories\User\PasswordTokenRepository;
 use App\Repositories\User\ProfileImageRepository;
 use App\Repositories\User\ThreadRepository;
 use App\Repositories\Vote\BallotCompletionRepository;
+use App\Repositories\Vote\BallotItemOptionRepository;
 use App\Repositories\Vote\BallotRepository;
-use App\Repositories\Vote\BallotSubjectRepository;
+use App\Repositories\Vote\BallotItemRepository;
 use App\Repositories\Vote\VoteRepository;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\ArticleVersionRepository;
@@ -101,8 +104,9 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             AssetRepositoryContract::class,
             BallotRepositoryContract::class,
             BallotCompletionRepositoryContract::class,
+            BallotItemRepositoryContract::class,
+            BallotItemOptionRepositoryContract::class,
             ContactRepositoryContract::class,
-            BallotSubjectRepositoryContract::class,
             FeatureRepositoryContract::class,
             IterationRepositoryContract::class,
             LineItemRepositoryContract::class,
@@ -170,7 +174,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             return new BallotRepository(
                 new Ballot(),
                 $this->app->make('log'),
-                $this->app->make(BallotSubjectRepositoryContract::class),
+                $this->app->make(BallotItemRepositoryContract::class),
             );
         });
         $this->app->bind(BallotCompletionRepositoryContract::class, function () {
@@ -179,10 +183,17 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
                 $this->app->make('log'),
             );
         });
-        $this->app->bind(BallotSubjectRepositoryContract::class, function () {
-            return new BallotSubjectRepository(
+        $this->app->bind(BallotItemOptionRepositoryContract::class, function () {
+            return new BallotItemOptionRepository(
+                new BallotItemOption(),
+                $this->app->make('log'),
+            );
+        });
+        $this->app->bind(BallotItemRepositoryContract::class, function () {
+            return new BallotItemRepository(
                 new BallotItem(),
                 $this->app->make('log'),
+                $this->app->make(BallotItemOptionRepositoryContract::class),
             );
         });
         $this->app->bind(ContactRepositoryContract::class, function () {

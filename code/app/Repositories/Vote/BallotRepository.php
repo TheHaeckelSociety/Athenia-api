@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Repositories\Vote;
 
 use App\Contracts\Repositories\Vote\BallotRepositoryContract;
-use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
+use App\Contracts\Repositories\Vote\BallotItemRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\Vote\Ballot;
 use App\Repositories\BaseRepositoryAbstract;
@@ -20,7 +20,7 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
     use CanGetAndUnset;
 
     /**
-     * @var BallotSubjectRepositoryContract
+     * @var BallotItemRepositoryContract
      */
     private $ballotSubjectRepository;
 
@@ -28,10 +28,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      * BallotRepository constructor.
      * @param Ballot $model
      * @param LogContract $log
-     * @param BallotSubjectRepositoryContract $ballotSubjectRepository
+     * @param BallotItemRepositoryContract $ballotSubjectRepository
      */
     public function __construct(Ballot $model, LogContract $log,
-                                BallotSubjectRepositoryContract $ballotSubjectRepository)
+                                BallotItemRepositoryContract $ballotSubjectRepository)
     {
         parent::__construct($model, $log);
         $this->ballotSubjectRepository = $ballotSubjectRepository;
@@ -47,10 +47,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      */
     public function create(array $data = [], BaseModelAbstract $relatedModel = null, array $forcedValues = [])
     {
-        $ballotSubjects = $this->getAndUnset($data, 'ballot_subjects', []);
+        $ballotItems = $this->getAndUnset($data, 'ballot_items', []);
         $model = parent::create($data, $relatedModel, $forcedValues);
 
-        $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotSubjects);
+        $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotItems);
 
         return $model;
     }
@@ -65,10 +65,10 @@ class BallotRepository extends BaseRepositoryAbstract implements BallotRepositor
      */
     public function update(BaseModelAbstract $model, array $data, array $forcedValues = []): BaseModelAbstract
     {
-        $ballotSubjects = $this->getAndUnset($data, 'ballot_subjects', null);
+        $ballotItems = $this->getAndUnset($data, 'ballot_items', null);
 
-        if ($ballotSubjects) {
-            $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotSubjects, $model->ballotSubjects);
+        if ($ballotItems !== null) {
+            $this->syncChildModels($this->ballotSubjectRepository, $model, $ballotItems, $model->ballotItems);
         }
 
         return parent::update($model, $data, $forcedValues);

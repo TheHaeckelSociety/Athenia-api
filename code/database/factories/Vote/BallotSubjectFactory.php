@@ -2,7 +2,7 @@
 namespace Database\Factories\Vote;
 
 use App\Models\Vote\Ballot;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Models\Wiki\Iteration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,7 +15,7 @@ class BallotSubjectFactory extends Factory
     /**
      * @var string The related model
      */
-    protected $model = BallotSubject::class;
+    protected $model = BallotItem::class;
 
     /**
      * @return array

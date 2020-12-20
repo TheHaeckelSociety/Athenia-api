@@ -6,8 +6,8 @@ namespace App\Contracts\Repositories\Vote;
 use App\Contracts\Repositories\BaseRepositoryContract;
 
 /**
- * Interface BallotSubjectRepositoryContract
+ * Interface BallotItemRepositoryContract
  * @package App\Contracts\Repositories\Vote
  */
-interface BallotSubjectRepositoryContract extends BaseRepositoryContract
+interface BallotItemRepositoryContract extends BaseRepositoryContract
 {}
