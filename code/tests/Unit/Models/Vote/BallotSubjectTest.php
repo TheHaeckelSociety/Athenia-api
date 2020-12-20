@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Models\Vote;
 
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use Tests\TestCase;
 
 /**
@@ -14,7 +14,7 @@ class BallotSubjectTest extends TestCase
 {
     public function testBallot()
     {
-        $model = new BallotSubject();
+        $model = new BallotItem();
         $relation = $model->ballot();
 
         $this->assertEquals('ballots.id', $relation->getQualifiedOwnerKeyName());
@@ -23,7 +23,7 @@ class BallotSubjectTest extends TestCase
 
     public function testUser()
     {
-        $model = new BallotSubject();
+        $model = new BallotItem();
         $relation = $model->subject();
 
         $this->assertEquals('subject_type', $relation->getMorphType());
@@ -32,7 +32,7 @@ class BallotSubjectTest extends TestCase
 
     public function testVotes()
     {
-        $model = new BallotSubject();
+        $model = new BallotItem();
         $relation = $model->votes();
 
         $this->assertEquals('ballot_subjects.id', $relation->getQualifiedParentKeyName());

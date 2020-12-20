@@ -47,7 +47,7 @@ use App\Models\User\ProfileImage;
 use App\Models\User\Thread;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotCompletion;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Models\Vote\Vote;
 use App\Models\Wiki\Article;
 use App\Models\Wiki\ArticleVersion;
@@ -181,7 +181,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
         });
         $this->app->bind(BallotSubjectRepositoryContract::class, function () {
             return new BallotSubjectRepository(
-                new BallotSubject(),
+                new BallotItem(),
                 $this->app->make('log'),
             );
         });

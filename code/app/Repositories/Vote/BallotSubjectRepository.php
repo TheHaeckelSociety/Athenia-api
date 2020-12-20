@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Repositories\Vote;
 
 use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Repositories\BaseRepositoryAbstract;
 use Psr\Log\LoggerInterface as LogContract;
 
@@ -16,10 +16,10 @@ class BallotSubjectRepository extends BaseRepositoryAbstract implements BallotSu
 {
     /**
      * BallotSubjectRepository constructor.
-     * @param BallotSubject $model
+     * @param BallotItem $model
      * @param LogContract $log
      */
-    public function __construct(BallotSubject $model, LogContract $log)
+    public function __construct(BallotItem $model, LogContract $log)
     {
         parent::__construct($model, $log);
     }

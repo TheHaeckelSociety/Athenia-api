@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
  * @property-read \App\Models\Vote\BallotCompletion $ballotCompletion
- * @property-read \App\Models\Vote\BallotSubject $ballotSubject
+ * @property-read \App\Models\Vote\BallotItem $ballotSubject
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote newModelQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote newQuery()
  * @method static \Fico7489\Laravel\EloquentJoin\EloquentJoinBuilder|\App\Models\Vote\Vote query()
@@ -57,6 +57,6 @@ class Vote extends BaseModelAbstract
      */
     public function ballotSubject(): BelongsTo
     {
-        return $this->belongsTo(BallotSubject::class);
+        return $this->belongsTo(BallotItem::class);
     }
 }

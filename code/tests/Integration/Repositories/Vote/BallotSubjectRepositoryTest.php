@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Repositories\Vote;
 
 use App\Models\Vote\Ballot;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Vote\BallotSubjectRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -31,14 +31,14 @@ class BallotSubjectRepositoryTest extends TestCase
         $this->setupDatabase();
 
         $this->repository = new BallotSubjectRepository(
-            new BallotSubject(),
+            new BallotItem(),
             $this->getGenericLogMock()
         );
     }
 
     public function testFindAllSuccess()
     {
-        BallotSubject::factory()->count(5)->create();
+        BallotItem::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -51,7 +51,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = BallotSubject::factory()->create();
+        $model = BallotItem::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -59,7 +59,7 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        BallotSubject::factory()->create(['id' => 19]);
+        BallotItem::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -73,7 +73,7 @@ class BallotSubjectRepositoryTest extends TestCase
         /** @var Iteration $iteration */
         $iteration = Iteration::factory()->create();
 
-        /** @var BallotSubject $ballotSubject */
+        /** @var BallotItem $ballotSubject */
         $ballotSubject = $this->repository->create([
             'subject_id' => $iteration->id,
             'subject_type' => 'iteration',
@@ -85,24 +85,24 @@ class BallotSubjectRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = BallotSubject::factory()->create([
+        $model = BallotItem::factory()->create([
             'votes_cast' => 1,
         ]);
         $this->repository->update($model, [
             'votes_cast' => 5,
         ]);
 
-        /** @var BallotSubject $updated */
-        $updated = BallotSubject::find($model->id);
+        /** @var BallotItem $updated */
+        $updated = BallotItem::find($model->id);
         $this->assertEquals(5, $updated->votes_cast);
     }
 
     public function testDeleteSuccess()
     {
-        $model = BallotSubject::factory()->create();
+        $model = BallotItem::factory()->create();
 
         $this->repository->delete($model);
 
-        $this->assertNull(BallotSubject::find($model->id));
+        $this->assertNull(BallotItem::find($model->id));
     }
 }

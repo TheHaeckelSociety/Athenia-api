@@ -6,7 +6,7 @@ namespace Tests\Unit\Listeners\Vote;
 use App\Contracts\Repositories\Vote\BallotSubjectRepositoryContract;
 use App\Events\Vote\VoteCreatedEvent;
 use App\Listeners\Vote\VoteCreatedListener;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Models\Vote\Vote;
 use Tests\CustomMockInterface;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class VoteCreatedListenerTest extends TestCase
     public function testHandle()
     {
         $vote = new Vote([
-            'ballotSubject' => new BallotSubject([
+            'ballotSubject' => new BallotItem([
                 'vote_count' => 34,
                 'votes_cast' => 45,
             ]),

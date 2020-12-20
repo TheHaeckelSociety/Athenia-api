@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Repositories\Vote;
 
 use App\Models\Vote\Ballot;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItem;
 use App\Models\Wiki\Iteration;
 use App\Repositories\Vote\BallotRepository;
 use App\Repositories\Vote\BallotSubjectRepository;
@@ -35,7 +35,7 @@ class BallotRepositoryTest extends TestCase
             new Ballot(),
             $this->getGenericLogMock(),
             new BallotSubjectRepository(
-                new BallotSubject(),
+                new BallotItem(),
                 $this->getGenericLogMock(),
             ),
         );
@@ -90,7 +90,7 @@ class BallotRepositoryTest extends TestCase
     public function testUpdateSuccess()
     {
         $model = factory(Ballot::class)->create();
-        $subjects = factory(BallotSubject::class, 3)->create([
+        $subjects = factory(BallotItem::class, 3)->create([
             'ballot_id' => $model->id,
         ]);
 
