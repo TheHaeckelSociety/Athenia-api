@@ -33,13 +33,13 @@ class UserAssetDeleteTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->path.= $this->user->id . '/assets/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->user->id,
             'owner_type' => 'user',
         ]);
@@ -50,7 +50,7 @@ class UserAssetDeleteTest extends TestCase
 
     public function testIncorrectUserBlocked()
     {
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->user->id,
             'owner_type' => 'user',
         ]);
@@ -64,7 +64,7 @@ class UserAssetDeleteTest extends TestCase
 
     public function testUserDoesNotOwnPaymentMethodBlocked()
     {
-        $asset = factory(Asset::class)->create();
+        $asset = Asset::factory()->create();
 
         $this->actingAs($this->user);
 
@@ -75,7 +75,7 @@ class UserAssetDeleteTest extends TestCase
 
     public function testDeleteSuccessful()
     {
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->user->id,
             'owner_type' => 'user',
         ]);

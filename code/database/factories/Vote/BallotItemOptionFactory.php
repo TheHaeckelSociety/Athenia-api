@@ -1,21 +1,21 @@
 <?php
 namespace Database\Factories\Vote;
 
-use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotItem;
+use App\Models\Vote\BallotItemOption;
 use App\Models\Wiki\Iteration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Class AssetFactory
+ * Class BallotItemOptionFactory
  * @package Database\Factories
  */
-class BallotSubjectFactory extends Factory
+class BallotItemOptionFactory extends Factory
 {
     /**
      * @var string The related model
      */
-    protected $model = BallotItem::class;
+    protected $model = BallotItemOption::class;
 
     /**
      * @return array
@@ -23,7 +23,7 @@ class BallotSubjectFactory extends Factory
     public function definition()
     {
         return [
-            'ballot_id' => Ballot::factory()->create()->id,
+            'ballot_item_id' => BallotItem::factory()->create()->id,
             'subject_id' => Iteration::factory()->create()->id,
             'subject_type' => 'iteration',
         ];

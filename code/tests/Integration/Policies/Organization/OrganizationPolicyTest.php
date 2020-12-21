@@ -36,8 +36,8 @@ class OrganizationPolicyTest extends TestCase
     public function testViewBlocksWhenNotOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         $this->assertFalse($policy->view($user, $organization));
     }
@@ -45,8 +45,8 @@ class OrganizationPolicyTest extends TestCase
     public function testViewPassesForOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
@@ -60,8 +60,8 @@ class OrganizationPolicyTest extends TestCase
     public function testUpdateBlocksWhenNotOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         $this->assertFalse($policy->update($user, $organization));
     }
@@ -69,8 +69,8 @@ class OrganizationPolicyTest extends TestCase
     public function testUpdatePassesForOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
@@ -84,8 +84,8 @@ class OrganizationPolicyTest extends TestCase
     public function testDeleteBlocksWhenNotOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         $this->assertFalse($policy->delete($user, $organization));
     }
@@ -93,8 +93,8 @@ class OrganizationPolicyTest extends TestCase
     public function testDeleteBlocksForOrganizationManager()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
@@ -108,8 +108,8 @@ class OrganizationPolicyTest extends TestCase
     public function testDeletePassesForOrganizationAdmin()
     {
         $policy = new OrganizationPolicy();
-        $organization = factory(Organization::class)->create();
-        $user = factory(User::class)->create();
+        $organization = Organization::factory()->create();
+        $user = User::factory()->create();
 
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,

@@ -2,7 +2,7 @@
 namespace Database\Factories\Vote;
 
 use App\Models\Vote\BallotCompletion;
-use App\Models\Vote\BallotSubject;
+use App\Models\Vote\BallotItemOption;
 use App\Models\Vote\Vote;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,7 +24,7 @@ class VoteFactory extends Factory
     {
         return [
             'ballot_completion_id' => BallotCompletion::factory()->create()->id,
-            'ballot_subject_id' => BallotSubject::factory()->create()->id,
+            'ballot_item_option_id' => BallotItemOption::factory()->create()->id,
         ];
     }
 }
