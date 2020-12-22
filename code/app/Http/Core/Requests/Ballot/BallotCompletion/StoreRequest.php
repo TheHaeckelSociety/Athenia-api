@@ -55,7 +55,7 @@ class StoreRequest extends BaseAuthenticatedRequestAbstract
     protected function getPolicyParameters(): array
     {
         return [
-            $this->route('article'),
+            $this->route('ballot'),
         ];
     }
 }

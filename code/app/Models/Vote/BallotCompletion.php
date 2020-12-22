@@ -80,6 +80,7 @@ class BallotCompletion extends BaseModelAbstract implements HasValidationRulesCo
         return [
             static::VALIDATION_RULES_BASE => [
                 'votes' => [
+                    'required',
                     'array',
                 ],
                 'votes.*' => [
@@ -87,11 +88,11 @@ class BallotCompletion extends BaseModelAbstract implements HasValidationRulesCo
                 ],
                 'votes.*.result' => [
                     'required',
-                    'number',
+                    'integer',
                 ],
                 'votes.*.ballot_item_option_id' => [
                     'required',
-                    'number',
+                    'integer',
                     Rule::exists('ballot_item_options', 'id'),
                 ],
             ]

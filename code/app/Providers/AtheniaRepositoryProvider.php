@@ -181,6 +181,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             return new BallotCompletionRepository(
                 new BallotCompletion(),
                 $this->app->make('log'),
+                $this->app->make(VoteRepositoryContract::class),
             );
         });
         $this->app->bind(BallotItemOptionRepositoryContract::class, function () {
