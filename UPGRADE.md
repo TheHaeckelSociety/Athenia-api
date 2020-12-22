@@ -2,6 +2,57 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.53.0
+
+The big ones keep on coming! This update reworks the ballot data to be more expandable for the future, and it also adds some endpoints that will allow for users to vote on publics through the API.
+
+* code/app/Contracts/Repositories/Vote/BallotItemOptionRepositoryContract.php
+* Code/app/Contracts/Repositories/Vote/BallotSubjectRepositoryContract.php
+* Code/app/Contracts/Repositories/Vote/BallotItemRepositoryContract.php
+* code/app/Http/Core/Controllers/Ballot/BallotCompletionControllerAbstract.php
+* code/app/Http/Core/Controllers/BallotControllerAbstract.php
+* code/app/Http/Core/Controllers/User/BallotCompletionControllerAbstract.php
+* code/app/Http/Core/Requests/Ballot/BallotCompletion/StoreRequest.php
+* code/app/Http/Core/Requests/Ballot/ViewRequest.php
+* code/app/Http/Core/Requests/User/BallotCompletion/IndexRequest.php
+* code/app/Http/V1/Controllers/Ballot/BallotCompletionController.php 
+* code/app/Http/V1/Controllers/BallotController.php
+* code/app/Http/V1/Controllers/User/BallotCompletionController.php
+* code/app/Listeners/Vote/VoteCreatedListener.php
+* code/app/Models/Subscription/Subscription.php
+* code/app/Models/Vote/Ballot.php
+* code/app/Models/Vote/BallotCompletion.php
+* code/app/Models/Vote/BallotItem.php
+* code/app/Models/Vote/BallotSubject.php
+* code/app/Models/Vote/BallotItemOption.php
+* code/app/Models/Vote/Vote.php
+* code/app/Policies/Vote/
+* code/app/Providers/AtheniaRepositoryProvider.php
+* code/app/Providers/RouteServiceProvider.php
+* code/app/Repositories/Vote/BallotCompletionRepository.php
+* code/app/Repositories/Vote/BallotItemOptionRepository.php
+* code/app/Repositories/Vote/BallotItemRepository.php
+* code/app/Repositories/Vote/BallotRepository.php
+* code/app/Repositories/Vote/BallotSubjectRepository.php
+* code/database/factories/VoteFactory.php
+* code/database/migrations/2020_12_12_160744_transform_ballot_subjects_to_options.php
+* code/routes/core.php 
+* code/tests/Feature/Http/Ballot/
+* code/tests/Feature/Http/User/BallotCompletion/UserBallotCompletionIndexTest.php
+* code/tests/Integration/Policies/Vote/
+* code/tests/Integration/Repositories/Vote/BallotCompletionRepositoryTest.php
+* code/tests/Integration/Repositories/Vote/BallotCompletionRepositoryTest.php
+* code/tests/Integration/Repositories/Vote/BallotSubjectRepositoryTest.php
+* code/tests/Integration/Repositories/Vote/BallotItemRepositoryTest.php
+* code/tests/Integration/Repositories/Vote/BallotRepositoryTest.php
+* code/tests/Integration/Repositories/Vote/VoteRepositoryTest.php
+* code/tests/Unit/Listeners/Vote/VoteCreatedListenerTest.php
+* code/tests/Unit/Models/Vote/BallotItemOptionTest.php
+* code/tests/Unit/Models/Vote/BallotItemTest.php
+* code/tests/Unit/Models/Vote/BallotSubjectTest.php
+* code/tests/Unit/Models/Vote/BallotTest.php
+* code/tests/Unit/Models/Vote/VoteTest.php
+
 ## 0.52.0
 
 Another big one, but a very useful one. This update adds both trial periods and prorated upgrades to subscriptions.
