@@ -106,10 +106,10 @@ class ResetPasswordTest extends TestCase
 
     public function testUserDoesNotOwnToken()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'guy@smiley.com',
         ]);
-        factory(PasswordToken::class)->create([
+        PasswordToken::factory()->create([
             'token' => 'hello',
         ]);
 
@@ -128,10 +128,10 @@ class ResetPasswordTest extends TestCase
 
     public function testTokenExpired()
     {
-        factory(PasswordToken::class)->create([
+        PasswordToken::factory()->create([
             'token' => 'hello',
             'created_at' => Carbon::now()->subMinutes(21),
-            'user_id' => factory(User::class)->create([
+            'user_id' => User::factory()->create([
                 'email' => 'guy@smiley.com',
             ])->id,
         ]);
@@ -151,11 +151,11 @@ class ResetPasswordTest extends TestCase
 
     public function testSuccess()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'test@test.com',
             'password' => Hash::make('password'),
         ]);
-        factory(PasswordToken::class)->create([
+        PasswordToken::factory()->create([
             'token' => 'hello',
             'user_id' => $user->id,
         ]);

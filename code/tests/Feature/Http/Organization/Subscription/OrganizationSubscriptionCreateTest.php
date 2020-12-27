@@ -39,7 +39,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
 
         $this->path.= $this->organization->id . '/subscriptions';
     }
@@ -78,10 +78,10 @@ class OrganizationSubscriptionCreateTest extends TestCase
             return $mock;
         });
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => true,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -120,10 +120,10 @@ class OrganizationSubscriptionCreateTest extends TestCase
             return $mock;
         });
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => true,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization'
         ]);
@@ -266,7 +266,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
             'role_id' => Role::ADMINISTRATOR,
         ]);
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => false,
         ]);
 
@@ -292,7 +292,7 @@ class OrganizationSubscriptionCreateTest extends TestCase
             'role_id' => Role::ADMINISTRATOR,
         ]);
 
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $response = $this->json('POST', $this->path, [
             'payment_method_id' => $paymentMethod->id,

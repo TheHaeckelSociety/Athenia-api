@@ -38,18 +38,18 @@ class ChargeRenewalTest extends TestCase
         Carbon::setTestNow($now);
 
         /** @var Subscription $nonRecurringSubscription */
-        $nonRecurringSubscription = factory(Subscription::class)->create([
+        $nonRecurringSubscription = Subscription::factory()->create([
             'recurring' => false,
             'expires_at' => $now,
         ]);
         /** @var Subscription $stripeSubscription */
-        $stripeSubscription = factory(Subscription::class)->create([
+        $stripeSubscription = Subscription::factory()->create([
             'recurring' => true,
             'expires_at' => $now,
-            'membership_plan_rate_id' => factory(MembershipPlanRate::class)->create([
+            'membership_plan_rate_id' => MembershipPlanRate::factory()->create([
                 'cost' => 35,
             ])->id,
-            'payment_method_id' => factory(PaymentMethod::class)->create([
+            'payment_method_id' => PaymentMethod::factory()->create([
                 'payment_method_type' => 'stripe',
                 'payment_method_key' => 'test_stripe',
             ])->id,

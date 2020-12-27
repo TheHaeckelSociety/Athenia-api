@@ -29,14 +29,14 @@ class UserContactUpdateTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
         $this->mockApplicationLog();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->path.= $this->user->id . '/contacts/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $contact = factory(Contact::class)->create();
+        $contact = Contact::factory()->create();
 
         $response = $this->json('PUT', $this->path . $contact->id);
 
@@ -56,7 +56,7 @@ class UserContactUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $contact = factory(Contact::class)->create([
+        $contact = Contact::factory()->create([
             'requested_id' => $this->user->id,
         ]);
 
@@ -76,7 +76,7 @@ class UserContactUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $contact = factory(Contact::class)->create([
+        $contact = Contact::factory()->create([
             'requested_id' => $this->user->id,
         ]);
 
@@ -96,7 +96,7 @@ class UserContactUpdateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $contact = factory(Contact::class)->create([
+        $contact = Contact::factory()->create([
             'requested_id' => $this->user->id,
         ]);
 
@@ -119,7 +119,7 @@ class UserContactUpdateTest extends TestCase
         $this->actingAs($this->user);
 
 
-        $contact = factory(Contact::class)->create([
+        $contact = Contact::factory()->create([
             'requested_id' => $this->user->id,
         ]);
 

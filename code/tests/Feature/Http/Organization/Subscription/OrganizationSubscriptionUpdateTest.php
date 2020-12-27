@@ -36,14 +36,14 @@ class OrganizationSubscriptionUpdateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organizaion = factory(Organization::class)->create();
+        $this->organizaion = Organization::factory()->create();
 
         $this->path.= $this->organizaion->id . '/subscriptions/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id);
@@ -54,7 +54,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
     public function testDisconnectedUserBlocked()
     {
         $this->actAs(Role::APP_USER);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -71,7 +71,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create();
+        $subscription = Subscription::factory()->create();
         $response = $this->json('PATCH', $this->path . $subscription->id);
 
         $response->assertStatus(403);
@@ -85,7 +85,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -102,7 +102,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -124,7 +124,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -150,7 +150,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -176,7 +176,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -200,7 +200,7 @@ class OrganizationSubscriptionUpdateTest extends TestCase
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);
@@ -218,14 +218,14 @@ class OrganizationSubscriptionUpdateTest extends TestCase
 
     public function testUpdateFailsPaymentMethodNotOwnedByUser()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
         $this->actAs(Role::APP_USER);
         OrganizationManager::factory()->create([
             'role_id' => Role::ADMINISTRATOR,
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organizaion->id,
         ]);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->organizaion->id,
             'subscriber_type' => 'organization',
         ]);

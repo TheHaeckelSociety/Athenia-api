@@ -36,7 +36,7 @@ class UserSubscriptionCreateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->path.= $this->user->id . '/subscriptions';
     }
@@ -60,10 +60,10 @@ class UserSubscriptionCreateTest extends TestCase
             return $mock;
         });
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => true,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -94,10 +94,10 @@ class UserSubscriptionCreateTest extends TestCase
             return $mock;
         });
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => true,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -203,7 +203,7 @@ class UserSubscriptionCreateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
             'active' => false,
         ]);
 
@@ -223,7 +223,7 @@ class UserSubscriptionCreateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $response = $this->json('POST', $this->path, [
             'payment_method_id' => $paymentMethod->id,

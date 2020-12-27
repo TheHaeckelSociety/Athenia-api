@@ -80,10 +80,10 @@ class MembershipPlanMembershipPlanRateIndexTest extends TestCase
         $this->actAs(Role::SUPER_ADMIN);
         $model = MembershipPlan::factory()->create();
         $this->setupRoute($model->id);
-        factory(MembershipPlanRate::class, 15)->create([
+        MembershipPlanRate::factory()->count( 15)->create([
             'membership_plan_id' => $model->id,
         ]);
-        factory(MembershipPlanRate::class, 3)->create();
+        MembershipPlanRate::factory()->count( 3)->create();
 
         // first page
         $response = $this->json('GET', $this->route);

@@ -27,7 +27,7 @@ class RefreshTest extends TestCase
 
     public function testTokenRefresh()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'test@test.com',
             'password' => Hash::make('complex!')
         ]);
@@ -60,7 +60,7 @@ class RefreshTest extends TestCase
 
     public function testTokenRefreshAfterRefreshWindowFails()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'test@test.com',
             'password' => Hash::make('complex!')
         ]);
@@ -89,7 +89,7 @@ class RefreshTest extends TestCase
 
     public function testTokenRefreshAfterExpirationBeforeRefreshTimeSucceeds()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'test@test.com',
             'password' => Hash::make('complex!')
         ]);

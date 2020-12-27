@@ -43,7 +43,7 @@ class ResourceRepositoryTest extends TestCase
             $resource->delete();
         }
 
-        factory(Resource::class, 5)->create();
+        Resource::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -60,7 +60,7 @@ class ResourceRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Resource::class)->create();
+        $model = Resource::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -68,7 +68,7 @@ class ResourceRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Resource::class)->create(['id' => 19]);
+        Resource::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -77,7 +77,7 @@ class ResourceRepositoryTest extends TestCase
     public function testCreateSuccess()
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Resource $resource */
         $resource = $this->repository->create([
@@ -93,7 +93,7 @@ class ResourceRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Resource::class)->create([
+        $model = Resource::factory()->create([
             'content' => 'a code'
         ]);
         $this->repository->update($model, [

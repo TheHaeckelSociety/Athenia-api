@@ -50,7 +50,7 @@ class BallotBallotCompletionCreateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
         $response = $this->json('POST', $this->route);
         $response->assertStatus(403);
@@ -59,11 +59,11 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateSuccessful()
     {
         $this->actAsUser();
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
 
-        $ballotItemOptions = factory(BallotItemOption::class, 2)->create([
-            'ballot_item_id' => factory(BallotItem::class)->create([
+        $ballotItemOptions = BallotItemOption::factory()->count( 2)->create([
+            'ballot_item_id' => BallotItem::factory()->create([
                 'ballot_id' => $ballot->id,
             ])->id,
         ]);
@@ -91,7 +91,7 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateFailsMissingRequiredFields()
     {
         $this->actAsUser();
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::class)->create();
         $this->setupRoute($ballot->id);
 
         $response = $this->json('POST', $this->route);
@@ -125,7 +125,7 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateFailsInvalidArrayFields()
     {
         $this->actAsUser();
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
 
         $data = [
@@ -160,7 +160,7 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateFailsInvalidNumericalFields()
     {
         $this->actAsUser();
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
 
         $data = [
@@ -187,7 +187,7 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateFailsInvalidRoleId()
     {
         $this->actAsUser();
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
 
         $data = [

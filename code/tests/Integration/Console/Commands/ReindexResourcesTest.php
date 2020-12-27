@@ -62,9 +62,9 @@ class ReindexResourcesTest extends TestCase
     {
         User::unsetEventDispatcher();
 
-        factory(User::class)->create();
+        User::factory()->create();
 
-        factory(Resource::class, 3)->create();
+        Resource::factory()->count( 3)->create();
 
         $this->assertCount(3, Resource::all());
         $this->assertCount(4, User::all());

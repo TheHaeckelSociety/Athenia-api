@@ -37,7 +37,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
 
         $this->path.= $this->organization->id . '/payment-methods';
     }
@@ -140,7 +140,7 @@ class OrganizationPaymentMethodCreateTest extends TestCase
     public function testCreateFailsInvalidBooleanFields()
     {
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $this->organization->id,
             'role_id' => Role::ADMINISTRATOR,

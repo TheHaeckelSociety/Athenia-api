@@ -30,7 +30,7 @@ class OrganizationUpdateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $membershipPlan = factory(Organization::class)->create();
+        $membershipPlan = Organization::factory()->create();
         $response = $this->json('PATCH', static::BASE_ROUTE . $membershipPlan->id);
         $response->assertStatus(403);
     }
@@ -39,7 +39,7 @@ class OrganizationUpdateTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(Organization::class)->create();
+            $model = Organization::factory()->create();
             $response = $this->json('PATCH', static::BASE_ROUTE . $model->id);
             $response->assertStatus(403);
         }
@@ -50,7 +50,7 @@ class OrganizationUpdateTest extends TestCase
         $this->actAs(Role::ADMINISTRATOR);
 
         /** @var Organization $organization */
-        $organization = factory(Organization::class)->create([
+        $organization = Organization::factory()->create([
             'name' => 'Test Organiz',
         ]);
         OrganizationManager::factory()->create([

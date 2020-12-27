@@ -93,7 +93,7 @@ class LoginTest extends TestCase
 
     public function testByEmailPasswordWrong()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'guy@smiley.com',
             'password' => 'do not guess me!'
         ]);
@@ -110,7 +110,7 @@ class LoginTest extends TestCase
 
     public function testByEmailSuccessLogin()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'guy@smiley.com',
             'password' => Hash::make('complex!')
         ]);

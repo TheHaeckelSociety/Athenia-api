@@ -33,13 +33,13 @@ class UserPaymentMethodUpdateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->path.= $this->user->id . '/payment-methods/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
         $response = $this->json('PUT', $this->path . $paymentMethod->id);
@@ -49,7 +49,7 @@ class UserPaymentMethodUpdateTest extends TestCase
 
     public function testIncorrectUserBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -62,7 +62,7 @@ class UserPaymentMethodUpdateTest extends TestCase
 
     public function testUserDoesNotOwnPaymentMethodBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $this->actingAs($this->user);
 
@@ -73,7 +73,7 @@ class UserPaymentMethodUpdateTest extends TestCase
 
     public function testUpdateSuccessful()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -92,7 +92,7 @@ class UserPaymentMethodUpdateTest extends TestCase
 
     public function testUpdateFailsNotAllowedFieldsPresent()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -113,7 +113,7 @@ class UserPaymentMethodUpdateTest extends TestCase
 
     public function testCreateFailsInvalidBooleanFields()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 

@@ -35,14 +35,14 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
 
         $this->path.= $this->organization->id . '/payment-methods/';
     }
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -53,13 +53,13 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
 
     public function testNotAdministratorBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,
@@ -72,10 +72,10 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
 
     public function testOrganizationDoesNotOwnPaymentMethodBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -88,13 +88,13 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
 
     public function testUpdateSuccessful()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -113,13 +113,13 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
 
     public function testUpdateFailsNotAllowedFieldsPresent()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,
@@ -140,13 +140,13 @@ class OrganizationPaymentMethodUpdateTest extends TestCase
 
     public function testCreateFailsInvalidBooleanFields()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
 
         $this->actAsUser();
-        factory(OrganizationManager::class)->create([
+        OrganizationManager::factory()->create([
             'organization_id' => $this->organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::ADMINISTRATOR,

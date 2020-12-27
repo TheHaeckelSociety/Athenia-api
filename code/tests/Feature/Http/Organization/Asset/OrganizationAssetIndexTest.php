@@ -32,7 +32,7 @@ class OrganizationAssetIndexTest extends TestCase
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/assets');
 
@@ -42,7 +42,7 @@ class OrganizationAssetIndexTest extends TestCase
     public function tesNotOrganizationManagerBlocked()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/assets');
 
@@ -61,7 +61,7 @@ class OrganizationAssetIndexTest extends TestCase
     public function testGetPaginationEmpty()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
@@ -80,19 +80,19 @@ class OrganizationAssetIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $organization->id,
         ]);
 
-        factory(Asset::class, 6)->create();
-        factory(Asset::class, 15)->create([
+        Asset::factory()->count( 6)->create();
+        Asset::factory()->count( 15)->create([
             'owner_id' => $organization->id,
             'owner_type' => 'organization',
         ]);
-        factory(Asset::class, 3)->create([
+        Asset::factory()->count( 3)->create([
             'owner_id' => $organization->id,
             'owner_type' => 'user',
         ]);

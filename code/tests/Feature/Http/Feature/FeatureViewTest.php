@@ -27,7 +27,7 @@ class FeatureViewTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(Feature::class)->create();
+        $model = Feature::factory()->create();
         $response = $this->json('GET', '/v1/features/' . $model->id);
         $response->assertStatus(403);
     }
@@ -36,7 +36,7 @@ class FeatureViewTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(Feature::class)->create();
+            $model = Feature::factory()->create();
             $response = $this->json('GET', '/v1/features/' . $model->id);
             $response->assertStatus(403);
         }
@@ -46,7 +46,7 @@ class FeatureViewTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
         /** @var Feature $model */
-        $model = factory(Feature::class)->create([
+        $model = Feature::factory()->create([
             'id'    =>  1,
         ]);
 

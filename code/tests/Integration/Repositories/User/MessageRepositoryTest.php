@@ -40,7 +40,7 @@ class MessageRepositoryTest extends TestCase
             $resource->delete();
         }
 
-        factory(Message::class, 5)->create();
+        Message::factory()->count( 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -57,7 +57,7 @@ class MessageRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $dispatcher = mock(Dispatcher::class);
 
@@ -115,7 +115,7 @@ class MessageRepositoryTest extends TestCase
         $dispatcher->shouldReceive('dispatch');
         Message::setEventDispatcher($dispatcher);
 
-        $message = factory(Message::class)->create();
+        $message = Message::factory()->create();
 
         /** @var Message $result */
         $result = $this->repository->update($message, [
@@ -130,7 +130,7 @@ class MessageRepositoryTest extends TestCase
     public function testSendEmailToUser()
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $dispatcher = mock(Dispatcher::class);
 
@@ -165,7 +165,7 @@ class MessageRepositoryTest extends TestCase
     public function testSendEmailToUserWithGreetingOverride()
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $dispatcher = mock(Dispatcher::class);
 

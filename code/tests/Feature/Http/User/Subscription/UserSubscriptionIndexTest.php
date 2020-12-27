@@ -32,7 +32,7 @@ class UserSubscriptionIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/subscriptions');
 
@@ -42,7 +42,7 @@ class UserSubscriptionIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/subscriptions');
 
@@ -75,12 +75,12 @@ class UserSubscriptionIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Subscription::class, 6)->create();
-        factory(Subscription::class, 15)->create([
+        Subscription::factory()->count( 6)->create();
+        Subscription::factory()->count( 15)->create([
             'subscriber_id' => $this->actingAs->id,
             'subscriber_type' => 'user',
         ]);
-        factory(Subscription::class, 3)->create([
+        Subscription::factory()->count( 3)->create([
             'subscriber_id' => $this->actingAs->id,
             'subscriber_type' => 'organization',
         ]);

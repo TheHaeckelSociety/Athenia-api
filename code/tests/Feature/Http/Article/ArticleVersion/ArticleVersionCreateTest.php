@@ -33,7 +33,7 @@ class ArticleVersionCreateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         $response = $this->json('POST', $this->path . $article->id . '/versions');
 
         $response->assertStatus(403);
@@ -42,7 +42,7 @@ class ArticleVersionCreateTest extends TestCase
     public function testNonOwningUserBlocked()
     {
         $this->actAs(Role::ARTICLE_EDITOR);
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         $response = $this->json('POST', $this->path . $article->id . '/versions');
 
         $response->assertStatus(403);
@@ -52,10 +52,10 @@ class ArticleVersionCreateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
-        $iteration = factory(Iteration::class)->create([
+        $iteration = Iteration::factory()->create([
             'article_id' => $article->id,
         ]);
 
@@ -73,7 +73,7 @@ class ArticleVersionCreateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
 
@@ -94,7 +94,7 @@ class ArticleVersionCreateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
 
@@ -115,10 +115,10 @@ class ArticleVersionCreateTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_EDITOR);
 
-        $article = factory(Article::class)->create([
+        $article = Article::factory()->create([
             'created_by_id' => $this->actingAs->id,
         ]);
-        $iteration = factory(Iteration::class)->create();
+        $iteration = Iteration::factory()->create();
 
         $response = $this->json('POST', $this->path . $article->id . '/versions', [
             'iteration_id' => $iteration->id,

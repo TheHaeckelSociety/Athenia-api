@@ -36,7 +36,7 @@ class ArticleViewTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->article = factory(Article::class)->create();
+        $this->article = Article::factory()->create();
         $this->path.= $this->article->id;
     }
 
@@ -71,11 +71,11 @@ class ArticleViewTest extends TestCase
     {
         $this->actAs(Role::ARTICLE_VIEWER);
 
-        $iteration = factory(Iteration::class)->create([
+        $iteration = Iteration::factory()->create([
             'content' => 'hello',
             'article_id' => $this->article->id,
         ]);
-        factory(ArticleVersion::class)->create([
+        ArticleVersion::factory()->create([
             'article_id' => $this->article->id,
             'iteration_id' => $iteration->id,
         ]);

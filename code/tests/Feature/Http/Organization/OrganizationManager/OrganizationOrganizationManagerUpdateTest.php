@@ -72,7 +72,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     public function testNotUserNotOrganizationAdminBlocked()
     {
         $this->actAs(Role::MANAGER);
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,
@@ -87,7 +87,7 @@ class OrganizationOrganizationManagerUpdateTest extends TestCase
     public function testUpdateSuccessful()
     {
         $this->actAs(Role::ADMINISTRATOR);
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,

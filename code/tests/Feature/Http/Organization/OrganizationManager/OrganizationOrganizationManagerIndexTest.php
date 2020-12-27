@@ -43,7 +43,7 @@ class OrganizationOrganizationManagerIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
         $this->setupRoute($organization->id);
         $response = $this->json('GET', $this->route);
         $response->assertStatus(403);
@@ -53,7 +53,7 @@ class OrganizationOrganizationManagerIndexTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $organization = factory(Organization::class)->create();
+            $organization = Organization::factory()->create();
             $this->setupRoute($organization->id);
             $response = $this->json('GET', $this->route);
 
@@ -64,17 +64,17 @@ class OrganizationOrganizationManagerIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAs(Role::MANAGER);
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
         OrganizationManager::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->actingAs->id,
             'role_id' => Role::MANAGER,
         ]);
         $this->setupRoute($organization->id);
-        factory(OrganizationManager::class, 14)->create([
+        OrganizationManager::factory()->count( 14)->create([
             'organization_id' => $organization->id,
         ]);
-        factory(OrganizationManager::class, 3)->create();
+        OrganizationManager::factory()->count( 3)->create();
 
         // first page
         $response = $this->json('GET', $this->route);

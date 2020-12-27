@@ -33,13 +33,13 @@ class UserPaymentMethodDeleteTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->path.= $this->user->id . '/payment-methods/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
         $response = $this->json('DELETE', $this->path . $paymentMethod->id);
@@ -49,7 +49,7 @@ class UserPaymentMethodDeleteTest extends TestCase
 
     public function testIncorrectUserBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 
@@ -62,7 +62,7 @@ class UserPaymentMethodDeleteTest extends TestCase
 
     public function testUserDoesNotOwnPaymentMethodBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $this->actingAs($this->user);
 
@@ -73,7 +73,7 @@ class UserPaymentMethodDeleteTest extends TestCase
 
     public function testDeleteSuccessful()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->user->id,
         ]);
 

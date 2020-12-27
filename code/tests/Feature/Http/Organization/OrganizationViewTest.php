@@ -28,7 +28,7 @@ class OrganizationViewTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(Organization::class)->create();
+        $model = Organization::factory()->create();
         $response = $this->json('GET', '/v1/organizations/' . $model->id);
         $response->assertStatus(403);
     }
@@ -37,7 +37,7 @@ class OrganizationViewTest extends TestCase
     {
         foreach ($this->rolesWithoutAdmins() as $role) {
             $this->actAs($role);
-            $model = factory(Organization::class)->create();
+            $model = Organization::factory()->create();
             $response = $this->json('GET', '/v1/organizations/' . $model->id);
             $response->assertStatus(403);
         }
@@ -47,7 +47,7 @@ class OrganizationViewTest extends TestCase
     {
         $this->actAs(Role::MANAGER);
         /** @var Organization $model */
-        $model = factory(Organization::class)->create([
+        $model = Organization::factory()->create([
             'id'    =>  1,
         ]);
         OrganizationManager::factory()->create([

@@ -32,7 +32,7 @@ class OrganizationPaymentIndexTest extends TestCase
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/payments');
 
@@ -42,7 +42,7 @@ class OrganizationPaymentIndexTest extends TestCase
     public function tesNotOrganizationManagerBlocked()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/payments');
 
@@ -61,7 +61,7 @@ class OrganizationPaymentIndexTest extends TestCase
     public function testGetPaginationEmpty()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
@@ -80,19 +80,19 @@ class OrganizationPaymentIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $organization->id,
         ]);
 
-        factory(Payment::class, 6)->create();
-        factory(Payment::class, 15)->create([
+        Payment::factory()->count( 6)->create();
+        Payment::factory()->count( 15)->create([
             'owner_id' => $organization->id,
             'owner_type' => 'organization',
         ]);
-        factory(Payment::class, 3)->create([
+        Payment::factory()->count( 3)->create([
             'owner_id' => $organization->id,
             'owner_type' => 'user',
         ]);

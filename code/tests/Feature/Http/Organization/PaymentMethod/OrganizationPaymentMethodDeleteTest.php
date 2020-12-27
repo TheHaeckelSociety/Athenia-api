@@ -35,13 +35,13 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
         $this->path.= $this->organization->id . '/payment-methods/';
     }
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -52,7 +52,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
 
     public function testNotAdministratorBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -71,7 +71,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
 
     public function testOrganizationDoesNotOwnPaymentMethodBlocked()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         $this->actAsUser();
         OrganizationManager::factory()->create([
@@ -87,7 +87,7 @@ class OrganizationPaymentMethodDeleteTest extends TestCase
 
     public function testDeleteSuccessful()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);

@@ -35,14 +35,14 @@ class OrganizationAssetUpdateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->organization = factory(Organization::class)->create();
+        $this->organization = Organization::factory()->create();
 
         $this->path.= $this->organization->id . '/assets/';
     }
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -54,7 +54,7 @@ class OrganizationAssetUpdateTest extends TestCase
     public function testNotRelatedToOrganizationBlocked()
     {
         $this->actAs(Role::APP_USER);
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -71,7 +71,7 @@ class OrganizationAssetUpdateTest extends TestCase
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
         ]);
-        $asset = factory(Asset::class)->create();
+        $asset = Asset::factory()->create();
         $response = $this->json('PATCH', $this->path . $asset->id);
 
         $response->assertStatus(403);
@@ -85,7 +85,7 @@ class OrganizationAssetUpdateTest extends TestCase
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
         ]);
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
             'name' => 'A Name',
@@ -108,7 +108,7 @@ class OrganizationAssetUpdateTest extends TestCase
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
         ]);
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);
@@ -132,7 +132,7 @@ class OrganizationAssetUpdateTest extends TestCase
             'role_id' => Role::MANAGER,
             'user_id' => $this->actingAs->id,
         ]);
-        $asset = factory(Asset::class)->create([
+        $asset = Asset::factory()->create([
             'owner_id' => $this->organization->id,
             'owner_type' => 'organization',
         ]);

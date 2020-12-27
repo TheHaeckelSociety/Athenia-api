@@ -27,7 +27,7 @@ class BallotViewTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $model = factory(Ballot::class)->create();
+        $model = Ballot::factory()->create();
         $response = $this->json('GET', '/v1/ballots/' . $model->id);
         $response->assertStatus(403);
     }
@@ -36,7 +36,7 @@ class BallotViewTest extends TestCase
     {
         $this->actAs(Role::SUPER_ADMIN);
         /** @var Ballot $model */
-        $model = factory(Ballot::class)->create([
+        $model = Ballot::factory()->create([
             'id'    =>  1,
         ]);
 

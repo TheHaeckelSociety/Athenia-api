@@ -32,7 +32,7 @@ class OrganizationSubscriptionIndexTest extends TestCase
 
     public function testNotLoggedInOrganizationBlocked()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/subscriptions');
 
