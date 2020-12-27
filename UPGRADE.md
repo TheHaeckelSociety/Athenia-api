@@ -2,6 +2,55 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.53.0
+
+The big ones keep on coming! This update reworks the ballot data to be more expandable for the future, and it also adds some endpoints that will allow for users to vote on publics through the API.
+
+* code/app/Contracts/Repositories/Vote/BallotItemOptionRepositoryContract.php - New File
+* Code/app/Contracts/Repositories/Vote/BallotSubjectRepositoryContract.php - Removed
+* Code/app/Contracts/Repositories/Vote/BallotItemRepositoryContract.php - New File
+* code/app/Http/Core/Controllers/Ballot/BallotCompletionControllerAbstract.php - New File
+* code/app/Http/Core/Controllers/BallotControllerAbstract.php - New File
+* code/app/Http/Core/Controllers/User/BallotCompletionControllerAbstract.php - New File
+* code/app/Http/Core/Requests/Ballot/ - New File
+* code/app/Http/Core/Requests/User/BallotCompletion/ - New File
+* code/app/Http/V1/Controllers/Ballot/BallotCompletionController.php - New File
+* code/app/Http/V1/Controllers/BallotController.php - New File
+* code/app/Http/V1/Controllers/User/BallotCompletionController.php - New File
+* code/app/Listeners/Vote/VoteCreatedListener.php - This has been completely updated for the elimination of the ballot subject piece of data
+* code/app/Models/Vote/Ballot.php - Changed ballotSubjects relation to ballotItems
+* code/app/Models/Vote/BallotCompletion.php - Added validation rules
+* code/app/Models/Vote/BallotItem.php - New File
+* code/app/Models/Vote/BallotSubject.php - Removed
+* code/app/Models/Vote/BallotItemOption.php - New File
+* code/app/Models/Vote/Vote.php - Changed ballotSubject relation to ballotItem
+* code/app/Policies/Vote/ - New File
+* code/app/Providers/AtheniaRepositoryProvider.php - Registered new repositories, and removed ballot subject registration
+* code/app/Providers/RouteServiceProvider.php - Added ballot and ballot_completion route params
+* code/app/Repositories/Vote/BallotCompletionRepository.php - Synced votes upon create
+* code/app/Repositories/Vote/BallotItemOptionRepository.php - New File
+* code/app/Repositories/Vote/BallotItemRepository.php - New File
+* code/app/Repositories/Vote/BallotRepository.php - Changed child syncing from ballot subjects to ballot items
+* code/app/Repositories/Vote/BallotSubjectRepository.php - Removed
+* code/database/factories/VoteFactory.php - Updated for new data model structure
+* code/database/migrations/2020_12_12_160744_transform_ballot_subjects_to_options.php - New File
+* code/routes/core.php - Registered new ballot related routes
+* code/tests/Feature/Http/Ballot/ - New File
+* code/tests/Feature/Http/User/BallotCompletion/UserBallotCompletionIndexTest.php - New File
+* code/tests/Integration/Policies/Vote/ - New File
+* code/tests/Integration/Repositories/Vote/BallotCompletionRepositoryTest.php - Injected vote repository
+* code/tests/Integration/Repositories/Vote/BallotItemOptionRepositoryTest.php - New File
+* code/tests/Integration/Repositories/Vote/BallotItemRepositoryTest.php - New File
+* code/tests/Integration/Repositories/Vote/BallotSubjectRepositoryTest.php - Removed
+* code/tests/Integration/Repositories/Vote/BallotRepositoryTest.php - Updated for ballot item injection instead of subject
+* code/tests/Integration/Repositories/Vote/VoteRepositoryTest.php - Updated for ballot item relation instead of ballot subject
+* code/tests/Unit/Listeners/Vote/VoteCreatedListenerTest.php - Updated test for new data structure
+* code/tests/Unit/Models/Vote/BallotItemOptionTest.php - New File
+* code/tests/Unit/Models/Vote/BallotItemTest.php - New File
+* code/tests/Unit/Models/Vote/BallotSubjectTest.php - Removed
+* code/tests/Unit/Models/Vote/BallotTest.php - Updated ballot subject test to ballot item
+* code/tests/Unit/Models/Vote/VoteTest.php - Updated ballot subject test to ballot item
+
 ## 0.52.0
 
 Another big one, but a very useful one. This update adds both trial periods and prorated upgrades to subscriptions.

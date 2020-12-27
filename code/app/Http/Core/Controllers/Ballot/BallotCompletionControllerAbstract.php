@@ -41,6 +41,9 @@ abstract class BallotCompletionControllerAbstract extends BaseControllerAbstract
 
         $data['user_id'] = Auth::user()->id;
 
-        return new JsonResponse($this->repository->create($data, $ballot), 201);
+        $model = $this->repository->create($data, $ballot);
+        $model->load('votes');
+
+        return new JsonResponse($model, 201);
     }
 }

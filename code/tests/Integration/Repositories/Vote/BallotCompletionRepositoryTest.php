@@ -7,7 +7,9 @@ use App\Exceptions\NotImplementedException;
 use App\Models\User\User;
 use App\Models\Vote\Ballot;
 use App\Models\Vote\BallotCompletion;
+use App\Models\Vote\Vote;
 use App\Repositories\Vote\BallotCompletionRepository;
+use App\Repositories\Vote\VoteRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
@@ -33,7 +35,11 @@ class BallotCompletionRepositoryTest extends TestCase
 
         $this->repository = new BallotCompletionRepository(
             new BallotCompletion(),
-            $this->getGenericLogMock()
+            $this->getGenericLogMock(),
+            new VoteRepository(
+                new Vote(),
+                $this->getGenericLogMock(),
+            ),
         );
     }
 
