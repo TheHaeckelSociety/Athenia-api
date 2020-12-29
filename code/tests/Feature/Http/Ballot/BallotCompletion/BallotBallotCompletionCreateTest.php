@@ -91,7 +91,7 @@ class BallotBallotCompletionCreateTest extends TestCase
     public function testCreateFailsMissingRequiredFields()
     {
         $this->actAsUser();
-        $ballot = Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
         $this->setupRoute($ballot->id);
 
         $response = $this->json('POST', $this->route);
