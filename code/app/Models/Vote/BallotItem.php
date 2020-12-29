@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property mixed|null $created_at
  * @property mixed|null $updated_at
+ * @property string|null $name
  * @property-read \App\Models\Vote\Ballot $ballot
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vote\BallotItemOption[] $ballotItemOptions
  * @property-read int|null $ballot_item_options_count
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVoteCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vote\BallotItem whereVotesCast($value)

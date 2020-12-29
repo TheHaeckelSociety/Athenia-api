@@ -43,6 +43,16 @@ class Ballot extends BaseModelAbstract
     const TYPE_SINGLE_OPTION = 'single_option';
 
     /**
+     * The ballot type for when there will be multiple options within each item
+     */
+    const TYPE_MULTIPLE_OPTIONS = 'multiple_options';
+
+    /**
+     * The ballot type for when we allow the user to rank their options
+     */
+    const TYPE_RANKED_CHOICE = 'ranked_choice';
+
+    /**
      * All times someone has completed this ballot
      *
      * @return HasMany
