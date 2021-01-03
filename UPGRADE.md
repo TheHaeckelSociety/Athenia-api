@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 0.54.0 
+
+Simple one! This simply adds some new ballot types, and a new field for the name of the ballot item. To complete this update copy over the following files.
+
+* code/app/Models/Vote/Ballot.php
+* code/database/migrations/2020_12_29_205926_add_additional_fields_to_ballot_items.php
+
 ## 0.53.0
 
 The big ones keep on coming! This update reworks the ballot data to be more expandable for the future, and it also adds some endpoints that will allow for users to vote on publics through the API.
