@@ -32,7 +32,7 @@ class UserAssetIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/assets');
 
@@ -42,7 +42,7 @@ class UserAssetIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/assets');
 
@@ -75,12 +75,12 @@ class UserAssetIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Asset::class, 6)->create();
-        factory(Asset::class, 15)->create([
+        Asset::factory()->count(6)->create();
+        Asset::factory()->count(15)->create([
             'owner_id' => $this->actingAs->id,
             'owner_type' => 'user',
         ]);
-        factory(Asset::class, 3)->create([
+        Asset::factory()->count(3)->create([
             'owner_id' => $this->actingAs->id,
             'owner_type' => 'organization',
         ]);

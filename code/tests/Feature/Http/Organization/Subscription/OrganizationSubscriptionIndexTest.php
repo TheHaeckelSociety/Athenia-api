@@ -42,7 +42,7 @@ class OrganizationSubscriptionIndexTest extends TestCase
     public function tesNotOrganizationManagerBlocked()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $response = $this->json('GET', $this->path . $organization->id . '/subscriptions');
 
@@ -61,7 +61,7 @@ class OrganizationSubscriptionIndexTest extends TestCase
     public function testGetPaginationEmpty()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
@@ -80,19 +80,19 @@ class OrganizationSubscriptionIndexTest extends TestCase
     public function testGetPaginationResult()
     {
         $this->actAsUser();
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         OrganizationManager::factory()->create([
             'user_id' => $this->actingAs->id,
             'organization_id' => $organization->id,
         ]);
 
-        factory(Subscription::class, 6)->create();
-        factory(Subscription::class, 15)->create([
+        Subscription::factory()->count(6)->create();
+        Subscription::factory()->count(15)->create([
             'subscriber_id' => $organization->id,
             'subscriber_type' => 'organization',
         ]);
-        factory(Subscription::class, 3)->create([
+        Subscription::factory()->count(3)->create([
             'subscriber_id' => $organization->id,
             'subscriber_type' => 'user',
         ]);

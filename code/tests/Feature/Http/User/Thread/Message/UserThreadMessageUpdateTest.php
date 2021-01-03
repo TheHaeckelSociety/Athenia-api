@@ -38,8 +38,8 @@ class UserThreadMessageUpdateTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
         $this->mockApplicationLog();
-        $this->user = factory(User::class)->create();
-        $this->thread = factory(Thread::class)->create([
+        $this->user = User::factory()->create();
+        $this->thread = Thread::factory()->create([
             'subject_type' => 'private_message',
         ]);
 
@@ -49,7 +49,7 @@ class UserThreadMessageUpdateTest extends TestCase
     public function testNotLoggedInUserBlocked()
     {
         Message::unsetEventDispatcher();
-        $message = factory(Message::class)->create();
+        $message = Message::factory()->create();
         $response = $this->json('PUT', $this->path . $message->id);
 
         $response->assertStatus(403);
@@ -61,7 +61,7 @@ class UserThreadMessageUpdateTest extends TestCase
         $this->actingAs($this->user);
 
         $this->thread->users()->sync([$this->user->id]);
-        $message = factory(Message::class)->create([
+        $message = Message::factory()->create([
             'to_id' => $this->user->id,
             'thread_id' => $this->thread->id,
         ]);
@@ -87,7 +87,7 @@ class UserThreadMessageUpdateTest extends TestCase
 
         $this->thread->users()->sync([$this->user->id]);
 
-        $message = factory(Message::class)->create([
+        $message = Message::factory()->create([
             'to_id' => $this->user->id,
             'thread_id' => $this->thread->id,
         ]);

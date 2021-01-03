@@ -54,7 +54,7 @@ class ResourceIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Resource::class, 15)->create();
+        Resource::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', $this->path);
@@ -112,7 +112,7 @@ class ResourceIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Resource::class, 15)->create();
+        Resource::factory()->count(15)->create();
 
         // first page
         $response = $this->json('GET', $this->path . '?expand[resource]=*');

@@ -32,7 +32,7 @@ class UserPaymentIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/payments');
 
@@ -42,7 +42,7 @@ class UserPaymentIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/payments');
 
@@ -75,12 +75,12 @@ class UserPaymentIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Payment::class, 6)->create();
-        factory(Payment::class, 15)->create([
+        Payment::factory()->count( 6)->create();
+        Payment::factory()->count( 15)->create([
             'owner_id' => $this->actingAs->id,
             'owner_type' => 'user',
         ]);
-        factory(Payment::class, 3)->create([
+        Payment::factory()->count(3)->create([
             'owner_id' => $this->actingAs->id,
             'owner_type' => 'organization',
         ]);

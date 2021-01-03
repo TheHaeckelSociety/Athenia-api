@@ -71,7 +71,7 @@ class ArticleIterationTest extends TestCase
         }
 
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $httpRequest = mock(RequestInterface::class);
 
@@ -101,7 +101,7 @@ class ArticleIterationTest extends TestCase
 
     public function testOnOpen()
     {
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         $this->createValidConnection($article);
     }
@@ -120,16 +120,16 @@ class ArticleIterationTest extends TestCase
         /**
          * This should not receive any messages, since we are not going to be updating this article
          */
-        $this->createValidConnection(factory(Article::class)->create());
+        $this->createValidConnection(Article::factory()->create());
 
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /**
          * Create some old iterations that should not affect the output
          */
-        factory(Iteration::class, 5)->create([
+        Iteration::factory()->count(5)->create([
             'article_id' => $article->id,
         ]);
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'This is a removal test of iugwhw something.',
         ]);
@@ -151,16 +151,16 @@ class ArticleIterationTest extends TestCase
         /**
          * This should not receive any messages, since we are not going to be updating this article
          */
-        $this->createValidConnection(factory(Article::class)->create());
+        $this->createValidConnection(Article::factory()->create());
 
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /**
          * Create some old iterations that should not affect the output
          */
-        factory(Iteration::class, 5)->create([
+        Iteration::factory()->count(5)->create([
             'article_id' => $article->id,
         ]);
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'This is an add test of something.',
         ]);
@@ -182,16 +182,16 @@ class ArticleIterationTest extends TestCase
         /**
          * This should not receive any messages, since we are not going to be updating this article
          */
-        $this->createValidConnection(factory(Article::class)->create());
+        $this->createValidConnection(Article::factory()->create());
 
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /**
          * Create some old iterations that should not affect the output
          */
-        factory(Iteration::class, 5)->create([
+        Iteration::factory()->count(5)->create([
             'article_id' => $article->id,
         ]);
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'This is a replace test of this content.',
         ]);

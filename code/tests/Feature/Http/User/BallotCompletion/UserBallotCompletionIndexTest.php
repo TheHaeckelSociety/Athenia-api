@@ -32,7 +32,7 @@ class UserBallotCompletionIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/ballot-completions');
 
@@ -42,7 +42,7 @@ class UserBallotCompletionIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/ballot-completions');
 
@@ -75,8 +75,8 @@ class UserBallotCompletionIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(BallotCompletion::class, 4)->create();
-        factory(BallotCompletion::class, 15)->create([
+        BallotCompletion::factory()->count(4)->create();
+        BallotCompletion::factory()->count(15)->create([
             'user_id' => $this->actingAs->id,
         ]);
 

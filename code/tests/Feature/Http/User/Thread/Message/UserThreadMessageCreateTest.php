@@ -38,8 +38,8 @@ class UserThreadMessageCreateTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
         $this->mockApplicationLog();
-        $this->user = factory(User::class)->create();
-        $this->thread = factory(Thread::class)->create([
+        $this->user = User::factory()->create();
+        $this->thread = Thread::factory()->create([
             'subject_type' => 'private_message'
         ]);
 

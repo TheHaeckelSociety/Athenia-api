@@ -35,14 +35,14 @@ class UserSubscriptionUpdateTest extends TestCase
         $this->setupDatabase();
         $this->mockApplicationLog();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->path.= $this->user->id . '/subscriptions/';
     }
 
     public function testNotLoggedInUserBlocked()
     {
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id);
@@ -53,7 +53,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testDifferentUserThanRouteBlocked()
     {
         $this->actAs(Role::APP_USER);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id);
@@ -64,7 +64,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testDifferentUserThanSubscriptionBlocked()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create();
+        $subscription = Subscription::factory()->create();
         $response = $this->json('PATCH', $this->path . $subscription->id);
 
         $response->assertStatus(403);
@@ -73,7 +73,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testUpdateSuccessful()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
@@ -89,7 +89,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testFailsNotPresentFieldsPresent()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
@@ -109,7 +109,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testUpdateFailsInvalidBooleanField()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
@@ -129,7 +129,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testUpdateFailsInvalidIntegerFields()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
@@ -147,7 +147,7 @@ class UserSubscriptionUpdateTest extends TestCase
     public function testUpdateFailsInvalidModelFields()
     {
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [
@@ -164,9 +164,9 @@ class UserSubscriptionUpdateTest extends TestCase
 
     public function testUpdateFailsPaymentMethodNotOwnedByUser()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
         $this->actingAs($this->user);
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $this->user->id,
         ]);
         $response = $this->json('PATCH', $this->path . $subscription->id, [

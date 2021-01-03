@@ -34,7 +34,7 @@ class UserMeTest extends TestCase
     {
         User::unsetEventDispatcher();
         /** @var User $myCurrentUser */
-        $myCurrentUser = factory(User::class)->create();
+        $myCurrentUser = User::factory()->create();
 
         $this->actingAs($myCurrentUser);
 
@@ -45,7 +45,7 @@ class UserMeTest extends TestCase
 
     public function testGetMeFailsWithTooManyExpands()
     {
-        $myCurrentUser = factory(User::class)->create();
+        $myCurrentUser = User::factory()->create();
 
         $this->actingAs($myCurrentUser);
 

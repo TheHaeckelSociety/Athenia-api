@@ -98,7 +98,7 @@ class OrganizationUpdateTest extends TestCase
 
     public function testPatchFailsInvalidStringFields()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 
@@ -119,7 +119,7 @@ class OrganizationUpdateTest extends TestCase
 
     public function testPatchFailsTooLongFields()
     {
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
 
         $this->actAs(Role::SUPER_ADMIN);
 

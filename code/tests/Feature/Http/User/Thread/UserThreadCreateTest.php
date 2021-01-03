@@ -32,7 +32,7 @@ class UserThreadCreateTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
         $this->mockApplicationLog();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->path.= $this->user->id . '/threads';
     }
@@ -48,13 +48,13 @@ class UserThreadCreateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $otherUser = factory(User::class)->create();
+        $otherUser = User::factory()->create();
         /** @var Thread $thread */
-        $thread = factory(Thread::class)->create();
+        $thread = Thread::factory()->create();
         $thread->users()->attach($otherUser->id);
         $thread->users()->attach($this->user->id);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('POST', $this->path, [
             'subject_type' => 'private_message',

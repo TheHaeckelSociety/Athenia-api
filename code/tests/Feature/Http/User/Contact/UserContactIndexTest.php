@@ -32,7 +32,7 @@ class UserContactIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/contacts');
 
@@ -42,7 +42,7 @@ class UserContactIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/contacts');
 
@@ -75,11 +75,11 @@ class UserContactIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Contact::class, 4)->create();
-        factory(Contact::class, 10)->create([
+        Contact::factory()->count(4)->create();
+        Contact::factory()->count(10)->create([
             'requested_id' => $this->actingAs->id,
         ]);
-        factory(Contact::class, 5)->create([
+        Contact::factory()->count( 5)->create([
             'initiated_by_id' => $this->actingAs->id,
         ]);
 
@@ -139,11 +139,11 @@ class UserContactIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Contact::class, 4)->create();
-        factory(Contact::class, 10)->create([
+        Contact::factory()->count(4)->create();
+        Contact::factory()->count(10)->create([
             'requested_id' => $this->actingAs->id,
         ]);
-        factory(Contact::class, 5)->create([
+        Contact::factory()->count(5)->create([
             'initiated_by_id' => $this->actingAs->id,
         ]);
 

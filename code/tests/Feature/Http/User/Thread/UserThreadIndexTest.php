@@ -33,7 +33,7 @@ class UserThreadIndexTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/threads');
 
@@ -43,7 +43,7 @@ class UserThreadIndexTest extends TestCase
     public function testIncorrectUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', $this->path . $user->id . '/threads');
 
@@ -76,17 +76,17 @@ class UserThreadIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Thread::class, 5)->create([
+        Thread::factory()->count(5)->create([
             'subject_type' => 'private_message'
         ]);
-        $threads = factory(Thread::class, 15)->create([
+        $threads = Thread::factory()->count(15)->create([
             'subject_type' => 'private_message'
         ]);
 
         /** @var Thread $thread */
         foreach ($threads as $thread) {
             $thread->users()->sync([$this->actingAs->id]);
-            factory(Message::class)->create([
+            Message::factory()->create([
                 'thread_id' => $thread->id,
             ]);
         }
@@ -148,17 +148,17 @@ class UserThreadIndexTest extends TestCase
     {
         $this->actAsUser();
 
-        factory(Thread::class, 5)->create([
+        Thread::factory()->count(5)->create([
             'subject_type' => 'private_message'
         ]);
-        $threads = factory(Thread::class, 15)->create([
+        $threads = Thread::factory()->count(15)->create([
             'subject_type' => 'private_message'
         ]);
 
         /** @var Thread $thread */
         foreach ($threads as $thread) {
             $thread->users()->sync([$this->actingAs->id]);
-            factory(Message::class)->create([
+            Message::factory()->create([
                 'thread_id' => $thread->id,
             ]);
         }

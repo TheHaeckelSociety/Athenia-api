@@ -34,7 +34,7 @@ class UserContactCreateTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
         $this->mockApplicationLog();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->path.= $this->user->id . '/contacts';
     }
@@ -62,7 +62,7 @@ class UserContactCreateTest extends TestCase
             return true;
         }));
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('POST', $this->path, [
             'requested_id' => $user->id,

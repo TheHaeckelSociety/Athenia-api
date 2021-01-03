@@ -31,7 +31,7 @@ class UserUpdateTest extends TestCase
 
     public function testNotLoggedInUserBlocked()
     {
-        $character = factory(User::class)->create();
+        $character = User::factory()->create();
         $response = $this->json('PUT', $this->path . '/' . $character->id);
 
         $response->assertStatus(403);
@@ -40,7 +40,7 @@ class UserUpdateTest extends TestCase
     public function testDifferentUserBlocked()
     {
         $this->actAsUser();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('PUT', $this->path . '/' . $user->id);
 
@@ -58,7 +58,7 @@ class UserUpdateTest extends TestCase
 
     public function testUpdateSuccessful()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'allow_users_to_add_me' => true,
             'receive_push_notifications' => true,
             'push_notification_key' => 'a key'
@@ -109,7 +109,7 @@ class UserUpdateTest extends TestCase
 
     public function testUpdateFailsInvalidBooleanFields()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
 
         $response = $this->json('PUT', $this->path . '/' . $user->id, [
