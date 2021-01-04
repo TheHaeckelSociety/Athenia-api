@@ -49,7 +49,7 @@ class BallotRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Ballot::class, 5)->create();
+        Ballot::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -62,7 +62,7 @@ class BallotRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Ballot::class)->create();
+        $model = Ballot::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -70,7 +70,7 @@ class BallotRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Ballot::class)->create(['id' => 19]);
+        Ballot::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -85,7 +85,7 @@ class BallotRepositoryTest extends TestCase
                 [
                     'ballot_item_options' => [
                         [
-                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_id' => Iteration::factory()->create()->id,
                             'subject_type' => 'iteration',
                         ],
                     ]
@@ -99,8 +99,8 @@ class BallotRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Ballot::class)->create();
-        $subjects = factory(BallotItem::class, 3)->create([
+        $model = Ballot::factory()->create();
+        $subjects = BallotItem::factory()->count(3)->create([
             'ballot_id' => $model->id,
         ]);
 
@@ -110,7 +110,7 @@ class BallotRepositoryTest extends TestCase
                     'id' => $subjects[1]->id,
                     'ballot_item_options' => [
                         [
-                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_id' => Iteration::factory()->create()->id,
                             'subject_type' => 'iteration',
                         ]
                     ]
@@ -118,7 +118,7 @@ class BallotRepositoryTest extends TestCase
                 [
                     'ballot_item_options' => [
                         [
-                            'subject_id' => factory(Iteration::class)->create()->id,
+                            'subject_id' => Iteration::factory()->create()->id,
                             'subject_type' => 'iteration',
                         ]
                     ]

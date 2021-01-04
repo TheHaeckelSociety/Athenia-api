@@ -36,7 +36,7 @@ class OrganizationRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Organization::class, 5)->create();
+        Organization::factory()->count( 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -49,7 +49,7 @@ class OrganizationRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Organization::class)->create();
+        $model = Organization::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -57,7 +57,7 @@ class OrganizationRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Organization::class)->create(['id' => 19]);
+        Organization::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -75,7 +75,7 @@ class OrganizationRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Organization::class)->create([
+        $model = Organization::factory()->create([
             'name' => 'A Organization',
         ]);
         $this->repository->update($model, [
@@ -89,7 +89,7 @@ class OrganizationRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Organization::class)->create();
+        $model = Organization::factory()->create();
 
         $this->repository->delete($model);
 

@@ -22,19 +22,19 @@ class MembershipPlanTest extends TestCase
         /** @var MembershipPlan $membershipPlan */
         $membershipPlan = MembershipPlan::factory()->create();
 
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 42.12,
             'active' => true,
             'created_at' => Carbon::now()->subDay(),
         ]);
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 65.43,
             'active' => true,
             'created_at' => Carbon::now(),
         ]);
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 12.43,
             'active' => false,
@@ -49,20 +49,20 @@ class MembershipPlanTest extends TestCase
         /** @var MembershipPlan $membershipPlan */
         $membershipPlan = MembershipPlan::factory()->create();
 
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 42.12,
             'active' => true,
             'created_at' => Carbon::now()->subDay(),
         ]);
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'id' => 6,
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 65.43,
             'active' => true,
             'created_at' => Carbon::now(),
         ]);
-        factory(MembershipPlanRate::class)->create([
+        MembershipPlanRate::factory()->create([
             'membership_plan_id' => $membershipPlan->id,
             'cost' => 12.43,
             'active' => false,

@@ -44,17 +44,17 @@ class SendRenewalRemindersTest extends TestCase
         $command = new SendRenewalReminders($subscriptionRepository, $messageRepository);
 
         /** @var Subscription $subscription */
-        $subscription = factory(Subscription::class)->create([
+        $subscription = Subscription::factory()->create([
             'expires_at' => Carbon::now()->addWeek(2),
-            'membership_plan_rate_id' => factory(MembershipPlanRate::class)->create()->id,
+            'membership_plan_rate_id' => MembershipPlanRate::factory()->create()->id,
         ]);
-        factory(Subscription::class)->create([
+        Subscription::factory()->create([
             'expires_at' => Carbon::now()->addWeek()->addDay(6),
-            'membership_plan_rate_id' => factory(MembershipPlanRate::class)->create()->id,
+            'membership_plan_rate_id' => MembershipPlanRate::factory()->create()->id,
         ]);
-        factory(Subscription::class)->create([
+        Subscription::factory()->create([
             'expires_at' => Carbon::now()->addWeek(2)->addDay(1),
-            'membership_plan_rate_id' => factory(MembershipPlanRate::class)->create()->id,
+            'membership_plan_rate_id' => MembershipPlanRate::factory()->create()->id,
         ]);
 
         $messageRepository->shouldReceive('sendEmailToUser')->once()->with(

@@ -41,10 +41,10 @@ class MessagePolicyTest extends TestCase
 
     public function testAllBlocksWhenGateNotFound()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -55,10 +55,10 @@ class MessagePolicyTest extends TestCase
 
     public function testAllBlockWhenAccessingAnotherUser()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -71,9 +71,9 @@ class MessagePolicyTest extends TestCase
 
     public function testAllBlockWhenGateFails()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -87,9 +87,9 @@ class MessagePolicyTest extends TestCase
 
     public function testAllPasses()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -103,10 +103,10 @@ class MessagePolicyTest extends TestCase
 
     public function testCreateBlocksWhenGateNotFound()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -117,10 +117,10 @@ class MessagePolicyTest extends TestCase
 
     public function testCreateBlockWhenAccessingAnotherUser()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -133,9 +133,9 @@ class MessagePolicyTest extends TestCase
 
     public function testCreateBlockWhenGateFails()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -149,9 +149,9 @@ class MessagePolicyTest extends TestCase
 
     public function testCreatePasses()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
 
@@ -165,13 +165,13 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdateBlocksWhenGateNotFound()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $message = factory(Message::class)->create();
+        $message = Message::factory()->create();
 
         $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
 
@@ -180,12 +180,12 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdateBlocksUserMismatch()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
-        $thread = factory(Thread::class)->create([
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $message = factory(Message::class)->create();
+        $message = Message::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 

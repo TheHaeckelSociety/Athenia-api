@@ -47,21 +47,21 @@ class ContactRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Contact::class, 5)->create();
+        Contact::factory()->count( 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
 
     public function testFindAllSuccessWithUser()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        factory(Contact::class, 5)->create();
+        Contact::factory()->count(5)->create();
 
-        factory(Contact::class, 4)->create([
+        Contact::factory()->count(4)->create([
             'requested_id' => $user->id,
         ]);
-        factory(Contact::class, 3)->create([
+        Contact::factory()->count(3)->create([
             'initiated_by_id' => $user->id,
         ]);
 
@@ -77,7 +77,7 @@ class ContactRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Contact::class)->create();
+        $model = Contact::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -85,7 +85,7 @@ class ContactRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Contact::class)->create(['id' => 19]);
+        Contact::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -93,8 +93,8 @@ class ContactRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $initiatedBy = factory(User::class)->create();
-        $requested = factory(User::class)->create();
+        $initiatedBy = User::factory()->create();
+        $requested = User::factory()->create();
 
         /** @var Contact $contact */
         $contact = $this->repository->create([
@@ -109,7 +109,7 @@ class ContactRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Contact::class)->create();
+        $model = Contact::factory()->create();
         $this->repository->update($model, [
             'denied_at' => Carbon::now(),
         ]);
@@ -120,7 +120,7 @@ class ContactRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Contact::class)->create();
+        $model = Contact::factory()->create();
 
         $this->repository->delete($model);
 

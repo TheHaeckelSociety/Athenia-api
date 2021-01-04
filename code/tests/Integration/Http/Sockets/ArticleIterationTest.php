@@ -63,11 +63,11 @@ class ArticleIterationTest extends TestCase
 
     public function testRunAction()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /** @var Iteration $initialIteration */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'content' => "Test content with a \n line break",
             'article_id' => $article->id,
         ]);
@@ -89,11 +89,11 @@ class ArticleIterationTest extends TestCase
 
     public function testHandleRemoveAction()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /** @var Iteration $initialIteration */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'content' => "Test content with a \n line break",
             'article_id' => $article->id,
         ]);
@@ -123,11 +123,11 @@ class ArticleIterationTest extends TestCase
 
     public function testHandleAddAction()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /** @var Iteration $initialIteration */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'content' => "Test content with a \n line break",
             'article_id' => $article->id,
         ]);
@@ -166,11 +166,11 @@ class ArticleIterationTest extends TestCase
 
     public function testHandleReplaceAction()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
         /** @var Iteration $initialIteration */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'content' => "Test content with a \n line break",
             'article_id' => $article->id,
         ]);

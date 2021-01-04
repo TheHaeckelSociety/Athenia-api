@@ -38,7 +38,7 @@ class BallotItemOptionRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(BallotItemOption::class, 5)->create();
+        BallotItemOption::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -51,7 +51,7 @@ class BallotItemOptionRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(BallotItemOption::class)->create();
+        $model = BallotItemOption::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -59,7 +59,7 @@ class BallotItemOptionRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(BallotItemOption::class)->create(['id' => 19]);
+        BallotItemOption::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -68,10 +68,10 @@ class BallotItemOptionRepositoryTest extends TestCase
     public function testCreateSuccess()
     {
         /** @var BallotItem $ballotItem */
-        $ballotItem = factory(BallotItem::class)->create();
+        $ballotItem = BallotItem::factory()->create();
 
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var BallotItemOption $ballotItemOption */
         $ballotItemOption = $this->repository->create([
@@ -86,7 +86,7 @@ class BallotItemOptionRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(BallotItemOption::class)->create([
+        $model = BallotItemOption::factory()->create([
             'vote_count' => 1,
         ]);
         $this->repository->update($model, [
@@ -100,7 +100,7 @@ class BallotItemOptionRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(BallotItemOption::class)->create();
+        $model = BallotItemOption::factory()->create();
 
         $this->repository->delete($model);
 

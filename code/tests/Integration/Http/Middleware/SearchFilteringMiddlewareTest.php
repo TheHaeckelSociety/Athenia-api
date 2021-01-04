@@ -25,11 +25,11 @@ class SearchFilteringMiddlewareTest extends TestCase
 
     public function testSearchWithLike()
     {
-        factory(Article::class, 1)->create(['title' => 'h']);
-        factory(Article::class, 1)->create(['title' => 'cart']);
-        factory(Article::class, 1)->create(['title' => 'can']);
-        factory(Article::class, 1)->create(['title' => 'the']);
-        factory(Article::class, 1)->create(['title' => 'butts']);
+        Article::factory()->create(['title' => 'h']);
+        Article::factory()->create(['title' => 'cart']);
+        Article::factory()->create(['title' => 'can']);
+        Article::factory()->create(['title' => 'the']);
+        Article::factory()->create(['title' => 'butts']);
 
         // first page
         $response = $this->json('GET', '/v1/articles?search[title]=like,*h*');
@@ -47,11 +47,11 @@ class SearchFilteringMiddlewareTest extends TestCase
 
     public function testFilter()
     {
-        factory(Article::class, 1)->create(['title' => 'h']);
-        factory(Article::class, 1)->create(['title' => 'cart']);
-        factory(Article::class, 1)->create(['title' => 'can']);
-        factory(Article::class, 1)->create(['title' => 'the']);
-        factory(Article::class, 1)->create(['title' => 'butts']);
+        Article::factory()->create(['title' => 'h']);
+        Article::factory()->create(['title' => 'cart']);
+        Article::factory()->create(['title' => 'can']);
+        Article::factory()->create(['title' => 'the']);
+        Article::factory()->create(['title' => 'butts']);
 
         // first page
         $response = $this->json('GET', '/v1/articles?filter[title]=butts');

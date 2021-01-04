@@ -36,7 +36,7 @@ class FeatureRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Feature::class, 5)->create();
+        Feature::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -49,7 +49,7 @@ class FeatureRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Feature::class)->create();
+        $model = Feature::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -57,7 +57,7 @@ class FeatureRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Feature::class)->create(['id' => 19]);
+        Feature::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -75,7 +75,7 @@ class FeatureRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Feature::class)->create([
+        $model = Feature::factory()->create([
             'name' => 'a code'
         ]);
         $this->repository->update($model, [
@@ -88,7 +88,7 @@ class FeatureRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Feature::class)->create();
+        $model = Feature::factory()->create();
 
         $this->repository->delete($model);
 

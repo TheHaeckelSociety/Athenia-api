@@ -19,8 +19,8 @@ class BallotCompletionPolicyTest extends TestCase
 
     public function testAll()
     {
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $policy = new BallotCompletionPolicy();
 

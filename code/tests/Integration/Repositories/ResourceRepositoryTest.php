@@ -106,7 +106,7 @@ class ResourceRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Resource::class)->create();
+        $model = Resource::factory()->create();
 
         $this->repository->delete($model);
 

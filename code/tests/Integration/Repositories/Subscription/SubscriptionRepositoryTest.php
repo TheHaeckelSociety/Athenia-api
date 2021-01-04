@@ -46,7 +46,7 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Subscription::class, 5)->create();
+        Subscription::factory()->count( 5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -59,7 +59,7 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Subscription::class)->create();
+        $model = Subscription::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -67,7 +67,7 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Subscription::class)->create(['id' => 19]);
+        Subscription::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -75,13 +75,13 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testCreateSuccessWithLifeTimeMembership()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
-            'membership_plan_id' => factory(MembershipPlan::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
+            'membership_plan_id' => MembershipPlan::factory()->create([
                 'duration' => MembershipPlan::DURATION_LIFETIME,
             ])->id,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create();
-        $user = factory(User::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
+        $user = User::factory()->create();
 
         /** @var Subscription $subscription */
         $subscription = $this->repository->create([
@@ -99,13 +99,13 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testCreateSuccessWithYearlyMembership()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
-            'membership_plan_id' => factory(MembershipPlan::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
+            'membership_plan_id' => MembershipPlan::factory()->create([
                 'duration' => MembershipPlan::DURATION_YEAR,
             ])->id,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create();
-        $user = factory(User::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow('2018-02-12 00:00:00');
 
@@ -125,13 +125,13 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testCreateSuccessWithMonthlyMembership()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
-            'membership_plan_id' => factory(MembershipPlan::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
+            'membership_plan_id' => MembershipPlan::factory()->create([
                 'duration' => MembershipPlan::DURATION_MONTH,
             ])->id,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create();
-        $user = factory(User::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow('2018-02-12 00:00:00');
 
@@ -151,9 +151,9 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testCreateSuccessWhenAttemptingATrialWithoutATrialPeriod()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create();
-        $paymentMethod = factory(PaymentMethod::class)->create();
-        $user = factory(User::class)->create();
+        $membershipPlanRate = MembershipPlanRate::factory()->create();
+        $paymentMethod = PaymentMethod::factory()->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow('2018-02-12 00:00:00');
 
@@ -174,13 +174,13 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testCreateSuccessWithTrialPeriod()
     {
-        $membershipPlanRate = factory(MembershipPlanRate::class)->create([
-            'membership_plan_id' => factory(MembershipPlan::class)->create([
+        $membershipPlanRate = MembershipPlanRate::factory()->create([
+            'membership_plan_id' => MembershipPlan::factory()->create([
                 'trial_period' => 14,
             ])->id,
         ]);
-        $paymentMethod = factory(PaymentMethod::class)->create();
-        $user = factory(User::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
+        $user = User::factory()->create();
 
         Carbon::setTestNow('2018-02-12 00:00:00');
 
@@ -202,7 +202,7 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Subscription::class)->create([
+        $model = Subscription::factory()->create([
             'expires_at' => null,
         ]);
         $this->repository->update($model, [
@@ -216,7 +216,7 @@ class SubscriptionRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Subscription::class)->create();
+        $model = Subscription::factory()->create();
 
         $this->repository->delete($model);
 

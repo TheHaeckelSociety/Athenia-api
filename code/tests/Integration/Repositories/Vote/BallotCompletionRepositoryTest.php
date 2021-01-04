@@ -45,7 +45,7 @@ class BallotCompletionRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(BallotCompletion::class, 5)->create();
+        BallotCompletion::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }

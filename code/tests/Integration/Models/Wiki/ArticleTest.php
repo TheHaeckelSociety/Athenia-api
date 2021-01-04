@@ -28,7 +28,7 @@ class ArticleTest extends TestCase
     public function testContentReturnsNull()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         $this->assertNull($article->content);
     }
@@ -36,13 +36,13 @@ class ArticleTest extends TestCase
     public function testCurrentVersionReturnsProperVersion()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
-        factory(ArticleVersion::class)->create([
+        ArticleVersion::factory()->create([
             'article_id' => $article->id,
         ]);
 
-        $expected = factory(ArticleVersion::class)->create([
+        $expected = ArticleVersion::factory()->create([
             'article_id' => $article->id,
         ]);
 
@@ -52,15 +52,15 @@ class ArticleTest extends TestCase
     public function testContentReturnsModelContent()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         /** @var Iteration $iteration This should be appended */
-        $iteration = factory(Iteration::class)->create([
+        $iteration = Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'Hello'
         ]);
 
-        factory(ArticleVersion::class)->create([
+        ArticleVersion::factory()->create([
             'article_id' => $article->id,
             'iteration_id' => $iteration->id,
         ]);
@@ -71,27 +71,27 @@ class ArticleTest extends TestCase
     public function testContentReturnsCorrectModel()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         /** This should be appended */
-        $iteration = factory(Iteration::class)->create([
+        $iteration = Iteration::factory()->create([
             'article_id' => $article->id,
             'created_at' => Carbon::now(),
             'content' => 'Hello'
         ]);
 
-        factory(ArticleVersion::class)->create([
+        ArticleVersion::factory()->create([
             'article_id' => $article->id,
             'iteration_id' => $iteration->id,
         ]);
 
         /** This is an old iteration that should not be appended */
-        $iteration = factory(Iteration::class)->create([
+        $iteration = Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'old content'
         ]);
 
-        factory(ArticleVersion::class)->create([
+        ArticleVersion::factory()->create([
             'article_id' => $article->id,
             'iteration_id' => $iteration->id,
             'created_at' => Carbon::now()->subDay(),
@@ -103,10 +103,10 @@ class ArticleTest extends TestCase
     public function testLastIterationContentReturnsModelContent()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         /** @var Iteration $iteration This should be appended */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'content' => 'Hello'
         ]);
@@ -117,17 +117,17 @@ class ArticleTest extends TestCase
     public function testLastIterationContentReturnsCorrectModel()
     {
         /** @var Article $article */
-        $article = factory(Article::class)->create();
+        $article = Article::factory()->create();
 
         /** This should be appended */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'created_at' => Carbon::now(),
             'content' => 'Hello'
         ]);
 
         /** This is an old iteration that should not be appended */
-        factory(Iteration::class)->create([
+        Iteration::factory()->create([
             'article_id' => $article->id,
             'created_at' => Carbon::now()->subDay(),
             'content' => 'old content'

@@ -21,23 +21,23 @@ class UserTest extends TestCase
     public function testHasRole()
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->assertFalse($user->hasRole(1));
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $user->roles()->attach(1);
         $this->assertFalse($user->hasRole(2));
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $user->roles()->attach(1);
         $this->assertTrue($user->hasRole(1));
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $user->roles()->attach(1);
         $user->roles()->attach(2);
         $this->assertTrue($user->hasRole(1));
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $user->roles()->attach(1);
         $user->roles()->attach(2);
 
@@ -52,9 +52,9 @@ class UserTest extends TestCase
     public function testCanManageOrganization()
     {
         /** @var Organization $organization */
-        $organization = factory(Organization::class)->create();
+        $organization = Organization::factory()->create();
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->assertFalse($user->canManageOrganization($organization));
 

@@ -39,7 +39,7 @@ class VoteRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Vote::class, 5)->create();
+        Vote::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -52,7 +52,7 @@ class VoteRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Vote::class)->create();
+        $model = Vote::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -60,7 +60,7 @@ class VoteRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Vote::class)->create(['id' => 19]);
+        Vote::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -69,10 +69,10 @@ class VoteRepositoryTest extends TestCase
     public function testCreateSuccess()
     {
         /** @var BallotCompletion $ballotCompletion */
-        $ballotCompletion = factory(BallotCompletion::class)->create();
+        $ballotCompletion = BallotCompletion::factory()->create();
 
         /** @var BallotItemOption $ballotItemOption */
-        $ballotItemOption = factory(BallotItemOption::class)->create();
+        $ballotItemOption = BallotItemOption::factory()->create();
 
         /** @var Vote $vote */
         $vote = $this->repository->create([
@@ -87,7 +87,7 @@ class VoteRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Vote::class)->create([
+        $model = Vote::factory()->create([
             'result' => 1,
         ]);
         $this->repository->update($model, [
@@ -101,7 +101,7 @@ class VoteRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Vote::class)->create();
+        $model = Vote::factory()->create();
 
         $this->repository->delete($model);
 

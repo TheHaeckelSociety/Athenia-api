@@ -45,8 +45,8 @@ class ArticleVersionPolicyTest extends TestCase
     {
         $policy = new ArticleVersionPolicy();
 
-        $user = factory(User::class)->create();
-        $article = factory(Article::class)->create();
+        $user = User::factory()->create();
+        $article = Article::factory()->create();
 
         $this->assertFalse($policy->create($user, $article));
     }
@@ -55,8 +55,8 @@ class ArticleVersionPolicyTest extends TestCase
     {
         $policy = new ArticleVersionPolicy();
 
-        $user = factory(User::class)->create();
-        $article = factory(Article::class)->create([
+        $user = User::factory()->create();
+        $article = Article::factory()->create([
             'created_by_id' => $user->id,
         ]);
 

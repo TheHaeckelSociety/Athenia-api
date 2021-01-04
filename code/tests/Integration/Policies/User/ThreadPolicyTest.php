@@ -39,8 +39,8 @@ class ThreadPolicyTest extends TestCase
 
     public function testAllBlocksWhenGateNotFound()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
         $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
 
@@ -49,8 +49,8 @@ class ThreadPolicyTest extends TestCase
 
     public function testAllBlockWhenAccessingAnotherUser()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -61,7 +61,7 @@ class ThreadPolicyTest extends TestCase
 
     public function testAllBlockWhenGateFails()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -73,7 +73,7 @@ class ThreadPolicyTest extends TestCase
 
     public function testAllPasses()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -85,8 +85,8 @@ class ThreadPolicyTest extends TestCase
 
     public function testCreateBlocksWhenGateNotFound()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
         $this->gateProvider->shouldReceive('createGate')->once()->with('a_type')->andReturnNull();
 
@@ -95,8 +95,8 @@ class ThreadPolicyTest extends TestCase
 
     public function testCreateBlockWhenAccessingAnotherUser()
     {
-        $loggedInUser = factory(User::class)->create();
-        $requestedUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
+        $requestedUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -107,7 +107,7 @@ class ThreadPolicyTest extends TestCase
 
     public function testCreateBlockWhenGateFails()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -119,7 +119,7 @@ class ThreadPolicyTest extends TestCase
 
     public function testCreatePasses()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
