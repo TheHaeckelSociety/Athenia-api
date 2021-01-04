@@ -58,7 +58,7 @@ class BallotCompletionRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(BallotCompletion::class)->create();
+        $model = BallotCompletion::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -66,7 +66,7 @@ class BallotCompletionRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(BallotCompletion::class)->create(['id' => 19]);
+        BallotCompletion::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -75,10 +75,10 @@ class BallotCompletionRepositoryTest extends TestCase
     public function testCreateSuccess()
     {
         /** @var Ballot $ballot */
-        $ballot = factory(Ballot::class)->create();
+        $ballot = Ballot::factory()->create();
 
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var BallotCompletion $ballotCompletion */
         $ballotCompletion = $this->repository->create([
@@ -97,7 +97,7 @@ class BallotCompletionRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(BallotCompletion::class)->create();
+        $model = BallotCompletion::factory()->create();
 
         $this->repository->delete($model);
 

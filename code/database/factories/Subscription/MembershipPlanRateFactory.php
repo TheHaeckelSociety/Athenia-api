@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Database\Factories\MembershipPlan;
+namespace Database\Factories\Subscription;
 
 use App\Models\Subscription\MembershipPlan;
 use App\Models\Subscription\MembershipPlanRate;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Class MembershipPlanRateFactory
- * @package Database\Factories\MembershipPlan
+ * @package Database\Factories\Subscription
  */
 class MembershipPlanRateFactory extends Factory
 {

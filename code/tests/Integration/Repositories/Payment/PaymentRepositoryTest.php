@@ -44,7 +44,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Payment::class, 5)->create();
+        Payment::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -57,7 +57,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Payment::class)->create();
+        $model = Payment::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -65,7 +65,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Payment::class)->create(['id' => 2]);
+        Payment::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -73,7 +73,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         /** @var Payment $payment */
         $payment = $this->repository->create([
@@ -86,7 +86,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testCreateSuccessWithLineItems()
     {
-        $paymentMethod = factory(PaymentMethod::class)->create();
+        $paymentMethod = PaymentMethod::factory()->create();
 
         /** @var Payment $payment */
         $payment = $this->repository->create([
@@ -106,8 +106,8 @@ class PaymentRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Payment::class)->create();
-        factory(LineItem::class)->create([
+        $model = Payment::factory()->create();
+        LineItem::factory()->create([
             'payment_id' => $model->id,
         ]);
         $this->repository->update($model, [
@@ -122,11 +122,11 @@ class PaymentRepositoryTest extends TestCase
 
     public function testUpdateSuccessWithLineItems()
     {
-        $model = factory(Payment::class)->create();
-        $keep = factory(LineItem::class)->create([
+        $model = Payment::factory()->create();
+        $keep = LineItem::factory()->create([
             'payment_id' => $model->id,
         ]);
-        factory(LineItem::class)->create([
+        LineItem::factory()->create([
             'payment_id' => $model->id,
         ]);
         $this->repository->update($model, [
@@ -156,7 +156,7 @@ class PaymentRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Payment::class)->create();
+        $model = Payment::factory()->create();
 
         $this->repository->delete($model);
 

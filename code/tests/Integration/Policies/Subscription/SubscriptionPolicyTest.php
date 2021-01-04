@@ -21,8 +21,8 @@ class SubscriptionPolicyTest extends TestCase
     {
         $policy = new SubscriptionPolicy();
 
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $this->assertFalse($policy->all($user1, $user2));
         $this->assertTrue($policy->all($user1, $user1));
@@ -32,8 +32,8 @@ class SubscriptionPolicyTest extends TestCase
     {
         $policy = new SubscriptionPolicy();
 
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $this->assertFalse($policy->create($user1, $user2));
         $this->assertTrue($policy->create($user1, $user1));
@@ -43,9 +43,9 @@ class SubscriptionPolicyTest extends TestCase
     {
         $policy = new SubscriptionPolicy();
 
-        $user1 = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $subscription = factory(Subscription::class)->create([
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $subscription = Subscription::factory()->create([
             'subscriber_id' => $user1->id,
         ]);
 

@@ -49,7 +49,7 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(ArticleVersion::class, 5)->create();
+        ArticleVersion::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -62,7 +62,7 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(ArticleVersion::class)->create();
+        $model = ArticleVersion::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -70,7 +70,7 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(ArticleVersion::class)->create(['id' => 19]);
+        ArticleVersion::factory()->create(['id' => 19]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(20);
@@ -78,8 +78,8 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $article = factory(Article::class)->create();
-        $iteration = factory(Iteration::class)->create();
+        $article = Article::factory()->create();
+        $iteration = Iteration::factory()->create();
 
         $this->dispatcher->shouldReceive('dispatch')->once()->with(\Mockery::on(function (ArticleVersionCreatedEvent $event) {
             return true;
@@ -96,7 +96,7 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(ArticleVersion::class)->create([
+        $model = ArticleVersion::factory()->create([
             'name' => null,
         ]);
         $this->repository->update($model, [
@@ -109,7 +109,7 @@ class ArticleVersionRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(ArticleVersion::class)->create();
+        $model = ArticleVersion::factory()->create();
 
         $this->repository->delete($model);
 

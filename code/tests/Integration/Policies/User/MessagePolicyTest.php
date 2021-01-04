@@ -196,12 +196,12 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdateBlockWhenGateFails()
     {
-        $loggedInUser = factory(User::class)->create();
+        $loggedInUser = User::factory()->create();
 
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $message = factory(Message::class)->create();
+        $message = Message::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -213,11 +213,11 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdateBlocksMessageNotInThread()
     {
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $user = factory(User::class)->create();
-        $message = factory(Message::class)->create();
+        $user = User::factory()->create();
+        $message = Message::factory()->create();
 
         $gate = mock(ThreadSubjectGateContract::class);
 
@@ -229,13 +229,13 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdateBlocksUserNotSentMessage()
     {
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $user = factory(User::class)->create();
-        $message = factory(Message::class)->create([
+        $user = User::factory()->create();
+        $message = Message::factory()->create([
             'thread_id' => $thread->id,
-            'to_id' => factory(User::class)->create()->id,
+            'to_id' => User::factory()->create()->id,
         ]);
 
         $gate = mock(ThreadSubjectGateContract::class);
@@ -248,11 +248,11 @@ class MessagePolicyTest extends TestCase
 
     public function testUpdatePasses()
     {
-        $thread = factory(Thread::class)->create([
+        $thread = Thread::factory()->create([
             'subject_type' => 'a_type',
         ]);
-        $user = factory(User::class)->create();
-        $message = factory(Message::class)->create([
+        $user = User::factory()->create();
+        $message = Message::factory()->create([
             'thread_id' => $thread->id,
             'to_id' => $user->id,
         ]);

@@ -21,8 +21,8 @@ class PaymentMethodPolicyTest extends TestCase
     {
         $policy = new PaymentMethodPolicy();
 
-        $me = factory(User::class)->create();
-        $other = factory(User::class)->create();
+        $me = User::factory()->create();
+        $other = User::factory()->create();
 
         $this->assertFalse($policy->create($me, $other));
         $this->assertTrue($policy->create($me, $me));
@@ -32,10 +32,10 @@ class PaymentMethodPolicyTest extends TestCase
     {
         $policy = new PaymentMethodPolicy();
 
-        $me = factory(User::class)->create();
-        $other = factory(User::class)->create();
+        $me = User::factory()->create();
+        $other = User::factory()->create();
 
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $me->id,
         ]);
 
@@ -48,10 +48,10 @@ class PaymentMethodPolicyTest extends TestCase
     {
         $policy = new PaymentMethodPolicy();
 
-        $me = factory(User::class)->create();
-        $other = factory(User::class)->create();
+        $me = User::factory()->create();
+        $other = User::factory()->create();
 
-        $paymentMethod = factory(PaymentMethod::class)->create([
+        $paymentMethod = PaymentMethod::factory()->create([
             'owner_id' => $me->id,
         ]);
 

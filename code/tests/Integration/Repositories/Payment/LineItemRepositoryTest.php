@@ -37,7 +37,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(LineItem::class, 5)->create();
+        LineItem::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -50,7 +50,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(LineItem::class)->create();
+        $model = LineItem::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -58,7 +58,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(LineItem::class)->create(['id' => 2]);
+        LineItem::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -66,7 +66,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $payment = factory(Payment::class)->create();
+        $payment = Payment::factory()->create();
 
         /** @var LineItem $lineItem */
         $lineItem = $this->repository->create([
@@ -80,7 +80,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(LineItem::class)->create([
+        $model = LineItem::factory()->create([
             'amount' => 11.32,
         ]);
         $this->repository->update($model, [
@@ -94,7 +94,7 @@ class LineItemRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(LineItem::class)->create();
+        $model = LineItem::factory()->create();
 
         $this->repository->delete($model);
 

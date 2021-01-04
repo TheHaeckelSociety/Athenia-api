@@ -73,7 +73,7 @@ class AssetPolicyTest extends TestCase
         $policy = new AssetPolicy();
 
         $user = User::factory()->create();
-        $asset = =Asset::factory()->create();
+        $asset = Asset::factory()->create();
 
         $this->assertFalse($policy->update($user, $user, $asset));
     }

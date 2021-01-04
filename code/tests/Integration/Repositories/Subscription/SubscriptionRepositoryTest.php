@@ -227,25 +227,25 @@ class SubscriptionRepositoryTest extends TestCase
     {
         $expirationDate = new Carbon('2018-10-21 04:00:00');
 
-        $subscription1 = factory(Subscription::class)->create([
+        $subscription1 = Subscription::factory()->create([
             'expires_at' => '2018-10-21 07:10:00'
         ]);
-        $subscription2 = factory(Subscription::class)->create([
+        $subscription2 = Subscription::factory()->create([
             'expires_at' => '2018-10-21 22:10:44'
         ]);
-        $subscription3 = factory(Subscription::class)->create([
+        $subscription3 = Subscription::factory()->create([
             'expires_at' => '2018-10-21 23:59:59'
         ]);
-        $subscription4 = factory(Subscription::class)->create([
+        $subscription4 = Subscription::factory()->create([
             'expires_at' => '2018-10-21 00:00:00'
         ]);
-        $subscription5 = factory(Subscription::class)->create([
+        $subscription5 = Subscription::factory()->create([
             'expires_at' => '2018-10-22 00:00:00'
         ]);
-        $subscription6 = factory(Subscription::class)->create([
+        $subscription6 = Subscription::factory()->create([
             'expires_at' => '2018-10-20 23:59:59'
         ]);
-        $subscription7 = factory(Subscription::class)->create([
+        $subscription7 = Subscription::factory()->create([
             'expires_at' => '2019-04-12 12:40:23'
         ]);
 
@@ -265,25 +265,25 @@ class SubscriptionRepositoryTest extends TestCase
     {
         $expirationDate = new Carbon('2018-10-21 04:00:00');
 
-        $subscription1 = factory(Subscription::class)->create([
+        $subscription1 = Subscription::factory()->create([
             'expires_at' => '2018-10-19 07:10:00'
         ]);
-        $subscription2 = factory(Subscription::class)->create([
+        $subscription2 = Subscription::factory()->create([
             'expires_at' => '2018-10-21 22:10:44'
         ]);
-        $subscription3 = factory(Subscription::class)->create([
+        $subscription3 = Subscription::factory()->create([
             'expires_at' => '2018-10-25 23:59:59'
         ]);
-        $subscription4 = factory(Subscription::class)->create([
+        $subscription4 = Subscription::factory()->create([
             'expires_at' => '2017-10-21 00:00:00'
         ]);
-        $subscription5 = factory(Subscription::class)->create([
+        $subscription5 = Subscription::factory()->create([
             'expires_at' => '2018-10-22 00:00:00'
         ]);
-        $subscription6 = factory(Subscription::class)->create([
+        $subscription6 = Subscription::factory()->create([
             'expires_at' => null
         ]);
-        $subscription7 = factory(Subscription::class)->create([
+        $subscription7 = Subscription::factory()->create([
             'expires_at' => '2019-04-12 12:40:23',
             'subscriber_type' => 'organization'
         ]);

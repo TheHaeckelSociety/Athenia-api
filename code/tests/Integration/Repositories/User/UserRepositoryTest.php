@@ -47,7 +47,7 @@ class UserRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(User::class, 5)->create();
+        User::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -60,16 +60,16 @@ class UserRepositoryTest extends TestCase
 
     public function testFindAllOrderedByEmail()
     {
-        $userT = factory(User::class)->create([
+        $userT = User::factory()->create([
             'email' => 't@t.weg',
         ]);
-        $userA = factory(User::class)->create([
+        $userA = User::factory()->create([
             'email' => 'a@t.weg',
         ]);
-        $userG = factory(User::class)->create([
+        $userG = User::factory()->create([
             'email' => 'g@t.weg',
         ]);
-        $userZ = factory(User::class)->create([
+        $userZ = User::factory()->create([
             'email' => 'z@t.weg',
         ]);
         $items = $this->repository->findAll([], [], ['email' => 'asc']);
@@ -82,7 +82,7 @@ class UserRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(User::class)->create();
+        $model = User::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -90,7 +90,7 @@ class UserRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(User::class)->create(['id' => 2]);
+        User::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -113,7 +113,7 @@ class UserRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(User::class)->create(['email' => 'butts@butts.com']);
+        $model = User::factory()->create(['email' => 'butts@butts.com']);
         $this->repository->update($model, [
             'email' => 'bump@butts.com',
             'password' => 'Something secure',
@@ -126,7 +126,7 @@ class UserRepositoryTest extends TestCase
 
     public function testUpdateSyncsRoles()
     {
-        $model = factory(User::class)->create();
+        $model = User::factory()->create();
 
         $this->assertCount(0, $model->roles);
 
@@ -146,7 +146,7 @@ class UserRepositoryTest extends TestCase
 
     public function testFindByEmailSuccess()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'test@test.com',
         ]);
 

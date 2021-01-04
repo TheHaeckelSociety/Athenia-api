@@ -88,7 +88,7 @@ class PasswordTokenRepositoryTest extends TestCase
             })
         );
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var PasswordToken $passwordToken */
         $passwordToken = $this->repository->create([
@@ -101,8 +101,8 @@ class PasswordTokenRepositoryTest extends TestCase
 
     public function testFindForUser()
     {
-        $user = factory(User::class)->create();
-        $passwordToken = factory(PasswordToken::class)->create([
+        $user = User::factory()->create();
+        $passwordToken = PasswordToken::factory()->create([
             'token' => '1234',
             'user_id' => $user->id,
         ]);
@@ -113,7 +113,7 @@ class PasswordTokenRepositoryTest extends TestCase
 
     public function testGenerateUniqueTokenSuccess()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->tokenGenerationService->shouldReceive('generateToken')->once()->andReturn('12345');
 
@@ -122,8 +122,8 @@ class PasswordTokenRepositoryTest extends TestCase
 
     public function testGenerateUniqueTokenThrowsException()
     {
-        $user = factory(User::class)->create();
-        factory(PasswordToken::class)->create([
+        $user = User::factory()->create();
+        PasswordToken::factory()->create([
             'user_id' => $user->id,
             'token' => '12345',
         ]);

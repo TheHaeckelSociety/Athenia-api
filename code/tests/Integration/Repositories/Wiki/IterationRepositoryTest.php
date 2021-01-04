@@ -50,7 +50,7 @@ class IterationRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Iteration::class)->create();
+        $model = Iteration::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -58,7 +58,7 @@ class IterationRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Iteration::class)->create(['id' => 2]);
+        Iteration::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -66,7 +66,7 @@ class IterationRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Iteration::class, 5)->create();
+        Iteration::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -79,8 +79,8 @@ class IterationRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $article = factory(Article::class)->create();
-        $user = factory(User::class)->create();
+        $article = Article::factory()->create();
+        $user = User::factory()->create();
 
         /** @var Iteration $model */
         $model = $this->repository->create([

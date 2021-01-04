@@ -42,7 +42,7 @@ class ArticleRepositoryTest extends TestCase
 
     public function testFindAllSuccess()
     {
-        factory(Article::class, 5)->create();
+        Article::factory()->count(5)->create();
         $items = $this->repository->findAll();
         $this->assertCount(5, $items);
     }
@@ -55,7 +55,7 @@ class ArticleRepositoryTest extends TestCase
 
     public function testFindOrFailSuccess()
     {
-        $model = factory(Article::class)->create();
+        $model = Article::factory()->create();
 
         $foundModel = $this->repository->findOrFail($model->id);
         $this->assertEquals($model->id, $foundModel->id);
@@ -63,7 +63,7 @@ class ArticleRepositoryTest extends TestCase
 
     public function testFindOrFailFails()
     {
-        factory(Article::class)->create(['id' => 2]);
+        Article::factory()->create(['id' => 2]);
 
         $this->expectException(ModelNotFoundException::class);
         $this->repository->findOrFail(1);
@@ -71,7 +71,7 @@ class ArticleRepositoryTest extends TestCase
 
     public function testCreateSuccess()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Article $article */
         $article = $this->repository->create([
@@ -85,7 +85,7 @@ class ArticleRepositoryTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $model = factory(Article::class)->create([
+        $model = Article::factory()->create([
             'title' => 'Ann Article'
         ]);
         $this->repository->update($model, [

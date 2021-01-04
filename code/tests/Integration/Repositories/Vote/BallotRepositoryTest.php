@@ -133,7 +133,7 @@ class BallotRepositoryTest extends TestCase
 
     public function testDeleteSuccess()
     {
-        $model = factory(Ballot::class)->create();
+        $model = Ballot::factory()->create();
 
         $this->repository->delete($model);
 
