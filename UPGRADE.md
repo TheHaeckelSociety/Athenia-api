@@ -1,0 +1,74 @@
+# Athenia App Upgrade Guide
+
+To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
+
+## 1.0.0
+
+Welcome to 1.0.0! This version officially marks the first API stable version of Athenia. It is not nearly as exciting as it sounds, and entirely exists due to the most recent laravel update. Laravel 8.0 brought a much more logical and integrated way of handling testing factories, which by its nature has created an update so substantial that we now have a 1.0! Before you begin this update, consult the UPGRADE-0.x doc to make sure you are at least up to date with 0.54.0. Once that is complete then you can start by following the steps below.
+
+### Dependency Changes
+
+* Remove "barryvdh/laravel-cors": "^1.0" and add "fruitcake/laravel-cors": "^2.0"
+* cartalyst/stripe-laravel - goes from ^12.0 to ^13.0
+* laravel/framework - goes from ^7.0 to ^8.0
+* Add "guzzlehttp/guzzle": "^7.0.1"
+* barryvdh/laravel-ide-helper - goes from ^2.6 to ^2.8
+* facade/ignition - goes from ^2.0 to ^2.3.6
+* laracasts/generators - goes from ^1.1 to ^2.0
+* nunomaduro/collision - goes from ^4.1 to ^5.0
+
+Then make sure to remove the `classmap` block in the autoload section, and add the following to the psr-4 section
+
+* "Database\\Factories\\": "database/factories/"
+* "Database\\Seeders\\": "database/seeders/"
+
+### Base Model Changes
+
+In the `BaseModelAbstract` the trait `HasFactory` needs to be added, and then the `$guarded` should be emptied out to maintain compatibility.
+
+### Failed Jobs Changes
+
+A uuid was added to the failed jobs to work with a new laravel batch feature. With this a new migration has been created at `code/database/migrations/2021_01_04_220915_create_failed_jobs_table.php`. If the failed jobs table already exists in yoru app then the create portion of the migration should be swapped with a migration that simply adds the uuid field. Then `'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),` should be added to the failed array within the `queue` config.
+
+### Seeders
+
+The seeds directory needs to be renamed to seeders, and the new namespace needs to be added to the existing php files.
+
+### Factories
+
+This is the largest change, which also caused the bump to 1.0.0. Every single use of a factory has been changed, and every child app should be updated accordingly. To complete this update follow each step very carefully.
+
+#### Factory Namespace
+
+This is the easiest step, and you can start by copying over everything in the `app/database/factories` directory. Some files will be overridden, and those files should be checked with a diff to see if there were more than one factory within them before the update, which was not apart of Athenia. Then, every single non-Athenia factory should have a new factory created for it that follows the model directory structure of the primary app.
+
+#### Utility Testing Updates
+
+Once the app factories are updated there will be a couple of utility files that need to be updated related to testing before we start the larger updates. These files are as follows.
+
+* code/phpunit.xml - General cleanup
+* code/tests/TestCase.php - The act as user factory call has been updated
+* code/tests/Traits/RolesTesting.php The getUserOfRole function factory call has been updated
+
+#### Feature & Integration Tests
+
+This is the most time intensive upgrade, and there are two recommended ways to manage this. Every single factory call has been updated for the new format, so every single integration and feature test will need to be updated. 
+
+1. First Path - Compare test changes
+
+This path would consists of multiple steps...
+ 
+* Checkout the 0.54.0 tag
+* Copy over all Integration tests into child project
+* Copy over all Feature tests into all API versions of child project
+* Make a note of all tests that have content changes as opposed to a simple change such as API version number differences
+* Reset all code in the child repo to head
+* Checkout the 1.0.0 tag again
+* Copy over all Athenia Feature & Integration tests
+* Manually review the content diffs of previously noted files
+
+Once these steps you will still need to continue down the second path, but the work load should be seriously reduced.
+
+##### Second Path - Manual Replacement
+
+This path consists of searching for the string ` factory`, and replacing the usage with a static function call on the model itself. Any usages of the old second parameter for the factory function should be replaced with a call to the `count` function in the static factory.
