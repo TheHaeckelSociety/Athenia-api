@@ -54,21 +54,6 @@ Once the app factories are updated there will be a couple of utility files that 
 
 This is the most time intensive upgrade, and there are two recommended ways to manage this. Every single factory call has been updated for the new format, so every single integration and feature test will need to be updated. 
 
-1. First Path - Compare test changes
+A simple way to start is to run a find and replace regex in phpunit with the search field set to `\sfactory\((.*)?class\)\s*(>*)` and the replace field set to `$1factory()`. Once that is done, you will need to search for ` factory` to find any remaining pieces that use a count variable with more advanced composites of the factory function.
 
-This path would consists of multiple steps...
- 
-* Checkout the 0.54.0 tag
-* Copy over all Integration tests into child project
-* Copy over all Feature tests into all API versions of child project
-* Make a note of all tests that have content changes as opposed to a simple change such as API version number differences
-* Reset all code in the child repo to head
-* Checkout the 1.0.0 tag again
-* Copy over all Athenia Feature & Integration tests
-* Manually review the content diffs of previously noted files
 
-Once these steps you will still need to continue down the second path, but the work load should be seriously reduced.
-
-##### Second Path - Manual Replacement
-
-This path consists of searching for the string ` factory`, and replacing the usage with a static function call on the model itself. Any usages of the old second parameter for the factory function should be replaced with a call to the `count` function in the static factory.
