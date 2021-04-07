@@ -25,20 +25,20 @@ class SearchFilteringMiddlewareTest extends TestCase
 
     public function testSearchWithLike()
     {
-        Article::factory()->create(['title' => 'h']);
-        Article::factory()->create(['title' => 'cart']);
-        Article::factory()->create(['title' => 'can']);
-        Article::factory()->create(['title' => 'the']);
-        Article::factory()->create(['title' => 'butts']);
+        factory(Article::class, 1)->create(['title' => 'h']);
+        factory(Article::class, 1)->create(['title' => 'cart']);
+        factory(Article::class, 1)->create(['title' => 'can']);
+        factory(Article::class, 1)->create(['title' => 'the']);
+        factory(Article::class, 1)->create(['title' => 'Hey']);
 
         // first page
-        $response = $this->json('GET', '/v1/articles?search[title]=like,*h*');
+        $response = $this->json('GET', '/v2/articles?search[title]=like,*h*');
         $response->assertJson([
-                'total' => 2,
+                'total' => 3,
                 'current_page' => 1,
                 'per_page' => 10,
                 'from' => 1,
-                'to' => 2,
+                'to' => 3,
                 'last_page' => 1
             ]);
 
@@ -47,14 +47,14 @@ class SearchFilteringMiddlewareTest extends TestCase
 
     public function testFilter()
     {
-        Article::factory()->create(['title' => 'h']);
-        Article::factory()->create(['title' => 'cart']);
-        Article::factory()->create(['title' => 'can']);
-        Article::factory()->create(['title' => 'the']);
-        Article::factory()->create(['title' => 'butts']);
+        factory(Article::class, 1)->create(['title' => 'h']);
+        factory(Article::class, 1)->create(['title' => 'cart']);
+        factory(Article::class, 1)->create(['title' => 'can']);
+        factory(Article::class, 1)->create(['title' => 'the']);
+        factory(Article::class, 1)->create(['title' => 'butts']);
 
         // first page
-        $response = $this->json('GET', '/v1/articles?filter[title]=butts');
+        $response = $this->json('GET', '/v2/articles?filter[title]=butts');
         $response->assertJson([
                 'total' => 1,
                 'current_page' => 1,

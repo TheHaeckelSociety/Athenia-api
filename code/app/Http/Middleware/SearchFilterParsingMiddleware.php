@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Str;
 use App\Exceptions\ValidationException;
 
@@ -13,6 +14,20 @@ use App\Exceptions\ValidationException;
  */
 class SearchFilterParsingMiddleware
 {
+    /**
+     * @var Repository
+     */
+    private Repository $config;
+
+    /**
+     * SearchFilterParsingMiddleware constructor.
+     * @param Repository $config
+     */
+    public function __construct(Repository $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * Add a parsed filter and search to the request as the `refine` variable
      *
@@ -146,7 +161,11 @@ class SearchFilterParsingMiddleware
                 $currentQuery[] = [$key, '>=', urldecode($searchTerm[0])];
                 $currentQuery[] = [$key, '<=', urldecode($searchTerm[1])];
             } elseif ($searchType == 'like') {
-                $currentQuery[] = [$key, $searchType, $searchTerm];
+                $currentQuery[] = [
+                    $key,
+                    (Str::contains($this->config->get('database.default'), 'pgsql') ? 'i' : '') . $searchType,
+                    $searchTerm,
+                ];
             } else {
                 $currentQuery[] = [$key, $searchType, is_array($searchTerm) ? array_map('urldecode', $searchTerm) : urldecode($searchTerm)];
             }
