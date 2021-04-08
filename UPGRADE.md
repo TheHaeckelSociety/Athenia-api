@@ -2,6 +2,14 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 1.1.0
+
+This is a minor little one that fixes a bug in the search middleware for postgres, and adds firebase configuration to the services.
+
+* code/app/Http/Middleware/SearchFilterParsingMiddleware.php - Reworked for passing through ilike instead of like is postgres is in use
+* code/config/services.php - Added fcm settings to the config
+* code/tests/Integration/Http/Middleware/SearchFilteringMiddlewareTest.php - Added test for case insensitive search
+
 ## 1.0.0
 
 Welcome to 1.0.0! This version officially marks the first API stable version of Athenia. It is not nearly as exciting as it sounds, and entirely exists due to the most recent laravel update. Laravel 8.0 brought a much more logical and integrated way of handling testing factories, which by its nature has created an update so substantial that we now have a 1.0! Before you begin this update, consult the UPGRADE-0.x doc to make sure you are at least up to date with 0.54.0. Once that is complete then you can start by following the steps below.
@@ -54,6 +62,6 @@ Once the app factories are updated there will be a couple of utility files that 
 
 This is the most time intensive upgrade, and there are two recommended ways to manage this. Every single factory call has been updated for the new format, so every single integration and feature test will need to be updated. 
 
-A simple way to start is to run a find and replace regex in phpunit with the search field set to `\sfactory\((.*)?class\)\s*(>*)` and the replace field set to ` $1factory()`. Once that is done, you will need to search for ` factory` to find any remaining pieces that use a count variable with more advanced composites of the factory function. The next replace should start by running another find and replace with `\sfactory\((.*)?class,(.*?)\)\s*(>*)` as the regex and ` $1factory()->count($2)` as the replace value. Once that is done, tests will need to be ran due to how large of a change this is.
+A simple way to start is to run a find and replace regex in phpunit with the search field set to `factory\((.*)?class\)\s*(>*)` and the replace field set to `$1factory()`. Once that is done, you will need to search for ` factory` to find any remaining pieces that use a count variable with more advanced composites of the factory function. The next replace should start by running another find and replace with `factory\((.*)?class,(.*?)\)\s*(>*)` as the regex and `$1factory()->count($2)` as the replace value. Once that is done, tests will need to be ran due to how large of a change this is.
 
 
