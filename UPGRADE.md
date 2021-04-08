@@ -54,6 +54,6 @@ Once the app factories are updated there will be a couple of utility files that 
 
 This is the most time intensive upgrade, and there are two recommended ways to manage this. Every single factory call has been updated for the new format, so every single integration and feature test will need to be updated. 
 
-A simple way to start is to run a find and replace regex in phpunit with the search field set to `\sfactory\((.*)?class\)\s*(>*)` and the replace field set to `$1factory()`. Once that is done, you will need to search for ` factory` to find any remaining pieces that use a count variable with more advanced composites of the factory function.
+A simple way to start is to run a find and replace regex in phpunit with the search field set to `\sfactory\((.*)?class\)\s*(>*)` and the replace field set to ` $1factory()`. Once that is done, you will need to search for ` factory` to find any remaining pieces that use a count variable with more advanced composites of the factory function.
 
 
