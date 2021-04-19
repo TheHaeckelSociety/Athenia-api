@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\User;
 
+use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\BaseModelAbstract;
 use App\Models\User\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -22,13 +23,20 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     use NotImplemented\Delete, NotImplemented\FindOrFail;
 
     /**
+     * @var UserRepositoryContract
+     */
+    private UserRepositoryContract $userRepository;
+
+    /**
      * MessageRepository constructor.
      * @param Message $model
      * @param LogContract $log
+     * @param UserRepositoryContract $userRepository
      */
-    public function __construct(Message $model, LogContract $log)
+    public function __construct(Message $model, LogContract $log, UserRepositoryContract $userRepository)
     {
         parent::__construct($model, $log);
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -95,17 +103,22 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     }
 
     /**
-     * @SWG\Definition(
-     *     definition="Messages",
-     *     @SWG\Property(
-     *         property="data",
-     *         description="A list of message models",
-     *         type="array",
-     *         minItems=0,
-     *         maxItems=100,
-     *         uniqueItems=true,
-     *         @SWG\Items(ref="#/definitions/Message")
-     *     )
-     * )
+     * Sends an email directly to the main system users in the system
+     *
+     * @param string $subject
+     * @param string $template
+     * @param array $baseTemplateData
+     * @param string|null $greeting
+     * @return Collection
      */
+    public function sendEmailToSuperAdmins(string $subject, string $template, array $baseTemplateData = [], $greeting = null): Collection
+    {
+        $messages = new Collection();
+
+        foreach ($this->userRepository->findSuperAdmins() as $user) {
+            $messages->push($this->sendEmailToUser($user, $subject, $template, $baseTemplateData, $greeting));
+        }
+
+        return $messages;
+    }
 }

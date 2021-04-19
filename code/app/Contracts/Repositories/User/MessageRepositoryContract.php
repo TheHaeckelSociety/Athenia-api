@@ -26,4 +26,15 @@ interface MessageRepositoryContract extends BaseRepositoryContract
      * @return Message
      */
     public function sendEmailToUser(User $user, string $subject, string $template, array $baseTemplateData = [], $greeting = null): Message;
+
+    /**
+     * Sends an email directly to the main system users in the system
+     *
+     * @param string $subject
+     * @param string $template
+     * @param array $baseTemplateData
+     * @param string|null $greeting
+     * @return Collection
+     */
+    public function sendEmailToSuperAdmins(string $subject, string $template, array $baseTemplateData = [], $greeting = null): Collection;
 }

@@ -79,6 +79,7 @@ use App\Repositories\Vote\VoteRepository;
 use App\Repositories\Wiki\ArticleRepository;
 use App\Repositories\Wiki\ArticleVersionRepository;
 use App\Repositories\Wiki\IterationRepository;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -229,7 +230,11 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
             );
         });
         $this->app->bind(MessageRepositoryContract::class, function() {
-            return new MessageRepository(new Message(), $this->app->make('log'));
+            return new MessageRepository(
+                new Message(),
+                $this->app->make('log'),
+                $this->app->make(UserRepositoryContract::class),
+            );
         });
         $this->app->bind(OrganizationRepositoryContract::class, function () {
             return new OrganizationRepository(new Organization(), $this->app->make('log'));
@@ -297,6 +302,7 @@ abstract class AtheniaRepositoryProvider extends ServiceProvider
                 new User(),
                 $this->app->make('log'),
                 $this->app->make(Hasher::class),
+                $this->app->make(Repository::class),
             );
         });
         $this->app->bind(VoteRepositoryContract::class, function () {

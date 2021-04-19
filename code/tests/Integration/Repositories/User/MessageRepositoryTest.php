@@ -5,10 +5,13 @@ namespace Tests\Integration\Repositories\User;
 
 use App\Events\Message\MessageCreatedEvent;
 use App\Exceptions\NotImplementedException;
+use App\Models\Role;
 use App\Models\User\Message;
 use App\Models\User\User;
 use App\Repositories\User\MessageRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Hashing\Hasher;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -31,7 +34,16 @@ class MessageRepositoryTest extends TestCase
         parent::setUp();
         $this->setupDatabase();
 
-        $this->repository = new MessageRepository(new Message(), $this->getGenericLogMock());
+        $this->repository = new MessageRepository(
+            new Message(),
+            $this->getGenericLogMock(),
+            new UserRepository(
+                new User(),
+                $this->getGenericLogMock(),
+                mock(Hasher::class),
+                $this->app->make('config'),
+            ),
+        );
     }
 
     public function testFindAllSuccess()
@@ -83,8 +95,9 @@ class MessageRepositoryTest extends TestCase
             'subject' => 'Hello',
             'template' => 'test_template',
             'email' => 'test@test.com',
+            'to_id' => $user->id,
             'data' => ['greeting' => 'hello'],
-        ], $user);
+        ]);
 
 
         $this->assertEquals('Hello', $message->subject);
@@ -196,5 +209,29 @@ class MessageRepositoryTest extends TestCase
         $this->assertEquals('no', $result->data['yes']);
         $this->assertNotNull($result->data['greeting']);
         $this->assertEquals('To whom it may concern,', $result->data['greeting']);
+    }
+
+    public function testSendEmailToSuperAdmins()
+    {
+        Message::unsetEventDispatcher();
+
+        $user1 = User::factory()->create([
+            'email' => 'test@test.com',
+            'first_name' => 'System User'
+        ]);
+        $user1->roles()->attach(Role::SUPER_ADMIN);
+        $user2 = User::factory()->create([
+            'email' => 'test@test.com',
+            'first_name' => 'System User'
+        ]);
+        $user2->roles()->attach(Role::SUPER_ADMIN);
+
+        User::factory()->count( 3)->create();
+
+        $result = $this->repository->sendEmailToSuperAdmins('A Subject', '');
+
+        $this->assertCount(2, $result);
+        $this->assertContains($user1->id, $result->pluck('to_id'));
+        $this->assertContains($user2->id, $result->pluck('to_id'));
     }
 }

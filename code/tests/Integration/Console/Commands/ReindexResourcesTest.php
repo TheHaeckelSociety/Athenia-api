@@ -10,6 +10,7 @@ use App\Models\Resource;
 use App\Models\User\User;
 use App\Repositories\ResourceRepository;
 use App\Repositories\User\UserRepository;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Hashing\Hasher;
 use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -50,6 +51,7 @@ class ReindexResourcesTest extends TestCase
             new User(),
             $this->getGenericLogMock(),
             mock(Hasher::class),
+            mock(Repository::class),
         );
 
         $this->command = new ReindexResources(

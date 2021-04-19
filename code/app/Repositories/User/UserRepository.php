@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace App\Repositories\User;
 
 use App\Models\BaseModelAbstract;
+use App\Models\Role;
 use App\Traits\CanGetAndUnset;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface as LogContract;
 use App\Contracts\Repositories\User\UserRepositoryContract;
 use App\Models\User\User;
@@ -23,18 +26,25 @@ class UserRepository extends BaseRepositoryAbstract implements UserRepositoryCon
     /**
      * @var Hasher
      */
-    private $hasher;
+    private Hasher $hasher;
+
+    /**
+     * @var Config
+     */
+    private Config $config;
 
     /**
      * UserRepository constructor.
      * @param User $model
      * @param LogContract $log
      * @param Hasher $hasher
+     * @param Config $config
      */
-    public function __construct(User $model, LogContract $log, Hasher $hasher)
+    public function __construct(User $model, LogContract $log, Hasher $hasher, Config $config)
     {
         parent::__construct($model, $log);
         $this->hasher = $hasher;
+        $this->config = $config;
     }
 
     /**
@@ -93,6 +103,35 @@ class UserRepository extends BaseRepositoryAbstract implements UserRepositoryCon
     public function findByEmail(string $email): ?User
     {
         return $this->model->where('email', $email)->first();
+    }
+
+    /**
+     * Finds all system users in the system
+     *
+     * Creates a new user if one is not found
+     *
+     * @return Collection
+     */
+    public function findSuperAdmins(): Collection
+    {
+        /** @var Collection $users */
+        $users = $this->model->whereHas('roles', function ($query) {
+            $query->where('role_id', Role::SUPER_ADMIN);
+        })->get();
+
+        if ($users->count() == 0) {
+            /** @var User $user */
+            $user = $this->create([
+                'first_name' => $this->config->get('mail.from.name'),
+                'email' => $this->config->get('mail.from.email'),
+            ]);
+
+            $user->roles()->attach(Role::SUPER_ADMIN);
+
+            return new Collection([$user]);
+        }
+
+        return $users;
     }
 
     /**

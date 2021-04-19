@@ -5,6 +5,7 @@ namespace App\Contracts\Repositories\User;
 
 use App\Contracts\Repositories\BaseRepositoryContract;
 use App\Models\User\User;
+use Illuminate\Support\Collection;
 
 /**
  * Interface UserRepositoryContract
@@ -19,4 +20,13 @@ interface UserRepositoryContract extends BaseRepositoryContract
      * @return User|null
      */
     public function findByEmail(string $email) : ?User;
+
+    /**
+     * Finds all system users in the system
+     *
+     * Creates a new user if one is not found
+     *
+     * @return Collection
+     */
+    public function findSuperAdmins(): Collection;
 }

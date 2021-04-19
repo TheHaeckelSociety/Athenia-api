@@ -7,8 +7,10 @@ use App\Exceptions\NotImplementedException;
 use App\Models\Role;
 use App\Models\User\User;
 use App\Repositories\User\UserRepository;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Tests\CustomMockInterface;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
@@ -27,6 +29,11 @@ class UserRepositoryTest extends TestCase
     private $hasher;
 
     /**
+     * @var Repository|CustomMockInterface
+     */
+    private $config;
+
+    /**
      * @var UserRepository
      */
     protected $repository;
@@ -37,11 +44,13 @@ class UserRepositoryTest extends TestCase
         $this->setupDatabase();
 
         $this->hasher = $this->app->make(Hasher::class);
+        $this->config = mock(Repository::class);
 
         $this->repository = new UserRepository(
             new User(),
             $this->getGenericLogMock(),
-            $this->hasher
+            $this->hasher,
+            $this->config,
         );
     }
 
@@ -158,5 +167,43 @@ class UserRepositoryTest extends TestCase
     public function testFindByEmailReturnsNull()
     {
         $this->assertNull($this->repository->findByEmail('test@test.com'));
+    }
+
+    public function testFindSuperAdminsWithoutExisting()
+    {
+        $this->config->shouldReceive('get')->with('mail.from.name')->andReturn('System User');
+        $this->config->shouldReceive('get')->with('mail.from.email')->andReturn('test@test.com');
+
+        $this->assertNull(User::whereHas('roles',function ($query) {
+            $query->where('role_id', Role::SUPER_ADMIN);
+        })->first());
+
+        $users = $this->repository->findSuperAdmins();
+
+        $this->assertNotNull($users[0]);
+        $this->assertEquals('System User', $users[0]->first_name);
+        $this->assertEquals('test@test.com', $users[0]->email);
+    }
+
+    public function testFindSystemUsersSuccess()
+    {
+        $user1 = User::factory()->create([
+            'email' => 'test@test.com',
+            'first_name' => 'System User'
+        ]);
+        $user1->roles()->attach(Role::SUPER_ADMIN);
+        $user2 = User::factory()->create([
+            'email' => 'test@test.com',
+            'first_name' => 'System User'
+        ]);
+        $user2->roles()->attach(Role::SUPER_ADMIN);
+
+        User::factory()->count( 3)->create();
+
+        $result = $this->repository->findSuperAdmins();
+
+        $this->assertCount(2, $result);
+        $this->assertContains($user1->id, $result->pluck('id'));
+        $this->assertContains($user2->id, $result->pluck('id'));
     }
 }
