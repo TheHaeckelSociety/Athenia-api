@@ -2,6 +2,21 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 1.2.0
+
+This little update adds a helper function to the message repository that makes it simple to send a user to all super admins in the system.
+
+* code/app/Contracts/Repositories/User/MessageRepositoryContract.php - Added new function `sendEmailToSuperAdmins`
+* code/app/Contracts/Repositories/User/UserRepositoryContract.php - Added new function `findSuperAdmins`
+* code/app/Providers/AtheniaRepositoryProvider.php - Updated MessageRepository to pass in UserRepository as a parameter, and updated UserRepository to pass the application config as a parameter
+* code/app/Repositories/User/MessageRepository.php - Added new function `sendEmailToSuperAdmins` and injected the user repository
+* code/app/Repositories/User/UserRepository.php - Added new function `findSuperAdmins` and injected the application config
+* code/database/migrations/2021_04_19_142743_make_password_nullable.php - New Migration
+* code/tests/Integration/Console/Commands/ReindexResourcesTest.php - Updated User repository constructor
+* code/tests/Integration/Http/Middleware/SearchFilteringMiddlewareTest.php - Updated for laravel 8 update, and fixed route
+* code/tests/Integration/Repositories/User/MessageRepositoryTest.php - Added new test for new function
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php - Added new test for new function
+
 ## 1.1.0
 
 This is a minor little one that fixes a bug in the search middleware for postgres, and adds firebase configuration to the services.
