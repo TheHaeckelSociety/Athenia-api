@@ -45,7 +45,13 @@ abstract class MessageControllerAbstract extends BaseControllerAbstract
      */
     public function index(Requests\User\Thread\Message\IndexRequest $request, User $user, Thread $thread)
     {
-        return $this->repository->findAll($this->filter($request), $this->search($request), $this->order($request), $this->expand($request), $this->limit($request), [$thread], (int)$request->input('page', 1));
+        $order = $this->order($request);
+
+        if (!count($order)) {
+            $order['created_at'] = 'desc';
+        }
+
+        return $this->repository->findAll($this->filter($request), $this->search($request), $order, $this->expand($request), $this->limit($request), [$thread], (int)$request->input('page', 1));
     }
 
     /**

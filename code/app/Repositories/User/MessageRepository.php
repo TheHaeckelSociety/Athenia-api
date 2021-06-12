@@ -94,8 +94,6 @@ class MessageRepository extends BaseRepositoryAbstract implements MessageReposit
     {
         $query = $this->buildFindAllQuery($filters, $searches, $orderBy, $with, $belongsToArray);
 
-        $query->orderBy('created_at', 'desc');
-
         if ($limit) {
             return $query->paginate($limit, $columns = ['*'], $pageName = 'page', $pageNumber);
         }

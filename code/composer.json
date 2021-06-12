@@ -17,10 +17,10 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "~2.0",
         "pda/pheanstalk": "^4.0",
-        "ralouphie/mimey": "^2.1",
         "roave/security-advisories": "dev-master",
         "sebastian/diff": "^4.0",
-        "tymon/jwt-auth": "^1.0"
+        "tymon/jwt-auth": "^1.0",
+        "xantios/mimey": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",
