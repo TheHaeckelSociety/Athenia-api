@@ -12,11 +12,10 @@ use App\Repositories\ResourceRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Hashing\Hasher;
-use Symfony\Component\Console\Helper\ProgressIndicator;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Tests\DatabaseSetupTrait;
 use Tests\TestCase;
 use Tests\Traits\MocksApplicationLog;
+use Tests\Traits\MocksConsoleOutput;
 
 /**
  * Class ReindexResourcesTest
@@ -24,7 +23,7 @@ use Tests\Traits\MocksApplicationLog;
  */
 class ReindexResourcesTest extends TestCase
 {
-    use MocksApplicationLog, DatabaseSetupTrait;
+    use MocksApplicationLog, MocksConsoleOutput, DatabaseSetupTrait;
 
     /**
      * @var ReindexResources
@@ -58,6 +57,7 @@ class ReindexResourcesTest extends TestCase
             $this->resourceRepository,
             $this->userRepository,
         );
+        $this->mockConsoleOutput($this->command);
     }
 
     public function testIndexUsers()
@@ -70,19 +70,6 @@ class ReindexResourcesTest extends TestCase
 
         $this->assertCount(3, Resource::all());
         $this->assertCount(4, User::all());
-
-        $reflected = new \ReflectionClass($this->command);
-
-        $output = $reflected->getProperty('output');
-        $output->setAccessible(true);
-        $mockOutput = mock(SymfonyStyle::class);
-
-        $progressMock = mock(ProgressIndicator::class);
-        $progressMock->shouldReceive('advance');
-
-        $mockOutput->shouldReceive('createProgressBar')->once()->with(4)->andReturn($progressMock);
-
-        $output->setValue($this->command, $mockOutput);
 
         $this->command->indexData($this->userRepository);
 

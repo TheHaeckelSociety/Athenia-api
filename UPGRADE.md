@@ -2,6 +2,14 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 1.3.0
+
+Another little one! This one adds a new testing trait to mock console output, and also fixes an issue with the ansible that came from the recent release of php8.
+
+* ansible/roles/php/tasks/main.yml - updated imagick package name
+* code/tests/Integration/Console/Commands/ReindexResourcesTest.php - Updated to use the new trait to ignore console ouput
+* code/tests/Traits/MocksConsoleOutput.php - New trait for ignoring console output with commands
+
 ## 1.2.0
 
 This little update adds a helper function to the message repository that makes it simple to send a user to all super admins in the system.
