@@ -9,6 +9,7 @@ use App\Models\User\Message;
 use Illuminate\Contracts\Events\Dispatcher;
 use Mockery\LegacyMockInterface;
 use Mockery\MockInterface;
+use Symfony\Component\Console\Input\InputInterface;
 use Tests\CustomMockInterface;
 use Tests\TestCase;
 use Tests\Traits\MocksConsoleOutput;
@@ -48,6 +49,13 @@ class ResendMessageCommandTest extends TestCase
 
     public function testHandle()
     {
+        $reflected = new \ReflectionClass($this->command);
+        $input = $reflected->getProperty('input');
+        $input->setAccessible(true);
+        $mockInput = mock(InputInterface::class);
+        $mockInput->shouldReceive('getArgument')->andReturn(4);
+        $input->setValue($this->command, $mockInput);
+
         $this->messageRepository->shouldReceive('findOrFail')->andReturn(new Message());
         $this->dispatcher->shouldReceive('dispatch');
 
