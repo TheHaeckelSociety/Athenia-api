@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step. With every update make sure to run `php artisan ide-helper:models --smart-reset`
 
+## 1.4.1
+
+* code/tests/Integration/Repositories/User/UserRepositoryTest.php - Simple fix to function name
+
 ## 1.4.0
 
 Nice little one! This adds a new command that allows for the resending of a message based on it's ID.
