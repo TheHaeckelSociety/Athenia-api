@@ -169,7 +169,7 @@ class UserRepositoryTest extends TestCase
         $this->assertNull($this->repository->findByEmail('test@test.com'));
     }
 
-    public function testFindSuperAdminsWithoutExisting()
+    public function testFindSuperAdminsSuccess()
     {
         $this->config->shouldReceive('get')->with('mail.from.name')->andReturn('System User');
         $this->config->shouldReceive('get')->with('mail.from.email')->andReturn('test@test.com');
